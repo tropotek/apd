@@ -1,11 +1,11 @@
 {
-  "name": "ttek/tkuni",
+  "name": "ttek/apd",
   "type": "project",
-  "description": "A base TK lib project for education institutions.",
+  "description": "Anatomic Pathology Database",
   "keywords": [
     "tropotek"
   ],
-  "time": "2019-04-09",
+  "time": "2020-07-22",
   "license": "MIT",
   "minimum-stability": "dev",
   "authors": [
@@ -30,7 +30,7 @@
   },
   "extra": {
     "branch-alias": {
-      "dev-master": "3.2.x-dev"
+      "dev-master": "1.0.x-dev"
     }
   },
   "repositories": [

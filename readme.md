@@ -1,8 +1,8 @@
-# tkuni  
+# apd  
 
-__Project:__ tkuni  
+__Project:__ APD (Anatomic Pathology Database)  
 __Published:__ 16 May 2016  
-__Web:__ <http://www.tropotek.com/>  
+__Web:__ <https://bitbucket.org/fvas-elearning/apd>  
 __Authors:__ Michael Mifsud <http://www.tropotek.com/>  
 
 
@@ -17,8 +17,7 @@ __Authors:__ Michael Mifsud <http://www.tropotek.com/>
 
 ## Introduction
 
-A base site using the Tk framework, use this as a starting point for your 
-own education sites.
+Anatomic Pathology Database
 
 
 ## Installation
@@ -26,8 +25,8 @@ own education sites.
 Start by getting the dependant libs:
 
 ~~~bash
-# git clone https://github.com/tropotek/tkuni.git
-# cd tkuni
+# git clone git@bitbucket.org:fvas-elearning/apd.git
+# cd apd
 # composer install
 ~~~
 
