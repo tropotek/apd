@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="/" var="base-url" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+  <title>Error</title>
+
+  <!-- bootstrap -->
+  <link rel="stylesheet" type="text/css" href="../theme-cube/components/bootstrap/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="../theme-cube/components/font-awesome/css/font-awesome.css" />
+
+  <!-- global styles -->
+  <link rel="stylesheet" type="text/css" href="../theme-cube/css/theme_styles.css" />
+  <link rel="stylesheet" type="text/css" href="../theme-cube/css/error.css" />
+
+  <!-- google font libraries -->
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,300|Titillium+Web:200,300,400' rel='stylesheet' type='text/css' />
+
+</head>
+<body id="error-page">
+<div class="container">
+  <div class="row">
+    <div class="col-12 col-sm-12">
+      <div id="error-box">
+        <div class="row">
+          <div class="col-12 col-sm-12">
+            <div id="error-box-inner">
+              <img src="../theme-cube/img/error-500-v1.png" alt="Error 500" var="error-img"/>
+            </div>
+            <h1 var="class"></h1>
+            <p var="message"></p>
+
+            <p>&nbsp;</p>
+            <pre class="trace" var="trace" choice="trace"></pre>
+            <p>&nbsp;</p>
+            <div class="log-dump" var="log" choice="log"></div>
+
+            <p>Go back to <a href="/" var="home-url">homepage</a>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="../theme-cube/components/jquery/dist/jquery.min.js"></script>
+<script src="../theme-cube/components/bootstrap/dist/js/bootstrap.bundle.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,72 @@
+<?php
+/*
+ * @author Michael Mifsud <info@tropotek.com>
+ * @link http://www.tropotek.com/
+ * @license Copyright 2015 Michael Mifsud
+ */
+$config = \App\Config::getInstance();
+
+// Database access
+$config['db.type'] = 'mysql';
+$config['db.host'] = 'localhost';
+$config['db.name'] = 'table';
+$config['db.user'] = 'username';
+$config['db.pass'] = 'password';
+
+//$config['google.map.apikey'] = '';
+//$config['google.recaptcha.publicKey'] = '';
+//$config['google.recaptcha.privateKey'] = '';
+
+/*
+ * The email address of the system developer
+ */
+//$config['system.email.developer'] = 'developer@example.com';
+
+/*
+ * The email address of the department maintaining this system
+ */
+//$config['system.email.department'] = 'department@example.com';
+
+/*
+ * Enable exception emails
+ */
+//$config['system.email.exception'] = array('user@example.com');
+
+/*
+ * Send copies of all system emails to these recipients (not error emails)
+ */
+//$config['mail.bcc'] = array('user1@example.edu.au');
+
+/*
+ * Enable logging of triggered events
+ * Default: false
+ */
+//$config['event.dispatcher.log'] = true;
+
+/**
+ * This is to be set to the sites default domain name so we can use it for links from the
+ * institution pages back to the site
+ */
+//$config['site.public.domain'] = '252s-live.vet.unimelb.edu.au';
+
+/*
+ * Debug
+ */
+//$config['debug'] = true;
+//$config['log.path'] = '/home/user/log/error.log';
+//$config['log.level'] = \Psr\Log\LogLevel::DEBUG;
+//$config['system.debug.email'] = 'user@example.com';
+
+
+if ($config->isDebug()) {
+//Used for the Mirror command
+    $config['live.db'] = array(
+        'type' => 'mysql',
+        'host' => 'localhost',
+        'name' => 'live_site',
+        'user' => 'username',
+        'pass' => ''
+    );
+    $config['live.data.path'] = 'user@example.edu.au:/home/user/public_html/data';
+}
+
