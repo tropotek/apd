@@ -12,17 +12,14 @@ class Dispatch extends \Uni\Dispatch
 
 
     /**
-     * @throws \Tk\Db\Exception
-     * @throws \Tk\Exception
+     * @throws \Exception
      */
     public function init()
     {
         parent::init();
         $dispatcher = $this->getDispatcher();
 
-
         $dispatcher->addSubscriber(new \App\Listener\NavRendererHandler());
-        $dispatcher->addSubscriber(new \App\Listener\SubjectHandler());
         $dispatcher->addSubscriber(new \Bs\Listener\PageLoaderHandler());
     }
 

@@ -13,10 +13,6 @@ use Dom\Template;
 class Dashboard extends \Uni\Controller\AdminIface
 {
 
-    /**
-     * @var \Uni\Table\Subject
-     */
-    protected $subjectTable = null;
 
     /**
      * Dashboard constructor.
@@ -38,22 +34,6 @@ class Dashboard extends \Uni\Controller\AdminIface
     public function doDefault(Request $request)
     {
 
-        $this->subjectTable = \Uni\Table\Subject::create()->init();
-        $this->subjectTable->removeAction('delete');
-        $this->subjectTable->findCell('name')->addOnPropertyValue(function ($cell, $obj, $value) {
-            /** @var UserIface $obj */
-            return $obj->getName();
-        })->setUrl(function ($cell, $obj) {
-            /** @var \Tk\Table\Cell\Iface $cell */
-            $url = \Uni\Uri::createSubjectUrl('/index.html', $obj);
-            $cell->setUrlProperty('');
-            return $url;
-        });
-
-        $filter = array();
-        $filter['institutionId'] = $this->getConfig()->getInstitutionId();
-        $filter['userId'] = $this->getAuthUser()->getId();
-        $this->subjectTable->setList($this->subjectTable->findList($filter));
 
 
     }
@@ -62,7 +42,7 @@ class Dashboard extends \Uni\Controller\AdminIface
     {
         $template = parent::show();
 
-        $template->appendTemplate('table', $this->subjectTable->getRenderer()->show());
+        //$template->appendTemplate('table', $this->subjectTable->getRenderer()->show());
 
         return $template;
     }
@@ -77,7 +57,7 @@ class Dashboard extends \Uni\Controller\AdminIface
         $xhtml = <<<HTML
 <div class="">
 
-  <div class="tk-panel" data-panel-title="Subject List" data-panel-icon="fa fa-university" var="table"></div>
+  <div class="tk-panel" data-panel-title="Case List" data-panel-icon="fa fa-paw" var="table"></div>
 
 </div>
 HTML;

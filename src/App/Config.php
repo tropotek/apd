@@ -12,9 +12,8 @@ class Config extends \Uni\Config
 
 
     /**
-     * @param \Tk\Event\Dispatcher $dispatcher
-     * @throws \Tk\Db\Exception
-     * @throws \Tk\Exception
+     * @param \Tk\EventDispatcher\EventDispatcher $dispatcher
+     * @throws \Exception
      */
     public function setupDispatcher($dispatcher)
     {
@@ -43,6 +42,15 @@ class Config extends \Uni\Config
         return $this->get('auth.handler');
     }
 
+
+    /**
+     * @param string $type (optional) If set returns only the permissions for that user type otherwise returns all permissions
+     * @return array
+     */
+    public function getPermissionList($type = '')
+    {
+         return \App\Db\Permission::getPermissionList($type);
+    }
 
 
 }
