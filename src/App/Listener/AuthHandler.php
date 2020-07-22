@@ -50,60 +50,48 @@ class AuthHandler extends \Bs\Listener\AuthHandler
                         return;
                     }
 
-//                    if (!$user) { // Create a user record if none exists
-//                        if (!$config->get('auth.ldap.auto.account')) {
-//                            $msg = sprintf('Please contact your site administrator to enable your user account. Please provide the following details' .
-//                                "\nusername: %s\nUID: %s\nEmail: %s", $adapter->get('username'), $uid, $email);
-//                            $event->setResult(new \Tk\Auth\Result(\Tk\Auth\Result::FAILURE_CREDENTIAL_INVALID, $adapter->get('username'), $msg));
-//                        }
-//
-//                        $type = 'student';
-//                        if (preg_match('/(staff|student)/', strtolower($ldapData[0]['auedupersontype'][0]), $reg)) {
-//                            if ($reg[1] == 'staff') $type = 'staff';
-//                        }
-//
-//                        if ($type == 'student') {
-//                            // To check if a user is pre-enrolled get an array of uid and emails for a user
-//                            $isPreEnrolled = $config->getSubjectMapper()->isPreEnrolled($config->getInstitutionId(),
-//                                array_merge($ldapData[0]['mail'], $ldapData[0]['mailalternateaddress']),
-//                                $ldapData[0]['auedupersonid'][0]
-//                            );
-//
-//                            if (!$isPreEnrolled) {      // Only create users accounts for enrolled students
-//                                $msg = sprintf('We cannot find any enrolled subjects. Please contact your coordinator.' .
-//                                    "\nusername: %s\nUID: %s\nEmail: %s", $adapter->get('username'), $uid, $email);
-//                                $event->setResult(new \Tk\Auth\Result(\Tk\Auth\Result::FAILURE_CREDENTIAL_INVALID, $adapter->get('username'), $msg));
-//                                return;
-//                            }
-//
-//                            $userData = array(
-//                                'authType' => 'ldap',
-//                                'institutionId' => $config->getInstitutionId(),
-//                                'username' => $adapter->get('username'),
-//                                'type' => $type,
-//                                'active' => true,
-//                                'email' => $email,
-//                                'name' => $ldapData[0]['displayname'][0],
-//                                'uid' => $ldapData[0]['auedupersonid'][0],
-//                                'ldapData' => $ldapData
-//                            );
-//                            $user = $config->createUser();
-//                            $config->getUserMapper()->mapForm($userData, $user);
-//                            $error = $user->validate();
-//                            if (count($error)) {
-//                                try {
-//                                    $user->setNewPassword($adapter->get('password'));
-//                                } catch (\Exception $e) {
-//                                    \Tk\Log::info($e->__toString());
-//                                }
-//                            }
-//                        } else {
-//                            $msg = sprintf('Staff members can contact the site administrator to request access');
-//                            $event->setResult(new \Tk\Auth\Result(\Tk\Auth\Result::FAILURE_CREDENTIAL_INVALID,
-//                                $adapter->get('username'), $msg));
-//                            return;
-//                        }
-//                    }
+                    if (!$user) { // Create a user record if none exists
+                        if (!$config->get('auth.ldap.auto.account')) {
+                            $msg = sprintf('Please <a href="mailto:%s">contact your site administrator</a> to request access. Please provide the following details',
+                                $this->getConfig()->getInstitution()->getEmail());
+                            $event->setResult(new \Tk\Auth\Result(\Tk\Auth\Result::FAILURE_CREDENTIAL_INVALID, $adapter->get('username'), $msg));
+                            return;
+                        }
+
+                        $type = 'student';
+                        if (preg_match('/(staff|student)/', strtolower($ldapData[0]['auedupersontype'][0]), $reg)) {
+                            if ($reg[1] == 'staff') $type = 'staff';
+                        }
+
+                        if ($type == 'staff') {
+                            $userData = array(
+                                'authType' => 'ldap',
+                                'institutionId' => $config->getInstitutionId(),
+                                'username' => $adapter->get('username'),
+                                'type' => $type,
+                                'active' => true,
+                                'email' => $email,
+                                'name' => $ldapData[0]['displayname'][0],
+                                'uid' => $ldapData[0]['auedupersonid'][0],
+                                'ldapData' => $ldapData
+                            );
+                            $user = $config->createUser();
+                            $config->getUserMapper()->mapForm($userData, $user);
+                            $error = $user->validate();
+                            if (count($error)) {
+                                try {
+                                    $user->setNewPassword($adapter->get('password'));
+                                } catch (\Exception $e) {
+                                    \Tk\Log::info($e->__toString());
+                                }
+                            }
+                        } else {
+                            $msg = sprintf('Only institution staff can access "%s". Please contact <a href="mailto:%s">%s</a> for more information.',
+                                $this->getConfig()->getSiteTite(), $this->getConfig()->getInstitution()->getEmail(), $this->getConfig()->getInstitution()->getEmail());
+                            $event->setResult(new \Tk\Auth\Result(\Tk\Auth\Result::FAILURE_CREDENTIAL_INVALID, $adapter->get('username'), $msg));
+                            return;
+                        }
+                    }
 
                     if ($user && $user->isActive()) {
                         if (!$user->getUid() && !empty($ldapData[0]['auedupersonid'][0]))
@@ -132,6 +120,12 @@ class AuthHandler extends \Bs\Listener\AuthHandler
             }
         }
 
+
+
+        // TODO:
+        // TODO: This need to be tested before releasing it
+        // TODO:
+
         // LTI Authentication
         if ($event->getAdapter() instanceof \Lti\Auth\LtiAdapter) {
             $config = \Uni\Config::getInstance();
@@ -142,16 +136,19 @@ class AuthHandler extends \Bs\Listener\AuthHandler
             $subjectData = $adapter->get('subjectData');
             $ltiData = $adapter->getLaunchData();
 
+            if ($userData['type'] != \Uni\Db\User::TYPE_STAFF) {
+                $msg = sprintf('Only institution staff can access "%s". Please contact <a href="mailto:%s">%s</a> for more information.',
+                    $this->getConfig()->getSiteTite(), $this->getConfig()->getInstitution()->getEmail(), $this->getConfig()->getInstitution()->getEmail());
+                $event->setResult(new \Tk\Auth\Result(\Tk\Auth\Result::FAILURE_CREDENTIAL_INVALID, $adapter->get('username'), $msg));
+                return;
+            }
+
             // Setup/Find User and log them in
             $user = $config->getUserMapper()->findByUsername($adapter->get('username'), $adapter->getInstitution()->getId());
-            if (!$user)
+            if (!$user) {
                 $user = $config->getUserMapper()->findByEmail($userData['email'], $adapter->getInstitution()->getId());
-            // Error out if no user
-//            if (!$user) {
-//                $event->setResult(new \Tk\Auth\Result(\Tk\Auth\Result::FAILURE_CREDENTIAL_INVALID,
-//                    $userData['username'], 'Invalid username. Please contact your administrator to setup an account.'));
-//                return;
-//            }
+            }
+
             // Create the new user account
             if (!$user) {
                 $user = $config->createUser();
@@ -160,6 +157,7 @@ class AuthHandler extends \Bs\Listener\AuthHandler
                 $user->addPermission(\Uni\Db\Permission::getDefaultPermissionList($user->getType()));
                 $adapter->set('user', $user);
             }
+
             // Update user details from login
             if (!$user->getEmail())
                 $user->setEmail($userData['email']);
@@ -168,77 +166,12 @@ class AuthHandler extends \Bs\Listener\AuthHandler
             if (!$user->getImage() && !empty($userData['image']))
                 $user->setImage($userData['image']);
 
-            // Find Subject
-            $subject = $config->getSubjectMapper()->findFiltered(
-                array('code' => $subjectData['subjectCode'], 'institutionId' => $adapter->getInstitution()->getId())
-            )->current();
-            if (!empty($subjectData['subjectId'])) {
-                $s = $config->getSubjectMapper()->find($subjectData['subjectId']);
-                if ($s) $subject = $s;
-            }
-
-            // Create a new subject
-            if (!$subject) {
-                if (!$user->isStaff()) {        // Only auto create subject for staff users
-                    $event->setResult(new \Tk\Auth\Result(\Tk\Auth\Result::FAILURE_CREDENTIAL_INVALID,
-                        $userData['username'], 'Subject [' . $subjectData['subjectCode'] . '] not available, Please contact the subject coordinator.'));
-                    return;
-                }
-
-                // Find/Create course
-                $course = $config->getCourseMapper()->findFiltered(
-                    array('code' => $subjectData['courseCode'], 'institutionId' => $adapter->getInstitution()->getId())
-                )->current();
-                if (!$course) {
-                    // Create a new Course and Subject here if needed
-                    $course = $config->createCourse();
-                    $course->setInstitutionId($adapter->getInstitution()->getId());
-                    $course->setName($subjectData['name']);
-                    $course->setEmail($subjectData['email']);
-                    $course->setCode($subjectData['courseCode']);
-                    if ($user->hasPermission(Permission::IS_COORDINATOR))
-                        $course->setCoordinatorId($user->getId());
-                    $course->save();
-                    $subjectData['isNewCourse'] = true;
-                }
-
-                // Subject
-                $subject = $config->createSubject();
-                $config->getSubjectMapper()->mapForm($subjectData, $subject);
-                if ($course)
-                    $subject->setCourseId($course->getId());
-                $subject->save();
-                $subjectData['isNewSubject'] = true;
-                $adapter->set('subject', $subject);
-            }
-
-
-            $config->getSession()->set('lti.subjectId', $subject->getId());   // Limit the dashboard to one subject for LTI logins
-            $event->setRedirect(\Uni\Uri::createSubjectUrl('/index.html', $subject, $user));
-
-            // (optional) to check the pre-enrollment, if not available fail authentication
-//            $isPreEnrolled = $config->getSubjectMapper()->isPreEnrolled($adapter->getInstitution()->getId(), array($user->getEmail()) );
-//            if (!$isPreEnrolled) {  // Only create users accounts for enrolled students
-//                $event->setResult(new \Tk\Auth\Result(\Tk\Auth\Result::FAILURE_CREDENTIAL_INVALID,
-//                    $userData['username'], 'You are not enrolled. Please contact your administrator to setup your account.'));
-//                return;
-//            }
-
-            // Add user to the subject if not already enrolled
-            if (!$config->getSubjectMapper()->hasUser($subject->getId(), $user->getId())) {
-                if ($user->isStudent())
-                    $config->getSubjectMapper()->addUser($subject->getId(), $user->getId());
-                if ($user->isStaff())
-                    $config->getCourseMapper()->addUser($subject->getCourseId(), $user->getId());
-            }
-
             $user->save();
             if ($ltiData && method_exists($user, 'getData')) {
                 $data = $user->getData();
                 $data->set('lti.last.login', json_encode($ltiData));
                 $data->save();
             }
-
 
             $config->getSession()->set('auth.password.access', false);
             $event->setResult(new \Tk\Auth\Result(\Tk\Auth\Result::SUCCESS, $config->getUserIdentity($user)));

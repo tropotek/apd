@@ -31,21 +31,28 @@ $routes->add('admin-dashboard', new \Tk\Routing\Route('/admin/index.html', 'App\
 $routes->add('admin-dashboard-base', new \Tk\Routing\Route('/admin/', 'App\Controller\Admin\Dashboard::doDefault'));
 $routes->add('admin-settings', new \Tk\Routing\Route('/admin/settings.html', 'App\Controller\Admin\Settings::doDefault'));
 
+$routes->add('admin-institution-edit', \Tk\Routing\Route::create('/admin/institutionEdit.html', 'App\Controller\Institution\Edit::doDefault'));
+
 
 // Client Pages
 $routes->add('client-dashboard', new \Tk\Routing\Route('/client/index.html', 'App\Controller\Client\Dashboard::doDefault'));
 $routes->add('client-dashboard-base', new \Tk\Routing\Route('/client/', 'App\Controller\Client\Dashboard::doDefault'));
+
+$routes->add('client-settings', \Tk\Routing\Route::create('/client/settings.html', 'App\Controller\Institution\Edit::doDefault'));
+
 
 // Mentor Pages
 $routes->add('mentor-dashboard', new \Tk\Routing\Route('/staff/mentor/index.html', 'App\Controller\Mentor\Dashboard::doDefault'));
 $routes->add('mentor-dashboard-base', new \Tk\Routing\Route('/staff/mentor/', 'App\Controller\Mentor\Dashboard::doDefault'));
 $routes->add('mentor-student-view', new \Tk\Routing\Route('/staff/mentor/studentView.html', 'App\Controller\Mentor\StudentView::doDefault'));
 
+
 // Staff Pages
 $routes->add('staff-dashboard', new \Tk\Routing\Route('/staff/index.html', 'App\Controller\Staff\Dashboard::doDefault'));
 $routes->add('staff-dashboard-base', new \Tk\Routing\Route('/staff/', 'App\Controller\Staff\Dashboard::doDefault'));
 $routes->add('staff-subject-dashboard', new \Tk\Routing\Route('/staff/{subjectCode}/index.html', 'App\Controller\Staff\SubjectDashboard::doDefault'));
 
+$routes->add('staff-institution-edit', \Tk\Routing\Route::create('/staff/settings.html', 'App\Controller\Institution\Edit::doDefault'));
 
 
 // Student Pages
