@@ -7,6 +7,24 @@
 -- TODO: see if this can be run here??
 -- UPDATE dev_apd.institution t SET t.name = 'University of Melbourne Veterinary Anatomic Pathology', t.email = 'anat-vet@unimelb.edu.au' WHERE t.id = 1;
 
+INSERT INTO `user` (`institution_id`, `type`, `username`, `password` ,`name_first`, `name_last`, `email`, `active`, `hash`, `modified`, `created`)
+VALUES
+  (1, 'staff', 'mifsudm', MD5(CONCAT('password', MD5('31mifsudm'))), 'Mick', 'Mifsud', 'mifsudm@unimelb.edu.au', 1, MD5('31mifsudm'), NOW(), NOW()),
+  (1, 'staff', 'rich', MD5(CONCAT('password', MD5('41rich'))), 'Richard', '', 'richard.ploeg@unimelb.edu.au', 1, MD5('41rich'), NOW(), NOW())
+;
+
+INSERT INTO `user_permission` (`user_id`, `name`)
+VALUES
+    (3, 'perm.manage.site'),
+    (3, 'perm.masquerade'),
+    (3, 'perm.manage.plugins'),
+    (3, 'perm.manage.staff'),
+    (4, 'perm.manage.site'),
+    (4, 'perm.masquerade'),
+    (4, 'perm.manage.plugins'),
+    (4, 'perm.manage.staff')
+;
+
 
 -- ----------------------------
 --  address table
