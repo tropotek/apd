@@ -76,7 +76,8 @@ CREATE TABLE IF NOT EXISTS `case`
 ) ENGINE=InnoDB;
 
 -- ----------------------------
--- users table
+-- case_user table
+--  Not sure if this is the best way to handle this.
 -- ----------------------------
 CREATE TABLE IF NOT EXISTS `case_user`
 (
