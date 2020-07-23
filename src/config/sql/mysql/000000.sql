@@ -76,6 +76,58 @@ CREATE TABLE IF NOT EXISTS `case`
 ) ENGINE=InnoDB;
 
 -- ----------------------------
+-- users table
+-- ----------------------------
+CREATE TABLE IF NOT EXISTS `case_user`
+(
+    `id` INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    `case_id` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+    `user_id` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+
+    `type` VARCHAR(64) NOT NULL DEFAULT '',             -- Pathologist, student, Clinician, ????
+    `` VARCHAR(64) NOT NULL DEFAULT '',
+    `` VARCHAR(64) NOT NULL DEFAULT '',
+
+    `modified` DATETIME NOT NULL,
+    `created` DATETIME NOT NULL,
+    KEY `case_user` (`case_id`, `user_id`)
+) ENGINE=InnoDB;
+
+
+
+
+
+-- ----------------------------
+--  animal table
+--  NOTE: Assuming that one animal can be involved in multiple cases
+--   For example a biopsy at one point then a necropsy or multiples of each
+-- ----------------------------
+CREATE TABLE IF NOT EXISTS `animal`
+(
+    `id` INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    `institution_id` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+
+    `del` TINYINT(1) NOT NULL DEFAULT 0,
+    `modified` DATETIME NOT NULL,
+    `created` DATETIME NOT NULL,
+    KEY `institution` (`institution_id`)
+) ENGINE=InnoDB;
+
+-- ----------------------------
+--   table
+-- ----------------------------
+CREATE TABLE IF NOT EXISTS ``
+(
+    `id` INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    `institution_id` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+
+    `del` TINYINT(1) NOT NULL DEFAULT 0,
+    `modified` DATETIME NOT NULL,
+    `created` DATETIME NOT NULL,
+    KEY `institution` (`institution_id`)
+) ENGINE=InnoDB;
+
+-- ----------------------------
 --   table
 -- ----------------------------
 CREATE TABLE IF NOT EXISTS ``
