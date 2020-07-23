@@ -64,6 +64,9 @@ class Index extends \Uni\Controller\Index
 
         if ($this->getConfig()->getInstitutionMapper()->findActive()->count() > 1) {
             $template->setVisible("multiInstitutions");
+        } else {
+            $template->setAttr('institution-login', 'href', $this->getConfig()->getInstitution()->getLoginUrl());
+            $template->setVisible("login");
         }
 
         return $template;
@@ -85,6 +88,7 @@ class Index extends \Uni\Controller\Index
         <a href="#welcome" role="tab">Welcome</a>
         <a href="#institutions" role="tab" choice="multiInstitutions">Institutions</a>
         <a href="#contact" role="tab">Contact</a>
+        <a href="/login.html" var="institution-login" role="tab" choice="login">Login</a>
       </nav>
     </div>
 
