@@ -87,7 +87,7 @@ class AuthHandler extends \Bs\Listener\AuthHandler
                             }
                         } else {
                             $msg = sprintf('Only institution staff can access "%s". Please contact <a href="mailto:%s">%s</a> for more information.',
-                                $this->getConfig()->getSiteTite(), $this->getConfig()->getInstitution()->getEmail(), $this->getConfig()->getInstitution()->getEmail());
+                                $this->getConfig()->getSiteTitle(), $this->getConfig()->getInstitution()->getEmail(), $this->getConfig()->getInstitution()->getEmail());
                             $event->setResult(new \Tk\Auth\Result(\Tk\Auth\Result::FAILURE_CREDENTIAL_INVALID, $adapter->get('username'), $msg));
                             return;
                         }
@@ -138,7 +138,7 @@ class AuthHandler extends \Bs\Listener\AuthHandler
 
             if ($userData['type'] != \Uni\Db\User::TYPE_STAFF) {
                 $msg = sprintf('Only institution staff can access "%s". Please contact <a href="mailto:%s">%s</a> for more information.',
-                    $this->getConfig()->getSiteTite(), $this->getConfig()->getInstitution()->getEmail(), $this->getConfig()->getInstitution()->getEmail());
+                    $this->getConfig()->getSiteTitle(), $this->getConfig()->getInstitution()->getEmail(), $this->getConfig()->getInstitution()->getEmail());
                 $event->setResult(new \Tk\Auth\Result(\Tk\Auth\Result::FAILURE_CREDENTIAL_INVALID, $adapter->get('username'), $msg));
                 return;
             }

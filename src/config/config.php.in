@@ -49,6 +49,13 @@ $config['db.pass'] = 'password';
  */
 //$config['site.public.domain'] = '252s-live.vet.unimelb.edu.au';
 
+/**
+ * Set this to true to allow access for all unimelb staff
+ * A new internal system account will be created for new users.
+ */
+$config['auth.ldap.auto.account'] = false;
+
+
 /*
  * Debug
  */
