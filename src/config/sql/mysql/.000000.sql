@@ -67,28 +67,7 @@ CREATE TABLE IF NOT EXISTS client
     fax VARCHAR(32) NOT NULL DEFAULT '',
     address_id INT(10) UNSIGNED NOT NULL DEFAULT 0,
     billing_address_id INT(10) UNSIGNED NOT NULL DEFAULT 0,
-    notes TEXT,
-    del TINYINT(1) NOT NULL DEFAULT 0,
-    modified DATETIME NOT NULL,
-    created DATETIME NOT NULL,
-    KEY institution_id (institution_id)
-) ENGINE=InnoDB;
-
-
--- ----------------------------
---  storage table
--- ----------------------------
-CREATE TABLE IF NOT EXISTS storage
-(
-    id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    institution_id INT(10) UNSIGNED NOT NULL DEFAULT 0,
-    address_id INT(10) UNSIGNED NOT NULL DEFAULT 0,           -- Postal address of storage location
-    uid VARCHAR(64) NOT NULL DEFAULT '',                      -- internal location id (room 130)
-    name VARCHAR(255) NOT NULL DEFAULT '',                    -- general name of storage location ???
-    -- Would be good to have the exact location for maps... Use selected address location as a default
-    map_zoom DECIMAL(4, 2) NOT NULL DEFAULT 14,
-    map_lng DECIMAL(11, 8) NOT NULL DEFAULT 0,
-    map_lat DECIMAL(11, 8) NOT NULL DEFAULT 0,
+    notes TEXT,                                                 -- Staff only notes
     del TINYINT(1) NOT NULL DEFAULT 0,
     modified DATETIME NOT NULL,
     created DATETIME NOT NULL,
@@ -137,7 +116,7 @@ CREATE TABLE IF NOT EXISTS `path_case`
     euthanised_method VARCHAR(255) NOT NULL DEFAULT '',       --
     ac_type VARCHAR(64) NOT NULL DEFAULT '',                  -- after care type: General Disposal/cremation/internal incineration
     ac_hold DATETIME DEFAULT NULL,                            -- after care Date to wait until processing animal
-    ac_storage_id INT(10) UNSIGNED NOT NULL DEFAULT 0,        --
+    storage_id INT(10) UNSIGNED NOT NULL DEFAULT 0,           -- The current location of the animal (cleared when disposal is completed)
     disposal DATETIME DEFAULT NULL,
     --
 
@@ -149,17 +128,45 @@ CREATE TABLE IF NOT EXISTS `path_case`
     ancillary_testing TEXT,
     morphological_diagnosis TEXT,
     cause_of_death TEXT,                                      -- (required) case not saved if blank
-    comments TEXT,
+    comments TEXT,                                            -- public comments
     --
 
-    notes TEXT,
+    notes TEXT,                                               -- Staff only notes
 
+    del TINYINT(1) NOT NULL DEFAULT 0,
+    modified DATETIME NOT NULL,
+    created DATETIME NOT NULL,
+    KEY institution_id (institution_id),
+    KEY client_id (client_id),
+    KEY pathology_id (pathology_id),
+    KEY storage_id (storage_id),
+    KEY type (type),
+    KEY submission_type (submission_type),
+    KEY `status` (status),
+    KEY ac_type (ac_type)
+
+) ENGINE=InnoDB;
+
+-- ----------------------------
+--  storage table
+-- ----------------------------
+CREATE TABLE IF NOT EXISTS storage
+(
+    id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    institution_id INT(10) UNSIGNED NOT NULL DEFAULT 0,
+    address_id INT(10) UNSIGNED NOT NULL DEFAULT 0,           -- Postal address of storage location
+    uid VARCHAR(64) NOT NULL DEFAULT '',                      -- internal location id (room 130)
+    name VARCHAR(255) NOT NULL DEFAULT '',                    -- general name of storage location ???
+    -- Would be good to have the exact location for maps... Use selected address location as a default
+    map_zoom DECIMAL(4, 2) NOT NULL DEFAULT 14,
+    map_lng DECIMAL(11, 8) NOT NULL DEFAULT 0,
+    map_lat DECIMAL(11, 8) NOT NULL DEFAULT 0,
+    notes TEXT,                                               -- Staff only notes
     del TINYINT(1) NOT NULL DEFAULT 0,
     modified DATETIME NOT NULL,
     created DATETIME NOT NULL,
     KEY institution_id (institution_id)
 ) ENGINE=InnoDB;
-
 
 -- ----------------------------
 --  service table
@@ -171,6 +178,8 @@ CREATE TABLE IF NOT EXISTS service
 
     name VARCHAR(64) NOT NULL DEFAULT '',
     price DECIMAL(9,2) NOT NULL DEFAULT 0.0,                  -- This should be a cost per service
+    comments TEXT,                                            -- public comments
+    notes TEXT,                                               -- Staff only notes
 
     del TINYINT(1) NOT NULL DEFAULT 0,
     modified DATETIME NOT NULL,
@@ -178,23 +187,23 @@ CREATE TABLE IF NOT EXISTS service
     KEY institution_id (institution_id)
 ) ENGINE=InnoDB;
 
-
-
 -- ----------------------------
 --  cassette table
--- This is a list of tissues in a cassette ???
+--  A cassette contains a qty of tissue slides/samples
 -- ----------------------------
 CREATE TABLE IF NOT EXISTS cassette
 (
     id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    path_case_id INT(10) UNSIGNED NOT NULL DEFAULT 0,          --
-    storage_id INT(10) UNSIGNED NOT NULL DEFAULT 0,       -- Storage location if available
+    path_case_id INT(10) UNSIGNED NOT NULL DEFAULT 0,         --
+    storage_id INT(10) UNSIGNED NOT NULL DEFAULT 0,           -- Storage location if available
 
-    container VARCHAR(64) NOT NULL DEFAULT '',            -- Not sure if we will be using this or storage_id or both???
-    tissue_id VARCHAR(64) NOT NULL DEFAULT '',            -- Generally just increments by 1 for each cassette
-    name VARCHAR(64) NOT NULL DEFAULT '',                 -- Usually the tissue type name
-    qty INT(10) NOT NULL DEFAULT 0,                       -- Quantity of samples available
-    price DECIMAL(9,2) NOT NULL DEFAULT 0.0,              -- I assume this is price per sample ???
+    container VARCHAR(64) NOT NULL DEFAULT '',                -- Not sure if we will be using this or storage_id or both???
+    number VARCHAR(64) NOT NULL DEFAULT '',                   -- Generally just increments by 1 for each group in a case
+    name VARCHAR(64) NOT NULL DEFAULT '',                     -- Usually the tissue type name
+    qty INT(10) NOT NULL DEFAULT 0,                           -- Quantity of samples available
+    price DECIMAL(9,2) NOT NULL DEFAULT 0.0,                  -- I assume this is price per sample ???
+    comments TEXT,                                            -- public comments
+    notes TEXT,                                               -- Staff only notes
 
     del TINYINT(1) NOT NULL DEFAULT 0,
     modified DATETIME NOT NULL,
@@ -203,20 +212,21 @@ CREATE TABLE IF NOT EXISTS cassette
     KEY storage_id (storage_id)
 ) ENGINE=InnoDB;
 
-
 -- ----------------------------
---   table
+--  request table
+--  Pathology samples request that are handled by the lab
 -- ----------------------------
 CREATE TABLE IF NOT EXISTS request
 (
     id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    path_case_id INT(10) UNSIGNED NOT NULL DEFAULT 0,          --
-    cassette_id INT(10) UNSIGNED NOT NULL DEFAULT 0,      --
-    service_id INT(10) UNSIGNED NOT NULL DEFAULT 0,       --
-    client_id INT(10) UNSIGNED NOT NULL DEFAULT 0,        -- The client requesting the samples (not sure if this could be staff, client, etc)
-    qty INT(10) NOT NULL DEFAULT 0,                       -- Quantity of samples requested (check available tissue.qty on submit)
-    price DECIMAL(9,2) NOT NULL DEFAULT 0.0,              -- The total cost based on qty requested + the service cost
-    comments TEXT,
+    path_case_id INT(10) UNSIGNED NOT NULL DEFAULT 0,         --
+    cassette_id INT(10) UNSIGNED NOT NULL DEFAULT 0,          --
+    service_id INT(10) UNSIGNED NOT NULL DEFAULT 0,           --
+    client_id INT(10) UNSIGNED NOT NULL DEFAULT 0,            -- The client requesting the samples (not sure if this could be staff, client, etc)
+    qty INT(10) NOT NULL DEFAULT 0,                           -- Quantity of samples requested (check available tissue.qty on submit)
+    price DECIMAL(9,2) NOT NULL DEFAULT 0.0,                  -- The total cost based on qty requested + the service cost
+    comments TEXT,                                            -- public comments
+    notes TEXT,                                               -- Staff only notes
 
     del TINYINT(1) NOT NULL DEFAULT 0,
     modified DATETIME NOT NULL,
