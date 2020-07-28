@@ -1,6 +1,7 @@
 <?php
 namespace App\Listener;
 
+use App\Db\Permission;
 use Tk\ConfigTrait;
 use Tk\Event\Subscriber;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -103,10 +104,16 @@ class NavRendererHandler implements Subscriber
             $menu->append(Item::create('Staff', \Uni\Uri::createHomeUrl('/staffUserManager.html'), 'fa fa-users'));
         }
         if ($user->isStaff()) {
+            if ($user->hasPermission(Permission::MANAGE_SITE))
+                $menu->append(Item::create('Settings', \Uni\Uri::createHomeUrl('/settings.html'), 'fa fa-cogs'));
 
-
-
-
+            // Temp links
+            $menu->append(Item::create('Address List', \Uni\Uri::createHomeUrl('/addressManager.html'), 'fa fa-question'));
+            $menu->append(Item::create('Cassette List', \Uni\Uri::createHomeUrl('/cassetteManager.html'), 'fa fa-question'));
+            $menu->append(Item::create('Client List', \Uni\Uri::createHomeUrl('/clientManager.html'), 'fa fa-question'));
+            $menu->append(Item::create('Storage List', \Uni\Uri::createHomeUrl('/storageManager.html'), 'fa fa-question'));
+            $menu->append(Item::create('Service List', \Uni\Uri::createHomeUrl('/serviceManager.html'), 'fa fa-question'));
+            $menu->append(Item::create('Case List', \Uni\Uri::createHomeUrl('/pathCaseManager.html'), 'fa fa-question'));
 
         }
 
