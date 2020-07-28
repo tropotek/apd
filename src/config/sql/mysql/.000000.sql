@@ -32,6 +32,7 @@ VALUES
 CREATE TABLE IF NOT EXISTS address
 (
     id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    institution_id INT(10) UNSIGNED NOT NULL DEFAULT 0,
 
     number VARCHAR(255) NOT NULL DEFAULT '',
     street VARCHAR(255) NOT NULL DEFAULT '',
@@ -46,7 +47,8 @@ CREATE TABLE IF NOT EXISTS address
     map_lat DECIMAL(11, 8) NOT NULL DEFAULT 0,
 
     modified DATETIME NOT NULL,
-    created DATETIME NOT NULL
+    created DATETIME NOT NULL,
+    KEY institution_id (institution_id)
 ) ENGINE=InnoDB;
 
 -- ----------------------------
@@ -56,10 +58,11 @@ CREATE TABLE IF NOT EXISTS client
 (
     id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     institution_id INT(10) UNSIGNED NOT NULL DEFAULT 0,
-    uid VARCHAR(64) NOT NULL DEFAULT '',             -- Farm Shed id
+    user_id INT(10) UNSIGNED NOT NULL DEFAULT 0,                -- use this if the client is a staff member
+    uid VARCHAR(64) NOT NULL DEFAULT '',                        -- Farm Shed id
     name VARCHAR(255) NOT NULL DEFAULT '',
     email VARCHAR(255) NOT NULL DEFAULT '',
-    billing_email VARCHAR(255) NOT NULL DEFAULT '',           -- use email if blank
+    billing_email VARCHAR(255) NOT NULL DEFAULT '',             -- use email if blank
     phone VARCHAR(32) NOT NULL DEFAULT '',
     fax VARCHAR(32) NOT NULL DEFAULT '',
     address_id INT(10) UNSIGNED NOT NULL DEFAULT 0,
@@ -68,7 +71,7 @@ CREATE TABLE IF NOT EXISTS client
     del TINYINT(1) NOT NULL DEFAULT 0,
     modified DATETIME NOT NULL,
     created DATETIME NOT NULL,
-    KEY institution (institution_id)
+    KEY institution_id (institution_id)
 ) ENGINE=InnoDB;
 
 
@@ -80,14 +83,16 @@ CREATE TABLE IF NOT EXISTS storage
     id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     institution_id INT(10) UNSIGNED NOT NULL DEFAULT 0,
     address_id INT(10) UNSIGNED NOT NULL DEFAULT 0,           -- Postal address of storage location
-
     uid VARCHAR(64) NOT NULL DEFAULT '',                      -- internal location id (room 130)
-    name VARCHAR(255) NOT NULL DEFAULT '',                    -- name ???
-
+    name VARCHAR(255) NOT NULL DEFAULT '',                    -- general name of storage location ???
+    -- Would be good to have the exact location for maps... Use selected address location as a default
+    map_zoom DECIMAL(4, 2) NOT NULL DEFAULT 14,
+    map_lng DECIMAL(11, 8) NOT NULL DEFAULT 0,
+    map_lat DECIMAL(11, 8) NOT NULL DEFAULT 0,
     del TINYINT(1) NOT NULL DEFAULT 0,
     modified DATETIME NOT NULL,
     created DATETIME NOT NULL,
-    KEY institution (institution_id)
+    KEY institution_id (institution_id)
 ) ENGINE=InnoDB;
 
 -- ----------------------------
@@ -98,18 +103,18 @@ CREATE TABLE IF NOT EXISTS `path_case`
     id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     institution_id INT(10) UNSIGNED NOT NULL DEFAULT 0,
     client_id INT(10) UNSIGNED NOT NULL DEFAULT 0,            -- Client/Clinician
-    pathology_id VARCHAR(64) NOT NULL DEFAULT '',             -- Pathology Number
 
+    -- Case
+    pathology_id VARCHAR(64) NOT NULL DEFAULT '',             -- Pathology Number
     type VARCHAR(64) NOT NULL DEFAULT '',                     -- BIOPSY, NECROPSY
     submission_type VARCHAR(64) NOT NULL DEFAULT '',          -- direct client/external vet/internal vet/researcher/ Other - Specify
     status VARCHAR(64) NOT NULL DEFAULT '',                   -- Pending/frozen storage/examined/reported/awaiting review (if applicable)/completed
-
     submitted DATETIME DEFAULT NULL,                          --
     examined DATETIME DEFAULT NULL,                           --
     finalised DATETIME DEFAULT NULL,                          --
-
     zootonic_disease VARCHAR(128) NOT NULL DEFAULT '',        -- A dropdown of entered diseases
     zootonic_result VARCHAR(128) NOT NULL DEFAULT '',         -- Positive/Negative ????
+    --
 
     -- Animal/patient details
     specimen_count INT(10) UNSIGNED NOT NULL DEFAULT 1,       --
@@ -152,7 +157,7 @@ CREATE TABLE IF NOT EXISTS `path_case`
     del TINYINT(1) NOT NULL DEFAULT 0,
     modified DATETIME NOT NULL,
     created DATETIME NOT NULL,
-    KEY institution (institution_id)
+    KEY institution_id (institution_id)
 ) ENGINE=InnoDB;
 
 
@@ -170,7 +175,7 @@ CREATE TABLE IF NOT EXISTS service
     del TINYINT(1) NOT NULL DEFAULT 0,
     modified DATETIME NOT NULL,
     created DATETIME NOT NULL,
-    KEY institution (institution_id)
+    KEY institution_id (institution_id)
 ) ENGINE=InnoDB;
 
 
@@ -182,7 +187,7 @@ CREATE TABLE IF NOT EXISTS service
 CREATE TABLE IF NOT EXISTS cassette
 (
     id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    case_id INT(10) UNSIGNED NOT NULL DEFAULT 0,          --
+    path_case_id INT(10) UNSIGNED NOT NULL DEFAULT 0,          --
     storage_id INT(10) UNSIGNED NOT NULL DEFAULT 0,       -- Storage location if available
 
     container VARCHAR(64) NOT NULL DEFAULT '',            -- Not sure if we will be using this or storage_id or both???
@@ -194,8 +199,8 @@ CREATE TABLE IF NOT EXISTS cassette
     del TINYINT(1) NOT NULL DEFAULT 0,
     modified DATETIME NOT NULL,
     created DATETIME NOT NULL,
-    KEY case (case_id),
-    KEY storage (storage_id)
+    KEY path_case_id (path_case_id),
+    KEY storage_id (storage_id)
 ) ENGINE=InnoDB;
 
 
@@ -205,7 +210,7 @@ CREATE TABLE IF NOT EXISTS cassette
 CREATE TABLE IF NOT EXISTS request
 (
     id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    case_id INT(10) UNSIGNED NOT NULL DEFAULT 0,          --
+    path_case_id INT(10) UNSIGNED NOT NULL DEFAULT 0,          --
     cassette_id INT(10) UNSIGNED NOT NULL DEFAULT 0,      --
     service_id INT(10) UNSIGNED NOT NULL DEFAULT 0,       --
     client_id INT(10) UNSIGNED NOT NULL DEFAULT 0,        -- The client requesting the samples (not sure if this could be staff, client, etc)
@@ -216,11 +221,32 @@ CREATE TABLE IF NOT EXISTS request
     del TINYINT(1) NOT NULL DEFAULT 0,
     modified DATETIME NOT NULL,
     created DATETIME NOT NULL,
-    KEY case (case_id),
-    KEY cassette (cassette_id),
-    KEY service (service_id),
-    KEY client (client_id)
+    KEY path_case_id (path_case_id),
+    KEY cassette_id (cassette_id),
+    KEY service_id (service_id),
+    KEY client_id (client_id)
 ) ENGINE=InnoDB;
+
+
+-- ----------------------------
+--  file table
+--  Store all case files and media here
+-- ----------------------------
+CREATE TABLE IF NOT EXISTS file
+(
+    id int unsigned auto_increment primary key,
+    fkey varchar(64) default '' not null,
+    fid int default 0 not null,
+    path text null,
+    bytes int default 0 not null,
+    mime varchar(255) default '' not null,
+    notes text null,
+    hash varchar(128) default '' not null,
+    modified datetime not null,
+    created datetime not null,
+    KEY fkey (fkey),
+    KEY fkey_2 (fkey, fid)
+);
 
 
 
@@ -247,27 +273,6 @@ CREATE TABLE IF NOT EXISTS specimen
     KEY case (case_id)
 ) ENGINE=InnoDB;
 */
-
-
--- ----------------------------
---  file table
---  Store all case files and media here
--- ----------------------------
-CREATE TABLE IF NOT EXISTS file
-(
-    id int unsigned auto_increment primary key,
-    fkey varchar(64) default '' not null,
-    fid int default 0 not null,
-    path text null,
-    bytes int default 0 not null,
-    mime varchar(255) default '' not null,
-    notes text null,
-    hash varchar(128) default '' not null,
-    modified datetime not null,
-    created datetime not null,
-    KEY fkey (fkey),
-    KEY fkey_2 (fkey, fid)
-);
 
 
 
