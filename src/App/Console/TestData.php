@@ -1,8 +1,17 @@
 <?php
 namespace App\Console;
 
+use App\Db\Address;
+use App\Db\AddressMap;
+use App\Db\Client;
+use App\Db\ClientMap;
+use App\Db\PathCase;
+use App\Db\Service;
+use App\Db\Storage;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Tk\Db\Tool;
+use Tk\ObjectUtil;
 use Uni\Db\Permission;
 use Uni\Db\User;
 
@@ -38,10 +47,22 @@ class TestData extends \Bs\Console\TestData
         $config = \App\Config::getInstance();
         $db = $this->getConfig()->getDb();
 
+        $this->write('Institution: ' . $config->getInstitution()->getName());
+
         if (!$config->isDebug()) {
             $this->writeError('Error: Only run this command in a debug environment.');
             return;
         }
+
+        // Clear DB: Make this a command on it own
+        $db->exec('DELETE FROM `user` WHERE `notes` = \'***\' ');
+        $db->exec('DELETE FROM `address` WHERE `postcode` = \'0000\'');
+        $db->exec('DELETE FROM `client` WHERE `notes` = \'***\' ');
+        $db->exec('DELETE FROM `storage` WHERE `notes` = \'***\' ');
+        $db->exec('DELETE FROM `service` WHERE `notes` = \'***\' ');
+
+
+
 
         /** @var \Uni\Db\Institution $institution */
         $institution = $config->getInstitutionMapper()->find(1);
@@ -55,138 +76,135 @@ class TestData extends \Bs\Console\TestData
                 $user->setUsername(strtolower($this->createName()) . '.' . rand(1000, 10000000));
             } while($config->getUserMapper()->findByUsername($user->getUsername()) != null);
             $user->setEmail($this->createUniqueEmail());
-            $user->setType((rand(1, 10) <= 5) ? \Uni\Db\User::TYPE_STAFF : \Uni\Db\User::TYPE_STUDENT);
+            //$user->setType((rand(1, 10) <= 5) ? \Uni\Db\User::TYPE_STAFF : \Uni\Db\User::TYPE_STUDENT);
+            $user->setType(\Uni\Db\User::TYPE_STAFF);
             $user->setNotes('***');
             $user->save();
             $user->setNewPassword('password');
             $user->save();
-
-            $user->addPermission(\Uni\Db\Permission::getDefaultPermissionList($user->getType()));
-            if ($user->isStaff() && (rand(1, 10) <= 5)) {
-                $user->addPermission(Permission::IS_COORDINATOR);
-            }
-            if ($user->isStaff() && (rand(1, 10) <= 8)) {
-                $user->addPermission(Permission::IS_LECTURER);
-            }
-            if ($user->isStaff() && (rand(1, 10) <= 4)) {
-                $user->addPermission(Permission::IS_MENTOR);
+            //$user->addPermission(\Uni\Db\Permission::getDefaultPermissionList($user->getType()));
+            if ((rand(1, 10) <= 5)) {
+                $user->addPermission(Permission::MANAGE_SITE);
+                $user->addPermission(Permission::MANAGE_STAFF);
+                $user->addPermission(Permission::CAN_MASQUERADE);
             }
         }
 
+        $db->exec('DELETE FROM `address` WHERE `postcode` = \'0000\'');
+        for($i = 0; $i < 50; $i++) {
+            $address = new Address();
+            $address->setNumber(rand(3, 3982));
+            $address->setStreet($this->createWords(rand(1, 3)));
+            $address->setCity(ucwords($this->createWords(rand(1, 2))));
+            $address->setCountry(ucwords($this->createWords(rand(1, 2))));
+            $address->setState(ucwords($this->createWords(rand(1, 2))));
+            $address->setPostcode('0000');
+            $address->setAddress(
+                $address->getNumber() . ' ' .
+                $address->getStreet() . ' ' .
+                $address->getCity() . ' ' .
+                $address->getState() . ' ' .
+                $address->getCountry() . ' ' .
+                $address->getPostcode()
+            );
+            $address->setMapLat(-40.847602844238);
+            $address->setMapLng(137.701782226560);
+            $address->save();
+        }
 
-        $db->exec('TRUNCATE `course`');
-        $db->exec('TRUNCATE `subject`');
-        $db->exec('TRUNCATE `subject_has_user`');
-        $db->exec('TRUNCATE `course_has_user`');
-
-        for ($i = 0; $i < 4; $i++) {
-            $year = 2016 + $i;
-            $course = $config->createCourse();
-            $course->setInstitutionId($institution->getId());
-            /** @var User $coordinator */
-            $coordinator = $config->getUserMapper()->findFiltered(array(
-                'type' => array(\Uni\Db\User::TYPE_STAFF),
-                'permission' => Permission::IS_COORDINATOR
-            ), \Tk\Db\Tool::create('RAND()', 1))->current();
-            if ($coordinator) {
-                $course->setCoordinatorId($coordinator->getId());
+        $db->exec('DELETE FROM `client` WHERE `notes` = \'***\' ');
+        for($i = 0; $i < 25; $i++) {
+            $client = new Client();
+            //$client->setUserId();     // TODO
+            $client->setUid($this->createStr(6));
+            $client->setName($this->createName());
+            $client->setEmail($this->createUniqueEmail());
+            if (rand(0, 1))
+                $client->setBillingEmail($this->createUniqueEmail());
+            $client->setPhone($this->createStr(10, '1234567890'));
+            if (rand(0, 1))
+                $client->setFax($this->createStr(10, '1234567890'));
+            $address = AddressMap::create()->findAll(Tool::create('RAND()'))->current();
+            $client->setAddressId($address->getId());
+            if (rand(0, 1)) {
+                if (rand(0, 1))
+                    $address = AddressMap::create()->findAll(Tool::create('RAND()'))->current();
+                $client->setBillingAddressId($address->getId());
             }
-            $course->setName('Test Course #'.$i);
-            $course->setCode('TEST10001');
-            $course->setEmail($institution->getEmail());
-            $course->save();
-            if ($coordinator) {
-                $course->addUser($coordinator);
-            }
-            $list = $config->getUserMapper()->findFiltered(array(
-                'type' => array(\Uni\Db\User::TYPE_STAFF)
-            ));
-            foreach ($list as $user) {
-                $course->addUser($user);
-            }
+            $client->setNotes('***');
+            $client->save();
+        }
 
-            for ($j = 0; $j < 4; $j++) {
-                $year = 2018 + $j;
-                $subject = $config->createSubject();
-                $subject->setCourseId($course->getId());
-                $subject->setInstitutionId($institution->getId());
-                $subject->setName($course->getName() . ' - ' . $year);
-                $subject->setCode($course->getCode() . '_' . $year);
-                $subject->setEmail($course->getCoordinator()->getEmail());
-                $subject->setDateStart(\Tk\Date::floor()->setDate($year, 1, 1));
-                $subject->setDateEnd(\Tk\Date::ceil()->setDate($year, 12, 31));
-                $subject->save();
+        $db->exec('DELETE FROM `storage` WHERE `notes` = \'***\' ');
+        for($i = 0; $i < 10; $i++) {
+            $storage = new Storage();
+            /** @var Address $address */
+            $address = AddressMap::create()->findAll(Tool::create('RAND()'))->current();
+            $storage->setAddressId($address->getId());
+            $storage->setUid($this->createStr(6));
+            $storage->setName($this->createName());
+            $storage->setMapLat($address->getMapLat());
+            $storage->setMapLng($address->getMapLng());
+            $storage->setNotes('***');
+            $storage->save();
+        }
 
-                $list = $config->getUserMapper()->findFiltered(array(
-                    'type' => array(\Uni\Db\User::TYPE_STUDENT)
-                ));
-                foreach ($list as $user) {
-                    $subject->addUser($user);
+        $db->exec('DELETE FROM `service` WHERE `notes` = \'***\' ');
+        for($i = 0; $i < 10; $i++) {
+            $service = new Service();
+            $service->setName($this->createName());
+            $service->setPrice(rand(1, 50) . '.' . rand(0, 99));
+            $service->setNotes('***');
+            $service->save();
+        }
+
+
+        $db->exec('DELETE FROM `path_case` WHERE `notes` = \'***\' ');
+        for($i = 0; $i < 100; $i++) {
+            $case = new PathCase();
+            /** @var Client $client */
+            $client = ClientMap::create()->findAll(Tool::create('RAND()'))->current();
+            $case->setClientId($client->getId());
+            $case->setPathologyId(rand(100, 999) . '-' . rand(1, 99));
+            $case->setType(rand(0,1) ? PathCase::TYPE_NECROPSY : PathCase::TYPE_BIOPSY);
+            $arr = ObjectUtil::getClassConstants($case, 'SUBMISSION_');
+            $selected = $arr[rand(0, count($arr)-1)];
+            if ($selected == 'other') $selected = $this->createStr(rand(8, 23));
+            $case->setSubmissionType($selected);
+            $arr = ObjectUtil::getClassConstants($case, 'STATUS_');
+            $selected = $arr[rand(0, count($arr)-1)];
+            $case->setStatus($selected);
+
+            // TODO: these fields will be redundant when using the status log
+            if (rand(0, 1)) {
+                $case->setSubmitted($this->createRandomDate());
+                $case->setStatus(PathCase::STATUS_PENDING);
+                if (rand(0, 1)) {
+                    $case->setExamined($this->createRandomDate($case->getSubmitted()));
+                    $case->setStatus(PathCase::STATUS_EXAMINED);
+                    if (rand(0, 1)) {
+                        $case->setFinalised($this->createRandomDate($case->getExamined()));
+                        $case->setStatus(PathCase::STATUS_COMPLETED);
+                    }
                 }
-
             }
 
-        }
-
-        $db->exec('TRUNCATE `user_mentor`');
-        $mentorList = $config->getUserMapper()->findFiltered(array(
-            'institutionId' => $institution->getId(),
-            'type' => array(\Uni\Db\User::TYPE_STAFF),
-            'permission' => Permission::IS_MENTOR
-        ), \Tk\Db\Tool::create('RAND()'));
-        foreach ($mentorList as $mentor) {
-            $studentList = $config->getUserMapper()->findFiltered(array(
-                'institutionId' => $institution->getId(),
-                'type' => array(\Uni\Db\User::TYPE_STUDENT)
-            ), \Tk\Db\Tool::create('RAND()', 8));
-            foreach ($studentList as $student) {
-                $config->getUserMapper()->addMentor($mentor->getId(), $student->getId());
+            if (rand(0, 1)) {
+                $case->setZootonicDisease($this->createStr());
+                if (rand(0, 1))
+                    $case->setZootonicResult(rand(0, 1) ? PathCase::ZOO_POSITIVE : PathCase::ZOO_NEGATIVE);
             }
+            $case->setSpecimenCount(rand(0, 100));      // TODO: do we really need this???
+            
+
+
+
+            $case->setNotes('***');
+            $case->save();
         }
-    }
 
 
-    public function getExampleSql()
-    {
-        $sql = <<<SQL
--- ----------------------------
---  TEST DATA
--- ----------------------------
 
-INSERT INTO institution (user_id, name, email, phone, domain, description, logo, feature, street, city, state, postcode, country, address, map_lat, map_lng, map_zoom, active, del, hash, modified, created) VALUES
-(2, 'The University Of Melbourne', 'admin@unimelb.edu.au', '', '', '<p>The University Of Melbourne</p>', '', '', '250 Princes Highway', 'Werribee', 'Victoria', '3030', 'Australia', '250 Princes Hwy, Werribee VIC 3030, Australia', -37.88916600, 144.69314774, 18.00, 1, 0, MD5('1'), NOW(), NOW())
-;
-
-INSERT INTO `user` (`role_id`, `institution_id`, `username`, `password` ,`name_first`, `name_last`, `email`, `active`, `hash`, `modified`, `created`)
-VALUES
-  (1, 0, 'admin', MD5(CONCAT('password', MD5('10admin'))), 'Administrator', '', 'admin@example.com', 1, MD5('10admin'), NOW(), NOW()),
-  (2, 0, 'unimelb', MD5(CONCAT('password', MD5('20unimelb'))), 'The University Of Melbourne', '', 'fvas@unimelb.edu.au', 1, MD5('20unimelb'), NOW(), NOW()),
-  (5, 1, 'staff', MD5(CONCAT('password', MD5('31staff'))), 'Staff', 'Unimelb', 'staff@unimelb.edu.au', 1, MD5('31staff'), NOW(), NOW()),
-  (4, 1, 'student', MD5(CONCAT('password', MD5('41student'))), 'Student', 'Unimelb', 'student@unimelb.edu.au', 1, MD5('41student'), NOW(), NOW())
-;
-
-INSERT INTO `subject` (`institution_id`, `course_id`, `name`, `code`, `email`, `description`, `date_start`, `date_end`, `modified`, `created`)
-  VALUES (1, 1, 'Poultry Test Field Work', 'VETS50001_2014_SM1', 'subject@unimelb.edu.au', '',  NOW(), DATE_ADD(NOW(), INTERVAL 190 DAY), NOW(), NOW() )
---  VALUES (1, 'Poultry Industry Field Work', 'VETS50001_2014_SM1', 'subject@unimelb.edu.au', '',  NOW(), DATE_ADD(CURRENT_DATETIME, INTERVAL 190 DAY), NOW(), NOW() )
-;
-
-INSERT INTO `subject_has_user` (`user_id`, `subject_id`)
-VALUES
-  (4, 1)
-;
-
-INSERT INTO `course_has_user` (`user_id`, `course_id`)
-VALUES
-  (3, 1)
-;
-
-# INSERT INTO `subject_pre_enrollment` (`subject_id`, `email`)
-# VALUES
-#   (1, 'student@unimelb.edu.au')
-# ;
-
-
-SQL;
 
     }
 

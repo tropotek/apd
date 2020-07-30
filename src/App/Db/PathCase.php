@@ -22,6 +22,24 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 
     //use StatusTrait;
 
+    const STATUS_PENDING            = 'pending';
+    const STATUS_HOLD               = 'hold';  // Awaiting review???
+    const STATUS_FROZEN_STORAGE     = 'frozenStorage';
+    const STATUS_EXAMINED           = 'examined';
+    const STATUS_REPORTED           = 'reported';
+    const STATUS_COMPLETED          = 'completed';
+
+    const TYPE_BIOPSY               = 'biopsy';
+    const TYPE_NECROPSY             = 'necropsy';
+
+    const SUBMISSION_EXTERNAL_VET   = 'external vet';
+    const SUBMISSION_INTERNAL_VET   = 'internal vet';
+    const SUBMISSION_RESEARCH       = 'research';
+    const SUBMISSION_OTHER          = 'other';
+
+    const ZOO_POSITIVE              = 'positive';
+    const ZOO_NEGATIVE              = 'negative';
+
     /**
      * @var int
      */

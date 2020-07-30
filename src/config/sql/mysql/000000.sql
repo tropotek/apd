@@ -69,15 +69,19 @@ CREATE TABLE IF NOT EXISTS `path_case`
     type VARCHAR(64) NOT NULL DEFAULT '',                     -- BIOPSY, NECROPSY
     submission_type VARCHAR(64) NOT NULL DEFAULT '',          -- direct client/external vet/internal vet/researcher/ Other - Specify
     status VARCHAR(64) NOT NULL DEFAULT '',                   -- Pending/frozen storage/examined/reported/awaiting review (if applicable)/completed
+
+    -- TODO: These fields will be redundant when using the status log
+    --       We should remove these fields...
     submitted DATETIME DEFAULT NULL,                          --
     examined DATETIME DEFAULT NULL,                           --
     finalised DATETIME DEFAULT NULL,                          --
+
     zootonic_disease VARCHAR(128) NOT NULL DEFAULT '',        -- A dropdown of entered diseases
     zootonic_result VARCHAR(128) NOT NULL DEFAULT '',         -- Positive/Negative ????
     --
 
     -- Animal/patient details
-    specimen_count INT(10) UNSIGNED NOT NULL DEFAULT 1,       --
+    specimen_count INT(10) UNSIGNED NOT NULL DEFAULT 1,       -- ??? TODO: not sure if this is needed
     animal_name VARCHAR(128) NOT NULL DEFAULT '',             --
     species VARCHAR(128) NOT NULL DEFAULT '',                 --
     gender VARCHAR(64) NOT NULL DEFAULT '',                   -- Male/Female
