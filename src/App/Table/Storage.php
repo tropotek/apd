@@ -31,7 +31,6 @@ class Storage extends \Bs\TableIface
     {
 
         $this->appendCell(new Cell\Checkbox('id'));
-        $this->appendCell(new Cell\Text('institutionId'));
         $this->appendCell(new Cell\Text('addressId'));
         $this->appendCell(new Cell\Text('uid'));
         $this->appendCell(new Cell\Text('name'))->addCss('key')->setUrl($this->getEditUrl());

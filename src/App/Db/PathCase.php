@@ -244,7 +244,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public function __construct()
     {
         $this->_TimestampTrait();
-
+        $this->institutionId = $this->getConfig()->getInstitutionId();
     }
 
     /**
@@ -301,6 +301,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
         return $this->submissionType;
     }
 
+    // TODO: ---------------------------------------------
     /**
      * @param string $status
      * @return PathCase
@@ -318,6 +319,8 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     {
         return $this->status;
     }
+
+    // TODO: ---------------------------------------------
 
     /**
      * @param \DateTime $submitted

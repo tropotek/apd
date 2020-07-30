@@ -92,7 +92,7 @@ class Address extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public function __construct()
     {
         $this->_TimestampTrait();
-
+        $this->institutionId = $this->getConfig()->getInstitutionId();
     }
 
     /**

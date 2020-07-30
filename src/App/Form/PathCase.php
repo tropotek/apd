@@ -27,8 +27,6 @@ class PathCase extends \Bs\FormIface
      */
     public function init()
     {
-
-        $this->appendField(new Field\Select('institutionId', array()))->prependOption('-- Select --', '');
         $this->appendField(new Field\Select('clientId', array()))->prependOption('-- Select --', '');
         $this->appendField(new Field\Select('pathologyId', array()))->prependOption('-- Select --', '');
         $this->appendField(new Field\Input('type'));

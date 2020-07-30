@@ -27,8 +27,6 @@ class Service extends \Bs\FormIface
      */
     public function init()
     {
-
-        $this->appendField(new Field\Select('institutionId', array()))->prependOption('-- Select --', '');
         $this->appendField(new Field\Input('name'));
         $this->appendField(new Field\Input('price'));
         $this->appendField(new Field\Textarea('comments'));

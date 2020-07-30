@@ -27,8 +27,6 @@ class Address extends \Bs\FormIface
      */
     public function init()
     {
-
-        $this->appendField(new Field\Select('institutionId', array()))->prependOption('-- Select --', '');
         $this->appendField(new Field\Input('number'));
         $this->appendField(new Field\Input('street'));
         $this->appendField(new Field\Input('city'));

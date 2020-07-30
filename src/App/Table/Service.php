@@ -31,7 +31,6 @@ class Service extends \Bs\TableIface
     {
 
         $this->appendCell(new Cell\Checkbox('id'));
-        $this->appendCell(new Cell\Text('institutionId'));
         $this->appendCell(new Cell\Text('name'))->addCss('key')->setUrl($this->getEditUrl());
         $this->appendCell(new Cell\Text('price'));
         $this->appendCell(new Cell\Date('modified'));

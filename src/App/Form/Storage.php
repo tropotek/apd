@@ -27,8 +27,6 @@ class Storage extends \Bs\FormIface
      */
     public function init()
     {
-
-        $this->appendField(new Field\Select('institutionId', array()))->prependOption('-- Select --', '');
         $this->appendField(new Field\Select('addressId', array()))->prependOption('-- Select --', '');
         $this->appendField(new Field\Input('uid'));
         $this->appendField(new Field\Input('name'));

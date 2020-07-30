@@ -31,7 +31,6 @@ class Address extends \Bs\TableIface
     {
 
         $this->appendCell(new Cell\Checkbox('id'));
-        $this->appendCell(new Cell\Text('institutionId'));
         $this->appendCell(new Cell\Text('number'));
         $this->appendCell(new Cell\Text('street'));
         $this->appendCell(new Cell\Text('city'));

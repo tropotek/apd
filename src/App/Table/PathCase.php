@@ -31,7 +31,6 @@ class PathCase extends \Bs\TableIface
     {
 
         $this->appendCell(new Cell\Checkbox('id'));
-        $this->appendCell(new Cell\Text('institutionId'));
         $this->appendCell(new Cell\Text('clientId'));
         $this->appendCell(new Cell\Text('pathologyId'));
         $this->appendCell(new Cell\Text('type'));
