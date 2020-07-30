@@ -3,11 +3,17 @@ namespace App\Console;
 
 use App\Db\Address;
 use App\Db\AddressMap;
+use App\Db\Cassette;
+use App\Db\CassetteMap;
 use App\Db\Client;
 use App\Db\ClientMap;
 use App\Db\PathCase;
+use App\Db\PathCaseMap;
+use App\Db\Request;
 use App\Db\Service;
+use App\Db\ServiceMap;
 use App\Db\Storage;
+use App\Db\StorageMap;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Tk\Db\Tool;
@@ -60,6 +66,8 @@ class TestData extends \Bs\Console\TestData
         $db->exec('DELETE FROM `client` WHERE `notes` = \'***\' ');
         $db->exec('DELETE FROM `storage` WHERE `notes` = \'***\' ');
         $db->exec('DELETE FROM `service` WHERE `notes` = \'***\' ');
+        $db->exec('DELETE FROM `path_case` WHERE `notes` = \'***\' ');
+        $db->exec('DELETE FROM `cassette` WHERE `notes` = \'***\' ');
 
 
 
@@ -195,15 +203,124 @@ class TestData extends \Bs\Console\TestData
                     $case->setZootonicResult(rand(0, 1) ? PathCase::ZOO_POSITIVE : PathCase::ZOO_NEGATIVE);
             }
             $case->setSpecimenCount(rand(0, 100));      // TODO: do we really need this???
-            
+            $case->setAnimalName($this->createName());
+            $case->setSpecies($this->createSpecies());
+            $case->setGender(rand(0, 1) ? 'M' : 'F');
+            $case->setDesexed((bool)rand(0,1));
+            $case->setPatientNumber($this->createStr(8, '123456789'));
+            $case->setMicrochip($this->createStr(12, '1234567890'));
+            $case->setOwnerName($this->createName() . ' ' . $this->createName());
+            $case->setOrigin($this->createStr());
+            $case->setBreed($this->createBreed());
+            $case->setVmisWeight(rand(0, 50) . '.' . rand(0, 99));
+            if ($case->getType() == PathCase::TYPE_NECROPSY)
+                $case->setNecoWeight(rand(0, 50) . '.' . rand(0, 99));
+            $case->setDob($this->createRandomDate());
+            if ($case->getType() == PathCase::TYPE_NECROPSY)
+                $case->setDod($this->createRandomDate($case->getDob()));
+            if ($case->getType() == PathCase::TYPE_NECROPSY && rand(0,1))
+                $case->setEuthanised(true);
+            if ($case->isEuthanised())
+                $case->setEuthanisedMethod($this->createStr());
 
+            if ($case->getType() == PathCase::TYPE_NECROPSY) {
+                $arr = ObjectUtil::getClassConstants($case, 'AC_');
+                $selected = $arr[rand(0, count($arr) - 1)];
+                $case->setAcType($selected);
+                if (rand(0, 1)) {
+                    $case->setAcHold($this->createRandomDate($case->getCreated(), $case->getCreated()->add(new \DateInterval('P60D'))));
+                }
+                if (rand(0,1)) {
+                    /** @var Storage $storage */
+                    $storage = StorageMap::create()->findAll(Tool::create('RAND()'))->current();
+                    $case->setStorageId($storage->getId());
+                }
+                if (rand(0,1)) {
+                    $case->setDisposal($this->createRandomDate($case->getCreated(), $case->getCreated()->add(new \DateInterval('P60D'))));
+                }
+            }
 
+            if (rand(0,1)) {
+                $case->setClinicalHistory($this->createLipsumHtml(rand(1, 8)));
+            }
+            if (rand(0,1)) {
+                $case->setGrossPathology($this->createLipsumHtml(rand(1, 8)));
+            }
+            if (rand(0,1)) {
+                $case->setGrossMorphologicalDiagnosis($this->createLipsumHtml(rand(1, 8)));
+            }
+            if (rand(0,1)) {
+                $case->setHistopathology($this->createLipsumHtml(rand(1, 8)));
+            }
+            if (rand(0,1)) {
+                $case->setAncillaryTesting($this->createLipsumHtml(rand(1, 8)));
+            }
+            if (rand(0,1)) {
+                $case->setMorphologicalDiagnosis($this->createLipsumHtml(rand(1, 8)));
+            }
+            if (rand(0,1)) {
+                $case->setCauseOfDeath($this->createLipsumHtml(rand(1, 8)));
+            }
+            if (rand(0,1)) {
+                $case->setComments($this->createLipsumHtml(rand(1, 8)));
+            }
+            if (rand(0,1)) {
+                $case->setNotes($this->createLipsumStr(rand(1, 2)));
+            }
 
             $case->setNotes('***');
             $case->save();
         }
 
+        $db->exec('DELETE FROM `cassette` WHERE `notes` = \'***\' ');
+        for($i = 0; $i < 250; $i++) {
+            $cassette = new Cassette();
+            /** @var PathCase $case */
+            $case = PathCaseMap::create()->findAll(Tool::create('RAND()'))->current();
+            $cassette->setPathCaseId($case->getId());
+            /** @var Storage $storage */
+            $storage = StorageMap::create()->findAll(Tool::create('RAND()'))->current();
+            $cassette->setStorageId($storage->getId());
+            if (rand(0, 1)) {
+                //$cassette->setContainer($this->createStr());
+            }
+            $cassette->setNumber(Cassette::getNextNumber($cassette->getPathCaseId()));
+            $cassette->setName($this->createStr());
+            $cassette->setQty(rand(1, 9));
+            $cassette->setPrice(rand(1, 50) . '.' . rand(0, 99));
+            if (rand(0,1)) {
+                $cassette->setComments($this->createLipsumHtml(rand(1, 8)));
+            }
 
+            $cassette->setNotes('***');
+            $cassette->save();
+        }
+
+        $db->exec('DELETE FROM `request` WHERE `notes` = \'***\' ');
+        for($i = 0; $i < 50; $i++) {
+            $request = new Request();
+            /** @var PathCase $case */
+            $case = PathCaseMap::create()->findAll(Tool::create('RAND()'))->current();
+            $request->setPathCaseId($case->getId());
+            /** @var Cassette $cassette */
+            $cassette = CassetteMap::create()->findFiltered(array('pathCaseId' => $request->getPathCaseId()), Tool::create('RAND()'))->current();
+            $request->setCassetteId($cassette->getId());
+            /** @var Service $service */
+            $service = ServiceMap::create()->findAll(Tool::create('RAND()'))->current();
+            $request->setServiceId($service->getId());
+            /** @var Client $client */
+            $client = ClientMap::create()->findAll(Tool::create('RANDOM()'))->current();
+            $request->setClientId($client->getId());
+
+            $request->setQty(rand(1, $cassette->getQty()));
+            $request->setPrice($service->getPrice()*$request->getQty());
+            if (rand(0,1)) {
+                $request->setComments($this->createLipsumHtml(rand(1, 8)));
+            }
+
+            $cassette->setNotes('***');
+            $cassette->save();
+        }
 
 
     }

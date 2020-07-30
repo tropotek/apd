@@ -1,8 +1,10 @@
 <?php
 namespace App\Db;
 
+use App\Db\Traits\PathCaseTrait;
 use App\Db\Traits\StorageTrait;
 use Bs\Db\Traits\TimestampTrait;
+use Tk\Db\Tool;
 
 /**
  * @author Mick Mifsud
@@ -14,7 +16,7 @@ class Cassette extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 {
     use TimestampTrait;
     use StorageTrait;
-    // use PathCaseTrait;
+    use PathCaseTrait;
 
     /**
      * @var int
@@ -210,6 +212,20 @@ class Cassette extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public function getNotes() : string
     {
         return $this->notes;
+    }
+
+    /**
+     * @param int $pathCaseId
+     * @return int
+     * @throws \Exception
+     */
+    static public function getNextNumber($pathCaseId)
+    {
+        /** @var Cassette $cassette */
+        $cassette = CassetteMap::create()->findFiltered(array('pathCaseId' => $pathCaseId), Tool::create('number DESC'))->current();
+        if ($cassette)
+            return (int)$cassette->getNumber() + 1;
+        return 1;
     }
 
     /**

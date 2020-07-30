@@ -40,6 +40,11 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     const ZOO_POSITIVE              = 'positive';
     const ZOO_NEGATIVE              = 'negative';
 
+    // After Care Options
+    const AC_GENERAL                = 'general';
+    const AC_CREMATION              = 'cremation';
+    const AC_INCINERATION           = 'incineration';
+
     /**
      * @var int
      */
