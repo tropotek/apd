@@ -28,13 +28,13 @@ class Cassette extends \Bs\FormIface
     public function init()
     {
 
-        $this->appendField(new Field\Select('pathCaseId', array()))->prependOption('-- Select --', '');
+        //$this->appendField(new Field\Select('pathCaseId', array()))->prependOption('-- Select --', '');
         $this->appendField(new Field\Select('storageId', array()))->prependOption('-- Select --', '');
         $this->appendField(new Field\Input('container'));
         $this->appendField(new Field\Input('number'));
         $this->appendField(new Field\Input('name'));
         $this->appendField(new Field\Input('qty'));
-        $this->appendField(new Field\Input('price'));
+        //$this->appendField(new Field\Input('price'));
         $this->appendField(new Field\Textarea('comments'));
         $this->appendField(new Field\Textarea('notes'));
 

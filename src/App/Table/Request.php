@@ -31,12 +31,12 @@ class Request extends \Bs\TableIface
     {
 
         $this->appendCell(new Cell\Checkbox('id'));
-        $this->appendCell(new Cell\Text('pathCaseId'));
-        $this->appendCell(new Cell\Text('cassetteId'));
+        //$this->appendCell(new Cell\Text('pathCaseId'));
+        $this->appendCell(new Cell\Text('cassetteId'))->addCss('key')->setUrl($this->getEditUrl());;
         $this->appendCell(new Cell\Text('serviceId'));
         $this->appendCell(new Cell\Text('clientId'));
         $this->appendCell(new Cell\Text('qty'));
-        $this->appendCell(new Cell\Text('price'));
+        //$this->appendCell(new Cell\Text('price'));
 
         $this->appendCell(new Cell\Date('modified'));
         $this->appendCell(new Cell\Date('created'));

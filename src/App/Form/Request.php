@@ -28,12 +28,12 @@ class Request extends \Bs\FormIface
     public function init()
     {
 
-        $this->appendField(new Field\Select('pathCaseId', array()))->prependOption('-- Select --', '');
-        $this->appendField(new Field\Select('cassetteId', array()))->prependOption('-- Select --', '');
+        //$this->appendField(new Field\Select('pathCaseId', array()))->prependOption('-- Select --', '');
+        //$this->appendField(new Field\Select('cassetteId', array()))->prependOption('-- Select --', '');
         $this->appendField(new Field\Select('serviceId', array()))->prependOption('-- Select --', '');
         $this->appendField(new Field\Select('clientId', array()))->prependOption('-- Select --', '');
         $this->appendField(new Field\Input('qty'));
-        $this->appendField(new Field\Input('price'));
+        //$this->appendField(new Field\Input('price'));
         $this->appendField(new Field\Textarea('comments'));
         $this->appendField(new Field\Textarea('notes'));
 

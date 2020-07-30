@@ -33,6 +33,8 @@ class RequestMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Decimal('price'));
             $this->dbMap->addPropertyMap(new Db\Text('comments'));
             $this->dbMap->addPropertyMap(new Db\Text('notes'));
+            $this->dbMap->addPropertyMap(new Db\Date('modified'));
+            $this->dbMap->addPropertyMap(new Db\Date('created'));
 
         }
         return $this->dbMap;

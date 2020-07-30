@@ -33,6 +33,8 @@ class StorageMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Decimal('mapLng', 'map_lng'));
             $this->dbMap->addPropertyMap(new Db\Decimal('mapLat', 'map_lat'));
             $this->dbMap->addPropertyMap(new Db\Text('notes'));
+            $this->dbMap->addPropertyMap(new Db\Date('modified'));
+            $this->dbMap->addPropertyMap(new Db\Date('created'));
 
         }
         return $this->dbMap;

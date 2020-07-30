@@ -68,6 +68,7 @@ class TestData extends \Bs\Console\TestData
         $db->exec('DELETE FROM `service` WHERE `notes` = \'***\' ');
         $db->exec('DELETE FROM `path_case` WHERE `notes` = \'***\' ');
         $db->exec('DELETE FROM `cassette` WHERE `notes` = \'***\' ');
+        $db->exec('DELETE FROM `request` WHERE `notes` = \'***\' ');
 
 
 
@@ -150,7 +151,7 @@ class TestData extends \Bs\Console\TestData
             $address = AddressMap::create()->findAll(Tool::create('RAND()'))->current();
             $storage->setAddressId($address->getId());
             $storage->setUid($this->createStr(6));
-            $storage->setName($this->createName());
+            $storage->setName('Building: ' . $this->createName());
             $storage->setMapLat($address->getMapLat());
             $storage->setMapLng($address->getMapLng());
             $storage->setNotes('***');
@@ -175,13 +176,14 @@ class TestData extends \Bs\Console\TestData
             $case->setClientId($client->getId());
             $case->setPathologyId(rand(100, 999) . '-' . rand(1, 99));
             $case->setType(rand(0,1) ? PathCase::TYPE_NECROPSY : PathCase::TYPE_BIOPSY);
-            $arr = ObjectUtil::getClassConstants($case, 'SUBMISSION_');
+            $arr = array_values(ObjectUtil::getClassConstants($case, 'SUBMISSION_'));
             $selected = $arr[rand(0, count($arr)-1)];
             if ($selected == 'other') $selected = $this->createStr(rand(8, 23));
             $case->setSubmissionType($selected);
-            $arr = ObjectUtil::getClassConstants($case, 'STATUS_');
-            $selected = $arr[rand(0, count($arr)-1)];
-            $case->setStatus($selected);
+
+            //$arr = array_values(ObjectUtil::getClassConstants($case, 'STATUS_'));
+            //$selected = $arr[rand(0, count($arr)-1)];
+            $case->setStatus(PathCase::STATUS_PENDING);
 
             // TODO: these fields will be redundant when using the status log
             if (rand(0, 1)) {
@@ -196,6 +198,7 @@ class TestData extends \Bs\Console\TestData
                     }
                 }
             }
+
 
             if (rand(0, 1)) {
                 $case->setZootonicDisease($this->createStr());
@@ -224,7 +227,7 @@ class TestData extends \Bs\Console\TestData
                 $case->setEuthanisedMethod($this->createStr());
 
             if ($case->getType() == PathCase::TYPE_NECROPSY) {
-                $arr = ObjectUtil::getClassConstants($case, 'AC_');
+                $arr = array_values(ObjectUtil::getClassConstants($case, 'AC_'));
                 $selected = $arr[rand(0, count($arr) - 1)];
                 $case->setAcType($selected);
                 if (rand(0, 1)) {
@@ -273,7 +276,7 @@ class TestData extends \Bs\Console\TestData
         }
 
         $db->exec('DELETE FROM `cassette` WHERE `notes` = \'***\' ');
-        for($i = 0; $i < 250; $i++) {
+        for($i = 0; $i < 450; $i++) {
             $cassette = new Cassette();
             /** @var PathCase $case */
             $case = PathCaseMap::create()->findAll(Tool::create('RAND()'))->current();
@@ -297,19 +300,20 @@ class TestData extends \Bs\Console\TestData
         }
 
         $db->exec('DELETE FROM `request` WHERE `notes` = \'***\' ');
-        for($i = 0; $i < 50; $i++) {
+        for($i = 0; $i < 100; $i++) {
             $request = new Request();
             /** @var PathCase $case */
             $case = PathCaseMap::create()->findAll(Tool::create('RAND()'))->current();
             $request->setPathCaseId($case->getId());
             /** @var Cassette $cassette */
             $cassette = CassetteMap::create()->findFiltered(array('pathCaseId' => $request->getPathCaseId()), Tool::create('RAND()'))->current();
+            if (!$cassette) continue;
             $request->setCassetteId($cassette->getId());
             /** @var Service $service */
             $service = ServiceMap::create()->findAll(Tool::create('RAND()'))->current();
             $request->setServiceId($service->getId());
             /** @var Client $client */
-            $client = ClientMap::create()->findAll(Tool::create('RANDOM()'))->current();
+            $client = ClientMap::create()->findAll(Tool::create('RAND()'))->current();
             $request->setClientId($client->getId());
 
             $request->setQty(rand(1, $cassette->getQty()));
@@ -318,8 +322,8 @@ class TestData extends \Bs\Console\TestData
                 $request->setComments($this->createLipsumHtml(rand(1, 8)));
             }
 
-            $cassette->setNotes('***');
-            $cassette->save();
+            $request->setNotes('***');
+            $request->save();
         }
 
 

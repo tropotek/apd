@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS `path_case`
     -- Case
     pathology_id VARCHAR(64) NOT NULL DEFAULT '',             -- Pathology Number
     type VARCHAR(64) NOT NULL DEFAULT '',                     -- BIOPSY, NECROPSY
-    submission_type VARCHAR(64) NOT NULL DEFAULT '',          -- direct client/external vet/internal vet/researcher/ Other - Specify
+    submission_type VARCHAR(64) NULL DEFAULT '',          -- direct client/external vet/internal vet/researcher/ Other - Specify
     status VARCHAR(64) NOT NULL DEFAULT '',                   -- Pending/frozen storage/examined/reported/awaiting review (if applicable)/completed
 
     -- TODO: These fields will be redundant when using the status log
@@ -98,8 +98,8 @@ CREATE TABLE IF NOT EXISTS `path_case`
     dod DATETIME DEFAULT NULL,                                -- Date and time of death
 
     euthanised TINYINT(1) NOT NULL DEFAULT 0,                 --
-    euthanised_method VARCHAR(255) NOT NULL DEFAULT '',       --
-    ac_type VARCHAR(64) NOT NULL DEFAULT '',                  -- after care type: General Disposal/cremation/internal incineration
+    euthanised_method VARCHAR(255) NULL DEFAULT '',       --
+    ac_type VARCHAR(64) NULL DEFAULT '',                  -- after care type: General Disposal/cremation/internal incineration
     ac_hold DATETIME DEFAULT NULL,                            -- after care Date to wait until processing animal
     storage_id INT(10) UNSIGNED NOT NULL DEFAULT 0,           -- The current location of the animal (cleared when disposal is completed)
     disposal DATETIME DEFAULT NULL,

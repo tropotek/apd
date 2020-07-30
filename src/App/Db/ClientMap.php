@@ -36,6 +36,8 @@ class ClientMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Integer('addressId', 'address_id'));
             $this->dbMap->addPropertyMap(new Db\Integer('billingAddressId', 'billing_address_id'));
             $this->dbMap->addPropertyMap(new Db\Text('notes'));
+            $this->dbMap->addPropertyMap(new Db\Date('modified'));
+            $this->dbMap->addPropertyMap(new Db\Date('created'));
 
         }
         return $this->dbMap;

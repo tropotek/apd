@@ -28,7 +28,7 @@ class Service extends \Bs\FormIface
     public function init()
     {
         $this->appendField(new Field\Input('name'));
-        $this->appendField(new Field\Input('price'));
+        //$this->appendField(new Field\Input('price'));
         $this->appendField(new Field\Textarea('comments'));
         $this->appendField(new Field\Textarea('notes'));
 
