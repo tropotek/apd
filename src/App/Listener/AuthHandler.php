@@ -120,8 +120,6 @@ class AuthHandler extends \Bs\Listener\AuthHandler
             }
         }
 
-
-
         // TODO:
         // TODO: This need to be tested before releasing it
         // TODO:

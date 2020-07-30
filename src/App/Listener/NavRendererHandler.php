@@ -114,6 +114,7 @@ class NavRendererHandler implements Subscriber
             $menu->append(Item::create('Storage List', \Uni\Uri::createHomeUrl('/storageManager.html'), 'fa fa-question'));
             $menu->append(Item::create('Service List', \Uni\Uri::createHomeUrl('/serviceManager.html'), 'fa fa-question'));
             $menu->append(Item::create('Case List', \Uni\Uri::createHomeUrl('/pathCaseManager.html'), 'fa fa-question'));
+            $menu->append(Item::create('Request List', \Uni\Uri::createHomeUrl('/requestManager.html'), 'fa fa-question'));
 
         }
 

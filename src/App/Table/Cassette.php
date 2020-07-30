@@ -31,13 +31,13 @@ class Cassette extends \Bs\TableIface
     {
 
         $this->appendCell(new Cell\Checkbox('id'));
-        $this->appendCell(new Cell\Text('pathCaseId'));
-        $this->appendCell(new Cell\Text('storageId'));
-        $this->appendCell(new Cell\Text('container'));
         $this->appendCell(new Cell\Text('number'));
+        $this->appendCell(new Cell\Text('container'));
         $this->appendCell(new Cell\Text('name'))->addCss('key')->setUrl($this->getEditUrl());
+        //$this->appendCell(new Cell\Text('pathCaseId'));
+        //$this->appendCell(new Cell\Text('storageId'));
         $this->appendCell(new Cell\Text('qty'));
-        $this->appendCell(new Cell\Text('price'));
+        //$this->appendCell(new Cell\Text('price'));
         $this->appendCell(new Cell\Date('modified'));
         $this->appendCell(new Cell\Date('created'));
 
@@ -46,7 +46,7 @@ class Cassette extends \Bs\TableIface
 
         // Actions
         //$this->appendAction(\Tk\Table\Action\Link::createLink('New Cassette', \Bs\Uri::createHomeUrl('/cassetteEdit.html'), 'fa fa-plus'));
-        //$this->appendAction(\Tk\Table\Action\ColumnSelect::create()->setUnselected(array('modified', 'created')));
+        $this->appendAction(\Tk\Table\Action\ColumnSelect::create()->setUnselected(array('modified')));
         $this->appendAction(\Tk\Table\Action\Delete::create());
         $this->appendAction(\Tk\Table\Action\Csv::create());
 

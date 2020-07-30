@@ -31,11 +31,12 @@ class PathCase extends \Bs\TableIface
     {
 
         $this->appendCell(new Cell\Checkbox('id'));
+        $this->appendCell(new Cell\Text('pathologyId'))->addCss('key')->setUrl($this->getEditUrl());
         $this->appendCell(new Cell\Text('clientId'));
-        $this->appendCell(new Cell\Text('pathologyId'));
         $this->appendCell(new Cell\Text('type'));
         $this->appendCell(new Cell\Text('submissionType'));
         $this->appendCell(new Cell\Text('status'));
+        /*
         $this->appendCell(new Cell\Date('submitted'));
         $this->appendCell(new Cell\Date('examined'));
         $this->appendCell(new Cell\Date('finalised'));
@@ -59,8 +60,10 @@ class PathCase extends \Bs\TableIface
         $this->appendCell(new Cell\Text('euthanisedMethod'));
         $this->appendCell(new Cell\Text('acType'));
         $this->appendCell(new Cell\Date('acHold'));
-        $this->appendCell(new Cell\Text('storageId'));
-        $this->appendCell(new Cell\Date('disposal'));
+        */
+        $this->appendCell(new Cell\Text('storageId'));  // Not sure (show address text)
+        //$this->appendCell(new Cell\Date('disposal'));
+
         $this->appendCell(new Cell\Date('modified'));
         $this->appendCell(new Cell\Date('created'));
 
@@ -69,7 +72,7 @@ class PathCase extends \Bs\TableIface
 
         // Actions
         //$this->appendAction(\Tk\Table\Action\Link::createLink('New Path Case', \Bs\Uri::createHomeUrl('/pathCaseEdit.html'), 'fa fa-plus'));
-        //$this->appendAction(\Tk\Table\Action\ColumnSelect::create()->setUnselected(array('modified', 'created')));
+        $this->appendAction(\Tk\Table\Action\ColumnSelect::create()->setUnselected(array('modified')));
         $this->appendAction(\Tk\Table\Action\Delete::create());
         $this->appendAction(\Tk\Table\Action\Csv::create());
 

@@ -49,6 +49,12 @@ VALUES
     (4, 'perm.manage.plugins'),
     (4, 'perm.manage.staff')
 ;
+
+DROP TABLE _user_role;
+DROP TABLE _user_role_id;
+DROP TABLE _user_role_institution;
+DROP TABLE _user_role_permission;
+
 SQL;
             try {
                 $this->getConfig()->getDb()->exec($sql);

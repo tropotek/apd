@@ -31,15 +31,16 @@ class Client extends \Bs\TableIface
     {
 
         $this->appendCell(new Cell\Checkbox('id'));
-        $this->appendCell(new Cell\Text('userId'));
-        $this->appendCell(new Cell\Text('uid'));
         $this->appendCell(new Cell\Text('name'))->addCss('key')->setUrl($this->getEditUrl());
+        //$this->appendCell(new Cell\Text('userId'));
+        //$this->appendCell(new Cell\Text('uid'));
         $this->appendCell(new Cell\Text('email'));
         $this->appendCell(new Cell\Text('billingEmail'));
         $this->appendCell(new Cell\Text('phone'));
         $this->appendCell(new Cell\Text('fax'));
-        $this->appendCell(new Cell\Text('addressId'));
-        $this->appendCell(new Cell\Text('billingAddressId'));
+        //$this->appendCell(new Cell\Text('addressId'));
+        //$this->appendCell(new Cell\Text('billingAddressId'));
+
         $this->appendCell(new Cell\Date('modified'));
         $this->appendCell(new Cell\Date('created'));
 
@@ -48,7 +49,7 @@ class Client extends \Bs\TableIface
 
         // Actions
         //$this->appendAction(\Tk\Table\Action\Link::createLink('New Client', \Bs\Uri::createHomeUrl('/clientEdit.html'), 'fa fa-plus'));
-        //$this->appendAction(\Tk\Table\Action\ColumnSelect::create()->setUnselected(array('modified', 'created')));
+        $this->appendAction(\Tk\Table\Action\ColumnSelect::create()->setUnselected(array('modified')));
         $this->appendAction(\Tk\Table\Action\Delete::create());
         $this->appendAction(\Tk\Table\Action\Csv::create());
 

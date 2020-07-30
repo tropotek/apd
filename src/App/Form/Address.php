@@ -27,6 +27,8 @@ class Address extends \Bs\FormIface
      */
     public function init()
     {
+
+        // maybe have these in a hidden area if the map does not work (See what others do)
         $this->appendField(new Field\Input('number'));
         $this->appendField(new Field\Input('street'));
         $this->appendField(new Field\Input('city'));
@@ -34,9 +36,11 @@ class Address extends \Bs\FormIface
         $this->appendField(new Field\Input('state'));
         $this->appendField(new Field\Input('postcode'));
         $this->appendField(new Field\Input('address'));
-        $this->appendField(new Field\Input('mapZoom'));
-        $this->appendField(new Field\Input('mapLng'));
-        $this->appendField(new Field\Input('mapLat'));
+
+        // TODO: Add a map field here
+        $this->appendField(new Field\Hidden('mapZoom'));
+        $this->appendField(new Field\Hidden('mapLng'));
+        $this->appendField(new Field\Hidden('mapLat'));
 
         $this->appendField(new Event\Submit('update', array($this, 'doSubmit')));
         $this->appendField(new Event\Submit('save', array($this, 'doSubmit')));
