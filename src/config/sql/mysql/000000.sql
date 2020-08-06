@@ -208,6 +208,7 @@ CREATE TABLE IF NOT EXISTS request
     cassette_id INT(10) UNSIGNED NOT NULL DEFAULT 0,          --
     service_id INT(10) UNSIGNED NOT NULL DEFAULT 0,           --
     client_id INT(10) UNSIGNED NOT NULL DEFAULT 0,            -- The client requesting the samples (not sure if this could be staff, client, etc)
+    status VARCHAR(64) NOT NULL DEFAULT '',                   -- ???
     qty INT(10) NOT NULL DEFAULT 0,                           -- Quantity of samples requested (check available tissue.qty on submit)
     price DECIMAL(9,2) NOT NULL DEFAULT 0.0,                  -- The total cost based on qty requested + the service cost
     comments TEXT,                                            -- public comments

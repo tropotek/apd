@@ -5,6 +5,7 @@ use App\Db\Traits\CassetteTrait;
 use App\Db\Traits\ClientTrait;
 use App\Db\Traits\PathCaseTrait;
 use App\Db\Traits\ServiceTrait;
+use Bs\Db\Traits\StatusTrait;
 use Bs\Db\Traits\TimestampTrait;
 
 /**
@@ -20,6 +21,12 @@ class Request extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     use CassetteTrait;
     use ServiceTrait;
     use ClientTrait;
+    use StatusTrait;
+
+    const STATUS_PENDING            = 'pending';
+    const STATUS_PROCESSING         = 'processing';
+    const STATUS_COMPLETED          = 'completed';
+    const STATUS_CANCELLED          = 'cancelled';
 
     /**
      * @var int
@@ -45,6 +52,11 @@ class Request extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      * @var int
      */
     public $clientId = 0;
+
+    /**
+     * @var string
+     */
+    public $status = 'pending';
 
     /**
      * @var int

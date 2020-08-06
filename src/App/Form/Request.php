@@ -32,6 +32,9 @@ class Request extends \Bs\FormIface
         //$this->appendField(new Field\Select('cassetteId', array()))->prependOption('-- Select --', '');
         $this->appendField(new Field\Select('serviceId', array()))->prependOption('-- Select --', '');
         $this->appendField(new Field\Select('clientId', array()))->prependOption('-- Select --', '');
+        $this->appendField(new \Bs\Form\Field\StatusSelect('status', \App\Db\Request::getStatusList($this->getRequest()->getStatus())))
+            ->setRequired()->prependOption('-- Status --', '')
+            ->setNotes('Set the status. Use the checkbox to disable notification emails.');
         $this->appendField(new Field\Input('qty'));
         //$this->appendField(new Field\Input('price'));
         $this->appendField(new Field\Textarea('comments'));
@@ -44,7 +47,7 @@ class Request extends \Bs\FormIface
     }
 
     /**
-     * @param \Tk\Request $request
+     * @param \Tk\Request|null $request
      * @throws \Exception
      */
     public function execute($request = null)

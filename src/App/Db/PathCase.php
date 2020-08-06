@@ -3,6 +3,7 @@ namespace App\Db;
 
 use App\Db\Traits\ClientTrait;
 use App\Db\Traits\StorageTrait;
+use Bs\Db\Traits\StatusTrait;
 use Bs\Db\Traits\TimestampTrait;
 use Uni\Db\Traits\InstitutionTrait;
 //use Uni\Db\Traits\StatusTrait;
@@ -19,8 +20,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     use InstitutionTrait;
     use ClientTrait;
     use StorageTrait;
-
-    //use StatusTrait;
+    use StatusTrait;
 
     const STATUS_PENDING            = 'pending';
     const STATUS_HOLD               = 'hold';  // Awaiting review???
@@ -28,6 +28,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     const STATUS_EXAMINED           = 'examined';
     const STATUS_REPORTED           = 'reported';
     const STATUS_COMPLETED          = 'completed';
+    const STATUS_CANCELLED          = 'cancelled';      // I think we need this in case a case is cancelled/dropped
 
     const TYPE_BIOPSY               = 'biopsy';
     const TYPE_NECROPSY             = 'necropsy';
@@ -78,7 +79,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     /**
      * @var string
      */
-    public $status = '';
+    public $status = 'pending';
 
     /**
      * @var \DateTime
@@ -323,27 +324,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     {
         return $this->submissionType;
     }
-
-    // TODO: ---------------------------------------------
-    /**
-     * @param string $status
-     * @return PathCase
-     */
-    public function setStatus($status) : PathCase
-    {
-        $this->status = $status;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStatus() : string
-    {
-        return $this->status;
-    }
-
-    // TODO: ---------------------------------------------
 
     /**
      * @param \DateTime $submitted

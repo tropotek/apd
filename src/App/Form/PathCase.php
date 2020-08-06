@@ -31,7 +31,9 @@ class PathCase extends \Bs\FormIface
         $this->appendField(new Field\Select('pathologyId', array()))->prependOption('-- Select --', '');
         $this->appendField(new Field\Input('type'));
         $this->appendField(new Field\Input('submissionType'));
-        $this->appendField(new Field\Input('status'));
+        $this->appendField(new \Bs\Form\Field\StatusSelect('status', \App\Db\PathCase::getStatusList($this->getPathCase()->getStatus())))
+            ->setRequired()->prependOption('-- Status --', '')
+            ->setNotes('Set the status. Use the checkbox to disable notification emails.');
         $this->appendField(new Field\Input('submitted'));
         $this->appendField(new Field\Input('examined'));
         $this->appendField(new Field\Input('finalised'));

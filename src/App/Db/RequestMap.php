@@ -29,6 +29,7 @@ class RequestMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Integer('cassetteId', 'cassette_id'));
             $this->dbMap->addPropertyMap(new Db\Integer('serviceId', 'service_id'));
             $this->dbMap->addPropertyMap(new Db\Integer('clientId', 'client_id'));
+            $this->dbMap->addPropertyMap(new Db\Text('status'));
             $this->dbMap->addPropertyMap(new Db\Integer('qty'));
             $this->dbMap->addPropertyMap(new Db\Decimal('price'));
             $this->dbMap->addPropertyMap(new Db\Text('comments'));
@@ -52,6 +53,7 @@ class RequestMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Integer('cassetteId'));
             $this->formMap->addPropertyMap(new Form\Integer('serviceId'));
             $this->formMap->addPropertyMap(new Form\Integer('clientId'));
+            $this->formMap->addPropertyMap(new Form\Text('status'));
             $this->formMap->addPropertyMap(new Form\Integer('qty'));
             $this->formMap->addPropertyMap(new Form\Decimal('price'));
             $this->formMap->addPropertyMap(new Form\Text('comments'));
@@ -107,6 +109,9 @@ class RequestMap extends Mapper
         }
         if (!empty($filter['clientId'])) {
             $filter->appendWhere('a.client_id = %s AND ', (int)$filter['clientId']);
+        }
+        if (!empty($filter['status'])) {
+            $filter->appendWhere('a.status = %s AND ', $this->quote($filter['status']));
         }
         if (!empty($filter['qty'])) {
             $filter->appendWhere('a.qty = %s AND ', (int)$filter['qty']);
