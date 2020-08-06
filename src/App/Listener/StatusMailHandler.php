@@ -140,7 +140,9 @@ class StatusMailHandler implements Subscriber
         $mailLog = $event->get('mailLog');
         //$message = $event->getMessage();
 
-        $mailLog->setUid($this->getConfig()->getInstitutionId());
+        if ($this->getConfig()->getInstitution())
+            $mailLog->setForeignModel($this->getConfig()->getInstitution());
+        
 
 //        if (!$mailLog || !$message instanceof \Tk\Mail\CurlyMessage) return;
 //        // Link status to mail log if one exists
