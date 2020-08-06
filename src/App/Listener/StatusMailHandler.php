@@ -2,6 +2,7 @@
 namespace App\Listener;
 
 use Dom\Exception;
+use Tk\ConfigTrait;
 use Tk\Event\Subscriber;
 use Tk\Mail\CurlyMessage;
 
@@ -14,7 +15,7 @@ use Tk\Mail\CurlyMessage;
  */
 class StatusMailHandler implements Subscriber
 {
-
+    use ConfigTrait;
 
     /**
      * @param \Uni\Event\StatusEvent $event
@@ -135,9 +136,12 @@ class StatusMailHandler implements Subscriber
      */
     public function postSend(\Tk\Mail\MailEvent $event)
     {
-//        /** @var \App\Db\MailLog $mailLog */
-//        $mailLog = $event->get('mailLog');
-//        $message = $event->getMessage();
+        /** @var \Tk\Ml\Db\MailLog $mailLog */
+        $mailLog = $event->get('mailLog');
+        //$message = $event->getMessage();
+
+        $mailLog->setUid($this->getConfig()->getInstitutionId());
+
 //        if (!$mailLog || !$message instanceof \Tk\Mail\CurlyMessage) return;
 //        // Link status to mail log if one exists
 //        if ($message->get('status::id')) {
@@ -153,7 +157,7 @@ class StatusMailHandler implements Subscriber
         return array(
             \Bs\StatusEvents::STATUS_CHANGE => array('onStatusChange', 0),
             \Bs\StatusEvents::STATUS_SEND_MESSAGES => array('onSendStatusMessages', 0),
-            \Tk\Mail\MailEvents::POST_SEND => array('postSend', 0)
+            \Tk\Mail\MailEvents::POST_SEND => array('postSend', 10)
         );
     }
 
