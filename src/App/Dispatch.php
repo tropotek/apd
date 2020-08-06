@@ -21,6 +21,7 @@ class Dispatch extends \Uni\Dispatch
 
         $dispatcher->addSubscriber(new \App\Listener\NavRendererHandler());
         $dispatcher->addSubscriber(new \Bs\Listener\PageLoaderHandler());
+        $dispatcher->addSubscriber(new \App\Listener\StatusMailHandler());
     }
 
 }

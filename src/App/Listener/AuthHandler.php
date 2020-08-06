@@ -1,11 +1,8 @@
 <?php
 namespace App\Listener;
 
-
-use Bs\Db\User;
 use Tk\Event\AuthEvent;
 use Tk\Auth\AuthEvents;
-use Uni\Db\Permission;
 
 /**
  * @author Michael Mifsud <info@tropotek.com>
@@ -23,14 +20,14 @@ class AuthHandler extends \Bs\Listener\AuthHandler
     public function onLoginProcess(\Tk\Event\AuthEvent $event)
     {
         $config = $this->getConfig();
+        /** @var \Tk\Auth\Adapter\Ldap $adapter */
+        $adapter = $event->getAdapter();
+
         if ($config->getMasqueradeHandler()->isMasquerading()) {
             $config->getMasqueradeHandler()->masqueradeClear();
         }
 
         if ($event->getAdapter() instanceof \Tk\Auth\Adapter\Ldap) {
-            /** @var \Tk\Auth\Adapter\Ldap $adapter */
-            $adapter = $event->getAdapter();
-            $config = \App\Config::getInstance();
             // Find user data from ldap connection
             $filter = substr($adapter->getBaseDn(), 0, strpos($adapter->getBaseDn(), ','));
             if ($filter) {
