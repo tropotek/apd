@@ -93,21 +93,21 @@ class RequestMap extends Mapper
             if ($w) $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
         }
 
-        if (!empty($filter['id'])) {
+        if (isset($filter['id'])) {
             $w = $this->makeMultiQuery($filter['id'], 'a.id');
             if ($w) $filter->appendWhere('(%s) AND ', $w);
         }
 
-        if (!empty($filter['pathCaseId'])) {
+        if (isset($filter['pathCaseId'])) {
             $filter->appendWhere('a.path_case_id = %s AND ', (int)$filter['pathCaseId']);
         }
-        if (!empty($filter['cassetteId'])) {
+        if (isset($filter['cassetteId'])) {
             $filter->appendWhere('a.cassette_id = %s AND ', (int)$filter['cassetteId']);
         }
-        if (!empty($filter['serviceId'])) {
+        if (isset($filter['serviceId'])) {
             $filter->appendWhere('a.service_id = %s AND ', (int)$filter['serviceId']);
         }
-        if (!empty($filter['clientId'])) {
+        if (isset($filter['clientId'])) {
             $filter->appendWhere('a.client_id = %s AND ', (int)$filter['clientId']);
         }
         if (!empty($filter['status'])) {

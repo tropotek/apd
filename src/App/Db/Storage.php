@@ -15,7 +15,6 @@ class Storage extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 {
     use TimestampTrait;
     use InstitutionTrait;
-    use AddressTrait;
 
     /**
      * @var int
@@ -26,11 +25,6 @@ class Storage extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      * @var int
      */
     public $institutionId = 0;
-
-    /**
-     * @var int
-     */
-    public $addressId = 0;
 
     /**
      * @var string
@@ -199,10 +193,6 @@ class Storage extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 
         if (!$this->institutionId) {
             $errors['institutionId'] = 'Invalid value: institutionId';
-        }
-
-        if (!$this->addressId) {
-            $errors['addressId'] = 'Invalid value: addressId';
         }
 
         if (!$this->uid) {

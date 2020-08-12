@@ -155,15 +155,15 @@ class PathCaseMap extends Mapper
             if ($w) $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
         }
 
-        if (!empty($filter['id'])) {
+        if (isset($filter['id'])) {
             $w = $this->makeMultiQuery($filter['id'], 'a.id');
             if ($w) $filter->appendWhere('(%s) AND ', $w);
         }
 
-        if (!empty($filter['institutionId'])) {
+        if (isset($filter['institutionId'])) {
             $filter->appendWhere('a.institution_id = %s AND ', (int)$filter['institutionId']);
         }
-        if (!empty($filter['clientId'])) {
+        if (isset($filter['clientId'])) {
             $filter->appendWhere('a.client_id = %s AND ', (int)$filter['clientId']);
         }
         if (!empty($filter['pathologyId'])) {

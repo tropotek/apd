@@ -38,6 +38,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     const SUBMISSION_RESEARCH       = 'research';
     const SUBMISSION_OTHER          = 'other';
 
+    const ZOO_UNKNOWN               = '';
     const ZOO_POSITIVE              = 'positive';
     const ZOO_NEGATIVE              = 'negative';
 
@@ -56,6 +57,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      */
     public $institutionId = 0;
 
+    // TODO??? is this the animal owner client??? rectify if this is related to the request client???
     /**
      * @var int
      */
@@ -269,6 +271,20 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     {
         $this->_TimestampTrait();
         $this->institutionId = $this->getConfig()->getInstitutionId();
+    }
+
+    /**
+     * Get the Case root file folder, all content related to the case must be stored in here
+     *
+     * @return string
+     * @throws \Exception
+     */
+    public function getDataPath()
+    {
+        if ($this->getInstitution()) {
+            return sprintf('%s/pathCase/%s', $this->getInstitution()->getDataPath(), $this->getVolatileId());
+        }
+        return sprintf('pathCase/%s', $this->getVolatileId());
     }
 
     /**
@@ -951,13 +967,13 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
             $errors['institutionId'] = 'Invalid value: institutionId';
         }
 
-        if (!$this->clientId) {
-            $errors['clientId'] = 'Invalid value: clientId';
-        }
+//        if (!$this->clientId) {
+//            $errors['clientId'] = 'Invalid value: clientId';
+//        }
 
-        if (!$this->pathologyId) {
-            $errors['pathologyId'] = 'Invalid value: pathologyId';
-        }
+//        if (!$this->pathologyId) {
+//            $errors['pathologyId'] = 'Invalid value: pathologyId';
+//        }
 
         if (!$this->type) {
             $errors['type'] = 'Invalid value: type';
@@ -971,21 +987,21 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
             $errors['status'] = 'Invalid value: status';
         }
 
-        if (!$this->zootonicDisease) {
-            $errors['zootonicDisease'] = 'Invalid value: zootonicDisease';
-        }
+//        if (!$this->zootonicDisease) {
+//            $errors['zootonicDisease'] = 'Invalid value: zootonicDisease';
+//        }
 
-        if (!$this->zootonicResult) {
-            $errors['zootonicResult'] = 'Invalid value: zootonicResult';
-        }
+//        if (!$this->zootonicResult) {
+//            $errors['zootonicResult'] = 'Invalid value: zootonicResult';
+//        }
 
-        if (!$this->specimenCount) {
-            $errors['specimenCount'] = 'Invalid value: specimenCount';
-        }
+//        if (!$this->specimenCount) {
+//            $errors['specimenCount'] = 'Invalid value: specimenCount';
+//        }
 
-        if (!$this->animalName) {
-            $errors['animalName'] = 'Invalid value: animalName';
-        }
+//        if (!$this->animalName) {
+//            $errors['animalName'] = 'Invalid value: animalName';
+//        }
 
         if (!$this->species) {
             $errors['species'] = 'Invalid value: species';
@@ -999,41 +1015,41 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
             $errors['patientNumber'] = 'Invalid value: patientNumber';
         }
 
-        if (!$this->microchip) {
-            $errors['microchip'] = 'Invalid value: microchip';
-        }
+//        if (!$this->microchip) {
+//            $errors['microchip'] = 'Invalid value: microchip';
+//        }
 
         if (!$this->ownerName) {
             $errors['ownerName'] = 'Invalid value: ownerName';
         }
 
-        if (!$this->origin) {
-            $errors['origin'] = 'Invalid value: origin';
-        }
+//        if (!$this->origin) {
+//            $errors['origin'] = 'Invalid value: origin';
+//        }
 
-        if (!$this->breed) {
-            $errors['breed'] = 'Invalid value: breed';
-        }
+//        if (!$this->breed) {
+//            $errors['breed'] = 'Invalid value: breed';
+//        }
 
-        if (!$this->vmisWeight) {
-            $errors['vmisWeight'] = 'Invalid value: vmisWeight';
-        }
+//        if (!$this->vmisWeight) {
+//            $errors['vmisWeight'] = 'Invalid value: vmisWeight';
+//        }
 
-        if (!$this->necoWeight) {
-            $errors['necoWeight'] = 'Invalid value: necoWeight';
-        }
+//        if (!$this->necoWeight) {
+//            $errors['necoWeight'] = 'Invalid value: necoWeight';
+//        }
 
-        if (!$this->euthanisedMethod) {
-            $errors['euthanisedMethod'] = 'Invalid value: euthanisedMethod';
-        }
+//        if (!$this->euthanisedMethod) {
+//            $errors['euthanisedMethod'] = 'Invalid value: euthanisedMethod';
+//        }
 
-        if (!$this->acType) {
-            $errors['acType'] = 'Invalid value: acType';
-        }
+//        if (!$this->acType) {
+//            $errors['acType'] = 'Invalid value: acType';
+//        }
 
-        if (!$this->storageId) {
-            $errors['storageId'] = 'Invalid value: storageId';
-        }
+//        if (!$this->storageId) {
+//            $errors['storageId'] = 'Invalid value: storageId';
+//        }
 
         return $errors;
     }

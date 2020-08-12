@@ -215,14 +215,16 @@ class Cassette extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     }
 
     /**
-     * @param int $pathCaseId
+     * @param int|PathCase $pathCaseId
      * @return int
      * @throws \Exception
      */
     static public function getNextNumber($pathCaseId)
     {
+        if ($pathCaseId instanceof \Tk\Db\ModelInterface) $pathCaseId = $pathCaseId->getId();
         /** @var Cassette $cassette */
         $cassette = CassetteMap::create()->findFiltered(array('pathCaseId' => $pathCaseId), Tool::create('number DESC'))->current();
+        vd($cassette);
         if ($cassette)
             return (int)$cassette->getNumber() + 1;
         return 1;
@@ -239,13 +241,13 @@ class Cassette extends \Tk\Db\Map\Model implements \Tk\ValidInterface
             $errors['pathCaseId'] = 'Invalid value: pathCaseId';
         }
 
-        if (!$this->storageId) {
-            $errors['storageId'] = 'Invalid value: storageId';
-        }
+//        if (!$this->storageId) {
+//            $errors['storageId'] = 'Invalid value: storageId';
+//        }
 
-        if (!$this->container) {
-            $errors['container'] = 'Invalid value: container';
-        }
+//        if (!$this->container) {
+//            $errors['container'] = 'Invalid value: container';
+//        }
 
         if (!$this->number) {
             $errors['number'] = 'Invalid value: number';
@@ -255,13 +257,13 @@ class Cassette extends \Tk\Db\Map\Model implements \Tk\ValidInterface
             $errors['name'] = 'Invalid value: name';
         }
 
-        if (!$this->qty) {
-            $errors['qty'] = 'Invalid value: qty';
-        }
+//        if (!$this->qty) {
+//            $errors['qty'] = 'Invalid value: qty';
+//        }
 
-        if (!$this->price) {
-            $errors['price'] = 'Invalid value: price';
-        }
+//        if (!$this->price) {
+//            $errors['price'] = 'Invalid value: price';
+//        }
 
         return $errors;
     }

@@ -10,27 +10,24 @@
 -- ----------------------------
 --  address table
 -- ----------------------------
-CREATE TABLE IF NOT EXISTS address
-(
-    id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    institution_id INT(10) UNSIGNED NOT NULL DEFAULT 0,
-
-    number VARCHAR(255) NOT NULL DEFAULT '',
-    street VARCHAR(255) NOT NULL DEFAULT '',
-    city VARCHAR(255) NOT NULL DEFAULT '',
-    country VARCHAR(255) NOT NULL DEFAULT '',
-    state VARCHAR(255) NOT NULL DEFAULT '',
-    postcode VARCHAR(255) NOT NULL DEFAULT '',
-    address VARCHAR(255) NOT NULL DEFAULT '', -- google address string, handy for dropdown selections
-
-    map_zoom DECIMAL(4, 2) NOT NULL DEFAULT 14,
-    map_lng DECIMAL(11, 8) NOT NULL DEFAULT 0,
-    map_lat DECIMAL(11, 8) NOT NULL DEFAULT 0,
-
-    modified DATETIME NOT NULL,
-    created DATETIME NOT NULL,
-    KEY institution_id (institution_id)
-) ENGINE=InnoDB;
+# CREATE TABLE IF NOT EXISTS address
+# (
+#     id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+#     institution_id INT(10) UNSIGNED NOT NULL DEFAULT 0,
+#
+#     street VARCHAR(255) NOT NULL DEFAULT '',
+#     city VARCHAR(255) NOT NULL DEFAULT '',
+#     country VARCHAR(255) NOT NULL DEFAULT '',
+#     state VARCHAR(255) NOT NULL DEFAULT '',
+#     postcode VARCHAR(255) NOT NULL DEFAULT '',
+#     map_zoom DECIMAL(4, 2) NOT NULL DEFAULT 14,
+#     map_lng DECIMAL(11, 8) NOT NULL DEFAULT 0,
+#     map_lat DECIMAL(11, 8) NOT NULL DEFAULT 0,
+#
+#     modified DATETIME NOT NULL,
+#     created DATETIME NOT NULL,
+#     KEY institution_id (institution_id)
+# ) ENGINE=InnoDB;
 
 -- ----------------------------
 --  company/client table
@@ -41,18 +38,32 @@ CREATE TABLE IF NOT EXISTS client
     institution_id INT(10) UNSIGNED NOT NULL DEFAULT 0,
     user_id INT(10) UNSIGNED NOT NULL DEFAULT 0,                -- use this if the client is a staff member
     uid VARCHAR(64) NOT NULL DEFAULT '',                        -- Farm Shed id
+    account_code VARCHAR(64) NOT NULL DEFAULT '',                        -- Farm Shed id
     name VARCHAR(255) NOT NULL DEFAULT '',
     email VARCHAR(255) NOT NULL DEFAULT '',
     billing_email VARCHAR(255) NOT NULL DEFAULT '',             -- use email if blank
     phone VARCHAR(32) NOT NULL DEFAULT '',
     fax VARCHAR(32) NOT NULL DEFAULT '',
-    address_id INT(10) UNSIGNED NOT NULL DEFAULT 0,
-    billing_address_id INT(10) UNSIGNED NOT NULL DEFAULT 0,
+
+    street VARCHAR(255) NOT NULL DEFAULT '',
+    city VARCHAR(255) NOT NULL DEFAULT '',
+    country VARCHAR(255) NOT NULL DEFAULT '',
+    state VARCHAR(255) NOT NULL DEFAULT '',
+    postcode VARCHAR(255) NOT NULL DEFAULT '',
+
+    use_address TINYINT(1) NOT NULL DEFAULT 1,                  -- use address as billing address
+    b_street VARCHAR(255) NOT NULL DEFAULT '',
+    b_city VARCHAR(255) NOT NULL DEFAULT '',
+    b_country VARCHAR(255) NOT NULL DEFAULT '',
+    b_state VARCHAR(255) NOT NULL DEFAULT '',
+    b_postcode VARCHAR(255) NOT NULL DEFAULT '',
+
     notes TEXT,                                                 -- Staff only notes
     del TINYINT(1) NOT NULL DEFAULT 0,
     modified DATETIME NOT NULL,
     created DATETIME NOT NULL,
-    KEY institution_id (institution_id)
+    KEY institution_id (institution_id),
+    KEY user_id (user_id)
 ) ENGINE=InnoDB;
 
 -- ----------------------------
@@ -139,7 +150,6 @@ CREATE TABLE IF NOT EXISTS storage
 (
     id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     institution_id INT(10) UNSIGNED NOT NULL DEFAULT 0,
-    address_id INT(10) UNSIGNED NOT NULL DEFAULT 0,           -- Postal address of storage location
     uid VARCHAR(64) NOT NULL DEFAULT '',                      -- internal location id (room 130)
     name VARCHAR(255) NOT NULL DEFAULT '',                    -- general name of storage location ???
     -- Would be good to have the exact location for maps... Use selected address location as a default

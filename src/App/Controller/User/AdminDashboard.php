@@ -1,5 +1,5 @@
 <?php
-namespace App\Controller\Admin;
+namespace App\Controller\User;
 
 use Tk\Request;
 use Dom\Template;
@@ -11,7 +11,7 @@ use Dom\Template;
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
  */
-class Dashboard extends \Uni\Controller\AdminIface
+class AdminDashboard extends \Uni\Controller\AdminIface
 {
 
     /**

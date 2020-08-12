@@ -27,10 +27,13 @@ class Service extends \Bs\FormIface
      */
     public function init()
     {
+        $layout = $this->getForm()->getRenderer()->getLayout();
+        $layout->removeRow('price', 'col-3');
+
         $this->appendField(new Field\Input('name'));
-        //$this->appendField(new Field\Input('price'));
+        $this->appendField(new Field\Input('price'));
         $this->appendField(new Field\Textarea('comments'));
-        $this->appendField(new Field\Textarea('notes'));
+        //$this->appendField(new Field\Textarea('notes'));
 
         $this->appendField(new Event\Submit('update', array($this, 'doSubmit')));
         $this->appendField(new Event\Submit('save', array($this, 'doSubmit')));

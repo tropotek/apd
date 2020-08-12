@@ -29,15 +29,16 @@ $routes->add('recover', route::create('/recover.html', 'App\Controller\Recover::
 $routes->add('install', Route::create('/install.html', 'App\Controller\Install::doDefault'));
 
 // Admin Pages
-$routes->add('admin-dashboard', route::create('/admin/index.html', 'App\Controller\Admin\Dashboard::doDefault'));
-$routes->add('admin-dashboard-base', route::create('/admin/', 'App\Controller\Admin\Dashboard::doDefault'));
-$routes->add('admin-settings', route::create('/admin/settings.html', 'App\Controller\Admin\Settings::doDefault'));
+$routes->add('admin-dashboard', route::create('/admin/index.html', 'App\Controller\User\AdminDashboard::doDefault'));
+$routes->add('admin-dashboard-base', route::create('/admin/', 'App\Controller\User\AdminDashboard::doDefault'));
+$routes->add('admin-settings', route::create('/admin/settings.html', 'App\Controller\User\AdminSettings::doDefault'));
 $routes->add('admin-institution-edit', Route::create('/admin/institutionEdit.html', 'App\Controller\Institution\Edit::doDefault'));
 
-
 // Uni user tpoe Client Pages (not pathology clients)
-$routes->add('client-dashboard', route::create('/client/index.html', 'App\Controller\Client\Dashboard::doDefault'));
-$routes->add('client-dashboard-base', route::create('/client/', 'App\Controller\Client\Dashboard::doDefault'));
+//$routes->add('client-dashboard', route::create('/client/index.html', 'App\Controller\Client\Dashboard::doDefault'));
+//$routes->add('client-dashboard-base', route::create('/client/', 'App\Controller\Client\Dashboard::doDefault'));
+$routes->add('client-dashboard', route::create('/client/index.html', 'App\Controller\User\ClientDashboard::doDefault'));
+$routes->add('client-dashboard-base', route::create('/client/', 'App\Controller\User\ClientDashboard::doDefault'));
 $routes->add('client-settings', Route::create('/client/settings.html', 'App\Controller\Institution\Edit::doDefault'));
 
 
@@ -47,9 +48,6 @@ $routes->add('staff-dashboard', route::create('/staff/index.html', 'App\Controll
 $routes->add('staff-dashboard-base', route::create('/staff/', 'App\Controller\Staff\Dashboard::doDefault'));
 $routes->add('staff-subject-dashboard', route::create('/staff/{subjectCode}/index.html', 'App\Controller\Staff\SubjectDashboard::doDefault'));
 $routes->add('staff-institution-edit', Route::create('/staff/settings.html', 'App\Controller\Institution\Edit::doDefault'));
-
-$routes->add('address-manager', Route::create('/staff/addressManager.html', 'App\Controller\Address\Manager::doDefault'));
-$routes->add('address-edit', Route::create('/staff/addressEdit.html', 'App\Controller\Address\Edit::doDefault'));
 
 $routes->add('cassette-manager', Route::create('/staff/cassetteManager.html', 'App\Controller\Cassette\Manager::doDefault'));
 $routes->add('cassette-edit', Route::create('/staff/cassetteEdit.html', 'App\Controller\Cassette\Edit::doDefault'));
@@ -73,10 +71,5 @@ $routes->add('request-edit', Route::create('/staff/requestEdit.html', 'App\Contr
 
 
 
-
-
-
-// Dev
-//$routes->add('admin-dev-forms', route::create('/admin/dev/forms.html', 'App\Controller\Dev\Forms::doDefault'));
 
 

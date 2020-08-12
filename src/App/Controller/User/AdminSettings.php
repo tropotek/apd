@@ -1,5 +1,5 @@
 <?php
-namespace App\Controller\Admin;
+namespace App\Controller\User;
 
 use Tk\Request;
 use Tk\Form;
@@ -12,7 +12,7 @@ use Tk\Form\Field;
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
  */
-class Settings extends \Uni\Controller\Admin\Settings
+class AdminSettings extends \Uni\Controller\Admin\Settings
 {
 
 }

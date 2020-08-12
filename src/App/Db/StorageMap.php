@@ -26,7 +26,6 @@ class StorageMap extends Mapper
             $this->dbMap = new \Tk\DataMap\DataMap();
             $this->dbMap->addPropertyMap(new Db\Integer('id'), 'key');
             $this->dbMap->addPropertyMap(new Db\Integer('institutionId', 'institution_id'));
-            $this->dbMap->addPropertyMap(new Db\Integer('addressId', 'address_id'));
             $this->dbMap->addPropertyMap(new Db\Text('uid'));
             $this->dbMap->addPropertyMap(new Db\Text('name'));
             $this->dbMap->addPropertyMap(new Db\Decimal('mapZoom', 'map_zoom'));
@@ -49,7 +48,6 @@ class StorageMap extends Mapper
             $this->formMap = new \Tk\DataMap\DataMap();
             $this->formMap->addPropertyMap(new Form\Integer('id'), 'key');
             $this->formMap->addPropertyMap(new Form\Integer('institutionId'));
-            $this->formMap->addPropertyMap(new Form\Integer('addressId'));
             $this->formMap->addPropertyMap(new Form\Text('uid'));
             $this->formMap->addPropertyMap(new Form\Text('name'));
             $this->formMap->addPropertyMap(new Form\Decimal('mapZoom'));
@@ -91,16 +89,13 @@ class StorageMap extends Mapper
             if ($w) $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
         }
 
-        if (!empty($filter['id'])) {
+        if (isset($filter['id'])) {
             $w = $this->makeMultiQuery($filter['id'], 'a.id');
             if ($w) $filter->appendWhere('(%s) AND ', $w);
         }
 
-        if (!empty($filter['institutionId'])) {
+        if (isset($filter['institutionId'])) {
             $filter->appendWhere('a.institution_id = %s AND ', (int)$filter['institutionId']);
-        }
-        if (!empty($filter['addressId'])) {
-            $filter->appendWhere('a.address_id = %s AND ', (int)$filter['addressId']);
         }
         if (!empty($filter['uid'])) {
             $filter->appendWhere('a.uid = %s AND ', $this->quote($filter['uid']));

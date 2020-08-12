@@ -12,6 +12,18 @@ use Uni\Db\User;
 class Permission extends \Uni\Db\Permission
 {
 
+    /**
+     * TODO: can we use different permissions to allow different actions
+     *      on a case??? What roles are available to the stakeholders
+     *      (pathologist, accounts, lab, .... ???)
+     *
+     * Pathologist:
+     *
+     * @target staff
+     */
+    const IS_PATHOLOGIST        = 'perm.is.pathologist';
+
+
 
     /**
      * Get all available permissions for a user type

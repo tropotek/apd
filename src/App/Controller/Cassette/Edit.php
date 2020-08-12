@@ -22,7 +22,6 @@ class Edit extends AdminEditIface
      */
     protected $cassette = null;
 
-
     /**
      * Iface constructor.
      */
@@ -38,6 +37,10 @@ class Edit extends AdminEditIface
     public function doDefault(Request $request)
     {
         $this->cassette = new \App\Db\Cassette();
+        if ($request->get('pathCaseId')) {
+            $this->cassette->setPathCaseId($request->get('pathCaseId'));
+        }
+        $this->cassette->setNumber(\App\Db\Cassette::getNextNumber($this->cassette->getPathCaseId()));
         if ($request->get('cassetteId')) {
             $this->cassette = \App\Db\CassetteMap::create()->find($request->get('cassetteId'));
         }

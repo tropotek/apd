@@ -1,6 +1,8 @@
 <?php
 namespace App\Form;
 
+use App\Db\ClientMap;
+use App\Db\ServiceMap;
 use Tk\Form\Field;
 use Tk\Form\Event;
 use Tk\Form;
@@ -27,18 +29,27 @@ class Request extends \Bs\FormIface
      */
     public function init()
     {
+        $layout = $this->getForm()->getRenderer()->getLayout();
+        //$layout->removeRow('serviceId', 'col');
+        $layout->removeRow('clientId', 'col');
 
         //$this->appendField(new Field\Select('pathCaseId', array()))->prependOption('-- Select --', '');
         //$this->appendField(new Field\Select('cassetteId', array()))->prependOption('-- Select --', '');
-        $this->appendField(new Field\Select('serviceId', array()))->prependOption('-- Select --', '');
-        $this->appendField(new Field\Select('clientId', array()))->prependOption('-- Select --', '');
-        $this->appendField(new \Bs\Form\Field\StatusSelect('status', \App\Db\Request::getStatusList($this->getRequest()->getStatus())))
-            ->setRequired()->prependOption('-- Status --', '')
-            ->setNotes('Set the status. Use the checkbox to disable notification emails.');
+        $list = ServiceMap::create()->findFiltered(array('institutionId' => $this->getRequest()->getPathCase()->getInstitutionId()));
+        $this->appendField(new Field\Select('serviceId', $list))->prependOption('-- Select --', '');
+        $list = ClientMap::create()->findFiltered(array('institutionId' => $this->getRequest()->getPathCase()->getInstitutionId()));
+        $this->appendField(new Field\Select('clientId', $list))->prependOption('-- Select --', '');
+
+        if ($this->getRequest()->getId()) {
+            $list = \App\Db\Request::getStatusList($this->getRequest()->getStatus());
+            $this->appendField(new \Bs\Form\Field\StatusSelect('status', $list))
+                ->setRequired()->prependOption('-- Status --', '')
+                ->setNotes('Set the status. Use the checkbox to disable notification emails.');
+        }
         $this->appendField(new Field\Input('qty'));
         //$this->appendField(new Field\Input('price'));
         $this->appendField(new Field\Textarea('comments'));
-        $this->appendField(new Field\Textarea('notes'));
+        //$this->appendField(new Field\Textarea('notes'));
 
         $this->appendField(new Event\Submit('update', array($this, 'doSubmit')));
         $this->appendField(new Event\Submit('save', array($this, 'doSubmit')));
