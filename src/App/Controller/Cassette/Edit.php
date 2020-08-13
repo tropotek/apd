@@ -69,7 +69,7 @@ class Edit extends AdminEditIface
     public function __makeTemplate()
     {
         $xhtml = <<<HTML
-<div class="tk-panel" data-panel-title="Cassette Edit" data-panel-icon="fa fa-book" var="panel"></div>
+<div class="tk-panel" data-panel-title="Cassette Edit" data-panel-icon="fa fa-stack-overflow" var="panel"></div>
 HTML;
         return \Dom\Loader::load($xhtml);
     }

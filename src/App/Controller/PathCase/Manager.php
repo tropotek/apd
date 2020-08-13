@@ -45,7 +45,7 @@ class Manager extends AdminManagerIface
     public function initActionPanel()
     {
         $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('New Case',
-            $this->getTable()->getEditUrl(), 'fa fa-book fa-add-action'));
+            $this->getTable()->getEditUrl(), 'fa fa-paw fa-add-action'));
     }
 
     /**
@@ -67,7 +67,7 @@ class Manager extends AdminManagerIface
     public function __makeTemplate()
     {
         $xhtml = <<<HTML
-<div class="tk-panel" data-panel-title="Case List" data-panel-icon="fa fa-book" var="panel"></div>
+<div class="tk-panel" data-panel-title="Case List" data-panel-icon="fa fa-paw" var="panel"></div>
 HTML;
         return \Dom\Loader::load($xhtml);
     }

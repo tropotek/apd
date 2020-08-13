@@ -55,9 +55,8 @@ class NavRendererHandler implements Subscriber
         $user = $this->getConfig()->getAuthUser();
         if (!$user) return;
 
-        $menu->append(Item::create('Profile', \Uni\Uri::createHomeUrl('/profile.html'), 'fa fa-user'));
-        $menu->append(Item::create('About', '#', 'fa fa-info-circle')
-            ->setAttr('data-toggle', 'modal')->setAttr('data-target', '#aboutModal'));
+        $menu->append(Item::create('My Profile', \Uni\Uri::createHomeUrl('/profile.html'), 'fa fa-user'));
+        $menu->append(Item::create()->addCss('divider'));
 
         if ($user->isAdmin()) {
             $menu->prepend(Item::create('Site Preview', \Uni\Uri::create('/index.html'), 'fa fa-home'))->getLink()
@@ -70,9 +69,15 @@ class NavRendererHandler implements Subscriber
 //        }
         if ($user->hasPermission(\Uni\Db\Permission::MANAGE_STAFF)) {
             $menu->append(Item::create('Staff', \Uni\Uri::createHomeUrl('/staffUserManager.html'), 'fa fa-user-md'));
+
+            $menu->append(Item::create('Storage Locations', \Uni\Uri::createHomeUrl('/storageManager.html'), 'fa fa-archive'));
+            $menu->append(Item::create('Available Services', \Uni\Uri::createHomeUrl('/serviceManager.html'), 'fa fa-tags'));
+            $menu->append(Item::create('Clients', \Uni\Uri::createHomeUrl('/clientManager.html'), 'fa fa-building'));
         }
 
         $menu->append(Item::create()->addCss('divider'));
+        $menu->append(Item::create('About', '#', 'fa fa-info-circle')
+            ->setAttr('data-toggle', 'modal')->setAttr('data-target', '#aboutModal'));
         $menu->append(Item::create('Logout', '#', 'fa fa-sign-out')
             ->setAttr('data-toggle', 'modal')->setAttr('data-target', '#logoutModal'));
         //vd($menu->__toString());

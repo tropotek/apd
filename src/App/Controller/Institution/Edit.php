@@ -31,7 +31,7 @@ class Edit extends \Uni\Controller\Institution\Edit
         $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Available Services',
             \Uni\Uri::createHomeUrl('/serviceManager.html'), 'fa fa-tags'));
         $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Clients',
-            \Uni\Uri::createHomeUrl('/clientManager.html'), 'fa fa-user-md'));
+            \Uni\Uri::createHomeUrl('/clientManager.html'), 'fa fa-building'));
 
     }
 
