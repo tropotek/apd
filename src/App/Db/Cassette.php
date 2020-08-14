@@ -224,7 +224,6 @@ class Cassette extends \Tk\Db\Map\Model implements \Tk\ValidInterface
         if ($pathCaseId instanceof \Tk\Db\ModelInterface) $pathCaseId = $pathCaseId->getId();
         /** @var Cassette $cassette */
         $cassette = CassetteMap::create()->findFiltered(array('pathCaseId' => $pathCaseId), Tool::create('number DESC'))->current();
-        vd($cassette);
         if ($cassette)
             return (int)$cassette->getNumber() + 1;
         return 1;

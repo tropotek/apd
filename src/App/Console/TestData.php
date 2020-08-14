@@ -62,7 +62,6 @@ class TestData extends \Bs\Console\TestData
 
         // Clear DB: Make this a command on it own
         $db->exec('DELETE FROM `user` WHERE `notes` = \'***\' ');
-        $db->exec('DELETE FROM `address` WHERE `postcode` = \'0000\'');
         $db->exec('DELETE FROM `client` WHERE `notes` = \'***\' ');
         $db->exec('DELETE FROM `storage` WHERE `notes` = \'***\' ');
         $db->exec('DELETE FROM `service` WHERE `notes` = \'***\' ');
@@ -99,27 +98,27 @@ class TestData extends \Bs\Console\TestData
             }
         }
 
-        $db->exec('DELETE FROM `address` WHERE `postcode` = \'0000\'');
-        for($i = 0; $i < 50; $i++) {
-            $address = new Address();
-            $address->setNumber(rand(3, 3982));
-            $address->setStreet($this->createWords(rand(1, 3)));
-            $address->setCity(ucwords($this->createWords(rand(1, 2))));
-            $address->setCountry(ucwords($this->createWords(rand(1, 2))));
-            $address->setState(ucwords($this->createWords(rand(1, 2))));
-            $address->setPostcode('0000');
-            $address->setAddress(
-                $address->getNumber() . ' ' .
-                $address->getStreet() . ' ' .
-                $address->getCity() . ' ' .
-                $address->getState() . ' ' .
-                $address->getCountry() . ' ' .
-                $address->getPostcode()
-            );
-            $address->setMapLat(-40.847602844238);
-            $address->setMapLng(137.701782226560);
-            $address->save();
-        }
+//        $db->exec('DELETE FROM `address` WHERE `postcode` = \'0000\'');
+//        for($i = 0; $i < 50; $i++) {
+//            $address = new Address();
+//            $address->setNumber(rand(3, 3982));
+//            $address->setStreet($this->createWords(rand(1, 3)));
+//            $address->setCity(ucwords($this->createWords(rand(1, 2))));
+//            $address->setCountry(ucwords($this->createWords(rand(1, 2))));
+//            $address->setState(ucwords($this->createWords(rand(1, 2))));
+//            $address->setPostcode('0000');
+//            $address->setAddress(
+//                $address->getNumber() . ' ' .
+//                $address->getStreet() . ' ' .
+//                $address->getCity() . ' ' .
+//                $address->getState() . ' ' .
+//                $address->getCountry() . ' ' .
+//                $address->getPostcode()
+//            );
+//            $address->setMapLat(-40.847602844238);
+//            $address->setMapLng(137.701782226560);
+//            $address->save();
+//        }
 
         $db->exec('DELETE FROM `client` WHERE `notes` = \'***\' ');
         for($i = 0; $i < 25; $i++) {
@@ -133,13 +132,22 @@ class TestData extends \Bs\Console\TestData
             $client->setPhone($this->createStr(10, '1234567890'));
             if (rand(0, 1))
                 $client->setFax($this->createStr(10, '1234567890'));
-            $address = AddressMap::create()->findAll(Tool::create('RAND()'))->current();
-            $client->setAddressId($address->getId());
+
+            $client->setStreet($this->createWords(rand(1, 3)));
+            $client->setCity(ucwords($this->createWords(rand(1, 2))));
+            $client->setCountry(ucwords($this->createWords(rand(1, 2))));
+            $client->setState(ucwords($this->createWords(rand(1, 2))));
+            $client->setPostcode($this->createStr(4, '1234567890'));
+
             if (rand(0, 1)) {
-                if (rand(0, 1))
-                    $address = AddressMap::create()->findAll(Tool::create('RAND()'))->current();
-                $client->setBillingAddressId($address->getId());
+                $client->setUseAddress(false);
+                $client->setBStreet($this->createWords(rand(1, 3)));
+                $client->setBCity(ucwords($this->createWords(rand(1, 2))));
+                $client->setBCountry(ucwords($this->createWords(rand(1, 2))));
+                $client->setBState(ucwords($this->createWords(rand(1, 2))));
+                $client->setBPostcode($this->createStr(4, '1234567890'));
             }
+
             $client->setNotes('***');
             $client->save();
         }
@@ -147,13 +155,10 @@ class TestData extends \Bs\Console\TestData
         $db->exec('DELETE FROM `storage` WHERE `notes` = \'***\' ');
         for($i = 0; $i < 10; $i++) {
             $storage = new Storage();
-            /** @var Address $address */
-            $address = AddressMap::create()->findAll(Tool::create('RAND()'))->current();
-            $storage->setAddressId($address->getId());
             $storage->setUid($this->createStr(6));
             $storage->setName('Building: ' . $this->createName());
-            $storage->setMapLat($address->getMapLat());
-            $storage->setMapLng($address->getMapLng());
+            $storage->setMapLat(14.2321);
+            $storage->setMapLng(-123.143);
             $storage->setNotes('***');
             $storage->save();
         }
