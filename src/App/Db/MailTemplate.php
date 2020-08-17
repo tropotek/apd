@@ -26,11 +26,15 @@ class MailTemplate extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public $institutionId = 0;
 
     /**
+     * The mail template event name that triggers the sending of this template
+     *
      * @var string
      */
     public $event = '';
 
     /**
+     * Identify the recipient type of this template (staff, client, etc...)
+     *
      * @var string
      */
     public $recipientType = '';

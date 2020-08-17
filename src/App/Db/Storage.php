@@ -1,7 +1,6 @@
 <?php
 namespace App\Db;
 
-use App\Db\Traits\AddressTrait;
 use Bs\Db\Traits\TimestampTrait;
 use Uni\Db\Traits\InstitutionTrait;
 
@@ -27,11 +26,13 @@ class Storage extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public $institutionId = 0;
 
     /**
+     * internal location id (room 130)
      * @var string
      */
     public $uid = '';
 
     /**
+     * general name of storage location ???
      * @var string
      */
     public $name = '';
@@ -52,6 +53,7 @@ class Storage extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public $mapLat = 0;
 
     /**
+     * Staff only notes
      * @var string
      */
     public $notes = '';

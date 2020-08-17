@@ -30,16 +30,19 @@ class Client extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public $institutionId = 0;
 
     /**
+     * Used if the client is also a staff member
      * @var int
      */
     public $userId = 0;
 
     /**
+     * Farm Shed id
      * @var string
      */
     public $uid = '';
 
     /**
+     * University account code or their accounts dep. account code for invoicing
      * @var string
      */
     public $accountCode = '';
@@ -55,6 +58,7 @@ class Client extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public $email = '';
 
     /**
+     * Use email if blank
      * @var string
      */
     public $billingEmail = '';
@@ -95,6 +99,8 @@ class Client extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public $postcode = '';
 
     /**
+     * Use address as billing address if flagged true
+     *
      * @var bool
      */
     public $useAddress = true;

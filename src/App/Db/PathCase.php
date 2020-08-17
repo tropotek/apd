@@ -57,58 +57,52 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      */
     public $institutionId = 0;
 
-    // TODO??? is this the animal owner client??? rectify if this is related to the request client???
+
     /**
+     * Client/Clinician
+     *
      * @var int
      */
     public $clientId = 0;
 
     /**
+     * Pathology Number
      * @var string
      */
     public $pathologyId = '';
 
     /**
+     * BIOPSY, NECROPSY
      * @var string
      */
     public $type = '';
 
     /**
+     * direct client/external vet/INTernal vet/researcher/ Other - Specify
      * @var string
      */
     public $submissionType = '';
 
     /**
+     * Pending/frozen storage/examined/reported/awaiting review (if applicable)/completed
      * @var string
      */
     public $status = 'pending';
 
     /**
-     * @var \DateTime
-     */
-    public $submitted = null;
-
-    /**
-     * @var \DateTime
-     */
-    public $examined = null;
-
-    /**
-     * @var \DateTime
-     */
-    public $finalised = null;
-
-    /**
+     * A dropdown of entered diseases
      * @var string
      */
     public $zootonicDisease = '';
 
     /**
+     * Positive/Negative (Pending???)
      * @var string
      */
     public $zootonicResult = '';
 
     /**
+     * TODO: NOT sure if this is needed
      * @var int
      */
     public $specimenCount = 1;
@@ -149,6 +143,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public $ownerName = '';
 
     /**
+     * TODO: For now a TEXT box, but NOT sure if this should be lookup table
      * @var string
      */
     public $origin = '';
@@ -169,11 +164,13 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public $necoWeight = '';
 
     /**
+     * Date of birth
      * @var \DateTime
      */
     public $dob = null;
 
     /**
+     * Date and time of death
      * @var \DateTime
      */
     public $dod = null;
@@ -189,16 +186,19 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public $euthanisedMethod = '';
 
     /**
+     * after care type: General Disposal/cremation/INTernal incineration
      * @var string
      */
     public $acType = '';
 
     /**
+     * after care Date to wait until processing animal
      * @var \DateTime
      */
     public $acHold = null;
 
     /**
+     * The current location of the animal (cleared when disposal is completed)
      * @var int
      */
     public $storageId = 0;
@@ -239,16 +239,19 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public $morphologicalDiagnosis = '';
 
     /**
+     * (required) case NOT saved if blank
      * @var string
      */
     public $causeOfDeath = '';
 
     /**
+     * public comments
      * @var string
      */
     public $comments = '';
 
     /**
+     * Staff only notes
      * @var string
      */
     public $notes = '';

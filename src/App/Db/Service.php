@@ -32,16 +32,19 @@ class Service extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public $name = '';
 
     /**
+     * This should be a cost per service
      * @var float
      */
     public $price = 0;
 
     /**
+     * public comments
      * @var string
      */
     public $comments = '';
 
     /**
+     * Staff only notes
      * @var string
      */
     public $notes = '';

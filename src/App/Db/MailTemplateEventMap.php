@@ -27,8 +27,9 @@ class MailTemplateEventMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Integer('id'), 'key');
             $this->dbMap->addPropertyMap(new Db\Text('name'));
             $this->dbMap->addPropertyMap(new Db\Text('event'));
+            $this->dbMap->addPropertyMap(new Db\Text('callback'));
             $this->dbMap->addPropertyMap(new Db\Text('description'));
-            $this->dbMap->addPropertyMap(new Db\Text('emailTags', 'email_tags'));
+            $this->dbMap->addPropertyMap(new Db\ArrayObject('tags'));
 
         }
         return $this->dbMap;
@@ -44,8 +45,9 @@ class MailTemplateEventMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Integer('id'), 'key');
             $this->formMap->addPropertyMap(new Form\Text('name'));
             $this->formMap->addPropertyMap(new Form\Text('event'));
+            $this->formMap->addPropertyMap(new Form\Text('callback'));
             $this->formMap->addPropertyMap(new Form\Text('description'));
-            $this->formMap->addPropertyMap(new Form\Text('emailTags'));
+            $this->formMap->addPropertyMap(new Form\ObjectMap('tags'));
 
         }
         return $this->formMap;
@@ -91,6 +93,9 @@ class MailTemplateEventMap extends Mapper
         }
         if (!empty($filter['event'])) {
             $filter->appendWhere('a.event = %s AND ', $this->quote($filter['event']));
+        }
+        if (!empty($filter['callback'])) {
+            $filter->appendWhere('a.callback = %s AND ', $this->quote($filter['callback']));
         }
 
         if (!empty($filter['exclude'])) {

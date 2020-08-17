@@ -16,14 +16,24 @@ class MailTemplateEvent extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public $id = 0;
 
     /**
+     * The human readable name for this email event
      * @var string
      */
     public $name = '';
 
     /**
+     * The event value that is sent when this event is triggered
      * @var string
      */
     public $event = '';
+
+    /**
+     * This is the callable function in the format of "MyNameSpc\MyClass::myCallbackMethod"
+     *   This callback method is used to render the mail message template
+     *
+     * @var string
+     */
+    public $callback = '';
 
     /**
      * @var string
@@ -31,9 +41,11 @@ class MailTemplateEvent extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public $description = '';
 
     /**
-     * @var string
+     * (Array) available tags that can be used in the template content {tag} = "Some dynamic value"
+     *
+     * @var array
      */
-    public $emailTags = '';
+    public $tags = array();
 
 
     /**
@@ -81,6 +93,24 @@ class MailTemplateEvent extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     }
 
     /**
+     * @param string $callback
+     * @return MailTemplateEvent
+     */
+    public function setCallback($callback) : MailTemplateEvent
+    {
+        $this->callback = $callback;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCallback() : string
+    {
+        return $this->callback;
+    }
+
+    /**
      * @param string $description
      * @return MailTemplateEvent
      */
@@ -99,21 +129,41 @@ class MailTemplateEvent extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     }
 
     /**
-     * @param string $emailTags
+     * @param array $tags
      * @return MailTemplateEvent
      */
-    public function setEmailTags($emailTags) : MailTemplateEvent
+    public function setTags($tags) : MailTemplateEvent
     {
-        $this->emailTags = $emailTags;
+        $this->tags = $tags;
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getEmailTags() : string
+    public function addTag(string $tag, string $description)
     {
-        return $this->emailTags;
+        $this->tags[$tag] = $description;
+        return$this;
+    }
+
+    /**
+     * @param string $key
+     * @return array    Returns the removed key and description value if found
+     */
+    public function removeTag(string $key)
+    {
+        $v = array($key => '');
+        if (isset($this->tags[$key])) {
+            $v = array($key => $this->tags[$key]);
+            unset($this->tags[$key]);
+        }
+        return $v;
+    }
+
+    /**
+     * @return array
+     */
+    public function getTags() : array
+    {
+        return $this->tags;
     }
 
     /**
@@ -129,6 +179,10 @@ class MailTemplateEvent extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 
         if (!$this->event) {
             $errors['event'] = 'Invalid value: event';
+        }
+
+        if (!$this->callback) {
+            $errors['callback'] = 'Invalid value: callback';
         }
 
         return $errors;

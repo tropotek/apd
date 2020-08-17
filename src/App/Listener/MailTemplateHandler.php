@@ -38,7 +38,7 @@ class MailTemplateHandler implements Subscriber
             // setup a message for each template found
             try {
 
-                $modelStrategy = $event->getStatus()->getModelStrategy();
+//                $modelStrategy = $event->getStatus()->getModelStrategy();
 //                if (!$modelStrategy) {
 //                    \Tk\Log::warning('onStatusChange: Strategy Not Found For: ' . $event->getStatus()->getFkey());
 //                    continue;

@@ -29,41 +29,49 @@ class Cassette extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public $pathCaseId = 0;
 
     /**
+     * Storage location if available
      * @var int
      */
     public $storageId = 0;
 
     /**
+     * TODO: Not sure if we will be using this or storage_id or both???
      * @var string
      */
     public $container = '';
 
     /**
+     * Generally just increments by 1 for each group in a case
      * @var string
      */
     public $number = '';
 
     /**
+     * Usually the tissue type name
      * @var string
      */
     public $name = '';
 
     /**
+     * Quantity of samples available
      * @var int
      */
     public $qty = 0;
 
     /**
+     * price per sample ???
      * @var float
      */
     public $price = 0;
 
     /**
+     * public comments
      * @var string
      */
     public $comments = '';
 
     /**
+     * Staff only notes
      * @var string
      */
     public $notes = '';

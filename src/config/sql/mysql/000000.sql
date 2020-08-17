@@ -36,9 +36,9 @@ CREATE TABLE IF NOT EXISTS client
 (
     id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     institution_id INT(10) UNSIGNED NOT NULL DEFAULT 0,
-    user_id INT(10) UNSIGNED NOT NULL DEFAULT 0,                -- use this if the client is a staff member
+    user_id INT(10) UNSIGNED NOT NULL DEFAULT 0,                -- Use this if the client is a staff member
     uid VARCHAR(64) NOT NULL DEFAULT '',                        -- Farm Shed id
-    account_code VARCHAR(64) NOT NULL DEFAULT '',                        -- Farm Shed id
+    account_code VARCHAR(64) NOT NULL DEFAULT '',               --
     name VARCHAR(255) NOT NULL DEFAULT '',
     email VARCHAR(255) NOT NULL DEFAULT '',
     billing_email VARCHAR(255) NOT NULL DEFAULT '',             -- use email if blank
@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS client
     b_state VARCHAR(255) NOT NULL DEFAULT '',
     b_postcode VARCHAR(255) NOT NULL DEFAULT '',
 
-    NOTes TEXT,                                                 -- Staff only NOTes
+    notes TEXT,                                                 -- Staff only Notes
     del TINYINT(1) NOT NULL DEFAULT 0,
     modified DATETIME NOT NULL,
     created DATETIME NOT NULL,
@@ -77,15 +77,15 @@ CREATE TABLE IF NOT EXISTS `path_case`
 
     -- Case
     pathology_id VARCHAR(64) NOT NULL DEFAULT '',             -- Pathology Number
-    type VARCHAR(64) NOT NULL DEFAULT '',                     -- BIOPSY, NECROPSY
-    submission_type VARCHAR(64) NULL DEFAULT '',          -- direct client/external vet/INTernal vet/researcher/ Other - Specify
+    type VARCHAR(64) NOT NULL DEFAULT '',                     -- BIOPSY, NECROPSY, ...
+    submission_type VARCHAR(64) NULL DEFAULT '',          -- direct client/external vet/internal vet/researcher/ Other - Specify
     status VARCHAR(64) NOT NULL DEFAULT '',                   -- Pending/frozen storage/examined/reported/awaiting review (if applicable)/completed
 
     -- TODO: These fields will be redundant when using the status log
     --       We should remove these fields...
-    submitted DATETIME DEFAULT NULL,                          --
-    examined DATETIME DEFAULT NULL,                           --
-    finalised DATETIME DEFAULT NULL,                          --
+--    submitted DATETIME DEFAULT NULL,                          --
+--    examined DATETIME DEFAULT NULL,                           --
+--    finalised DATETIME DEFAULT NULL,                          --
 
     zootonic_disease VARCHAR(128) NOT NULL DEFAULT '',        -- A dropdown of entered diseases
     zootonic_result VARCHAR(128) NOT NULL DEFAULT '',         -- Positive/Negative ????
@@ -110,7 +110,7 @@ CREATE TABLE IF NOT EXISTS `path_case`
 
     euthanised TINYINT(1) NOT NULL DEFAULT 0,                 --
     euthanised_method VARCHAR(255) NULL DEFAULT '',       --
-    ac_type VARCHAR(64) NULL DEFAULT '',                  -- after care type: General Disposal/cremation/INTernal incineration
+    ac_type VARCHAR(64) NULL DEFAULT '',                  -- after care type: General Disposal/cremation/internal incineration
     ac_hold DATETIME DEFAULT NULL,                            -- after care Date to wait until processing animal
     storage_id INT(10) UNSIGNED NOT NULL DEFAULT 0,           -- The current location of the animal (cleared when disposal is completed)
     disposal DATETIME DEFAULT NULL,
@@ -127,7 +127,7 @@ CREATE TABLE IF NOT EXISTS `path_case`
     comments TEXT,                                            -- public comments
     --
 
-    NOTes TEXT,                                               -- Staff only NOTes
+    notes TEXT,                                               -- Staff only notes
 
     del TINYINT(1) NOT NULL DEFAULT 0,
     modified DATETIME NOT NULL,
@@ -150,13 +150,13 @@ CREATE TABLE IF NOT EXISTS storage
 (
     id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     institution_id INT(10) UNSIGNED NOT NULL DEFAULT 0,
-    uid VARCHAR(64) NOT NULL DEFAULT '',                      -- INTernal location id (room 130)
+    uid VARCHAR(64) NOT NULL DEFAULT '',                      -- internal location id (room 130)
     name VARCHAR(255) NOT NULL DEFAULT '',                    -- general name of storage location ???
     -- Would be good to have the exact location for maps... Use selected address location as a DEFAULT
     map_zoom DECIMAL(4, 2) NOT NULL DEFAULT 14,
     map_lng DECIMAL(11, 8) NOT NULL DEFAULT 0,
     map_lat DECIMAL(11, 8) NOT NULL DEFAULT 0,
-    NOTes TEXT,                                               -- Staff only NOTes
+    notes TEXT,                                               -- Staff only notes
     del TINYINT(1) NOT NULL DEFAULT 0,
     modified DATETIME NOT NULL,
     created DATETIME NOT NULL,
@@ -174,7 +174,7 @@ CREATE TABLE IF NOT EXISTS service
     name VARCHAR(64) NOT NULL DEFAULT '',
     price DECIMAL(9,2) NOT NULL DEFAULT 0.0,                  -- This should be a cost per service
     comments TEXT,                                            -- public comments
-    NOTes TEXT,                                               -- Staff only NOTes
+    notes TEXT,                                               -- Staff only notes
 
     del TINYINT(1) NOT NULL DEFAULT 0,
     modified DATETIME NOT NULL,
@@ -198,7 +198,7 @@ CREATE TABLE IF NOT EXISTS cassette
     qty INT(10) NOT NULL DEFAULT 0,                           -- Quantity of samples available
     price DECIMAL(9,2) NOT NULL DEFAULT 0.0,                  -- I assume this is price per sample ???
     comments TEXT,                                            -- public comments
-    NOTes TEXT,                                               -- Staff only NOTes
+    notes TEXT,                                               -- Staff only notes
 
     del TINYINT(1) NOT NULL DEFAULT 0,
     modified DATETIME NOT NULL,
@@ -222,7 +222,7 @@ CREATE TABLE IF NOT EXISTS request
     qty INT(10) NOT NULL DEFAULT 0,                           -- Quantity of samples requested (check available tissue.qty on submit)
     price DECIMAL(9,2) NOT NULL DEFAULT 0.0,                  -- The total cost based on qty requested + the service cost
     comments TEXT,                                            -- public comments
-    NOTes TEXT,                                               -- Staff only NOTes
+    notes TEXT,                                               -- Staff only notes
 
     del TINYINT(1) NOT NULL DEFAULT 0,
     modified DATETIME NOT NULL,
@@ -246,7 +246,7 @@ CREATE TABLE IF NOT EXISTS file
     path TEXT NULL,
     bytes INT DEFAULT 0 NOT NULL,
     mime VARCHAR(255) DEFAULT '' NOT NULL,
-    NOTes TEXT NULL,
+    notes TEXT NULL,
     hash VARCHAR(128) DEFAULT '' NOT NULL,
     modified datetime NOT NULL,
     created datetime NOT NULL,
@@ -300,13 +300,54 @@ create table mail_template_event
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(64) DEFAULT '' NOT NULL,               -- The human readable name for this email event
     event VARCHAR(64) DEFAULT '' NOT NULL,              -- The event value that is sent when this event is triggered
+    callback VARCHAR(128) DEFAULT '' NOT NULL,          -- This is the callable function in the format of "MyNameSpc\MyClass::myCallbackMethod"
+                                                        --      This callback method is used to render the mail message template
     description TEXT NULL,
-    email_tags  TEXT NULL,                              -- (Array) available tags that can be used in the template content {tag} = "Some dynamic value"
+    tags  TEXT NULL,                                    -- (Array) available tags that can be used in the template content {tag} = "Some dynamic value"
     CONSTRAINT `event` UNIQUE (`event`),
     KEY name (name)
 );
 
+insert into mail_template_event (id, name, event, callback, description)  VALUES
+(1, 'Case - Pending', 'status.app.pathCase.pending', 'App\\Db\\PathCaseStrategy::onFormatMessage', 'Triggered when a case status is set to Pending'),
+(2, 'Case - Hold', 'status.app.pathCase.hold', 'App\\Db\\PathCaseStrategy::onFormatMessage', 'Triggered when a case status is set to Hold'),
+(3, 'Case - Frozen Storage', 'status.app.pathCase.forozenStorage', 'App\\Db\\PathCaseStrategy::onFormatMessage', 'Triggered when a case status is set to Frozen Storage'),
+(4, 'Case - Approved', 'status.app.pathCase.examined', 'App\\Db\\PathCaseStrategy::onFormatMessage', 'Triggered when a case status is set to Approved'),
+(5, 'Case - Reported', 'status.app.pathCase.reported', 'App\\Db\\PathCaseStrategy::onFormatMessage', 'Triggered when a case status is set to Reported'),
+(6, 'Case - Completed', 'status.app.pathCase.completed', 'App\\Db\\PathCaseStrategy::onFormatMessage', 'Triggered when a case status is set to Completed'),
+(7, 'Case - Cancelled', 'status.app.pathCase.cancelled', 'App\\Db\\PathCaseStrategy::onFormatMessage', 'Triggered when a case status is set to Cancelled'),
+(8, 'Request - Pending', 'status.app.request.pending', 'App\\Db\\RequestStrategy::onFormatMessage', 'Triggered when a request status is set to Pending'),
+(9, 'Request - Processing', 'status.app.request.processing', 'App\\Db\\RequestStrategy::onFormatMessage', 'Triggered when a request status is set to Processing'),
+(10, 'Request - Completed', 'status.app.request.completed', 'App\\Db\\RequestStrategy::onFormatMessage', 'Triggered when a request status is set to Completed'),
+(11, 'Request - Cancelled', 'status.app.request.cancelled', 'App\\Db\\RequestStrategy::onFormatMessage', 'Triggered when a request status is set to Cancelled')
+;
 
+
+
+
+CREATE TABLE IF NOT EXISTS `status` (
+    `id` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    `user_id` INT UNSIGNED NOT NULL DEFAULT 0,              -- The user who performed the activity
+    `msq_user_id` INT UNSIGNED NOT NULL DEFAULT 0,          -- If the user was masquerading who was the root masquerading user
+    `course_id` INTEGER NOT NULL DEFAULT 0,                 -- Ignored in APD
+    `subject_id` INTEGER NOT NULL DEFAULT 0,                -- Ignored in APD
+    `fkey` VARCHAR(64) NOT NULL DEFAULT '',                 -- A foreign key as a string (usually the object name)
+    `fid` INTEGER NOT NULL DEFAULT 0,                       -- foreign_id
+    `name` VARCHAR(32) NOT NULL DEFAULT '',                 -- pending|approved|not_approved
+    `event` VARCHAR(128) NOT NULL DEFAULT '',               -- the name of the event triggered if any (link status_event.name)
+    `notify` BOOL NOT NULL DEFAULT 1,                       -- Was the message email sent
+    `message` TEXT,                                         -- A status update log message
+    `serial_data` TEXT,                                     -- json/serialized data of any related objects pertaining to this activity
+    `del` BOOL NOT NULL DEFAULT 0,                          -- This value should mirror its model `del` value
+    `created` DATETIME NOT NULL,
+    KEY (`user_id`),
+    KEY (`msq_user_id`),
+    KEY (`course_id`),
+    KEY (`subject_id`),
+    KEY (`fid`),
+    KEY (`fkey`),
+    KEY (`fid`, `id`)
+) ENGINE = InnoDB;
 
 
 

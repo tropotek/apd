@@ -49,6 +49,7 @@ class Request extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public $serviceId = 0;
 
     /**
+     * The client requesting the samples (NOT sure if this could be staff, client, etc)
      * @var int
      */
     public $clientId = 0;
@@ -59,21 +60,25 @@ class Request extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public $status = 'pending';
 
     /**
+     * Quantity of samples requested (check available tissue.qty on submit)
      * @var int
      */
     public $qty = 0;
 
     /**
+     * The total cost based on qty requested + the service cost
      * @var float
      */
     public $price = 0;
 
     /**
+     * public comments
      * @var string
      */
     public $comments = '';
 
     /**
+     * Staff only notes
      * @var string
      */
     public $notes = '';
