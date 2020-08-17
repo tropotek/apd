@@ -289,8 +289,8 @@ CREATE TABLE mail_template
     recipient_type VARCHAR(64) NOT NULL DEFAULT '',     -- Identify the recipient type of this template (staff, client, etc...)
     template TEXT NULL,
     active TINYINT(1) NOT NULL DEFAULT 1,
-    modified datetime NOT NULL,
-    created datetime NOT NULL,
+    modified DATETIME NOT NULL,
+    created DATETIME NOT NULL,
     KEY institution_id (institution_id)
 );
 
@@ -309,17 +309,17 @@ create table mail_template_event
 );
 
 insert into mail_template_event (id, name, event, callback, description)  VALUES
-(1, 'Case - Pending', 'status.app.pathCase.pending', 'App\\Db\\PathCaseStrategy::onFormatMessage', 'Triggered when a case status is set to Pending'),
-(2, 'Case - Hold', 'status.app.pathCase.hold', 'App\\Db\\PathCaseStrategy::onFormatMessage', 'Triggered when a case status is set to Hold'),
-(3, 'Case - Frozen Storage', 'status.app.pathCase.forozenStorage', 'App\\Db\\PathCaseStrategy::onFormatMessage', 'Triggered when a case status is set to Frozen Storage'),
-(4, 'Case - Approved', 'status.app.pathCase.examined', 'App\\Db\\PathCaseStrategy::onFormatMessage', 'Triggered when a case status is set to Approved'),
-(5, 'Case - Reported', 'status.app.pathCase.reported', 'App\\Db\\PathCaseStrategy::onFormatMessage', 'Triggered when a case status is set to Reported'),
-(6, 'Case - Completed', 'status.app.pathCase.completed', 'App\\Db\\PathCaseStrategy::onFormatMessage', 'Triggered when a case status is set to Completed'),
-(7, 'Case - Cancelled', 'status.app.pathCase.cancelled', 'App\\Db\\PathCaseStrategy::onFormatMessage', 'Triggered when a case status is set to Cancelled'),
-(8, 'Request - Pending', 'status.app.request.pending', 'App\\Db\\RequestStrategy::onFormatMessage', 'Triggered when a request status is set to Pending'),
-(9, 'Request - Processing', 'status.app.request.processing', 'App\\Db\\RequestStrategy::onFormatMessage', 'Triggered when a request status is set to Processing'),
-(10, 'Request - Completed', 'status.app.request.completed', 'App\\Db\\RequestStrategy::onFormatMessage', 'Triggered when a request status is set to Completed'),
-(11, 'Request - Cancelled', 'status.app.request.cancelled', 'App\\Db\\RequestStrategy::onFormatMessage', 'Triggered when a request status is set to Cancelled')
+(1, 'Case - Status Change - Pending', 'status.app.pathCase.pending', 'App\\Db\\PathCaseStrategy::onFormatMessage', 'Triggered when a case status is set to Pending'),
+(2, 'Case - Status Change - Hold', 'status.app.pathCase.hold', 'App\\Db\\PathCaseStrategy::onFormatMessage', 'Triggered when a case status is set to Hold'),
+(3, 'Case - Status Change - Frozen Storage', 'status.app.pathCase.forozenStorage', 'App\\Db\\PathCaseStrategy::onFormatMessage', 'Triggered when a case status is set to Frozen Storage'),
+(4, 'Case - Status Change - Approved', 'status.app.pathCase.examined', 'App\\Db\\PathCaseStrategy::onFormatMessage', 'Triggered when a case status is set to Approved'),
+(5, 'Case - Status Change - Reported', 'status.app.pathCase.reported', 'App\\Db\\PathCaseStrategy::onFormatMessage', 'Triggered when a case status is set to Reported'),
+(6, 'Case - Status Change - Completed', 'status.app.pathCase.completed', 'App\\Db\\PathCaseStrategy::onFormatMessage', 'Triggered when a case status is set to Completed'),
+(7, 'Case - Status Change - Cancelled', 'status.app.pathCase.cancelled', 'App\\Db\\PathCaseStrategy::onFormatMessage', 'Triggered when a case status is set to Cancelled'),
+(8, 'Request - Status Change - Pending', 'status.app.request.pending', 'App\\Db\\RequestStrategy::onFormatMessage', 'Triggered when a request status is set to Pending'),
+(9, 'Request - Status Change - Processing', 'status.app.request.processing', 'App\\Db\\RequestStrategy::onFormatMessage', 'Triggered when a request status is set to Processing'),
+(10, 'Request - Status Change - Completed', 'status.app.request.completed', 'App\\Db\\RequestStrategy::onFormatMessage', 'Triggered when a request status is set to Completed'),
+(11, 'Request - Status Change - Cancelled', 'status.app.request.cancelled', 'App\\Db\\RequestStrategy::onFormatMessage', 'Triggered when a request status is set to Cancelled')
 ;
 
 

@@ -31,8 +31,7 @@ class MailTemplate extends \Bs\TableIface
     {
 
         $this->appendCell(new Cell\Checkbox('id'));
-        $this->appendCell(new Cell\Text('institutionId'));
-        $this->appendCell(new Cell\Text('event'));
+        $this->appendCell(new Cell\Text('event'))->addCss('key')->setUrl($this->getEditUrl());
         $this->appendCell(new Cell\Text('recipientType'));
         $this->appendCell(new Cell\Boolean('active'));
         $this->appendCell(new Cell\Date('modified'));
@@ -43,7 +42,7 @@ class MailTemplate extends \Bs\TableIface
 
         // Actions
         //$this->appendAction(\Tk\Table\Action\Link::createLink('New Mail Template', \Bs\Uri::createHomeUrl('/mail/templateEdit.html'), 'fa fa-plus'));
-        //$this->appendAction(\Tk\Table\Action\ColumnSelect::create()->setUnselected(array('modified', 'created')));
+        $this->appendAction(\Tk\Table\Action\ColumnSelect::create()->setUnselected(array('modified', 'created')));
         $this->appendAction(\Tk\Table\Action\Delete::create());
         $this->appendAction(\Tk\Table\Action\Csv::create());
 

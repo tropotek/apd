@@ -30,7 +30,7 @@ class MailTemplate extends \Bs\FormIface
     {
 
         $mediaPath = $this->getMailTemplate()->getInstitution()->getDataPath().'/mtpl/media';
-        vd($mediaPath);
+        //vd($mediaPath);
 
         $list = MailTemplateEventMap::create()->findFiltered(array())->toArray('event', 'name');
         $this->appendField(new Field\Select('event', $list))->prependOption('-- Select --', '');
@@ -38,7 +38,7 @@ class MailTemplate extends \Bs\FormIface
         $this->appendField(new Field\Select('recipientType', $list))->prependOption('-- Select --', '');
         $this->appendField(new Field\Checkbox('active'));
         $this->appendField(new Field\Textarea('template'))
-            ->addCss('mce-med')->setAttr('data-elfinder-path', $mediaPath);
+            ->addCss('mce')->setAttr('data-elfinder-path', $mediaPath);
 
         $this->appendField(new Event\Submit('update', array($this, 'doSubmit')));
         $this->appendField(new Event\Submit('save', array($this, 'doSubmit')));

@@ -43,6 +43,8 @@ class MailTemplateMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Text('recipientType', 'recipient_type'));
             $this->dbMap->addPropertyMap(new Db\Text('template'));
             $this->dbMap->addPropertyMap(new Db\Boolean('active'));
+            $this->dbMap->addPropertyMap(new Db\Date('modified'));
+            $this->dbMap->addPropertyMap(new Db\Date('created'));
 
         }
         return $this->dbMap;

@@ -48,13 +48,12 @@ class MailTemplateHandler implements Subscriber
 
                 // Save the message for sending
                 if ($message instanceof \Tk\Mail\Message) {
-                    if ($message->hasRecipient()) {     // Ignore any message with no recipients
-                        $event->addMessage($message);
-                    } else {
+                    if (!$message->hasRecipient()) {     // Ignore any message with no recipients
                         \Tk\Log::debug('No recipient for message: ' . $mailTemplateEvent->getEvent());
+                        continue;
                     }
+                    $event->addMessage($message);
                 }
-
             } catch (\Exception $e) {
                 \Tk\Log::error($e->getMessage());
             }
