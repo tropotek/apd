@@ -9,8 +9,6 @@ namespace App;
  */
 class Dispatch extends \Uni\Dispatch
 {
-
-
     /**
      * @throws \Exception
      */
@@ -19,9 +17,13 @@ class Dispatch extends \Uni\Dispatch
         parent::init();
         $dispatcher = $this->getDispatcher();
 
-        $dispatcher->addSubscriber(new \App\Listener\NavRendererHandler());
-        $dispatcher->addSubscriber(new \Bs\Listener\PageLoaderHandler());
-        $dispatcher->addSubscriber(new \App\Listener\StatusMailHandler());
+        $dispatcher->addSubscriber(new \App\Listener\MailTemplateHandler());
+
+        if (!$this->getConfig()->isCli()) {
+            $dispatcher->addSubscriber(new \App\Listener\NavRendererHandler());
+            $dispatcher->addSubscriber(new \Bs\Listener\PageLoaderHandler());
+        }
+
     }
 
 }

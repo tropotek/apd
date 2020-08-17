@@ -13,7 +13,7 @@ use Tk\Mail\CurlyMessage;
  * @see http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
  */
-class StatusMailHandler implements Subscriber
+class MailTemplateHandler implements Subscriber
 {
     use ConfigTrait;
 
@@ -26,19 +26,19 @@ class StatusMailHandler implements Subscriber
         // do not send messages
         if (!$event->getStatus()->isNotify()) return;
 
-//
-//        // Find all mail templates for this status update
-//        $mailTemplateList = \App\Db\MailTemplateMap::create()->findFiltered(array(
-//            'active' => true,
-//            'courseId' => $event->getStatus()->getCourseId(),
-//            'event' => $event->getStatus()->getEvent()
-//        ));
-//
-//        /** @var \App\Db\MailTemplate $mailTemplate */
-//        foreach ($mailTemplateList as $mailTemplate) {
-//            // send a message for each template found
-//            try {
-//                $modelStrategy = $event->getStatus()->getModelStrategy();
+        // Find all mail templates for this status update
+        $mailTemplateList = \App\Db\MailTemplateMap::create()->findFiltered(array(
+            'active' => true,
+            'institutionId' => $this->getConfig()->getInstitutionId(),
+            'event' => $event->getStatus()->getEvent()
+        ));
+
+        /** @var \App\Db\MailTemplate $mailTemplate */
+        foreach ($mailTemplateList as $mailTemplate) {
+            // setup a message for each template found
+            try {
+
+                $modelStrategy = $event->getStatus()->getModelStrategy();
 //                if (!$modelStrategy) {
 //                    \Tk\Log::warning('onStatusChange: Strategy Not Found For: ' . $event->getStatus()->getFkey());
 //                    continue;
@@ -60,18 +60,21 @@ class StatusMailHandler implements Subscriber
 //                        $event->addMessage($message);
 //                    }
 //                }
-//            } catch (\Exception $e) {
-//                \Tk\Log::error($e->getMessage());
-//            }
-//        }
-//        if (!count($event->getMessageList())) $event->stopPropagation();
+
+            } catch (\Exception $e) {
+                \Tk\Log::error($e->getMessage());
+            }
+        }
+
+        // Stop if no messages are being sent
+        if (!count($event->getMessageList())) $event->stopPropagation();
     }
 
     /**
      * @param \Uni\Event\StatusEvent $event
      * @throws \Exception
      */
-    public function onSendStatusMessages(\Uni\Event\StatusEvent $event)
+    public function onStatusSendMessages(\Uni\Event\StatusEvent $event)
     {
         if (!$event->getStatus()->isNotify()) return;   // do not send messages
 
@@ -158,7 +161,7 @@ class StatusMailHandler implements Subscriber
     {
         return array(
             \Bs\StatusEvents::STATUS_CHANGE => array('onStatusChange', 0),
-            \Bs\StatusEvents::STATUS_SEND_MESSAGES => array('onSendStatusMessages', 0),
+            \Bs\StatusEvents::STATUS_SEND_MESSAGES => array('onStatusSendMessages', 0),
             \Tk\Mail\MailEvents::POST_SEND => array('postSend', 10)
         );
     }

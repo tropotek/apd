@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS client
     b_state VARCHAR(255) NOT NULL DEFAULT '',
     b_postcode VARCHAR(255) NOT NULL DEFAULT '',
 
-    notes TEXT,                                                 -- Staff only notes
+    NOTes TEXT,                                                 -- Staff only NOTes
     del TINYINT(1) NOT NULL DEFAULT 0,
     modified DATETIME NOT NULL,
     created DATETIME NOT NULL,
@@ -78,7 +78,7 @@ CREATE TABLE IF NOT EXISTS `path_case`
     -- Case
     pathology_id VARCHAR(64) NOT NULL DEFAULT '',             -- Pathology Number
     type VARCHAR(64) NOT NULL DEFAULT '',                     -- BIOPSY, NECROPSY
-    submission_type VARCHAR(64) NULL DEFAULT '',          -- direct client/external vet/internal vet/researcher/ Other - Specify
+    submission_type VARCHAR(64) NULL DEFAULT '',          -- direct client/external vet/INTernal vet/researcher/ Other - Specify
     status VARCHAR(64) NOT NULL DEFAULT '',                   -- Pending/frozen storage/examined/reported/awaiting review (if applicable)/completed
 
     -- TODO: These fields will be redundant when using the status log
@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS `path_case`
     --
 
     -- Animal/patient details
-    specimen_count INT(10) UNSIGNED NOT NULL DEFAULT 1,       -- ??? TODO: not sure if this is needed
+    specimen_count INT(10) UNSIGNED NOT NULL DEFAULT 1,       -- ??? TODO: NOT sure if this is needed
     animal_name VARCHAR(128) NOT NULL DEFAULT '',             --
     species VARCHAR(128) NOT NULL DEFAULT '',                 --
     gender VARCHAR(64) NOT NULL DEFAULT '',                   -- Male/Female
@@ -100,7 +100,7 @@ CREATE TABLE IF NOT EXISTS `path_case`
     patient_number VARCHAR(128) NOT NULL DEFAULT '',          --
     microchip VARCHAR(128) NOT NULL DEFAULT '',               --
     owner_name VARCHAR(128) NOT NULL DEFAULT '',              --
-    origin VARCHAR(128) NOT NULL DEFAULT '',                  -- ?? For now a text box, but not sure if this should be lookup table
+    origin VARCHAR(128) NOT NULL DEFAULT '',                  -- ?? For now a TEXT box, but NOT sure if this should be lookup table
     breed VARCHAR(128) NOT NULL DEFAULT '',                   --
     vmis_weight VARCHAR(128) NOT NULL DEFAULT '',             --
     neco_weight VARCHAR(128) NOT NULL DEFAULT '',             --
@@ -110,7 +110,7 @@ CREATE TABLE IF NOT EXISTS `path_case`
 
     euthanised TINYINT(1) NOT NULL DEFAULT 0,                 --
     euthanised_method VARCHAR(255) NULL DEFAULT '',       --
-    ac_type VARCHAR(64) NULL DEFAULT '',                  -- after care type: General Disposal/cremation/internal incineration
+    ac_type VARCHAR(64) NULL DEFAULT '',                  -- after care type: General Disposal/cremation/INTernal incineration
     ac_hold DATETIME DEFAULT NULL,                            -- after care Date to wait until processing animal
     storage_id INT(10) UNSIGNED NOT NULL DEFAULT 0,           -- The current location of the animal (cleared when disposal is completed)
     disposal DATETIME DEFAULT NULL,
@@ -123,11 +123,11 @@ CREATE TABLE IF NOT EXISTS `path_case`
     histopathology TEXT,                                      --
     ancillary_testing TEXT,
     morphological_diagnosis TEXT,
-    cause_of_death TEXT,                                      -- (required) case not saved if blank
+    cause_of_death TEXT,                                      -- (required) case NOT saved if blank
     comments TEXT,                                            -- public comments
     --
 
-    notes TEXT,                                               -- Staff only notes
+    NOTes TEXT,                                               -- Staff only NOTes
 
     del TINYINT(1) NOT NULL DEFAULT 0,
     modified DATETIME NOT NULL,
@@ -150,13 +150,13 @@ CREATE TABLE IF NOT EXISTS storage
 (
     id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     institution_id INT(10) UNSIGNED NOT NULL DEFAULT 0,
-    uid VARCHAR(64) NOT NULL DEFAULT '',                      -- internal location id (room 130)
+    uid VARCHAR(64) NOT NULL DEFAULT '',                      -- INTernal location id (room 130)
     name VARCHAR(255) NOT NULL DEFAULT '',                    -- general name of storage location ???
-    -- Would be good to have the exact location for maps... Use selected address location as a default
+    -- Would be good to have the exact location for maps... Use selected address location as a DEFAULT
     map_zoom DECIMAL(4, 2) NOT NULL DEFAULT 14,
     map_lng DECIMAL(11, 8) NOT NULL DEFAULT 0,
     map_lat DECIMAL(11, 8) NOT NULL DEFAULT 0,
-    notes TEXT,                                               -- Staff only notes
+    NOTes TEXT,                                               -- Staff only NOTes
     del TINYINT(1) NOT NULL DEFAULT 0,
     modified DATETIME NOT NULL,
     created DATETIME NOT NULL,
@@ -174,7 +174,7 @@ CREATE TABLE IF NOT EXISTS service
     name VARCHAR(64) NOT NULL DEFAULT '',
     price DECIMAL(9,2) NOT NULL DEFAULT 0.0,                  -- This should be a cost per service
     comments TEXT,                                            -- public comments
-    notes TEXT,                                               -- Staff only notes
+    NOTes TEXT,                                               -- Staff only NOTes
 
     del TINYINT(1) NOT NULL DEFAULT 0,
     modified DATETIME NOT NULL,
@@ -198,7 +198,7 @@ CREATE TABLE IF NOT EXISTS cassette
     qty INT(10) NOT NULL DEFAULT 0,                           -- Quantity of samples available
     price DECIMAL(9,2) NOT NULL DEFAULT 0.0,                  -- I assume this is price per sample ???
     comments TEXT,                                            -- public comments
-    notes TEXT,                                               -- Staff only notes
+    NOTes TEXT,                                               -- Staff only NOTes
 
     del TINYINT(1) NOT NULL DEFAULT 0,
     modified DATETIME NOT NULL,
@@ -217,12 +217,12 @@ CREATE TABLE IF NOT EXISTS request
     path_case_id INT(10) UNSIGNED NOT NULL DEFAULT 0,         --
     cassette_id INT(10) UNSIGNED NOT NULL DEFAULT 0,          --
     service_id INT(10) UNSIGNED NOT NULL DEFAULT 0,           --
-    client_id INT(10) UNSIGNED NOT NULL DEFAULT 0,            -- The client requesting the samples (not sure if this could be staff, client, etc)
+    client_id INT(10) UNSIGNED NOT NULL DEFAULT 0,            -- The client requesting the samples (NOT sure if this could be staff, client, etc)
     status VARCHAR(64) NOT NULL DEFAULT '',                   -- ???
     qty INT(10) NOT NULL DEFAULT 0,                           -- Quantity of samples requested (check available tissue.qty on submit)
     price DECIMAL(9,2) NOT NULL DEFAULT 0.0,                  -- The total cost based on qty requested + the service cost
     comments TEXT,                                            -- public comments
-    notes TEXT,                                               -- Staff only notes
+    NOTes TEXT,                                               -- Staff only NOTes
 
     del TINYINT(1) NOT NULL DEFAULT 0,
     modified DATETIME NOT NULL,
@@ -240,25 +240,25 @@ CREATE TABLE IF NOT EXISTS request
 -- ----------------------------
 CREATE TABLE IF NOT EXISTS file
 (
-    id int unsigned auto_increment primary key,
-    fkey varchar(64) default '' not null,
-    fid int default 0 not null,
-    path text null,
-    bytes int default 0 not null,
-    mime varchar(255) default '' not null,
-    notes text null,
-    hash varchar(128) default '' not null,
-    modified datetime not null,
-    created datetime not null,
-    KEY fkey (fkey),
-    KEY fkey_2 (fkey, fid)
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    fKEY VARCHAR(64) DEFAULT '' NOT NULL,
+    fid INT DEFAULT 0 NOT NULL,
+    path TEXT NULL,
+    bytes INT DEFAULT 0 NOT NULL,
+    mime VARCHAR(255) DEFAULT '' NOT NULL,
+    NOTes TEXT NULL,
+    hash VARCHAR(128) DEFAULT '' NOT NULL,
+    modified datetime NOT NULL,
+    created datetime NOT NULL,
+    KEY fKEY (fKEY),
+    KEY fKEY_2 (fKEY, fid)
 );
 
 
 
 /*
 -- TODO:
---   Teaching specimens (not critical but would be good to incorporate):
+--   Teaching specimens (NOT critical but would be good to incorporate):
 --       Teaching specimens collected – YES/NO. Specimen. Teaching tub. Transferred to tub – YES/NO
 --   This allows us to track material collected during necropsy which will be used in other teaching classes
 -- ----------------------------
@@ -279,6 +279,35 @@ CREATE TABLE IF NOT EXISTS specimen
     KEY case (case_id)
 ) ENGINE=InnoDB;
 */
+
+
+CREATE TABLE mail_template
+(
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    institution_id INT UNSIGNED NOT NULL DEFAULT 0,
+    event VARCHAR(64) NOT NULL DEFAULT '',              -- The mail template event name that triggers the sending of this template
+    recipient_type VARCHAR(64) NOT NULL DEFAULT '',     -- Identify the recipient type of this template (staff, client, etc...)
+    template TEXT NULL,
+    active TINYINT(1) NOT NULL DEFAULT 1,
+    modified datetime NOT NULL,
+    created datetime NOT NULL,
+    KEY institution_id (institution_id)
+);
+
+    
+create table mail_template_event
+(
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(64) DEFAULT '' NOT NULL,               -- The human readable name for this email event
+    event VARCHAR(64) DEFAULT '' NOT NULL,              -- The event value that is sent when this event is triggered
+    description TEXT NULL,
+    email_tags  TEXT NULL,                              -- (Array) available tags that can be used in the template content {tag} = "Some dynamic value"
+    CONSTRAINT `event` UNIQUE (`event`),
+    KEY name (name)
+);
+
+
+
 
 
 
