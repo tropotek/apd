@@ -37,29 +37,23 @@ class MailTemplateHandler implements Subscriber
         foreach ($mailTemplateList as $mailTemplate) {
             // setup a message for each template found
             try {
+                $mailTemplateEvent = $mailTemplate->getMailTemplateEvent();
+                if (!$mailTemplateEvent || !is_callable($mailTemplateEvent->getCallback())) return;
 
-//                $modelStrategy = $event->getStatus()->getModelStrategy();
-//                if (!$modelStrategy) {
-//                    \Tk\Log::warning('onStatusChange: Strategy Not Found For: ' . $event->getStatus()->getFkey());
-//                    continue;
-//                }
-//
-//                // create and populate status email message
-//                $message = CurlyMessage::create($mailTemplate->getTemplate());
-//                $message->set('_mailTemplate', $mailTemplate);
-//                $modelStrategy->formatStatusMessage($event->getStatus(), $message);
-//
-//                // Save the message for sending
-//                if ($message instanceof \Tk\Mail\Message) {
-//                    \App\Util\StatusMessage::setStatus($message, $event->getStatus());
-//                    \App\Util\StatusMessage::setCourse($message, $event->getStatus()->getCourse());
-//                    \App\Util\StatusMessage::setSubject($message, $event->getStatus()->getSubject());
-//                    if ($mailTemplate->getRecipient())
-//                        \App\Util\StatusMessage::setRecipient($message, $mailTemplate->getRecipient());
-//                    if ($message->hasRecipient()) {
-//                        $event->addMessage($message);
-//                    }
-//                }
+                // create and populate status email message
+                $message = CurlyMessage::create($mailTemplate->getTemplate());
+                $message->set('_mailTemplate', $mailTemplate);
+                // Call the message rendering callback (see DB mail_template_event.callback)
+                call_user_func_array($mailTemplateEvent->getCallback(), array($event->getStatus(), $message));
+
+                // Save the message for sending
+                if ($message instanceof \Tk\Mail\Message) {
+                    if ($message->hasRecipient()) {     // Ignore any message with no recipients
+                        $event->addMessage($message);
+                    } else {
+                        \Tk\Log::debug('No recipient for message: ' . $mailTemplateEvent->getEvent());
+                    }
+                }
 
             } catch (\Exception $e) {
                 \Tk\Log::error($e->getMessage());

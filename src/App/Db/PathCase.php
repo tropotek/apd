@@ -345,69 +345,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     }
 
     /**
-     * @param \DateTime $submitted
-     * @return PathCase
-     */
-    public function setSubmitted($submitted) : PathCase
-    {
-        $this->submitted = $submitted;
-        return $this;
-    }
-
-    /**
-     * @param null|string $format   If supplied then a string of the formatted date is returned
-     * @return \DateTime|string
-     */
-    public function getSubmitted($format = null)
-    {
-        if ($format && $this->submitted)
-            return $this->submitted->format($format);
-        return $this->submitted;
-    }
-
-    /**
-     * @param \DateTime $examined
-     * @return PathCase
-     */
-    public function setExamined($examined) : PathCase
-    {
-        $this->examined = $examined;
-        return $this;
-    }
-
-    /**
-     * @param null|string $format   If supplied then a string of the formatted date is returned
-     * @return \DateTime|string
-     */
-    public function getExamined($format = null)
-    {
-        if ($format && $this->examined)
-            return $this->examined->format($format);
-        return $this->examined;
-    }
-
-    /**
-     * @param \DateTime $finalised
-     * @return PathCase
-     */
-    public function setFinalised($finalised) : PathCase
-    {
-        $this->finalised = $finalised;
-        return $this;
-    }
-
-    /**
-     * @param null|string $format   If supplied then a string of the formatted date is returned
-     * @return \DateTime|string
-     */
-    public function getFinalised($format = null)
-    {
-        if ($format && $this->finalised)
-            return $this->finalised->format($format);
-        return $this->finalised;
-    }
-
-    /**
      * @param string $zootonicDisease
      * @return PathCase
      */

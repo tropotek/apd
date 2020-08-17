@@ -37,9 +37,6 @@ class PathCase extends \Bs\TableIface
         $this->appendCell(new Cell\Text('submissionType'));
         $this->appendCell(new Cell\Text('status'));
         /*
-        $this->appendCell(new Cell\Date('submitted'));
-        $this->appendCell(new Cell\Date('examined'));
-        $this->appendCell(new Cell\Date('finalised'));
         $this->appendCell(new Cell\Text('zootonicDisease'));
         $this->appendCell(new Cell\Text('zootonicResult'));
         $this->appendCell(new Cell\Text('specimenCount'));

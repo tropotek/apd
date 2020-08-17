@@ -64,6 +64,9 @@ $routes->add('service-edit', Route::create('/staff/serviceEdit.html', 'App\Contr
 $routes->add('path-case-manager', Route::create('/staff/pathCaseManager.html', 'App\Controller\PathCase\Manager::doDefault'));
 $routes->add('path-case-edit', Route::create('/staff/pathCaseEdit.html', 'App\Controller\PathCase\Edit::doDefault'));
 
+$routes->add('mail-template-manager', Route::create('/staff/mailTemplateManager.html', 'App\Controller\MailTemplate\Manager::doDefault'));
+$routes->add('mail-template-edit', Route::create('/staff/mailTemplateEdit.html', 'App\Controller\MailTemplate\Edit::doDefault'));
+
 $routes->add('request-manager', Route::create('/staff/requestManager.html', 'App\Controller\Request\Manager::doDefault'));
 $routes->add('request-edit', Route::create('/staff/requestEdit.html', 'App\Controller\Request\Edit::doDefault'));
 

@@ -45,9 +45,9 @@ class PathCase extends \Bs\FormIface
                 ->setRequired()->prependOption('-- Status --', '')
                 ->setNotes('Set the status. Use the checkbox to disable notification emails.');
         }
-        $this->appendField(new Field\Input('submitted'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy');
-        $this->appendField(new Field\Input('examined'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy');
-        $this->appendField(new Field\Input('finalised'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy');
+//        $this->appendField(new Field\Input('submitted'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy');
+//        $this->appendField(new Field\Input('examined'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy');
+//        $this->appendField(new Field\Input('finalised'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy');
 
         $list = \Tk\ObjectUtil::getClassConstants($this->getPathCase(), 'ZOO_');
         $this->appendField(new Field\Input('zootonicDisease'));

@@ -66,7 +66,7 @@ class MailTemplate extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public function __construct()
     {
         $this->_TimestampTrait();
-
+        $this->institutionId = $this->getConfig()->getInstitutionId();
     }
 
     /**
@@ -85,6 +85,15 @@ class MailTemplate extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public function getEvent() : string
     {
         return $this->event;
+    }
+
+    /**
+     * @return MailTemplateEvent|object|\Tk\Db\Map\Model|null
+     * @throws \Exception
+     */
+    public function getMailTemplateEvent()
+    {
+        return MailTemplateEventMap::create()->findFiltered(array('event' => $this->event))->current();
     }
 
     /**

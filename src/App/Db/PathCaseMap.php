@@ -31,9 +31,6 @@ class PathCaseMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Text('type'));
             $this->dbMap->addPropertyMap(new Db\Text('submissionType', 'submission_type'));
             $this->dbMap->addPropertyMap(new Db\Text('status'));
-            $this->dbMap->addPropertyMap(new Db\Date('submitted'));
-            $this->dbMap->addPropertyMap(new Db\Date('examined'));
-            $this->dbMap->addPropertyMap(new Db\Date('finalised'));
             $this->dbMap->addPropertyMap(new Db\Text('zootonicDisease', 'zootonic_disease'));
             $this->dbMap->addPropertyMap(new Db\Text('zootonicResult', 'zootonic_result'));
             $this->dbMap->addPropertyMap(new Db\Integer('specimenCount', 'specimen_count'));
@@ -86,9 +83,6 @@ class PathCaseMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Text('type'));
             $this->formMap->addPropertyMap(new Form\Text('submissionType'));
             $this->formMap->addPropertyMap(new Form\Text('status'));
-            $this->formMap->addPropertyMap(new Form\Date('submitted'));
-            $this->formMap->addPropertyMap(new Form\Date('examined'));
-            $this->formMap->addPropertyMap(new Form\Date('finalised'));
             $this->formMap->addPropertyMap(new Form\Text('zootonicDisease'));
             $this->formMap->addPropertyMap(new Form\Text('zootonicResult'));
             $this->formMap->addPropertyMap(new Form\Integer('specimenCount'));

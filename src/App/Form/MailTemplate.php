@@ -1,6 +1,7 @@
 <?php
 namespace App\Form;
 
+use App\Db\MailTemplateEventMap;
 use Tk\Form\Field;
 use Tk\Form\Event;
 use Tk\Form;
@@ -28,11 +29,16 @@ class MailTemplate extends \Bs\FormIface
     public function init()
     {
 
-        $this->appendField(new Field\Select('institutionId', array()))->prependOption('-- Select --', '');
-        $this->appendField(new Field\Input('event'));
-        $this->appendField(new Field\Input('recipientType'));
-        $this->appendField(new Field\Textarea('template'));
+        $mediaPath = $this->getMailTemplate()->getInstitution()->getDataPath().'/mtpl/media';
+        vd($mediaPath);
+
+        $list = MailTemplateEventMap::create()->findFiltered(array())->toArray('event', 'name');
+        $this->appendField(new Field\Select('event', $list))->prependOption('-- Select --', '');
+        $list = array('Client' => 'client', 'Staff' => 'staff');
+        $this->appendField(new Field\Select('recipientType', $list))->prependOption('-- Select --', '');
         $this->appendField(new Field\Checkbox('active'));
+        $this->appendField(new Field\Textarea('template'))
+            ->addCss('mce-med')->setAttr('data-elfinder-path', $mediaPath);
 
         $this->appendField(new Event\Submit('update', array($this, 'doSubmit')));
         $this->appendField(new Event\Submit('save', array($this, 'doSubmit')));

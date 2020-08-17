@@ -7,7 +7,7 @@ use Tk\Request;
 
 /**
  * TODO: Add Route to routes.php:
- *      $routes->add('mail-template-manager', Route::create('/staff/mail/templateManager.html', 'App\Controller\MailTemplate\Manager::doDefault'));
+ *      $routes->add('mail-template-manager', Route::create('/staff/mailTemplateManager.html', 'App\Controller\MailTemplate\Manager::doDefault'));
  *
  * @author Mick Mifsud
  * @created 2020-08-17
@@ -32,7 +32,7 @@ class Manager extends AdminManagerIface
     public function doDefault(Request $request)
     {
         $this->setTable(\App\Table\MailTemplate::create());
-        $this->getTable()->setEditUrl(\Bs\Uri::createHomeUrl('/mail/templateEdit.html'));
+        $this->getTable()->setEditUrl(\Bs\Uri::createHomeUrl('/mailTemplateEdit.html'));
         $this->getTable()->init();
 
         $filter = array();

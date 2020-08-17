@@ -1,6 +1,7 @@
 <?php
 namespace App\Db;
 
+use Tk\Db\Pdo;
 use Tk\Db\Tool;
 use Tk\Db\Map\ArrayObject;
 use Tk\DataMap\Db;
@@ -16,6 +17,18 @@ use Tk\Db\Filter;
  */
 class MailTemplateMap extends Mapper
 {
+
+    /**
+     * Mapper constructor.
+     *
+     * @param Pdo|null $db
+     * @throws \Exception
+     */
+    public function __construct($db = null)
+    {
+        parent::__construct($db);
+        $this->setMarkDeleted('');
+    }
 
     /**
      * @return \Tk\DataMap\DataMap
@@ -92,7 +105,8 @@ class MailTemplateMap extends Mapper
             $filter->appendWhere('a.institution_id = %s AND ', (int)$filter['institutionId']);
         }
         if (!empty($filter['event'])) {
-            $filter->appendWhere('a.event = %s AND ', $this->quote($filter['event']));
+            $w = $this->makeMultiQuery($filter['event'], 'a.event');
+            if ($w) $filter->appendWhere('(%s) AND ', $w);
         }
         if (!empty($filter['recipientType'])) {
             $filter->appendWhere('a.recipient_type = %s AND ', $this->quote($filter['recipientType']));

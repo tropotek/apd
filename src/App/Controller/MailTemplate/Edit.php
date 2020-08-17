@@ -7,7 +7,7 @@ use Tk\Request;
 
 /**
  * TODO: Add Route to routes.php:
- *      $routes->add('mail-template-edit', Route::create('/staff/mail/templateEdit.html', 'App\Controller\MailTemplate\Edit::doDefault'));
+ *      $routes->add('mail-template-edit', Route::create('/staff/mailTemplateEdit.html', 'App\Controller\MailTemplate\Edit::doDefault'));
  *
  * @author Mick Mifsud
  * @created 2020-08-17
