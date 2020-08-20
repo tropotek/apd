@@ -139,7 +139,6 @@ class MailTemplateHandler implements Subscriber
         if ($this->getConfig()->getInstitution())
             $mailLog->setForeignModel($this->getConfig()->getInstitution());
 
-
 //        if (!$mailLog || !$message instanceof \Tk\Mail\CurlyMessage) return;
 //        // Link status to mail log if one exists
 //        if ($message->get('status::id')) {
