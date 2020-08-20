@@ -6,34 +6,34 @@ namespace App\Db;
 
 use Tk\Mail\CurlyMessage;
 use Tk\Mail\Message;
-use Uni\Db\Status;
+use Bs\Db\Status;
 
 class RequestStrategy
 {
-    public static function onStatusChange(Status $status)
-    {
-        /** @var Request $model */
-        $model = $status->getModel();
-        $prevStatusName = $status->getPreviousName();
-
-        switch ($status->getName()) {
-            case Request::STATUS_PENDING:
-                if (!$prevStatusName)
-                    return true;
-                break;
-            case Request::STATUS_PROCESSING:
-                if (!$prevStatusName || Request::STATUS_PENDING == $prevStatusName)
-                    return true;
-                break;
-            case Request::STATUS_COMPLETED:
-                if (!$prevStatusName || Request::STATUS_PENDING == $prevStatusName || Request::STATUS_PROCESSING == $prevStatusName)
-                    return true;
-                break;
-            case Request::STATUS_CANCELLED:
-                    return true;
-        }
-        return false;
-    }
+//    public static function onStatusChange(Status $status)
+//    {
+//        /** @var Request $model */
+//        $model = $status->getModel();
+//        $prevStatusName = $status->getPreviousName();
+//
+//        switch ($status->getName()) {
+//            case Request::STATUS_PENDING:
+//                if (!$prevStatusName)
+//                    return true;
+//                break;
+//            case Request::STATUS_PROCESSING:
+//                if (!$prevStatusName || Request::STATUS_PENDING == $prevStatusName)
+//                    return true;
+//                break;
+//            case Request::STATUS_COMPLETED:
+//                if (!$prevStatusName || Request::STATUS_PENDING == $prevStatusName || Request::STATUS_PROCESSING == $prevStatusName)
+//                    return true;
+//                break;
+//            case Request::STATUS_CANCELLED:
+//                    return true;
+//        }
+//        return false;
+//    }
 
 
     public static function onFormatMessage(Status $status, CurlyMessage $message)

@@ -136,8 +136,6 @@ class PathCase extends \Bs\FormIface
         $isNew = (bool)$this->getPathCase()->getId();
         $this->getPathCase()->save();
 
-        // Do Custom data saving
-
         \Tk\Alert::addSuccess('Record saved!');
         $event->setRedirect($this->getBackUrl());
         if ($form->getTriggeredEvent()->getName() == 'save') {

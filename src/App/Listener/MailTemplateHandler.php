@@ -21,7 +21,7 @@ class MailTemplateHandler implements Subscriber
      * @param \Uni\Event\StatusEvent $event
      * @throws \Exception
      */
-    public function onStatusChange(\Uni\Event\StatusEvent $event)
+    public function onStatusChange(\Bs\Event\StatusEvent $event)
     {
         // do not send messages
         if (!$event->getStatus()->isNotify()) return;
@@ -67,7 +67,7 @@ class MailTemplateHandler implements Subscriber
      * @param \Uni\Event\StatusEvent $event
      * @throws \Exception
      */
-    public function onStatusSendMessages(\Uni\Event\StatusEvent $event)
+    public function onStatusSendMessages(\Bs\Event\StatusEvent $event)
     {
         if (!$event->getStatus()->isNotify()) return;   // do not send messages
 

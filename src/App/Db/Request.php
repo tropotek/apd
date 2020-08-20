@@ -5,6 +5,7 @@ use App\Db\Traits\CassetteTrait;
 use App\Db\Traits\ClientTrait;
 use App\Db\Traits\PathCaseTrait;
 use App\Db\Traits\ServiceTrait;
+use Bs\Db\Status;
 use Bs\Db\Traits\StatusTrait;
 use Bs\Db\Traits\TimestampTrait;
 
@@ -209,4 +210,25 @@ class Request extends \Tk\Db\Map\Model implements \Tk\ValidInterface
         return $errors;
     }
 
+    public function hasStatusChanged(Status $status)
+    {
+        $prevStatusName = $status->getPreviousName();
+        switch ($status->getName()) {
+            case Request::STATUS_PENDING:
+                if (!$prevStatusName)
+                    return true;
+                break;
+            case Request::STATUS_PROCESSING:
+                if (!$prevStatusName || Request::STATUS_PENDING == $prevStatusName)
+                    return true;
+                break;
+            case Request::STATUS_COMPLETED:
+                if (!$prevStatusName || Request::STATUS_PENDING == $prevStatusName || Request::STATUS_PROCESSING == $prevStatusName)
+                    return true;
+                break;
+            case Request::STATUS_CANCELLED:
+                return true;
+        }
+        return false;
+    }
 }

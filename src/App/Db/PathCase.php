@@ -3,10 +3,10 @@ namespace App\Db;
 
 use App\Db\Traits\ClientTrait;
 use App\Db\Traits\StorageTrait;
+use Bs\Db\Status;
 use Bs\Db\Traits\StatusTrait;
 use Bs\Db\Traits\TimestampTrait;
 use Uni\Db\Traits\InstitutionTrait;
-//use Uni\Db\Traits\StatusTrait;
 
 /**
  * @author Mick Mifsud
@@ -994,4 +994,32 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
         return $errors;
     }
 
+    public function hasStatusChanged(Status $status)
+    {
+        $prevStatusName = $status->getPreviousName();
+        switch ($status->getName()) {
+            case PathCase::STATUS_PENDING:
+                if (!$prevStatusName || PathCase::STATUS_HOLD == $prevStatusName)
+                    return true;
+                break;
+            case PathCase::STATUS_FROZEN_STORAGE:
+                return true;
+            case PathCase::STATUS_EXAMINED:
+                if (!$prevStatusName || PathCase::STATUS_PENDING == $prevStatusName || PathCase::STATUS_HOLD == $prevStatusName)
+                    return true;
+                break;
+            case PathCase::STATUS_REPORTED:
+                if (PathCase::STATUS_EXAMINED == $prevStatusName || PathCase::STATUS_PENDING == $prevStatusName )
+                    return true;
+                break;
+            case PathCase::STATUS_COMPLETED:
+                if (PathCase::STATUS_PENDING == $prevStatusName || PathCase::STATUS_REPORTED == $prevStatusName || PathCase::STATUS_EXAMINED == $prevStatusName)
+                    return true;
+                break;
+            case Request::STATUS_CANCELLED:
+                return true;
+        }
+
+        return false;
+    }
 }

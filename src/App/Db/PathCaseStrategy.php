@@ -6,41 +6,41 @@ namespace App\Db;
 
 use Tk\Mail\CurlyMessage;
 use Tk\Mail\Message;
-use Uni\Db\Status;
+use Bs\Db\Status;
 
 class PathCaseStrategy
 {
-    public static function onStatusChange(Status $status)
-    {
-        /** @var PathCase $model */
-        $model = $status->getModel();
-        $prevStatusName = $status->getPreviousName();
-
-        switch ($status->getName()) {
-            case PathCase::STATUS_PENDING:
-                if (!$prevStatusName || PathCase::STATUS_HOLD == $prevStatusName)
-                    return true;
-                break;
-            case PathCase::STATUS_FROZEN_STORAGE:
-                return true;
-            case PathCase::STATUS_EXAMINED:
-                if (!$prevStatusName || PathCase::STATUS_PENDING == $prevStatusName || PathCase::STATUS_HOLD == $prevStatusName)
-                    return true;
-                break;
-            case PathCase::STATUS_REPORTED:
-                if (PathCase::STATUS_EXAMINED == $prevStatusName || PathCase::STATUS_PENDING == $prevStatusName )
-                    return true;
-                break;
-            case PathCase::STATUS_COMPLETED:
-                if (PathCase::STATUS_PENDING == $prevStatusName || PathCase::STATUS_REPORTED == $prevStatusName || PathCase::STATUS_EXAMINED == $prevStatusName)
-                    return true;
-                break;
-            case Request::STATUS_CANCELLED:
-                return true;
-        }
-
-        return false;
-    }
+//    public static function onStatusChange(Status $status)
+//    {
+//        /** @var PathCase $model */
+//        $model = $status->getModel();
+//        $prevStatusName = $status->getPreviousName();
+//
+//        switch ($status->getName()) {
+//            case PathCase::STATUS_PENDING:
+//                if (!$prevStatusName || PathCase::STATUS_HOLD == $prevStatusName)
+//                    return true;
+//                break;
+//            case PathCase::STATUS_FROZEN_STORAGE:
+//                return true;
+//            case PathCase::STATUS_EXAMINED:
+//                if (!$prevStatusName || PathCase::STATUS_PENDING == $prevStatusName || PathCase::STATUS_HOLD == $prevStatusName)
+//                    return true;
+//                break;
+//            case PathCase::STATUS_REPORTED:
+//                if (PathCase::STATUS_EXAMINED == $prevStatusName || PathCase::STATUS_PENDING == $prevStatusName )
+//                    return true;
+//                break;
+//            case PathCase::STATUS_COMPLETED:
+//                if (PathCase::STATUS_PENDING == $prevStatusName || PathCase::STATUS_REPORTED == $prevStatusName || PathCase::STATUS_EXAMINED == $prevStatusName)
+//                    return true;
+//                break;
+//            case Request::STATUS_CANCELLED:
+//                return true;
+//        }
+//
+//        return false;
+//    }
 
 
     public static function onFormatMessage(Status $status, CurlyMessage $message)
