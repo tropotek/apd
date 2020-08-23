@@ -1,6 +1,7 @@
 <?php
 namespace App\Db;
 
+use App\Db\Traits\MailTemplateEventTrait;
 use Bs\Db\Traits\TimestampTrait;
 use Uni\Db\Traits\InstitutionTrait;
 
@@ -14,6 +15,7 @@ class MailTemplate extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 {
     use InstitutionTrait;
     use TimestampTrait;
+    use MailTemplateEventTrait;
 
     /**
      * @var int
@@ -24,6 +26,11 @@ class MailTemplate extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      * @var int
      */
     public $institutionId = 0;
+
+    /**
+     * @var int
+     */
+    public $mailTemplateEventId = 0;
 
     /**
      * The mail template event name that triggers the sending of this template
@@ -69,32 +76,32 @@ class MailTemplate extends \Tk\Db\Map\Model implements \Tk\ValidInterface
         $this->institutionId = $this->getConfig()->getInstitutionId();
     }
 
-    /**
-     * @param string $event
-     * @return MailTemplate
-     */
-    public function setEvent($event) : MailTemplate
-    {
-        $this->event = $event;
-        return $this;
-    }
+//    /**
+//     * @param string $event
+//     * @return MailTemplate
+//     */
+//    public function setEvent($event) : MailTemplate
+//    {
+//        $this->event = $event;
+//        return $this;
+//    }
+//
+//    /**
+//     * @return string
+//     */
+//    public function getEvent() : string
+//    {
+//        return $this->event;
+//    }
 
-    /**
-     * @return string
-     */
-    public function getEvent() : string
-    {
-        return $this->event;
-    }
-
-    /**
-     * @return MailTemplateEvent|object|\Tk\Db\Map\Model|null
-     * @throws \Exception
-     */
-    public function getMailTemplateEvent()
-    {
-        return MailTemplateEventMap::create()->findFiltered(array('event' => $this->event))->current();
-    }
+//    /**
+//     * @return MailTemplateEvent|object|\Tk\Db\Map\Model|null
+//     * @throws \Exception
+//     */
+//    public function getMailTemplateEvent()
+//    {
+//        return MailTemplateEventMap::create()->findFiltered(array('event' => $this->event))->current();
+//    }
 
     /**
      * @param string $recipientType
@@ -159,10 +166,6 @@ class MailTemplate extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 
         if (!$this->institutionId) {
             $errors['institutionId'] = 'Invalid value: institutionId';
-        }
-
-        if (!$this->event) {
-            $errors['event'] = 'Invalid value: event';
         }
 
         if (!$this->recipientType) {

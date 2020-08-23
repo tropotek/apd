@@ -946,8 +946,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
                 if (!$prevStatusName || PathCase::STATUS_HOLD == $prevStatusName)
                     return true;
                 break;
-            case PathCase::STATUS_FROZEN_STORAGE:
-                return true;
             case PathCase::STATUS_EXAMINED:
                 if (!$prevStatusName || PathCase::STATUS_PENDING == $prevStatusName || PathCase::STATUS_HOLD == $prevStatusName)
                     return true;
@@ -960,6 +958,8 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
                 if (PathCase::STATUS_PENDING == $prevStatusName || PathCase::STATUS_REPORTED == $prevStatusName || PathCase::STATUS_EXAMINED == $prevStatusName)
                     return true;
                 break;
+            case PathCase::STATUS_HOLD:
+            case PathCase::STATUS_FROZEN_STORAGE:
             case Request::STATUS_CANCELLED:
                 return true;
         }

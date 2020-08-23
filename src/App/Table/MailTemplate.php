@@ -1,6 +1,8 @@
 <?php
 namespace App\Table;
 
+use App\Db\MailTemplateEventMap;
+use App\Db\MailTemplateMap;
 use Tk\Form\Field;
 use Tk\Table\Cell;
 
@@ -31,7 +33,17 @@ class MailTemplate extends \Bs\TableIface
     {
 
         $this->appendCell(new Cell\Checkbox('id'));
-        $this->appendCell(new Cell\Text('event'))->addCss('key')->setUrl($this->getEditUrl());
+        $this->appendCell(new Cell\Text('id'));
+        $this->appendCell(new Cell\Text('eventId'))->addCss('key')->setUrl($this->getEditUrl())->addOnPropertyValue(
+            function (\Tk\Table\Cell\Iface $cell, $obj, $value) {
+                /** @var \App\Db\MailTemplateEvent $mEvent */
+                $mEvent = MailTemplateEventMap::create()->find($value);
+                if ($mEvent) {
+                    $value = $mEvent->getName();
+                }
+                return $value;
+            }
+        );
         $this->appendCell(new Cell\Text('recipientType'));
         $this->appendCell(new Cell\Boolean('active'));
         $this->appendCell(new Cell\Date('modified'));

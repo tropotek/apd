@@ -4,62 +4,49 @@
 namespace App\Db;
 
 
+use Tk\Collection;
 use Tk\Mail\CurlyMessage;
 use Tk\Mail\Message;
 use Bs\Db\Status;
 
-class PathCaseStrategy
+class PathCaseDecorator
 {
-//    public static function onStatusChange(Status $status)
-//    {
-//        /** @var PathCase $model */
-//        $model = $status->getModel();
-//        $prevStatusName = $status->getPreviousName();
-//
-//        switch ($status->getName()) {
-//            case PathCase::STATUS_PENDING:
-//                if (!$prevStatusName || PathCase::STATUS_HOLD == $prevStatusName)
-//                    return true;
-//                break;
-//            case PathCase::STATUS_FROZEN_STORAGE:
-//                return true;
-//            case PathCase::STATUS_EXAMINED:
-//                if (!$prevStatusName || PathCase::STATUS_PENDING == $prevStatusName || PathCase::STATUS_HOLD == $prevStatusName)
-//                    return true;
-//                break;
-//            case PathCase::STATUS_REPORTED:
-//                if (PathCase::STATUS_EXAMINED == $prevStatusName || PathCase::STATUS_PENDING == $prevStatusName )
-//                    return true;
-//                break;
-//            case PathCase::STATUS_COMPLETED:
-//                if (PathCase::STATUS_PENDING == $prevStatusName || PathCase::STATUS_REPORTED == $prevStatusName || PathCase::STATUS_EXAMINED == $prevStatusName)
-//                    return true;
-//                break;
-//            case Request::STATUS_CANCELLED:
-//                return true;
-//        }
-//
-//        return false;
-//    }
 
 
+    /**
+     * @param Status $status
+     * @param CurlyMessage $message
+     * @throws \Exception
+     */
     public static function onFormatMessage(Status $status, CurlyMessage $message)
     {
         /** @var PathCase $case */
         $case = $status->getModel();
+        /** @var MailTemplate $mailTemplate */
+        $mailTemplate = $message->get('_mailTemplate');
 
         $message->setSubject('[#' . $case->getId() . '] ' . ucfirst($status->getName()) . ': ' . $case->getPathologyId());
         $message->setFrom(Message::joinEmail($case->getInstitution()->getEmail(), $case->getInstitution()->getName()));
 
-        // Setup default message vars
-//        StatusMessage::setStudent($message, $status->findLastStudent());
-//        StatusMessage::setStaff($message, $status->findLastStaff());
-//        StatusMessage::setCompany($message, $case);
+        // Setup default message dynamic vars
+        $message->replace(Collection::prefixArrayKeys(\Uni\Db\InstitutionMap::create()->unmapForm($case->getInstitution()), 'institution::'));
+        $message->replace(Collection::prefixArrayKeys(\App\Db\ClientMap::create()->unmapForm($case->getClient()), 'client::'));
+        $message->replace(Collection::prefixArrayKeys(\App\Db\PathCaseMap::create()->unmapForm($case), 'pathCase::'));
+        $message->replace(Collection::prefixArrayKeys(\Bs\Db\StatusMap::create()->unmapForm($case->getStatusObject()), 'status::'));
+
+        // Recipient
+        if ($mailTemplate->getRecipientType() == 'client') {
+            $message->replace(Collection::prefixArrayKeys(\App\Db\ClientMap::create()->unmapForm($case->getClient()), 'recipient::'));
+        } else if ($mailTemplate->getRecipientType() == 'staff') {
+            $staff = '';// ??????????????????
+            $message->replace(Collection::prefixArrayKeys(\Bs\Db\StatusMap::create()->unmapForm($case->getStatusObject()), 'recipient::'));
+        }
+
+
+exit;
 
         // TODO: recipients need to be competed when we know whats going on
 
-        /** @var MailTemplate $mailTemplate */
-        $mailTemplate = $message->get('_mailTemplate');
 //        switch ($mailTemplate->getRecipientType()) {
 //            case 'client':
 //                if ($case && $case->getEmail()) {

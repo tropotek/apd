@@ -39,7 +39,8 @@ class MailTemplateMap extends Mapper
             $this->dbMap = new \Tk\DataMap\DataMap();
             $this->dbMap->addPropertyMap(new Db\Integer('id'), 'key');
             $this->dbMap->addPropertyMap(new Db\Integer('institutionId', 'institution_id'));
-            $this->dbMap->addPropertyMap(new Db\Text('event'));
+            $this->dbMap->addPropertyMap(new Db\Integer('mailTemplateEventId', 'mail_template_event_id'));
+            //$this->dbMap->addPropertyMap(new Db\Text('event'));     // deprecated
             $this->dbMap->addPropertyMap(new Db\Text('recipientType', 'recipient_type'));
             $this->dbMap->addPropertyMap(new Db\Text('template'));
             $this->dbMap->addPropertyMap(new Db\Boolean('active'));
@@ -59,7 +60,8 @@ class MailTemplateMap extends Mapper
             $this->formMap = new \Tk\DataMap\DataMap();
             $this->formMap->addPropertyMap(new Form\Integer('id'), 'key');
             $this->formMap->addPropertyMap(new Form\Integer('institutionId'));
-            $this->formMap->addPropertyMap(new Form\Text('event'));
+            $this->formMap->addPropertyMap(new Form\Integer('mailTemplateEventId'));
+            //$this->formMap->addPropertyMap(new Form\Text('event'));     // deprecated
             $this->formMap->addPropertyMap(new Form\Text('recipientType'));
             $this->formMap->addPropertyMap(new Form\Text('template'));
             $this->formMap->addPropertyMap(new Form\Boolean('active'));
@@ -106,10 +108,13 @@ class MailTemplateMap extends Mapper
         if (isset($filter['institutionId'])) {
             $filter->appendWhere('a.institution_id = %s AND ', (int)$filter['institutionId']);
         }
-        if (!empty($filter['event'])) {
-            $w = $this->makeMultiQuery($filter['event'], 'a.event');
+
+        if (!empty($filter['eventId'])) $filter['mailTemplateEventId'] = $filter['eventId'];
+        if (!empty($filter['mailTemplateEventId'])) {
+            $w = $this->makeMultiQuery($filter['mailTemplateEventId'], 'a.mail_template_event_id');
             if ($w) $filter->appendWhere('(%s) AND ', $w);
         }
+
         if (!empty($filter['recipientType'])) {
             $filter->appendWhere('a.recipient_type = %s AND ', $this->quote($filter['recipientType']));
         }

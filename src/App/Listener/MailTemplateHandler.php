@@ -1,7 +1,8 @@
 <?php
 namespace App\Listener;
 
-use Dom\Exception;
+use App\Db\MailTemplateEvent;
+use App\Db\MailTemplateEventMap;
 use Tk\ConfigTrait;
 use Tk\Event\Subscriber;
 use Tk\Mail\CurlyMessage;
@@ -18,6 +19,9 @@ class MailTemplateHandler implements Subscriber
     use ConfigTrait;
 
     /**
+     * After a status change is triggered Look for any existing template to be sent
+     * If found then create that template as a message
+     *
      * @param \Uni\Event\StatusEvent $event
      * @throws \Exception
      */
@@ -26,34 +30,27 @@ class MailTemplateHandler implements Subscriber
         // do not send messages
         if (!$event->getStatus()->isNotify()) return;
 
+        // Find the mail template event type from the status.event field
+        /** @var MailTemplateEvent $mEvent */
+        $mEvent = MailTemplateEventMap::create()->findFiltered(array('event' => $event->getStatus()->getEvent()))->current();
+        if (!$mEvent) return;
+
         // Find all mail templates for this status update
         $mailTemplateList = \App\Db\MailTemplateMap::create()->findFiltered(array(
             'active' => true,
             'institutionId' => $this->getConfig()->getInstitutionId(),
-            'event' => $event->getStatus()->getEvent()
+            'mailTemplateEventId' => $mEvent->getId()
         ));
 
+        // setup a message object for each template found
         /** @var \App\Db\MailTemplate $mailTemplate */
         foreach ($mailTemplateList as $mailTemplate) {
-            // setup a message for each template found
             try {
-                $mailTemplateEvent = $mailTemplate->getMailTemplateEvent();
-                if (!$mailTemplateEvent || !is_callable($mailTemplateEvent->getCallback())) return;
-
+                if (!is_callable($mEvent->getCallback())) continue;
                 // create and populate status email message
                 $message = CurlyMessage::create($mailTemplate->getTemplate());
                 $message->set('_mailTemplate', $mailTemplate);
-                // Call the message rendering callback (see DB mail_template_event.callback)
-                call_user_func_array($mailTemplateEvent->getCallback(), array($event->getStatus(), $message));
-
-                // Save the message for sending
-                if ($message instanceof \Tk\Mail\Message) {
-                    if (!$message->hasRecipient()) {     // Ignore any message with no recipients
-                        \Tk\Log::debug('No recipient for message: ' . $mailTemplateEvent->getEvent());
-                        continue;
-                    }
-                    $event->addMessage($message);
-                }
+                $event->addMessage($message);
             } catch (\Exception $e) {
                 \Tk\Log::error($e->getMessage());
             }
@@ -64,6 +61,9 @@ class MailTemplateHandler implements Subscriber
     }
 
     /**
+     * If messages exist in the queue, add recipients and insert the
+     * mail template variables for formatting templates.
+     *
      * @param \Uni\Event\StatusEvent $event
      * @throws \Exception
      */
@@ -71,8 +71,31 @@ class MailTemplateHandler implements Subscriber
     {
         if (!$event->getStatus()->isNotify()) return;   // do not send messages
 
-//        /** @var \Tk\Mail\CurlyMessage $message */
-//        foreach ($event->getMessageList() as $message) {
+        /** @var \Tk\Mail\CurlyMessage $message */
+        foreach ($event->getMessageList() as $message) {
+            /** @var \App\Db\MailTemplate $mailTemplate */
+            $mailTemplate = $message->get('_mailTemplate');
+            if (!$mailTemplate) continue;
+
+            // Call the template callback as first step
+            $mEvent = $mailTemplate->getMailTemplateEvent();
+            if (!$mEvent) continue;
+            call_user_func_array($mEvent->getCallback(), array($event->getStatus(), $message));
+
+
+            // Add recipients
+
+            // Add message subject
+
+            // Add message dynamic variables
+
+            // clean up any message content
+
+            // Send message
+
+
+
+
 //            if (!count($message->getTo())) {
 //                \Tk\Log::error('onSendStatusMessages: Recipient Not Found');
 //                continue;
@@ -123,7 +146,7 @@ class MailTemplateHandler implements Subscriber
 //                \Tk\Log::notice('      Subject: ' . $message->getSubject() );
 //                $event->set('sent', $event->get('sent', 0)+1);
 //            }
-//        }
+        }
 
     }
 
@@ -134,16 +157,24 @@ class MailTemplateHandler implements Subscriber
     {
         /** @var \Tk\Ml\Db\MailLog $mailLog */
         $mailLog = $event->get('mailLog');
-        //$message = $event->getMessage();
-
+        /** @var \Tk\Mail\CurlyMessage $message */
+        $message = $event->getMessage();
         if ($this->getConfig()->getInstitution())
             $mailLog->setForeignModel($this->getConfig()->getInstitution());
 
-//        if (!$mailLog || !$message instanceof \Tk\Mail\CurlyMessage) return;
-//        // Link status to mail log if one exists
-//        if ($message->get('status::id')) {
-//            \App\Db\MailLogMap::create()->addStatus($mailLog->getId(), $message->get('status::id'));
-//        }
+        if ($message instanceof \Tk\Mail\CurlyMessage) {
+            // Link status to mail log if one exists
+            if ($message->has('status::id')) {
+                $message->addHeader('X-status-id', $message->get('status::id'));
+                /** @var \Bs\Db\Status $status */
+                $status = \Bs\Db\StatusMap::create()->find($message->get('status::id'));
+                if ($status) {
+                    $message->addHeader('X-status-name', $status->getName());
+                }
+            }
+        }
+
+        $mailLog->save();
     }
 
     /**
