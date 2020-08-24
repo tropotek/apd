@@ -135,7 +135,7 @@ CREATE TABLE IF NOT EXISTS `path_case`
     created DATETIME NOT NULL,
     KEY institution_id (institution_id),
     KEY client_id (client_id),
-    KEY client_id (user_id),
+    KEY user_id (user_id),
     KEY pathology_id (pathology_id),
     KEY storage_id (storage_id),
     KEY type (type),
