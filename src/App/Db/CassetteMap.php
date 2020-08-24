@@ -124,7 +124,7 @@ class CassetteMap extends Mapper
             $w = $this->makeMultiQuery($filter['exclude'], 'a.id', 'AND', '!=');
             if ($w) $filter->appendWhere('(%s) AND ', $w);
         }
-vd($filter);
+
         return $filter;
     }
 

@@ -78,73 +78,58 @@ class MailTemplateHandler implements Subscriber
             $mEvent = $mailTemplate->getMailTemplateEvent();
             if (!$mEvent) continue;
 
+            if (!count($message->getTo())) {
+                \Tk\Log::error('onSendStatusMessages: Recipient Not Found');
+                continue;
+            }
+
+            if (\App\Config::getInstance()->isDebug() && $message->has('recipient::type')) {
+                $message->setSubject($message->getSubject() . ' [' . ucwords($message->get('recipient::type')) . ']');
+            }
 
 
+            // Check the message content is not empty
+            $tst = trim(preg_replace('/\W/', '', html_entity_decode(strip_tags($message->getParsed()))));
+            if ($tst == '') {
+                \Tk\Log::warning($message->getSubject() . ' [EMPTY - NOT SENT]');
+                continue;
+            }
 
+            // Add the signature var
+            $message->setBody(sprintf('<div>%s {sig}</div>', $message->getBody()));
 
+            // Fix all message relative paths
+            $tpl = null;
+            try {
+                $tpl = \Dom\Template::load($message->getBody());
+            } catch (\Exception $e) {
+                \Tk\Log::notice($e->__toString());
+            }
+            if ($tpl) {
+                $config = \App\Config::getInstance();
+                /** @var \Uni\Db\InstitutionIface $institution */
+                $institution = $config->getInstitutionMapper()->find($message->get('institution::id'));
+                $dm = new \Dom\Modifier\Modifier();
 
-
-            // Add message subject
-
-            // Add message dynamic variables
-
-            // clean up any message content
+                $path = \Uni\Uri::create('/');
+                $path->setHost($config->getSiteHost());
+                if ($institution && $institution->getDomain()) {
+                    $path->setHost($institution->getDomain());
+                }
+                $dm->add(new \Dom\Modifier\Filter\UrlPath($path));
+                $dm->execute($tpl->getDocument(false));
+                $message->setBody($tpl->toString(true));
+            }
 
             // Send message
-
-
-
-
-//            if (!count($message->getTo())) {
-//                \Tk\Log::error('onSendStatusMessages: Recipient Not Found');
-//                continue;
-//            }
-//            if (\App\Config::getInstance()->isDebug() && $message->has('recipient::type')) {
-//                $message->setSubject($message->getSubject() . ' [' . ucwords($message->get('recipient::type')) . ']');
-//            }
-//
-//            // Check the message is not empty
-//            $tst = trim(preg_replace('/\W/', '', html_entity_decode(strip_tags($message->getParsed()))));
-//            if ($tst == '') {
-//                \Tk\Log::warning($message->getSubject() . ' [EMPTY - NOT SENT]');
-//                continue;
-//            }
-//
-//            // Add the profile signature var
-//            $message->setBody(sprintf('<div>%s {sig}</div>', $message->getBody()));
-//
-//            // Fix all message relative paths
-//            $tpl = null;
-//            try {
-//                $tpl = \Dom\Template::load($message->getBody());
-//            } catch (Exception $e) {
-//                \Tk\Log::notice($e->__toString());
-//            }
-//            if ($tpl) {
-//                $config = \App\Config::getInstance();
-//                /** @var \Uni\Db\InstitutionIface $institution */
-//                $institution = $config->getInstitutionMapper()->find($message->get('institution::id'));
-//                $dm = new \Dom\Modifier\Modifier();
-//
-//                $path = \Uni\Uri::create('/');
-//                $path->setHost($config->getSiteHost());
-//                if ($institution && $institution->getDomain()) {
-//                    $path->setHost($institution->getDomain());
-//                }
-//                $dm->add(new \Dom\Modifier\Filter\UrlPath($path));
-//                $dm->execute($tpl->getDocument(false));
-//                $message->setBody($tpl->toString(true));
-//            }
-//
-//            // Send message
-//            if (!\App\Config::getInstance()->getEmailGateway()->send($message)) {
-//                \Tk\Log::warning('Email Not Sent: ' . implode(', ', $message->getTo()));
-//                \Tk\Log::warning(implode("\n", \App\Config::getInstance()->getEmailGateway()->getErrors()));
-//            } else {
-//                \Tk\Log::notice('Email To: ' . implode(', ', $message->getTo()));
-//                \Tk\Log::notice('      Subject: ' . $message->getSubject() );
-//                $event->set('sent', $event->get('sent', 0)+1);
-//            }
+            if (!\App\Config::getInstance()->getEmailGateway()->send($message)) {
+                \Tk\Log::warning('Email Not Sent: ' . implode(', ', $message->getTo()));
+                \Tk\Log::warning(implode("\n", \App\Config::getInstance()->getEmailGateway()->getErrors()));
+            } else {
+                \Tk\Log::notice('Email To: ' . implode(', ', $message->getTo()));
+                \Tk\Log::notice('      Subject: ' . $message->getSubject() );
+                $event->set('sent', $event->get('sent', 0)+1);
+            }
         }
 
     }

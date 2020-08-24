@@ -6,6 +6,7 @@ use App\Db\Traits\StorageTrait;
 use Bs\Db\Status;
 use Bs\Db\Traits\StatusTrait;
 use Bs\Db\Traits\TimestampTrait;
+use Bs\Db\Traits\UserTrait;
 use Uni\Db\Traits\InstitutionTrait;
 
 /**
@@ -21,6 +22,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     use ClientTrait;
     use StorageTrait;
     use StatusTrait;
+    use UserTrait;
 
     const STATUS_PENDING            = 'pending';
     const STATUS_HOLD               = 'hold';  // Awaiting review???
@@ -64,6 +66,14 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      * @var int
      */
     public $clientId = 0;
+
+
+    /**
+     * Staff who created this case
+     *
+     * @var int
+     */
+    public $userId = 0;
 
     /**
      * Pathology Number
@@ -940,6 +950,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 
     public function hasStatusChanged(Status $status)
     {
+        return true;
         $prevStatusName = $status->getPreviousName();
         switch ($status->getName()) {
             case PathCase::STATUS_PENDING:

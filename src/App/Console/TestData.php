@@ -190,21 +190,22 @@ class TestData extends \Bs\Console\TestData
 
             //$arr = array_values(ObjectUtil::getClassConstants($case, 'STATUS_'));
             //$selected = $arr[rand(0, count($arr)-1)];
+            // TODO: set multiple status
             $case->setStatus(PathCase::STATUS_PENDING);
 
             // TODO: these fields will be redundant when using the status log
-            if (rand(0, 1)) {
-                $case->setSubmitted($this->createRandomDate());
-                $case->setStatus(PathCase::STATUS_PENDING);
-                if (rand(0, 1)) {
-                    $case->setExamined($this->createRandomDate($case->getSubmitted()));
-                    $case->setStatus(PathCase::STATUS_EXAMINED);
-                    if (rand(0, 1)) {
-                        $case->setFinalised($this->createRandomDate($case->getExamined()));
-                        $case->setStatus(PathCase::STATUS_COMPLETED);
-                    }
-                }
-            }
+//            if (rand(0, 1)) {
+//                $case->setSubmitted($this->createRandomDate());
+//                $case->setStatus(PathCase::STATUS_PENDING);
+//                if (rand(0, 1)) {
+//                    $case->setExamined($this->createRandomDate($case->getSubmitted()));
+//                    $case->setStatus(PathCase::STATUS_EXAMINED);
+//                    if (rand(0, 1)) {
+//                        $case->setFinalised($this->createRandomDate($case->getExamined()));
+//                        $case->setStatus(PathCase::STATUS_COMPLETED);
+//                    }
+//                }
+//            }
 
 
             if (rand(0, 1)) {

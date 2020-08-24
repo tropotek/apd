@@ -34,7 +34,7 @@ class MailTemplate extends \Bs\TableIface
 
         $this->appendCell(new Cell\Checkbox('id'));
         $this->appendCell(new Cell\Text('id'));
-        $this->appendCell(new Cell\Text('eventId'))->addCss('key')->setUrl($this->getEditUrl())->addOnPropertyValue(
+        $this->appendCell(new Cell\Text('mailTemplateEventId'))->setLabel('Mail Event')->addCss('key')->setUrl($this->getEditUrl())->addOnPropertyValue(
             function (\Tk\Table\Cell\Iface $cell, $obj, $value) {
                 /** @var \App\Db\MailTemplateEvent $mEvent */
                 $mEvent = MailTemplateEventMap::create()->find($value);

@@ -4,54 +4,80 @@
 namespace App\Db;
 
 
+use Bs\Event\StatusEvent;
+use Tk\Collection;
 use Tk\Mail\CurlyMessage;
 use Tk\Mail\Message;
 use Bs\Db\Status;
+use Uni\Db\User;
 
 class RequestDecorator
 {
+
     /**
-     * @param Status $status
-     * @param CurlyMessage $message
+     * @param StatusEvent $event
+     * @param MailTemplate $mailTemplate
      * @throws \Exception
      */
-    public static function onFormatMessage(Status $status, CurlyMessage $message)
+    public static function onCreateMessages(StatusEvent $event, MailTemplate $mailTemplate)
     {
-        /** @var PathCase $case */
-        $case = $status->getModel();
+        /** @var Request $request */
+        $request = $event->getStatus()->getModel();
+        $status = $event->getStatus();
+        $messageList = array();
 
-        $message->setSubject('[#' . $case->getId() . '] ' . ucfirst($status->getName()) . ': ' . $case->getPathologyId());
-        $message->setFrom(Message::joinEmail($case->getInstitution()->getEmail(), $case->getInstitution()->getName()));
+        // Create one message per recipient
+        if ($mailTemplate->getRecipientType() == 'client') { // Should only ever be one client
+            $message = CurlyMessage::create($mailTemplate->getTemplate());
+            $message->set('_mailTemplate', $mailTemplate);
+            $message->addTo($request->getClient()->getEmail());
+            $message->replace(Collection::prefixArrayKeys(array(
+                'type' => 'client',
+                'name' => $request->getClient()->getName(),
+                'email' => $request->getClient()->getEmail()
+            ), 'recipient::'));
+            $messageList[] = $message;
+        } else if ($mailTemplate->getRecipientType() == 'staff') {  // all staff involved in the pathCase
+            $staffList =  $status->findUsersByType($mailTemplate->getRecipientType());
+            if ($request->getPathCase()->getUser())
+                $staffList[$request->getPathCase()->getUserId()] = $request->getPathCase()->getUser();
+            /** @var User $user */
+            foreach ($staffList as $user) {
+                $message = CurlyMessage::create($mailTemplate->getTemplate());
+                $message->set('_mailTemplate', $mailTemplate);
+                $message->addTo($user->getEmail());
+                $message->replace(Collection::prefixArrayKeys(array(
+                    'type' => 'staff',
+                    'name' => $user->getName(),
+                    'email' => $user->getEmail()
+                ), 'recipient::'));
+                $messageList[] = $message;
+            }
+        }
 
-        // Setup default message vars
-//        StatusMessage::setStudent($message, $status->findLastStudent());
-//        StatusMessage::setStaff($message, $status->findLastStaff());
-//        StatusMessage::setCompany($message, $case);
+        foreach ($messageList as $message) {
 
-        // TODO: recipients need to be competed when we know whats going on
+            $message->setSubject('[#' . $request->getId() . '] Pathology Request - ' . ucfirst($status->getName()) . ': ' . $request->getPathCase()->getPathologyId());
+            $message->setFrom(Message::joinEmail($request->getPathCase()->getInstitution()->getEmail(),
+                $request->getPathCase()->getInstitution()->getName()));
 
-        /** @var MailTemplate $mailTemplate */
-        $mailTemplate = $message->get('_mailTemplate');
-//        switch ($mailTemplate->getRecipientType()) {
-//            case 'client':
-//                if ($case && $case->getEmail()) {
-//                    $message->addTo(Message::joinEmail($case->getEmail(), $case->getName()));
-//                    $message->set('recipient::email', $case->getEmail());
-//                    $message->set('recipient::name', $case->getName());
-//                }
-//                break;
-//            case 'staff':
-//                $staffList = $status->getSubject()->getCourse()->getUsers();
-//                if (count($staffList)) {
-//                    /** @var User $s */
-//                    foreach ($staffList as $s) {
-//                        $message->addBcc(Message::joinEmail($s->getEmail(), $s->getName()));
-//                    }
-//                    $message->addTo(Message::joinEmail($status->getSubject()->getCourse()->getEmail(), $status->getSubjectName()));
-//                    $message->set('recipient::email', $status->getSubject()->getCourse()->getEmail());
-//                    $message->set('recipient::name', $status->getSubjectName());
-//                }
-//                break;
-//        }
+            // Setup default message dynamic vars
+            $message->replace(Collection::prefixArrayKeys([
+                'id' => $status->getId(),
+                'name' => $status->getName(),
+                'message' => $status->getMessage(),
+//                'fkey'  => $status->getFkey(),
+//                'fid' => $status->getFId()
+            ], 'status::'));
+            $message->replace(Collection::prefixArrayKeys(\App\Db\RequestMap::create()->unmapForm($request), 'request::'));
+            if ($request->getPathCase() && $request->getPathCase()->getInstitution())
+                $message->replace(Collection::prefixArrayKeys(\Uni\Db\InstitutionMap::create()->unmapForm($request->getPathCase()->getInstitution()), 'institution::'));
+            if ($request->getClient())
+                $message->replace(Collection::prefixArrayKeys(\App\Db\ClientMap::create()->unmapForm($request->getClient()), 'client::'));
+            if ($request->getPathCase())
+                $message->replace(Collection::prefixArrayKeys(\App\Db\PathCaseMap::create()->unmapForm($request->getPathCase()), 'pathCase::'));
+
+            $event->addMessage($message);
+        }
     }
 }

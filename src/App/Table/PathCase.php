@@ -32,7 +32,22 @@ class PathCase extends \Bs\TableIface
 
         $this->appendCell(new Cell\Checkbox('id'));
         $this->appendCell(new Cell\Text('pathologyId'))->addCss('key')->setUrl($this->getEditUrl());
-        $this->appendCell(new Cell\Text('clientId'));
+        $this->appendCell(new Cell\Text('userId'))->setLabel('Staff')->addOnPropertyValue(function (Cell\Text $cell, \App\Db\PathCase $obj, $value)
+        {
+            $user = $obj->getUser();
+            if ($user) {
+                $value = $user->getName();
+            }
+            return $value;
+        });
+        $this->appendCell(new Cell\Text('clientId'))->addOnPropertyValue(function (Cell\Text $cell, \App\Db\PathCase $obj, $value)
+        {
+            $user = $obj->getClient();
+            if ($user) {
+                $value = $user->getName();
+            }
+            return $value;
+        });
         $this->appendCell(new Cell\Text('type'));
         $this->appendCell(new Cell\Text('submissionType'));
         $this->appendCell(new Cell\Text('status'));
