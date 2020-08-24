@@ -287,7 +287,7 @@ TRUNCATE mail_template_event;
 insert into mail_template_event (id, name, event, callback, description)  VALUES
 (1, 'Case - Status Change - Pending', 'status.app.pathCase.pending', 'App\\Db\\PathCaseDecorator::onCreateMessages', 'Triggered when a case status is set to Pending'),
 (2, 'Case - Status Change - Hold', 'status.app.pathCase.hold', 'App\\Db\\PathCaseDecorator::onCreateMessages', 'Triggered when a case status is set to Hold'),
-(3, 'Case - Status Change - Frozen Storage', 'status.app.pathCase.forozenStorage', 'App\\Db\\PathCaseDecorator::onCreateMessages', 'Triggered when a case status is set to Frozen Storage'),
+(3, 'Case - Status Change - Frozen Storage', 'status.app.pathCase.frozenStorage', 'App\\Db\\PathCaseDecorator::onCreateMessages', 'Triggered when a case status is set to Frozen Storage'),
 (4, 'Case - Status Change - Approved', 'status.app.pathCase.examined', 'App\\Db\\PathCaseDecorator::onCreateMessages', 'Triggered when a case status is set to Approved'),
 (5, 'Case - Status Change - Reported', 'status.app.pathCase.reported', 'App\\Db\\PathCaseDecorator::onCreateMessages', 'Triggered when a case status is set to Reported'),
 (6, 'Case - Status Change - Completed', 'status.app.pathCase.completed', 'App\\Db\\PathCaseDecorator::onCreateMessages', 'Triggered when a case status is set to Completed'),
