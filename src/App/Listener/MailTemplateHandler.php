@@ -95,13 +95,13 @@ class MailTemplateHandler implements Subscriber
                 continue;
             }
 
-            // Add the signature var
-            $message->setBody(sprintf('<div>%s {sig}</div>', $message->getBody()));
+            // TODO: Add the signature var
+            //$message->setBody(sprintf('<div>%s {sig}</div>', $message->getBody()));
 
             // Fix all message relative paths
             $tpl = null;
             try {
-                $tpl = \Dom\Template::load($message->getBody());
+                $tpl = \Dom\Template::load('<div>'. $message->getBody().'</div>');
             } catch (\Exception $e) {
                 \Tk\Log::notice($e->__toString());
             }
@@ -139,13 +139,19 @@ class MailTemplateHandler implements Subscriber
      */
     public function postSend(\Tk\Mail\MailEvent $event)
     {
+
         /** @var \Tk\Ml\Db\MailLog $mailLog */
         $mailLog = $event->get('mailLog');
+        // TODO: We do not have a mail log here?????
+
+        if ($this->getConfig()->getInstitution() && $mailLog) {
+            vd('MailTemplateHandler::postSend');
+            $mailLog->setForeignModel($this->getConfig()->getInstitution());
+            $mailLog->save();
+        }
+
         /** @var \Tk\Mail\CurlyMessage $message */
         $message = $event->getMessage();
-        if ($this->getConfig()->getInstitution())
-            $mailLog->setForeignModel($this->getConfig()->getInstitution());
-
         if ($message instanceof \Tk\Mail\CurlyMessage) {
             // Link status to mail log if one exists
             if ($message->has('status::id')) {
@@ -158,7 +164,6 @@ class MailTemplateHandler implements Subscriber
             }
         }
 
-        $mailLog->save();
     }
 
     /**
@@ -169,7 +174,7 @@ class MailTemplateHandler implements Subscriber
         return array(
             \Bs\StatusEvents::STATUS_CHANGE => array('onStatusChange', 0),
             \Bs\StatusEvents::STATUS_SEND_MESSAGES => array('onStatusSendMessages', 0),
-            \Tk\Mail\MailEvents::POST_SEND => array('postSend', 10)
+            \Tk\Mail\MailEvents::POST_SEND => array('postSend', -1)
         );
     }
 

@@ -370,7 +370,7 @@ CREATE TABLE IF NOT EXISTS
 
 TRUNCATE mail_template;
 INSERT INTO dev_apd.mail_template (id, institution_id, mail_template_event_id, recipient_type, template, active, modified, created) VALUES (1, 1, 1, 'client', '<p>Hi {recipient::name},</p>
-<p><br />Pathology Case:</p>
+<p>Pathology Case:</p>
 <ul>
 <li>Pathology #: {pathCase::pathologyId}</li>
 <li>Institution ID: {pathCase::institutionId}</li>
@@ -390,10 +390,7 @@ INSERT INTO dev_apd.mail_template (id, institution_id, mail_template_event_id, r
 </ul>
 <p>&nbsp;</p>
 <p>Thanks,</p>
-<p>{institution::name}</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>', 1, NOW(), NOW());
+<p>{institution::name}</p>', 1, NOW(), NOW());
 INSERT INTO dev_apd.mail_template (id, institution_id, mail_template_event_id, recipient_type, template, active, modified, created) VALUES (2, 1, 2, 'client', '<p>Hi {recipient::name},</p>
 <p>Case status is ON HOLD</p>
 <p>Pathology Case:</p>

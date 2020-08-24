@@ -65,7 +65,8 @@ class RequestDecorator
             $message->replace(Collection::prefixArrayKeys([
                 'id' => $status->getId(),
                 'name' => $status->getName(),
-                'message' => $status->getMessage(),
+                'message' => nl2br($status->getMessage()),
+                'event' => $status->getEvent(),
 //                'fkey'  => $status->getFkey(),
 //                'fid' => $status->getFId()
             ], 'status::'));
