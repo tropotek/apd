@@ -3,11 +3,8 @@ namespace App\Listener;
 
 use App\Db\MailTemplateEvent;
 use App\Db\MailTemplateEventMap;
-use App\Db\PathCase;
-use Tk\Collection;
 use Tk\ConfigTrait;
 use Tk\Event\Subscriber;
-use Tk\Mail\CurlyMessage;
 
 
 /**
@@ -139,13 +136,10 @@ class MailTemplateHandler implements Subscriber
      */
     public function postSend(\Tk\Mail\MailEvent $event)
     {
-
         /** @var \Tk\Ml\Db\MailLog $mailLog */
         $mailLog = $event->get('mailLog');
-        // TODO: We do not have a mail log here?????
 
         if ($this->getConfig()->getInstitution() && $mailLog) {
-            vd('MailTemplateHandler::postSend');
             $mailLog->setForeignModel($this->getConfig()->getInstitution());
             $mailLog->save();
         }
