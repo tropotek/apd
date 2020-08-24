@@ -74,6 +74,7 @@ CREATE TABLE IF NOT EXISTS `path_case`
     id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     institution_id INT(10) UNSIGNED NOT NULL DEFAULT 0,
     client_id INT(10) UNSIGNED NOT NULL DEFAULT 0,            -- Client/Clinician
+    user_id INT(10) UNSIGNED NOT NULL DEFAULT 0,              -- Case Author
 
     -- Case
     pathology_id VARCHAR(64) NOT NULL DEFAULT '',             -- Pathology Number
@@ -134,6 +135,7 @@ CREATE TABLE IF NOT EXISTS `path_case`
     created DATETIME NOT NULL,
     KEY institution_id (institution_id),
     KEY client_id (client_id),
+    KEY client_id (user_id),
     KEY pathology_id (pathology_id),
     KEY storage_id (storage_id),
     KEY type (type),

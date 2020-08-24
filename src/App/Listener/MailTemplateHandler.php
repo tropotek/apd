@@ -3,6 +3,8 @@ namespace App\Listener;
 
 use App\Db\MailTemplateEvent;
 use App\Db\MailTemplateEventMap;
+use App\Db\PathCase;
+use Tk\Collection;
 use Tk\ConfigTrait;
 use Tk\Event\Subscriber;
 use Tk\Mail\CurlyMessage;
@@ -27,7 +29,7 @@ class MailTemplateHandler implements Subscriber
      */
     public function onStatusChange(\Bs\Event\StatusEvent $event)
     {
-        // do not send messages
+        // do not send messages if notify is false
         if (!$event->getStatus()->isNotify()) return;
 
         // Find the mail template event type from the status.event field
@@ -42,20 +44,15 @@ class MailTemplateHandler implements Subscriber
             'mailTemplateEventId' => $mEvent->getId()
         ));
 
-        // setup a message object for each template found
         /** @var \App\Db\MailTemplate $mailTemplate */
         foreach ($mailTemplateList as $mailTemplate) {
             try {
                 if (!is_callable($mEvent->getCallback())) continue;
-                // create and populate status email message
-                $message = CurlyMessage::create($mailTemplate->getTemplate());
-                $message->set('_mailTemplate', $mailTemplate);
-                $event->addMessage($message);
+                call_user_func_array($mEvent->getCallback(), array($event, $mailTemplate));
             } catch (\Exception $e) {
                 \Tk\Log::error($e->getMessage());
             }
         }
-
         // Stop if no messages are being sent
         if (!count($event->getMessageList())) $event->stopPropagation();
     }
@@ -80,10 +77,12 @@ class MailTemplateHandler implements Subscriber
             // Call the template callback as first step
             $mEvent = $mailTemplate->getMailTemplateEvent();
             if (!$mEvent) continue;
-            call_user_func_array($mEvent->getCallback(), array($event->getStatus(), $message));
 
 
-            // Add recipients
+
+
+
+
 
             // Add message subject
 

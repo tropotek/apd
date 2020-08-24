@@ -28,6 +28,7 @@ class PathCaseMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Integer('id'), 'key');
             $this->dbMap->addPropertyMap(new Db\Integer('institutionId', 'institution_id'));
             $this->dbMap->addPropertyMap(new Db\Integer('clientId', 'client_id'));
+            $this->dbMap->addPropertyMap(new Db\Integer('userId', 'user_id'));
             $this->dbMap->addPropertyMap(new Db\Text('pathologyId', 'pathology_id'));
             $this->dbMap->addPropertyMap(new Db\Text('type'));
             $this->dbMap->addPropertyMap(new Db\Text('submissionType', 'submission_type'));
@@ -80,6 +81,7 @@ class PathCaseMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Integer('id'), 'key');
             $this->formMap->addPropertyMap(new Form\Integer('institutionId'));
             $this->formMap->addPropertyMap(new Form\Integer('clientId'));
+            $this->formMap->addPropertyMap(new Form\Integer('userId'));
             $this->formMap->addPropertyMap(new Form\Text('pathologyId'));
             $this->formMap->addPropertyMap(new Form\Text('type'));
             $this->formMap->addPropertyMap(new Form\Text('submissionType'));
@@ -160,6 +162,9 @@ class PathCaseMap extends Mapper
         }
         if (isset($filter['clientId'])) {
             $filter->appendWhere('a.client_id = %s AND ', (int)$filter['clientId']);
+        }
+        if (isset($filter['userId'])) {
+            $filter->appendWhere('a.user_id = %s AND ', (int)$filter['userId']);
         }
         if (!empty($filter['pathologyId'])) {
             $filter->appendWhere('a.pathology_id = %s AND ', $this->quote($filter['pathologyId']));
