@@ -62,11 +62,6 @@ class NavRendererHandler implements Subscriber
             $menu->prepend(Item::create('Site Preview', \Uni\Uri::create('/index.html'), 'fa fa-home'))->getLink()
                 ->setAttr('target', '_blank');
         }
-//        if ($user->hasPermission(\Uni\Db\Permission::MANAGE_SUBJECT)) {
-//            $menu->append(Item::create('Settings', \Uni\Uri::createHomeUrl('/settings.html'), 'fa fa-cogs'), 'Profile');
-////            $menu->append(Item::create('Create Course', \Uni\Uri::createHomeUrl('/courseEdit.html'), 'fa fa-institution'));
-////            $menu->append(Item::create('Create Subject', \Uni\Uri::createHomeUrl('/subjectEdit.html'), 'fa fa-graduation-cap'));
-//        }
         if ($user->hasPermission(\Uni\Db\Permission::MANAGE_STAFF)) {
             $menu->append(Item::create('Staff', \Uni\Uri::createHomeUrl('/staffUserManager.html'), 'fa fa-user-md'));
 
@@ -74,13 +69,14 @@ class NavRendererHandler implements Subscriber
             $menu->append(Item::create('Available Services', \Uni\Uri::createHomeUrl('/serviceManager.html'), 'fa fa-tags'));
             $menu->append(Item::create('Clients', \Uni\Uri::createHomeUrl('/clientManager.html'), 'fa fa-building'));
         }
+        if ($user->hasPermission(Permission::MANAGE_SITE))
+            $menu->append(Item::create('Settings', \Uni\Uri::createHomeUrl('/settings.html'), 'fa fa-cogs'), 'Staff');
 
         $menu->append(Item::create()->addCss('divider'));
         $menu->append(Item::create('About', '#', 'fa fa-info-circle')
             ->setAttr('data-toggle', 'modal')->setAttr('data-target', '#aboutModal'));
         $menu->append(Item::create('Logout', '#', 'fa fa-sign-out')
             ->setAttr('data-toggle', 'modal')->setAttr('data-target', '#logoutModal'));
-        //vd($menu->__toString());
     }
 
     /**
@@ -96,7 +92,6 @@ class NavRendererHandler implements Subscriber
 
         if ($user->isAdmin()) {
             $menu->append(Item::create('Settings', \Uni\Uri::createHomeUrl('/settings.html'), 'fa fa-cogs'));
-            //$menu->append(Item::create('Institutions', \Uni\Uri::createHomeUrl('/institutionManager.html'), 'fa fa-university'));
             if ($this->getConfig()->isDebug()) {
                 $sub = $menu->append(Item::create('Development', '#', 'fa fa-bug'));
                 // <a href="/admin/tailLog.html"><i class="fa fa-road"></i> Tail Log</a>
@@ -111,8 +106,8 @@ class NavRendererHandler implements Subscriber
             $menu->append(Item::create('Mail Log', \Uni\Uri::createHomeUrl(MailLog::createMailLogUrl('/manager.html', $this->getAuthUser()->getInstitution())), 'fa fa-envelope'));
         }
         if ($user->isStaff()) {
-            if ($user->hasPermission(Permission::MANAGE_SITE))
-                $menu->append(Item::create('Settings', \Uni\Uri::createHomeUrl('/settings.html'), 'fa fa-cogs'));
+//            if ($user->hasPermission(Permission::MANAGE_SITE))
+//                $menu->append(Item::create('Settings', \Uni\Uri::createHomeUrl('/settings.html'), 'fa fa-cogs'));
 
             // Temp links
 

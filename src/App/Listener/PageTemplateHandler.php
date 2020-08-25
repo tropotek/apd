@@ -69,6 +69,12 @@ class PageTemplateHandler extends \Uni\Listener\PageTemplateHandler
                 if ($img) {
                     $template->setAttr('user-image', 'src', $img);
                 }
+
+                // Show create new item menu
+                if ($user->isStaff()) {
+                    $template->setVisible('isStaff');
+                }
+
             }
 
             if ($this->getConfig()->getInstitution()) {

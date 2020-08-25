@@ -41,7 +41,7 @@ class Client extends \Bs\FormIface
         $this->appendField(new Field\Select(
             'userId',
             $this->getConfig()->getUserMapper()->findFiltered(array('institutionId' => $this->getClient()->getInstitutionId()))
-        ))->prependOption('-- None --', '')->setTabGroup($tab);
+        ))->prependOption('-- None --', '')->setLabel('')->setTabGroup($tab);
         $this->appendField(new Field\Input('accountCode'))->setTabGroup($tab)->setNotes('Add an internal account code if available.');
 
 //        $this->appendField(new Field\Input('uid'))->setTabGroup($tab);

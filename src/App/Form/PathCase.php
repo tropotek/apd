@@ -29,75 +29,89 @@ class PathCase extends \Bs\FormIface
     public function init()
     {
         $list  = ClientMap::create()->findFiltered(array('institutionId'=> $this->getPathCase()->getInstitutionId()));
-        $this->appendField(new Field\Select('clientId', $list))->prependOption('-- Select --', '');
 
-        $this->appendField(new Field\Input('pathologyId'));
+        $tab = 'Details';
 
+        // TODO: Add ability to create a new client with a button and dialog box.
+        $this->appendField(Field\Select::createSelect('clientId', $list)->prependOption('-- Select --', ''))
+            ->setTabGroup($tab);
+        $this->appendField(new Field\Input('pathologyId'))->setTabGroup($tab);
         $list = \Tk\ObjectUtil::getClassConstants($this->getPathCase(), 'TYPE_');
-        $this->appendField(new Field\Select('type', $list))->prependOption('-- Select --', '');
+        $this->appendField(Field\Select::createSelect('type', $list)->prependOption('-- Select --', ''))
+            ->setTabGroup($tab);
 
         $list = \Tk\ObjectUtil::getClassConstants($this->getPathCase(), 'SUBMISSION_');
-        $this->appendField(new Field\Select('submissionType', $list))->prependOption('-- Select --', '');
+        $this->appendField(Field\Select::createSelect('submissionType', $list)->prependOption('-- Select --', ''))
+            ->setTabGroup($tab);
 
         if ($this->getPathCase()->getId()) {
             $list = \App\Db\PathCase::getStatusList($this->getPathCase()->getStatus());
-            $this->appendField(new \Bs\Form\Field\StatusSelect('status', $list))
-                ->setRequired()->prependOption('-- Status --', '')
+            $this->appendField(\Bs\Form\Field\StatusSelect::createSelect('status', $list)->prependOption('-- Status --', ''))
+                ->setRequired()->setTabGroup($tab)
                 ->setNotes('Set the status. Use the checkbox to disable notification emails.');
         }
-//        $this->appendField(new Field\Input('submitted'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy');
-//        $this->appendField(new Field\Input('examined'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy');
-//        $this->appendField(new Field\Input('finalised'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy');
+//        $this->appendField(new Field\Input('submitted'))->setTabGroup($tab)->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy');
+//        $this->appendField(new Field\Input('examined'))->setTabGroup($tab)->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy');
+//        $this->appendField(new Field\Input('finalised'))->setTabGroup($tab)->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy');
 
         $list = \Tk\ObjectUtil::getClassConstants($this->getPathCase(), 'ZOO_');
-        $this->appendField(new Field\Input('zootonicDisease'));
-        $this->appendField(new Field\Select('zootonicResult', $list))->prependOption('-- Select --', '');
-        //$this->appendField(new Field\Input('zootonicResult'));
+        $this->appendField(new Field\Input('zootonicDisease'))->setTabGroup($tab);
+        $this->appendField(Field\Select::createSelect('zootonicResult', $list)->prependOption('-- Select --', ''))
+            ->setTabGroup($tab);
+        //$this->appendField(new Field\Input('zootonicResult'))->setTabGroup($tab);
 
-        $this->appendField(new Field\Input('specimenCount'));
-        $this->appendField(new Field\Input('animalName'));
-        $this->appendField(new Field\Input('species'));
-        $this->appendField(new Field\Input('gender'));
-        $this->appendField(new Field\Checkbox('desexed'));
-        $this->appendField(new Field\Input('patientNumber'));
-        $this->appendField(new Field\Input('microchip'));
-        $this->appendField(new Field\Input('ownerName'));
-        $this->appendField(new Field\Input('origin'));
-        $this->appendField(new Field\Input('breed'));
-        $this->appendField(new Field\Input('vmisWeight'));
-        $this->appendField(new Field\Input('necoWeight'));
-        $this->appendField(new Field\Input('dob'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy');
-        $this->appendField(new Field\Input('dod'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy');
+        $this->appendField(new Field\Input('specimenCount'))->setTabGroup($tab);
 
-        $this->appendField(new Field\Checkbox('euthanised'));
-        $this->appendField(new Field\Input('euthanisedMethod'));
+        $tab = 'Animal';
+        $this->appendField(new Field\Input('animalName'))->setTabGroup($tab);
+        $this->appendField(new Field\Input('species'))->setTabGroup($tab);
+        $this->appendField(new Field\Input('gender'))->setTabGroup($tab);
+        $this->appendField(new Field\Checkbox('desexed'))->setTabGroup($tab);
+        $this->appendField(new Field\Input('patientNumber'))->setTabGroup($tab);
+        $this->appendField(new Field\Input('microchip'))->setTabGroup($tab);
+        $this->appendField(new Field\Input('ownerName'))->setTabGroup($tab);
+        $this->appendField(new Field\Input('origin'))->setTabGroup($tab);
+        $this->appendField(new Field\Input('breed'))->setTabGroup($tab);
+        $this->appendField(new Field\Input('vmisWeight'))->setTabGroup($tab);
+        $this->appendField(new Field\Input('necoWeight'))->setTabGroup($tab);
+        $this->appendField(new Field\Input('dob'))->setTabGroup($tab)->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy');
+        $this->appendField(new Field\Input('dod'))->setTabGroup($tab)->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy');
+
+        $tab = 'Sample';
+        $this->appendField(new Field\Checkbox('euthanised'))->setTabGroup($tab);
+        $this->appendField(new Field\Input('euthanisedMethod'))->setTabGroup($tab);
 
         $list = \Tk\ObjectUtil::getClassConstants($this->getPathCase(), 'AC_');
-        $this->appendField(new Field\Select('acType', $list))->prependOption('-- None --', '');
-        $this->appendField(new Field\Input('acHold'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy');
-        $this->appendField(new Field\Select('storageId', array()))->prependOption('-- Select --', '');
-        $this->appendField(new Field\Input('disposal'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy');
+        $this->appendField(Field\Select::createSelect('acType', $list)->prependOption('-- None --', ''))
+            ->setLabel('Aftercare Type')->setTabGroup($tab);
+        $this->appendField(new Field\Input('acHold'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy')
+            ->setLabel('Aftercare Hold')->setTabGroup($tab);
+        $this->appendField(Field\Select::createSelect('storageId', array())->prependOption('-- Select --', ''))
+            ->setTabGroup($tab);
+        $this->appendField(new Field\Input('disposal'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy')
+            ->setTabGroup($tab);
 
+        $tab = 'Reporting';
         // TODO: All MCE editors must use the case folder to store media in
         //     /media => WYSIWYG files, /files => case attached files
         // TODO: Allow WYSIWYG to view all files but only upload to html folder if possible (add this later)
         $mediaPath = $this->getPathCase()->getDataPath().'/media';
         $this->appendField(new Field\Textarea('clinicalHistory'))
-            ->addCss('mce-med')->setAttr('data-elfinder-path', $mediaPath);
+            ->addCss('mce-med')->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
         $this->appendField(new Field\Textarea('grossPathology'))
-            ->addCss('mce-med')->setAttr('data-elfinder-path', $mediaPath);
+            ->addCss('mce-med')->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
         $this->appendField(new Field\Textarea('grossMorphologicalDiagnosis'))
-            ->addCss('mce-med')->setAttr('data-elfinder-path', $mediaPath);
+            ->addCss('mce-med')->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
         $this->appendField(new Field\Textarea('histopathology'))
-            ->addCss('mce-med')->setAttr('data-elfinder-path', $mediaPath);
+            ->addCss('mce-med')->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
         $this->appendField(new Field\Textarea('ancillaryTesting'))
-            ->addCss('mce-med')->setAttr('data-elfinder-path', $mediaPath);
+            ->addCss('mce-med')->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
         $this->appendField(new Field\Textarea('morphologicalDiagnosis'))
-            ->addCss('mce-med')->setAttr('data-elfinder-path', $mediaPath);
+            ->addCss('mce-med')->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
         $this->appendField(new Field\Textarea('causeOfDeath'))
-            ->addCss('mce-med')->setAttr('data-elfinder-path', $mediaPath);
+            ->addCss('mce-med')->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
         $this->appendField(new Field\Textarea('comments'))
-            ->addCss('mce-med')->setAttr('data-elfinder-path', $mediaPath);
+            ->addCss('mce-med')->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
         //$this->appendField(new Field\Textarea('notes'));
 
         $this->appendField(new Event\Submit('update', array($this, 'doSubmit')));

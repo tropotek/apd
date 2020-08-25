@@ -35,9 +35,12 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     const TYPE_BIOPSY               = 'biopsy';
     const TYPE_NECROPSY             = 'necropsy';
 
-    const SUBMISSION_EXTERNAL_VET   = 'external vet';
-    const SUBMISSION_INTERNAL_VET   = 'internal vet';
+    // TODO: Go ovber these types with stakeholder's b4 release
+    const SUBMISSION_EXTERNAL_VET   = 'externalVet';
+    const SUBMISSION_INTERNAL_VET   = 'internalVet';
     const SUBMISSION_RESEARCH       = 'research';
+    const SUBMISSION_TEACHING       = 'teaching';
+    const SUBMISSION_PAID           = 'paid';
     const SUBMISSION_OTHER          = 'other';
 
     const ZOO_UNKNOWN               = '';

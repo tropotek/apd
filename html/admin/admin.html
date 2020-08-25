@@ -32,10 +32,66 @@
         <!-- header-nav-left -->
         <ul class="nav navbar-nav mr-auto d-none d-lg-block mrg-l-none" var="header-nav-left">
           <li><a class="btn" id="make-small-nav"><i class="fa fa-bars"></i></a></li>
+
+          <li class="dropdown d-none d-md-block" choice="isStaff">
+            <a class="btn dropdown-toggle" data-toggle="dropdown">
+              New Item
+            </a>
+            <ul class="dropdown-menu">
+              <li class="item">
+                <a href="/staff/pathCaseEdit.html?type=necropsy">
+                  <i class="fa fa-paw">
+                  </i>
+                  New Necropsy Case
+                </a>
+              </li>
+              <li class="item">
+                <a href="/staff/pathCaseEdit.html?type=biopsy">
+                  <i class="fa fa-paw">
+                  </i>
+                  New Biopsy Case
+                </a>
+              </li>
+              <li class="item">
+                <a href="/staff/clientEdit.html">
+                  <i class="fa fa-building">
+                  </i>
+                  New Client
+                </a>
+              </li>
+              <li class="item">
+                <a href="/staff/storageEdit.html">
+                  <i class="fa fa-archive">
+                  </i>
+                  New Storage Location
+                </a>
+              </li>
+              <li class="item">
+                <a href="/staff/serviceEdit.html">
+                  <i class="fa fa-tags">
+                  </i>
+                  New Service
+                </a>
+              </li>
+            </ul>
+          </li>
         </ul>
 
         <!-- Top Right Menu Items -->
         <ul class="nav navbar-nav ml-auto float-right float-lg-none" id="header-nav">
+            <li class="mobile-search">
+              <a class="btn"><i class="fa fa-search"></i></a>
+              <div class="drowdown-search">
+                <form role="search" action="" name="" method="post" id="id-page-search">
+                  <div class="form-group">
+                    <input class="form-control" placeholder="Search..." type="text" name="keywords">
+                      <i class="fa fa-search nav-search-icon"></i>
+                    </input>
+                  </div>
+                </form>
+              </div>
+            </li>
+
             <li class="dropdown profile-dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                   <img alt="" src="/html/theme-cube/img/user.png" var="user-image"/>
