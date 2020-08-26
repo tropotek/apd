@@ -138,6 +138,12 @@ class PathCase extends \Bs\FormIface
             ->addCss('mce-med')->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
         //$this->appendField(new Field\Textarea('notes'));
 
+
+        $tab = 'Files';
+        $this->appendField(new Field\File('files'))
+            ->addCss('')->setAttr('data-path', $mediaPath)->setTabGroup($tab);
+
+
         $this->appendField(new Event\Submit('update', array($this, 'doSubmit')));
         $this->appendField(new Event\Submit('save', array($this, 'doSubmit')));
         $this->appendField(new Event\Link('cancel', $this->getBackUrl()));
