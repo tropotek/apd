@@ -24,13 +24,15 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     use StatusTrait;
     use UserTrait;
 
-    const STATUS_PENDING            = 'pending';
-    const STATUS_HOLD               = 'hold';  // Awaiting review???
-    const STATUS_FROZEN_STORAGE     = 'frozenStorage';
-    const STATUS_EXAMINED           = 'examined';
-    const STATUS_REPORTED           = 'reported';
-    const STATUS_COMPLETED          = 'completed';
-    const STATUS_CANCELLED          = 'cancelled';      // I think we need this in case a case is cancelled/dropped
+    // TODO: Check these status's against the actual workflow.
+    const STATUS_PENDING            = 'pending';            // Submitted ???
+    const STATUS_HOLD               = 'hold';               // Awaiting review???
+    const STATUS_FROZEN_STORAGE     = 'frozenStorage';      //
+    const STATUS_EXAMINED           = 'examined';           //
+    const STATUS_REPORTED           = 'reported';           //
+    const STATUS_DISPOSED           = 'disposed';           //
+    const STATUS_COMPLETED          = 'completed';          //
+    const STATUS_CANCELLED          = 'cancelled';          // case cancelled
 
     const TYPE_BIOPSY               = 'biopsy';
     const TYPE_NECROPSY             = 'necropsy';
@@ -953,7 +955,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 
     public function hasStatusChanged(Status $status)
     {
-        return true;
         $prevStatusName = $status->getPreviousName();
         switch ($status->getName()) {
             case PathCase::STATUS_PENDING:
@@ -972,6 +973,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
                 if (PathCase::STATUS_PENDING == $prevStatusName || PathCase::STATUS_REPORTED == $prevStatusName || PathCase::STATUS_EXAMINED == $prevStatusName)
                     return true;
                 break;
+            case PathCase::STATUS_DISPOSED:
             case PathCase::STATUS_HOLD:
             case PathCase::STATUS_FROZEN_STORAGE:
             case Request::STATUS_CANCELLED:

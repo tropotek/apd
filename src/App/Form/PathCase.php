@@ -28,20 +28,44 @@ class PathCase extends \Bs\FormIface
      */
     public function init()
     {
-        $list  = ClientMap::create()->findFiltered(array('institutionId'=> $this->getPathCase()->getInstitutionId()));
+        $layout = $this->getRenderer()->getLayout();
 
+        // Details
+        $layout->removeRow('animalName', 'col');
+        $layout->removeRow('submissionType', 'col');
+        $layout->removeRow('zootonicResult', 'col');
+        $layout->removeRow('euthanisedMethod', 'col');
+        // Animal
+        $layout->removeRow('breed', 'col');
+        $layout->removeRow('specimenCount', 'col-2');
+        $layout->removeRow('desexed', 'col-2');
+
+        $layout->removeRow('microchip', 'col');
+
+        $layout->removeRow('necoWeight', 'col');
+        $layout->removeRow('dod', 'col');
+
+        // After Care
+
+
+
+
+        // FORM FIELDS
         $tab = 'Details';
 
-        // TODO: Add ability to create a new client with a button and dialog box.
-        $this->appendField(Field\Select::createSelect('clientId', $list)->prependOption('-- Select --', ''))
-            ->setTabGroup($tab);
-        $this->appendField(new Field\Input('pathologyId'))->setTabGroup($tab);
+        $this->appendField(new Field\Input('pathologyId'))->setLabel('Pathology ID')->setTabGroup($tab);
+
         $list = \Tk\ObjectUtil::getClassConstants($this->getPathCase(), 'TYPE_');
         $this->appendField(Field\Select::createSelect('type', $list)->prependOption('-- Select --', ''))
             ->setTabGroup($tab);
 
         $list = \Tk\ObjectUtil::getClassConstants($this->getPathCase(), 'SUBMISSION_');
         $this->appendField(Field\Select::createSelect('submissionType', $list)->prependOption('-- Select --', ''))
+            ->setTabGroup($tab);
+
+        // TODO: Add ability to create a new client with a button and dialog box.
+        $list  = ClientMap::create()->findFiltered(array('institutionId'=> $this->getPathCase()->getInstitutionId()));
+        $this->appendField(Field\Select::createSelect('clientId', $list)->prependOption('-- Select --', ''))
             ->setTabGroup($tab);
 
         if ($this->getPathCase()->getId()) {
@@ -58,28 +82,28 @@ class PathCase extends \Bs\FormIface
         $this->appendField(new Field\Input('zootonicDisease'))->setTabGroup($tab);
         $this->appendField(Field\Select::createSelect('zootonicResult', $list)->prependOption('-- Select --', ''))
             ->setTabGroup($tab);
-        //$this->appendField(new Field\Input('zootonicResult'))->setTabGroup($tab);
 
-        $this->appendField(new Field\Input('specimenCount'))->setTabGroup($tab);
+        $this->appendField(new Field\Checkbox('euthanised'))->setTabGroup($tab);
+        $this->appendField(new Field\Input('euthanisedMethod'))->setTabGroup($tab);
+
 
         $tab = 'Animal';
+        $this->appendField(new Field\Input('ownerName'))->setTabGroup($tab);
         $this->appendField(new Field\Input('animalName'))->setTabGroup($tab);
         $this->appendField(new Field\Input('species'))->setTabGroup($tab);
-        $this->appendField(new Field\Input('gender'))->setTabGroup($tab);
-        $this->appendField(new Field\Checkbox('desexed'))->setTabGroup($tab);
+        $this->appendField(new Field\Input('breed'))->setTabGroup($tab);
+        $this->appendField(new Field\Input('specimenCount'))->setTabGroup($tab);
         $this->appendField(new Field\Input('patientNumber'))->setTabGroup($tab);
         $this->appendField(new Field\Input('microchip'))->setTabGroup($tab);
-        $this->appendField(new Field\Input('ownerName'))->setTabGroup($tab);
+        $this->appendField(new Field\Input('gender'))->setTabGroup($tab);
+        $this->appendField(new Field\Checkbox('desexed'))->setTabGroup($tab);
         $this->appendField(new Field\Input('origin'))->setTabGroup($tab);
-        $this->appendField(new Field\Input('breed'))->setTabGroup($tab);
         $this->appendField(new Field\Input('vmisWeight'))->setTabGroup($tab);
         $this->appendField(new Field\Input('necoWeight'))->setTabGroup($tab);
         $this->appendField(new Field\Input('dob'))->setTabGroup($tab)->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy');
         $this->appendField(new Field\Input('dod'))->setTabGroup($tab)->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy');
 
-        $tab = 'Sample';
-        $this->appendField(new Field\Checkbox('euthanised'))->setTabGroup($tab);
-        $this->appendField(new Field\Input('euthanisedMethod'))->setTabGroup($tab);
+        $tab = 'After Care';
 
         $list = \Tk\ObjectUtil::getClassConstants($this->getPathCase(), 'AC_');
         $this->appendField(Field\Select::createSelect('acType', $list)->prependOption('-- None --', ''))
