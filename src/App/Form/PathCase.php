@@ -23,6 +23,15 @@ use Tk\Form;
 class PathCase extends \Bs\FormIface
 {
 
+    public function __construct($formId = '')
+    {
+        parent::__construct($formId);
+
+        if ($this->getConfig()->getRequest()->has('del')) {
+            $this->doDelete($this->getConfig()->getRequest());
+        }
+    }
+
     /**
      * @throws \Exception
      */
@@ -140,8 +149,22 @@ class PathCase extends \Bs\FormIface
 
 
         $tab = 'Files';
-        $this->appendField(new Field\File('files'))
-            ->addCss('')->setAttr('data-path', $mediaPath)->setTabGroup($tab);
+        $fileField = $this->appendField(Field\File::create('files[]', $this->getPathCase()->getDataPath()))
+            ->setTabGroup($tab)->addCss('tk-multiinput')
+            //->setAttr('accept', '.png,.jpg,.jpeg,.gif')
+            ->setNotes('Upload any related files');
+
+        if ($this->getPathCase()->getId()) {
+            $v = json_encode($this->getPathCase()->getFiles()->toArray());
+            $fileField->setAttr('data-value', $v);
+            $fileField->setAttr('data-prop-path', 'path');
+            $fileField->setAttr('data-prop-id', 'id');
+        }
+
+//        $this->appendField(new Field\File('files'))
+//            ->addCss('')->setAttr('data-path', $mediaPath)->setTabGroup($tab);
+
+
 
 
         $this->appendField(new Event\Submit('update', array($this, 'doSubmit')));
@@ -161,6 +184,24 @@ class PathCase extends \Bs\FormIface
     }
 
     /**
+     * @param \Tk\Request $request
+     */
+    public function doDelete(\Tk\Request $request)
+    {
+        $fileId = $request->get('del');
+        try {
+            /** @var \App\Db\File $file */
+            $file = \App\Db\FileMap::create()->find($fileId);
+            if ($file) $file->delete();
+        } catch (\Exception $e) {
+            \Tk\ResponseJson::createJson(array('status' => 'err', 'msg' => $e->getMessage()), 500)->send();
+            exit();
+        }
+        \Tk\ResponseJson::createJson(array('status' => 'ok'))->send();
+        exit();
+    }
+
+    /**
      * @param Form $form
      * @param Event\Iface $event
      * @throws \Exception
@@ -171,14 +212,51 @@ class PathCase extends \Bs\FormIface
         \App\Db\PathCaseMap::create()->mapForm($form->getValues(), $this->getPathCase());
 
         // Do Custom Validations
+        /** @var \Tk\Form\Field\File $fileField */
+        $fileField = $form->getField('files');
+
+
 
         $form->addFieldErrors($this->getPathCase()->validate());
         if ($form->hasErrors()) {
+            if (!array_key_exists('files', $form->getAllErrors())) {
+                $form->addFieldError('files', 'Please re-select any files if required.');
+            }
             return;
         }
 
         $isNew = (bool)$this->getPathCase()->getId();
         $this->getPathCase()->save();
+
+
+        /** @var \Tk\Form\Field\File $fileField */
+        $fileField = $form->getField('files');
+        if ($fileField->hasFile()) {
+            /** @var \Symfony\Component\HttpFoundation\File\UploadedFile $file */
+            foreach ($fileField->getUploadedFiles() as $file) {
+                if (!\App\Config::getInstance()->validateFile($file->getClientOriginalName())) {
+                    \Tk\Alert::addWarning('Illegal file type: ' . $file->getClientOriginalName());
+                    continue;
+                }
+                try {
+                    $filePath = $this->getConfig()->getDataPath() . $this->getPathCase()->getDataPath() . '/' . $file->getClientOriginalName();
+                    if (!is_dir(dirname($filePath))) {
+                        mkdir(dirname($filePath), $this->getConfig()->getDirMask(), true);
+                    }
+                    $file->move(dirname($filePath), basename($filePath));
+                    $oFile = \App\Db\FileMap::create()->findFiltered(array('model' => $this->getPathCase(), 'path' => $this->getPathCase()->getDataPath() . '/' . $file->getClientOriginalName()))->current();
+                    if (!$oFile) {
+                        $oFile = \App\Db\File::create($this->getPathCase(), $this->getPathCase()->getDataPath() . '/' . $file->getClientOriginalName(), $this->getConfig()->getDataPath() );
+                    }
+                    //$oFile->path = $this->report->getDataPath() . '/' . $file->getClientOriginalName();
+                    $oFile->save();
+                } catch (\Exception $e) {
+                    \Tk\Log::error($e->__toString());
+                    \Tk\Alert::addWarning('Error Uploading file: ' . $file->getClientOriginalName());
+                }
+            }
+        }
+
 
         \Tk\Alert::addSuccess('Record saved!');
         $event->setRedirect($this->getBackUrl());

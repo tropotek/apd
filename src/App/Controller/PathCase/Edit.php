@@ -75,7 +75,6 @@ class Edit extends AdminEditIface
         );
         $this->statusTable->setList($this->statusTable->findList($filter, \Tk\Db\Tool::create('created DESC', 0)));
 
-
     }
 
     /**

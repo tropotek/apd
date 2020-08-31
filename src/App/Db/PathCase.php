@@ -7,6 +7,7 @@ use Bs\Db\Status;
 use Bs\Db\Traits\StatusTrait;
 use Bs\Db\Traits\TimestampTrait;
 use Bs\Db\Traits\UserTrait;
+use Tk\Db\Tool;
 use Uni\Db\Traits\InstitutionTrait;
 
 /**
@@ -289,6 +290,17 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     {
         $this->_TimestampTrait();
         $this->institutionId = $this->getConfig()->getInstitutionId();
+    }
+
+    /**
+     * @param Tool|null $tool
+     * @return File[]|\Tk\Db\Map\ArrayObject
+     * @throws \Exception
+     */
+    public function getFiles(Tool $tool = null)
+    {
+        $list = FileMap::create()->findFiltered(array('model' => $this), $tool);
+        return $list;
     }
 
     /**
