@@ -2,6 +2,7 @@
 namespace App\Db;
 
 use App\Db\Traits\ClientTrait;
+use App\Db\Traits\PathologistTrait;
 use App\Db\Traits\StorageTrait;
 use Bs\Db\Status;
 use Bs\Db\Traits\StatusTrait;
@@ -24,6 +25,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     use StorageTrait;
     use StatusTrait;
     use UserTrait;
+    use PathologistTrait;
 
     // TODO: Check these status's against the actual workflow.
     const STATUS_PENDING            = 'pending';            // Submitted ???
@@ -67,19 +69,39 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 
 
     /**
-     * Client/Clinician
-     *
-     * @var int
-     */
-    public $clientId = 0;
-
-
-    /**
      * Staff who created this case
      *
      * @var int
      */
     public $userId = 0;
+
+    /**
+     * Client/Clinician
+     * @var int
+     */
+    public $clientId = 0;
+
+    /**
+     * userId of the pathologist user
+     * @var int
+     */
+    public $pathologistId = 0;
+
+    /**
+     * @var string
+     */
+    public $resident = '';
+
+    /**
+     * @var string
+     */
+    public $student = '';
+
+    /**
+     * @var string
+     */
+    public $studentEmail = '';
+
 
     /**
      * Pathology Number
@@ -223,6 +245,11 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      * @var \DateTime
      */
     public $disposal = null;
+
+    /**
+     * @var string
+     */
+    public $collectedSamples = '';
 
     /**
      * @var string
@@ -759,6 +786,78 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
         if ($format && $this->disposal)
             return $this->disposal->format($format);
         return $this->disposal;
+    }
+
+    /**
+     * @return string
+     */
+    public function getResident(): string
+    {
+        return $this->resident;
+    }
+
+    /**
+     * @param string $resident
+     * @return PathCase
+     */
+    public function setResident(string $resident): PathCase
+    {
+        $this->resident = $resident;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStudent(): string
+    {
+        return $this->student;
+    }
+
+    /**
+     * @param string $student
+     * @return PathCase
+     */
+    public function setStudent(string $student): PathCase
+    {
+        $this->student = $student;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStudentEmail(): string
+    {
+        return $this->studentEmail;
+    }
+
+    /**
+     * @param string $studentEmail
+     * @return PathCase
+     */
+    public function setStudentEmail(string $studentEmail): PathCase
+    {
+        $this->studentEmail = $studentEmail;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCollectedSamples(): string
+    {
+        return $this->collectedSamples;
+    }
+
+    /**
+     * @param string $collectedSamples
+     * @return PathCase
+     */
+    public function setCollectedSamples(string $collectedSamples): PathCase
+    {
+        $this->collectedSamples = $collectedSamples;
+        return $this;
     }
 
     /**

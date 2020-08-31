@@ -1,7 +1,6 @@
 <?php
 namespace App\Db;
 
-use Bs\Db\DataMap\Form\Status;
 use Tk\Db\Tool;
 use Tk\Db\Map\ArrayObject;
 use Tk\DataMap\Db;
@@ -27,12 +26,19 @@ class PathCaseMap extends Mapper
             $this->dbMap = new \Tk\DataMap\DataMap();
             $this->dbMap->addPropertyMap(new Db\Integer('id'), 'key');
             $this->dbMap->addPropertyMap(new Db\Integer('institutionId', 'institution_id'));
-            $this->dbMap->addPropertyMap(new Db\Integer('clientId', 'client_id'));
             $this->dbMap->addPropertyMap(new Db\Integer('userId', 'user_id'));
+            $this->dbMap->addPropertyMap(new Db\Integer('clientId', 'client_id'));
+
+            $this->dbMap->addPropertyMap(new Db\Integer('pathologistId', 'pathologist_id'));
+            $this->dbMap->addPropertyMap(new Db\Text('resident'));
+            $this->dbMap->addPropertyMap(new Db\Text('student'));
+            $this->dbMap->addPropertyMap(new Db\Text('studentEmail', 'student_email'));
+
             $this->dbMap->addPropertyMap(new Db\Text('pathologyId', 'pathology_id'));
             $this->dbMap->addPropertyMap(new Db\Text('type'));
             $this->dbMap->addPropertyMap(new Db\Text('submissionType', 'submission_type'));
             $this->dbMap->addPropertyMap(new Db\Text('status'));
+
             $this->dbMap->addPropertyMap(new Db\Text('zootonicDisease', 'zootonic_disease'));
             $this->dbMap->addPropertyMap(new Db\Text('zootonicResult', 'zootonic_result'));
             $this->dbMap->addPropertyMap(new Db\Integer('specimenCount', 'specimen_count'));
@@ -55,6 +61,8 @@ class PathCaseMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Date('acHold', 'ac_hold'));
             $this->dbMap->addPropertyMap(new Db\Integer('storageId', 'storage_id'));
             $this->dbMap->addPropertyMap(new Db\Date('disposal'));
+
+            $this->dbMap->addPropertyMap(new Db\Text('collectedSamples', 'collected_samples'));
             $this->dbMap->addPropertyMap(new Db\Text('clinicalHistory', 'clinical_history'));
             $this->dbMap->addPropertyMap(new Db\Text('grossPathology', 'gross_pathology'));
             $this->dbMap->addPropertyMap(new Db\Text('grossMorphologicalDiagnosis', 'gross_morphological_diagnosis'));
@@ -80,9 +88,12 @@ class PathCaseMap extends Mapper
             $this->formMap = new \Tk\DataMap\DataMap();
             $this->formMap->addPropertyMap(new Form\Integer('id'), 'key');
             $this->formMap->addPropertyMap(new Form\Integer('institutionId'));
-            $this->formMap->addPropertyMap(new Form\Integer('clientId'));
             $this->formMap->addPropertyMap(new Form\Integer('userId'));
-            $this->formMap->addPropertyMap(new Form\Text('pathologyId'));
+            $this->formMap->addPropertyMap(new Form\Integer('clientId'));
+            $this->formMap->addPropertyMap(new Form\Integer('pathologistId'));
+            $this->formMap->addPropertyMap(new Form\Text('resident'));
+            $this->formMap->addPropertyMap(new Form\Text('student'));
+            $this->formMap->addPropertyMap(new Form\Text('studentEmail'));
             $this->formMap->addPropertyMap(new Form\Text('type'));
             $this->formMap->addPropertyMap(new Form\Text('submissionType'));
             $this->formMap->addPropertyMap(new Form\Text('status'));
@@ -108,6 +119,7 @@ class PathCaseMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Date('acHold'));
             $this->formMap->addPropertyMap(new Form\Integer('storageId'));
             $this->formMap->addPropertyMap(new Form\Date('disposal'));
+            $this->formMap->addPropertyMap(new Form\Text('collectedSamples'));
             $this->formMap->addPropertyMap(new Form\Text('clinicalHistory'));
             $this->formMap->addPropertyMap(new Form\Text('grossPathology'));
             $this->formMap->addPropertyMap(new Form\Text('grossMorphologicalDiagnosis'));
@@ -166,8 +178,20 @@ class PathCaseMap extends Mapper
         if (isset($filter['userId'])) {
             $filter->appendWhere('a.user_id = %s AND ', (int)$filter['userId']);
         }
+        if (isset($filter['pathologistId'])) {
+            $filter->appendWhere('a.pathologist_id = %s AND ', (int)$filter['pathologistId']);
+        }
         if (!empty($filter['pathologyId'])) {
             $filter->appendWhere('a.pathology_id = %s AND ', $this->quote($filter['pathologyId']));
+        }
+        if (!empty($filter['resident'])) {
+            $filter->appendWhere('a.resident = %s AND ', $this->quote($filter['resident']));
+        }
+        if (!empty($filter['student'])) {
+            $filter->appendWhere('a.student = %s AND ', $this->quote($filter['student']));
+        }
+        if (!empty($filter['studentEmail'])) {
+            $filter->appendWhere('a.student_email = %s AND ', $this->quote($filter['studentEmail']));
         }
         if (!empty($filter['type'])) {
             $filter->appendWhere('a.type = %s AND ', $this->quote($filter['type']));

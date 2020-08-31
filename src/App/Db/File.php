@@ -6,6 +6,7 @@ namespace App\Db;
 use App\Config;
 use Bs\Db\Traits\ForeignModelTrait;
 use Bs\Db\Traits\TimestampTrait;
+use Bs\Db\Traits\UserTrait;
 use DateTime;
 use Exception;
 use Tk\Db\Map\Model;
@@ -25,11 +26,17 @@ class File extends Model implements ValidInterface
 
     use ForeignModelTrait;
     use TimestampTrait;
+    use UserTrait;
 
     /**
      * @var int
      */
     public $id = 0;
+
+    /**
+     * @var int
+     */
+    public $userId = 0;
 
     /**
      * @var string
@@ -93,10 +100,22 @@ class File extends Model implements ValidInterface
      * @return static
      * @throws Exception
      */
-    public static function create($model, $file = '', $dataPath = '')
+    public static function create($model, $file = '', $dataPath = '', $userId = null)
     {
         $obj = new static();
         $obj->setForeignModel($model);
+        if ($userId === null) {
+            if (method_exists($model, 'getUserId')) {
+                $userId = $model->getUserId();
+            } elseif (property_exists($model, 'userId')) {
+                $userId = $model->userId;
+            } else if ($obj->getConfig()->getAuthUser()) {
+                $userId = $obj->getConfig()->getAuthUser()->getId();
+            }
+            $userId = 0;
+        }
+        $obj->setUserId($userId);
+
 
         if (!$dataPath) $dataPath = Config::getInstance()->getDataPath();
         if ($file) {

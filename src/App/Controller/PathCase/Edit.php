@@ -34,7 +34,7 @@ class Edit extends AdminEditIface
      */
     public function __construct()
     {
-        $this->setPageTitle('Case Edit');
+        $this->setPageTitle('Create Case');
     }
 
     /**
@@ -55,6 +55,9 @@ class Edit extends AdminEditIface
 
         if ($request->get('pathCaseId')) {
             $this->pathCase = \App\Db\PathCaseMap::create()->find($request->get('pathCaseId'));
+        }
+        if ($this->pathCase->getId()) {
+            $this->setPageTitle($this->pathCase->getPathologyId() . ' - (' . ucwords($this->pathCase->getType()) . ')');
         }
 
         $this->setForm(\App\Form\PathCase::create()->setModel($this->pathCase));
@@ -86,6 +89,9 @@ class Edit extends AdminEditIface
 
         // Render the form
         $template->appendTemplate('panel', $this->getForm()->show());
+        if ($this->pathCase->getId()) {
+            $template->setAttr('panel', 'data-panel-title', $this->pathCase->getPathologyId() . ' - (' . ucwords($this->pathCase->getType()) . ')');
+        }
 
         if ($this->statusTable) {
             $template->appendTemplate('side-panel-status', $this->statusTable->show());
@@ -111,7 +117,7 @@ class Edit extends AdminEditIface
   </div>
   <div class="col-4" var="panel2" choice="panel2">
     <div class="tk-panel" data-panel-title="Sample Slides" data-panel-icon="fa fa-list-alt" var="side-panel-slides" choice1="side-panel-slides"></div>
-    <div class="tk-panel" data-panel-title="Sample requests" data-panel-icon="fa fa-medkit" var="side-panel-requests" choice1="side-panel-requests"></div>
+    <div class="tk-panel" data-panel-title="Hisology Requests" data-panel-icon="fa fa-medkit" var="side-panel-requests" choice1="side-panel-requests"></div>
     <div class="tk-panel" data-panel-title="Files" data-panel-icon="fa fa-floppy-o" var="side-panel-files" choice="side-panel-files"></div>
     <div class="tk-panel" data-panel-title="Status Log" data-panel-icon="fa fa-list" var="side-panel-status" choice="side-panel-status"></div>
   </div>

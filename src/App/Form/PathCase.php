@@ -37,11 +37,18 @@ class PathCase extends \Bs\FormIface
      */
     public function init()
     {
+        // All MCE editors must use the case folder to store media in
+        //     /media => WYSIWYG files, /files => case attached files
+        // TODO: Allow WYSIWYG to view all files but only upload to html folder if possible (add this later)
+        $mediaPath = $this->getPathCase()->getDataPath().'/media';
+
         $layout = $this->getRenderer()->getLayout();
 
         // Details
+        $layout->removeRow('resident', 'col');
+        $layout->removeRow('studentEmail', 'col');
+
         $layout->removeRow('animalName', 'col');
-        $layout->removeRow('submissionType', 'col');
         $layout->removeRow('zootonicResult', 'col');
         $layout->removeRow('euthanisedMethod', 'col');
         // Animal
@@ -54,28 +61,30 @@ class PathCase extends \Bs\FormIface
         $layout->removeRow('necoWeight', 'col');
         $layout->removeRow('dod', 'col');
 
-        // After Care
-
-
 
 
         // FORM FIELDS
         $tab = 'Details';
+        // TODO: should we autonumber these somehow???
+        if (!$this->getPathCase()->getId())
+            $this->appendField(new Field\Input('pathologyId'))->setLabel('Pathology ID')->setTabGroup($tab);
 
-        $this->appendField(new Field\Input('pathologyId'))->setLabel('Pathology ID')->setTabGroup($tab);
+        // TODO: Add ability to create a new client with a button and dialog box.
+        $list  = ClientMap::create()->findFiltered(array('institutionId'=> $this->getPathCase()->getInstitutionId()));
+        $this->appendField(Field\Select::createSelect('clientId', $list)->prependOption('-- Select --', ''))
+            ->setTabGroup($tab)->setLabel('Client/Clinician');
 
-        $list = \Tk\ObjectUtil::getClassConstants($this->getPathCase(), 'TYPE_');
-        $this->appendField(Field\Select::createSelect('type', $list)->prependOption('-- Select --', ''))
-            ->setTabGroup($tab);
+
+        if (!$this->getPathCase()->getType()) {
+            $list = \Tk\ObjectUtil::getClassConstants($this->getPathCase(), 'TYPE_');
+            $this->appendField(Field\Select::createSelect('type', $list)->prependOption('-- Select --', ''))
+                ->setTabGroup($tab);
+        }
 
         $list = \Tk\ObjectUtil::getClassConstants($this->getPathCase(), 'SUBMISSION_');
         $this->appendField(Field\Select::createSelect('submissionType', $list)->prependOption('-- Select --', ''))
             ->setTabGroup($tab);
 
-        // TODO: Add ability to create a new client with a button and dialog box.
-        $list  = ClientMap::create()->findFiltered(array('institutionId'=> $this->getPathCase()->getInstitutionId()));
-        $this->appendField(Field\Select::createSelect('clientId', $list)->prependOption('-- Select --', ''))
-            ->setTabGroup($tab);
 
         if ($this->getPathCase()->getId()) {
             $list = \App\Db\PathCase::getStatusList($this->getPathCase()->getStatus());
@@ -83,6 +92,17 @@ class PathCase extends \Bs\FormIface
                 ->setRequired()->setTabGroup($tab)
                 ->setNotes('Set the status. Use the checkbox to disable notification emails.');
         }
+
+        $list  = $this->getConfig()->getUserMapper()->findFiltered(array('institutionId'=> $this->getPathCase()->getInstitutionId(), 'type' => 'staff'));
+        $this->appendField(Field\Select::createSelect('pathologistId', $list)->prependOption('-- Select --', ''))
+            ->setTabGroup($tab)->setLabel('Pathologist');
+
+        $this->appendField(new Field\Input('resident'))->setTabGroup($tab);
+        $this->appendField(new Field\Input('student'))->setTabGroup($tab);
+        $this->appendField(new Field\Input('studentEmail'))->setTabGroup($tab);
+
+
+
 //        $this->appendField(new Field\Input('submitted'))->setTabGroup($tab)->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy');
 //        $this->appendField(new Field\Input('examined'))->setTabGroup($tab)->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy');
 //        $this->appendField(new Field\Input('finalised'))->setTabGroup($tab)->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy');
@@ -95,6 +115,8 @@ class PathCase extends \Bs\FormIface
         $this->appendField(new Field\Checkbox('euthanised'))->setTabGroup($tab);
         $this->appendField(new Field\Input('euthanisedMethod'))->setTabGroup($tab);
 
+        $this->appendField(new Field\Textarea('collectedSamples'))
+            ->addCss('mce-min')->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
 
         $tab = 'Animal';
         $this->appendField(new Field\Input('ownerName'))->setTabGroup($tab);
@@ -114,37 +136,36 @@ class PathCase extends \Bs\FormIface
 
         $tab = 'After Care';
 
-        $list = \Tk\ObjectUtil::getClassConstants($this->getPathCase(), 'AC_');
-        $this->appendField(Field\Select::createSelect('acType', $list)->prependOption('-- None --', ''))
-            ->setLabel('Aftercare Type')->setTabGroup($tab);
-        $this->appendField(new Field\Input('acHold'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy')
-            ->setLabel('Aftercare Hold')->setTabGroup($tab);
         $this->appendField(Field\Select::createSelect('storageId', array())->prependOption('-- Select --', ''))
             ->setTabGroup($tab);
+        $this->appendField(new Field\Input('acHold'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy')
+            ->setLabel('Aftercare Hold')->setTabGroup($tab);
+        $list = \Tk\ObjectUtil::getClassConstants($this->getPathCase(), 'AC_');
+        $this->appendField(Field\Select::createSelect('acType', $list)->prependOption('-- None --', ''))
+            ->setLabel('Aftercare Type')->setLabel('Method Of Disposal')->setTabGroup($tab);
+        $this->appendField(new Field\Input('acHold'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy')
+            ->setLabel('Aftercare Hold')->setTabGroup($tab);
         $this->appendField(new Field\Input('disposal'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy')
             ->setTabGroup($tab);
 
         $tab = 'Reporting';
-        // TODO: All MCE editors must use the case folder to store media in
-        //     /media => WYSIWYG files, /files => case attached files
-        // TODO: Allow WYSIWYG to view all files but only upload to html folder if possible (add this later)
-        $mediaPath = $this->getPathCase()->getDataPath().'/media';
+        $mce = 'mce-min';
         $this->appendField(new Field\Textarea('clinicalHistory'))
-            ->addCss('mce-med')->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
+            ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
         $this->appendField(new Field\Textarea('grossPathology'))
-            ->addCss('mce-med')->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
+            ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
         $this->appendField(new Field\Textarea('grossMorphologicalDiagnosis'))
-            ->addCss('mce-med')->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
+            ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
         $this->appendField(new Field\Textarea('histopathology'))
-            ->addCss('mce-med')->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
+            ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
         $this->appendField(new Field\Textarea('ancillaryTesting'))
-            ->addCss('mce-med')->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
+            ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
         $this->appendField(new Field\Textarea('morphologicalDiagnosis'))
-            ->addCss('mce-med')->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
+            ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
         $this->appendField(new Field\Textarea('causeOfDeath'))
-            ->addCss('mce-med')->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
+            ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
         $this->appendField(new Field\Textarea('comments'))
-            ->addCss('mce-med')->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
+            ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
         //$this->appendField(new Field\Textarea('notes'));
 
 

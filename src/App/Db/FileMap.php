@@ -40,6 +40,7 @@ class FileMap extends Mapper
         if (!$this->dbMap) {
             $this->dbMap = new DataMap();
             $this->dbMap->addPropertyMap(new Db\Integer('id'), 'key');
+            $this->dbMap->addPropertyMap(new Db\Integer('userId', 'user_id'));
             $this->dbMap->addPropertyMap(new Db\Text('fkey'));
             $this->dbMap->addPropertyMap(new Db\Integer('fid'));
             $this->dbMap->addPropertyMap(new Db\Text('path'));
@@ -61,6 +62,7 @@ class FileMap extends Mapper
         if (!$this->formMap) {
             $this->formMap = new DataMap();
             $this->formMap->addPropertyMap(new Form\Integer('id'), 'key');
+            $this->formMap->addPropertyMap(new Form\Integer('userId'));
             $this->formMap->addPropertyMap(new Form\Text('fkey'));
             $this->formMap->addPropertyMap(new Form\Integer('fid'));
             $this->formMap->addPropertyMap(new Form\Text('path'));
@@ -116,6 +118,10 @@ class FileMap extends Mapper
 
         if (isset($filter['id'])) {
             $w = $this->makeMultiQuery($filter['id'], 'a.id');
+            if ($w) $filter->appendWhere('(%s) AND ', $w);
+        }
+        if (isset($filter['userId'])) {
+            $w = $this->makeMultiQuery($filter['userId'], 'a.user_id');
             if ($w) $filter->appendWhere('(%s) AND ', $w);
         }
 

@@ -187,6 +187,11 @@ class TestData extends \Bs\Console\TestData
             $selected = $arr[rand(0, count($arr)-1)];
             if ($selected == 'other') $selected = $this->createStr(rand(8, 23));
             $case->setSubmissionType($selected);
+            $staff1 = $this->getConfig()->getUserMapper()->findFiltered(array('type' => 'staff'), Tool::create('RAND()'))->current();
+            $case->setPathologistId($staff1->getId());
+            $case->setResident($this->createFullName());
+            $case->setStudent($this->createFullName());
+            $case->setStudentEmail($this->createEmail());
 
             //$arr = array_values(ObjectUtil::getClassConstants($case, 'STATUS_'));
             //$selected = $arr[rand(0, count($arr)-1)];
@@ -251,6 +256,9 @@ class TestData extends \Bs\Console\TestData
                 }
             }
 
+            if (rand(0,1)) {
+                $case->setCollectedSamples($this->createLipsumHtml(rand(1, 8)));
+            }
             if (rand(0,1)) {
                 $case->setClinicalHistory($this->createLipsumHtml(rand(1, 8)));
             }

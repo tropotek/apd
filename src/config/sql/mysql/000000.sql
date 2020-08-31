@@ -73,13 +73,18 @@ CREATE TABLE IF NOT EXISTS `path_case`
 (
     id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     institution_id INT(10) UNSIGNED NOT NULL DEFAULT 0,
-    client_id INT(10) UNSIGNED NOT NULL DEFAULT 0,            -- Client/Clinician
     user_id INT(10) UNSIGNED NOT NULL DEFAULT 0,              -- Case Author
+    client_id INT(10) UNSIGNED NOT NULL DEFAULT 0,            -- Client/Clinician Could be an external users...
+
+    pathologist_id INT(10) UNSIGNED NOT NULL DEFAULT 0,       -- Pathologist user_id from the user table
+    resident VARCHAR(128) NOT NULL DEFAULT '',                -- Name of the resident Pathologist???
+    student VARCHAR(128) NOT NULL DEFAULT '',                 --
+    student_email VARCHAR(128) NOT NULL DEFAULT '',           --
 
     -- Case
-    pathology_id VARCHAR(64) NOT NULL DEFAULT '',             -- Pathology Number
+    pathology_id VARCHAR(64) NOT NULL DEFAULT '',             -- Pathology Number  (ie: title, name)
     type VARCHAR(64) NOT NULL DEFAULT '',                     -- BIOPSY, NECROPSY, ...
-    submission_type VARCHAR(64) NULL DEFAULT '',          -- direct client/external vet/internal vet/researcher/ Other - Specify
+    submission_type VARCHAR(64) NULL DEFAULT '',              -- Direct client/external vet/internal vet/researcher/ Other - Specify
     status VARCHAR(64) NOT NULL DEFAULT '',                   -- Pending/frozen storage/examined/reported/awaiting review (if applicable)/completed
 
     -- TODO: These fields will be redundant when using the status log
@@ -90,9 +95,9 @@ CREATE TABLE IF NOT EXISTS `path_case`
 
     zootonic_disease VARCHAR(128) NOT NULL DEFAULT '',        -- A dropdown of entered diseases
     zootonic_result VARCHAR(128) NOT NULL DEFAULT '',         -- Positive/Negative ????
-    --
 
     -- Animal/patient details
+    -- TODO: in the future create an animal table
     specimen_count INT(10) UNSIGNED NOT NULL DEFAULT 1,       -- ??? TODO: NOT sure if this is needed
     animal_name VARCHAR(128) NOT NULL DEFAULT '',             --
     species VARCHAR(128) NOT NULL DEFAULT '',                 --
@@ -110,20 +115,21 @@ CREATE TABLE IF NOT EXISTS `path_case`
     dod DATETIME DEFAULT NULL,                                -- Date and time of death
 
     euthanised TINYINT(1) NOT NULL DEFAULT 0,                 --
-    euthanised_method VARCHAR(255) NULL DEFAULT '',       --
-    ac_type VARCHAR(64) NULL DEFAULT '',                  -- after care type: General Disposal/cremation/internal incineration
+    euthanised_method VARCHAR(255) NULL DEFAULT '',           --
+    ac_type VARCHAR(64) NULL DEFAULT '',                      -- after care type: General Disposal/cremation/internal incineration
     ac_hold DATETIME DEFAULT NULL,                            -- after care Date to wait until processing animal
     storage_id INT(10) UNSIGNED NOT NULL DEFAULT 0,           -- The current location of the animal (cleared when disposal is completed)
     disposal DATETIME DEFAULT NULL,
     --
 
     -- Reporting
+    collected_samples TEXT,                                   -- Save Tissues/Frozen Samples
     clinical_history TEXT,                                    --
     gross_pathology TEXT,                                     --
-    gross_morphological_diagnosis TEXT,                         --
+    gross_morphological_diagnosis TEXT,                       --
     histopathology TEXT,                                      --
-    ancillary_testing TEXT,
-    morphological_diagnosis TEXT,
+    ancillary_testing TEXT,                                   --
+    morphological_diagnosis TEXT,                             --
     cause_of_death TEXT,                                      -- (required) case NOT saved if blank
     comments TEXT,                                            -- public comments
     --
@@ -243,7 +249,8 @@ CREATE TABLE IF NOT EXISTS request
 CREATE TABLE IF NOT EXISTS file
 (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    fKEY VARCHAR(64) DEFAULT '' NOT NULL,
+    user_id INT(10) UNSIGNED NOT NULL DEFAULT 0,
+    fkey VARCHAR(64) DEFAULT '' NOT NULL,
     fid INT DEFAULT 0 NOT NULL,
     path TEXT NULL,
     bytes INT DEFAULT 0 NOT NULL,
@@ -252,8 +259,9 @@ CREATE TABLE IF NOT EXISTS file
     hash VARCHAR(128) DEFAULT '' NOT NULL,
     modified datetime NOT NULL,
     created datetime NOT NULL,
-    KEY fKEY (fKEY),
-    KEY fKEY_2 (fKEY, fid)
+    KEY user_id (user_id),
+    KEY fkey (fkey),
+    KEY fkey_2 (fkey, fid)
 );
 
 
