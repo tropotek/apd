@@ -317,6 +317,8 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     {
         $this->_TimestampTrait();
         $this->institutionId = $this->getConfig()->getInstitutionId();
+        if ($this->getConfig()->getAuthUser())
+            $this->setUserId($this->getConfig()->getAuthUser()->getId());
     }
 
     /**

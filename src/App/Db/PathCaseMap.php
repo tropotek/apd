@@ -94,6 +94,7 @@ class PathCaseMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Text('resident'));
             $this->formMap->addPropertyMap(new Form\Text('student'));
             $this->formMap->addPropertyMap(new Form\Text('studentEmail'));
+            $this->formMap->addPropertyMap(new Form\Text('pathologyId'));
             $this->formMap->addPropertyMap(new Form\Text('type'));
             $this->formMap->addPropertyMap(new Form\Text('submissionType'));
             $this->formMap->addPropertyMap(new Form\Text('status'));

@@ -2,6 +2,7 @@
 namespace App\Form;
 
 use App\Db\ClientMap;
+use Tk\Db\Tool;
 use Tk\Form\Field;
 use Tk\Form\Event;
 use Tk\Form;
@@ -70,7 +71,7 @@ class PathCase extends \Bs\FormIface
             $this->appendField(new Field\Input('pathologyId'))->setLabel('Pathology ID')->setTabGroup($tab);
 
         // TODO: Add ability to create a new client with a button and dialog box.
-        $list  = ClientMap::create()->findFiltered(array('institutionId'=> $this->getPathCase()->getInstitutionId()));
+        $list  = ClientMap::create()->findFiltered(array('institutionId'=> $this->getPathCase()->getInstitutionId()), Tool::create('name'));
         $this->appendField(Field\Select::createSelect('clientId', $list)->prependOption('-- Select --', ''))
             ->setTabGroup($tab)->setLabel('Client/Clinician');
 
@@ -93,7 +94,7 @@ class PathCase extends \Bs\FormIface
                 ->setNotes('Set the status. Use the checkbox to disable notification emails.');
         }
 
-        $list  = $this->getConfig()->getUserMapper()->findFiltered(array('institutionId'=> $this->getPathCase()->getInstitutionId(), 'type' => 'staff'));
+        $list  = $this->getConfig()->getUserMapper()->findFiltered(array('institutionId'=> $this->getPathCase()->getInstitutionId(), 'type' => 'staff'), Tool::create('nameFirst'));
         $this->appendField(Field\Select::createSelect('pathologistId', $list)->prependOption('-- Select --', ''))
             ->setTabGroup($tab)->setLabel('Pathologist');
 

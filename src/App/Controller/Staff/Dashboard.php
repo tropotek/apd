@@ -2,6 +2,7 @@
 namespace App\Controller\Staff;
 
 use Bs\Db\UserIface;
+use Tk\Db\Tool;
 use Tk\Request;
 use Dom\Template;
 
@@ -45,7 +46,7 @@ class Dashboard extends \Uni\Controller\AdminIface
         $filter = array(
             'userId' => $this->getAuthUser()->getId()
         );
-        $this->caseTable->setList($this->caseTable->findList($filter));
+        $this->caseTable->setList($this->caseTable->findList($filter, Tool::create('created DESC')));
 
 
 
