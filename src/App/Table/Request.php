@@ -1,8 +1,10 @@
 <?php
 namespace App\Table;
 
+
 use Tk\Form\Field;
 use Tk\Table\Cell;
+use Uni\Uri;
 
 /**
  * Example:
@@ -22,6 +24,52 @@ use Tk\Table\Cell;
  */
 class Request extends \Bs\TableIface
 {
+    /**
+     * @var bool
+     */
+    private $minMode = false;
+
+
+    public function __construct($tableId = '')
+    {
+        parent::__construct($tableId);
+
+        if ($this->getConfig()->getRequest()->has('rDel')) {
+            $this->doDelete($this->getConfig()->getRequest()->get('rDel'));
+        }
+
+    }
+
+    public function doDelete($requestId)
+    {
+        /** @var \App\Db\Request $request */
+        $request = \App\Db\RequestMap::create()->find($requestId);
+        if ($request) {
+            $request->delete();
+            \Tk\Uri::create()->remove('rDel')->redirect();
+        }
+    }
+
+
+    /**
+     * @return bool
+     */
+    public function isMinMode(): bool
+    {
+        return $this->minMode;
+    }
+
+    /**
+     * Set this to true to enable minimum mode that will render for side panels
+     *
+     * @param bool $minMode
+     * @return Request
+     */
+    public function setMinMode(bool $minMode)
+    {
+        $this->minMode = $minMode;
+        return $this;
+    }
 
     /**
      * @return $this
@@ -29,25 +77,65 @@ class Request extends \Bs\TableIface
      */
     public function init()
     {
+        if($this->isMinMode())
+            $this->getRenderer()->enableFooter(false);
 
-        $this->appendCell(new Cell\Checkbox('id'));
+        if (!$this->isMinMode()) {
+            $this->appendCell(new Cell\Checkbox('id'));
+        }else {
+            $aCell = $this->getActionCell();
+            $aCell->addButton(Cell\ActionButton::create('Delete', Uri::create(), 'fa fa-trash')->addCss('btn-danger'))
+                ->setShowLabel(false)
+                ->addOnShow(function ($cell, \App\Db\Request$obj, Cell\ActionButton $button) {
+                    $button->getUrl()->set('rDel', $obj->getId());
+                    $button->setAttr('data-confirm', 'Are you sure you want to remove this request?');
+                });
+            $this->appendCell($this->getActionCell())->setLabel('');
+
+        }
+
         //$this->appendCell(new Cell\Text('pathCaseId'));
-        $this->appendCell(new Cell\Text('cassetteId'))->addCss('key')->setUrl($this->getEditUrl());;
-        $this->appendCell(new Cell\Text('serviceId'));
-        $this->appendCell(new Cell\Text('clientId'));
+        $this->appendCell(new Cell\Text('cassetteId'))->addCss('key')->setUrl($this->getEditUrl())->
+            addOnPropertyValue(function (Cell\Text $cell, \App\Db\Request $obj, $value) {
+                if ($obj->getCassette()) {
+                    $value = $obj->getCassette()->getName();
+                }
+                return $value;
+            });
+
+        $this->appendCell(new Cell\Text('serviceId'))->
+            addOnPropertyValue(function (Cell\Text $cell, \App\Db\Request $obj, $value) {
+                if ($obj->getService()) {
+                    $value = $obj->getService()->getName();
+                }
+                return $value;
+            });
+        $this->appendCell(new Cell\Text('clientId'))->
+            addOnPropertyValue(function (Cell\Text $cell, \App\Db\Request $obj, $value) {
+                if ($obj->getClient()) {
+                    $value = $obj->getClient()->getName();
+                }
+                return $value;
+            });
+
+        $this->appendCell(new Cell\Text('status'));
         $this->appendCell(new Cell\Text('qty'));
-        //$this->appendCell(new Cell\Text('price'));
 
-        $this->appendCell(new Cell\Date('modified'));
-        $this->appendCell(new Cell\Date('created'));
-
+        if (!$this->isMinMode()) {
+            $this->appendCell(new Cell\Date('modified'));
+            $this->appendCell(new Cell\Date('created'));
+        }
+        
         // Filters
-        $this->appendFilter(new Field\Input('keywords'))->setAttr('placeholder', 'Search');
+        if (!$this->isMinMode())
+            $this->appendFilter(new Field\Input('keywords'))->setAttr('placeholder', 'Search');
 
         // Actions
         //$this->appendAction(\Tk\Table\Action\Link::createLink('New Request', \Bs\Uri::createHomeUrl('/requestEdit.html'), 'fa fa-plus'));
+
         $this->appendAction(\Tk\Table\Action\ColumnSelect::create()->setUnselected(array('modified')));
-        $this->appendAction(\Tk\Table\Action\Delete::create());
+        if (!$this->isMinMode())
+            $this->appendAction(\Tk\Table\Action\Delete::create());
         $this->appendAction(\Tk\Table\Action\Csv::create());
 
         // load table

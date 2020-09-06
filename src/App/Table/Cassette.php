@@ -3,6 +3,7 @@ namespace App\Table;
 
 use Tk\Form\Field;
 use Tk\Table\Cell;
+use Tk\Table\Cell\ActionButton;
 
 /**
  * Example:
@@ -22,6 +23,30 @@ use Tk\Table\Cell;
  */
 class Cassette extends \Bs\TableIface
 {
+    /**
+     * @var bool
+     */
+    private $minMode = false;
+
+    /**
+     * @return bool
+     */
+    public function isMinMode(): bool
+    {
+        return $this->minMode;
+    }
+
+    /**
+     * Set this to true to enable minimum mode that will render for side panels
+     *
+     * @param bool $minMode
+     * @return Cassette
+     */
+    public function setMinMode(bool $minMode): Cassette
+    {
+        $this->minMode = $minMode;
+        return $this;
+    }
 
     /**
      * @return $this
@@ -29,25 +54,46 @@ class Cassette extends \Bs\TableIface
      */
     public function init()
     {
+        if($this->isMinMode())
+            $this->getRenderer()->enableFooter(false);
 
-        $this->appendCell(new Cell\Checkbox('id'));
-        $this->appendCell(new Cell\Text('number'));
-        $this->appendCell(new Cell\Text('container'));
+        if (!$this->isMinMode()) {
+            $this->appendCell(new Cell\Checkbox('id'));
+        } else {
+            $aCell = $this->getActionCell();
+            $url = \Uni\Uri::createHomeUrl('/requestEdit.html');
+            $aCell->addButton(ActionButton::create('Create Request', $url, 'fa fa-flask')->addCss('btn-success'))
+                ->setShowLabel(false)
+                ->addOnShow(function ($cell, $obj, $button) {
+                    /* @var $obj \App\Db\Cassette */
+                    /* @var $button ActionButton */
+                    $button->getUrl()->set('cassetteId', $obj->getId());
+                    if ($obj->getQty() <= 0) {
+                        $button->addCss('btn-dark disabled');
+                    }
+                });
+            $this->appendCell($this->getActionCell())->setLabel('');
+
+        }
+        $this->appendCell(new Cell\Text('number'))->setLabel('#');
         $this->appendCell(new Cell\Text('name'))->addCss('key')->setUrl($this->getEditUrl());
         //$this->appendCell(new Cell\Text('pathCaseId'));
         //$this->appendCell(new Cell\Text('storageId'));
-        $this->appendCell(new Cell\Text('qty'));
         //$this->appendCell(new Cell\Text('price'));
         //$this->appendCell(new Cell\Date('modified'));
+        $this->appendCell(new Cell\Text('container'));
+        $this->appendCell(new Cell\Text('qty'));
         $this->appendCell(new Cell\Date('created'));
 
         // Filters
-        $this->appendFilter(new Field\Input('keywords'))->setAttr('placeholder', 'Search');
+        if (!$this->isMinMode())
+            $this->appendFilter(new Field\Input('keywords'))->setAttr('placeholder', 'Search');
 
         // Actions
         //$this->appendAction(\Tk\Table\Action\Link::createLink('New Cassette', \Bs\Uri::createHomeUrl('/cassetteEdit.html'), 'fa fa-plus'));
         $this->appendAction(\Tk\Table\Action\ColumnSelect::create()->setUnselected(array('modified')));
-        $this->appendAction(\Tk\Table\Action\Delete::create());
+        if (!$this->isMinMode())
+            $this->appendAction(\Tk\Table\Action\Delete::create());
         $this->appendAction(\Tk\Table\Action\Csv::create());
 
         // load table

@@ -104,6 +104,24 @@ class Request extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 
     }
 
+    public function insert()
+    {
+        if ($this->getCassette()) {
+            $this->getCassette()->addRequest($this);
+            $this->getCassette()->save();
+        }
+        return parent::insert();
+    }
+
+    public function delete()
+    {
+        if ($this->getCassette()) {
+            $this->getCassette()->removeRequest($this);
+            $this->getCassette()->save();
+        }
+        return parent::delete();
+    }
+
     /**
      * @param int $qty
      * @return Request
@@ -199,13 +217,13 @@ class Request extends \Tk\Db\Map\Model implements \Tk\ValidInterface
             $errors['clientId'] = 'Invalid value: clientId';
         }
 
-        if (!$this->qty) {
+        if (!$this->qty || $this->qty < 1 || $this->qty > $this->getCassette()->getQty()) {
             $errors['qty'] = 'Invalid value: qty';
         }
 
-        if (!$this->price) {
-            $errors['price'] = 'Invalid value: price';
-        }
+//        if (!$this->price) {
+//            $errors['price'] = 'Invalid value: price';
+//        }
 
         return $errors;
     }

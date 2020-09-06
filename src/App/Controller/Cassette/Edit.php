@@ -51,10 +51,24 @@ class Edit extends AdminEditIface
     }
 
     /**
+     * Add actions here
+     */
+    public function initActionPanel()
+    {
+        if ($this->cassette->getId()) {
+            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn(
+                'New Request',
+                \Uni\Uri::createHomeUrl('/requestEdit.html')->set('cassetteId', $this->cassette->getId()),
+                'fa fa-flask fa-add-action'));
+        }
+    }
+
+    /**
      * @return \Dom\Template
      */
     public function show()
     {
+        $this->initActionPanel();
         $template = parent::show();
 
         // Render the form

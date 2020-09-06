@@ -97,6 +97,40 @@ class Cassette extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     }
 
     /**
+     * @param Request $request
+     * @return $this
+     * @throws \Tk\Exception
+     */
+    public function addRequest(Request $request)
+    {
+        if (!$this->getId() || !$this->getPathCaseId())
+            throw new \Tk\Exception('Save Cassette first');
+        if ($this->getQty() < $request->getQty())
+            throw new \Tk\Exception('Not enough Quantity available in cassette');
+        if (!$request->getCassetteId())
+            $request->setCassetteId($this->getId());
+        if (!$request->getPathCaseId())
+            $request->setPathCaseId($this->getPathCaseId());
+        $this->setQty($this->getQty() - $request->getQty());
+        return $this;
+    }
+
+    /**
+     * @param Request $request
+     * @return $this
+     * @throws \Tk\Exception
+     */
+    public function removeRequest(Request $request)
+    {
+        if (!$this->getId() || !$this->getPathCaseId())
+            throw new \Tk\Exception('Save Cassette first.');
+        //if ($request->getStatus() != Request::STATUS_COMPLETED && $request->getStatus() != Request::STATUS_CANCELLED) {
+            $this->setQty($this->getQty() + $request->getQty());
+        //}
+        return $this;
+    }
+
+    /**
      * @param string $container
      * @return Cassette
      */

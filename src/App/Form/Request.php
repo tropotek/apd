@@ -87,7 +87,6 @@ class Request extends \Bs\FormIface
         $isNew = (bool)$this->getRequest()->getId();
         $this->getRequest()->save();
 
-
         \Tk\Alert::addSuccess('Record saved!');
         $event->setRedirect($this->getBackUrl());
         if ($form->getTriggeredEvent()->getName() == 'save') {

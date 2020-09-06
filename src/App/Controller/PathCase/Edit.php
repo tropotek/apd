@@ -34,6 +34,11 @@ class Edit extends AdminEditIface
      */
     protected $cassetteTable = null;
 
+    /**
+     * @var null|\App\Table\Request
+     */
+    protected $requestTable = null;
+
 
     /**
      * Iface constructor.
@@ -74,7 +79,9 @@ class Edit extends AdminEditIface
         }
         $this->getForm()->execute();
 
+        // No need to do the reset for new cases
         if (!$this->pathCase->getId()) return;
+
 
         $this->statusTable = \Bs\Table\Status::create()
             ->setSelectedColumns(array('name', 'message', 'created'))->init();
@@ -84,11 +91,28 @@ class Edit extends AdminEditIface
         );
         $this->statusTable->setList($this->statusTable->findList($filter, \Tk\Db\Tool::create('created DESC', 0)));
 
+
         $this->cassetteTable = \App\Table\Cassette::create();
+        $this->cassetteTable->setEditUrl(\Bs\Uri::createHomeUrl('/cassetteEdit.html'));
+        $this->cassetteTable->setMinMode(true);
+        $this->cassetteTable->init();
         $filter = array(
             'pathCaseId' => $this->pathCase->getId()
         );
-        $this->cassetteTable->setList($this->cassetteTable->findList($filter, \Tk\Db\Tool::create('created DESC', 0)));
+        $this->cassetteTable->setList($this->cassetteTable->findList($filter, \Tk\Db\Tool::create('number')));
+
+
+        $this->requestTable = \App\Table\Request::create();
+        $this->requestTable->setEditUrl(\Bs\Uri::createHomeUrl('/requestEdit.html'));
+        $this->requestTable->setMinMode(true);
+        $this->requestTable->init();
+        $filter = array(
+            'pathCaseId' => $this->pathCase->getId()
+        );
+        $this->requestTable->setList($this->requestTable->findList($filter, \Tk\Db\Tool::create('created DESC')));
+
+
+
 
 
     }
@@ -98,10 +122,14 @@ class Edit extends AdminEditIface
      */
     public function initActionPanel()
     {
-        $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('New Cassette',
-            Uri::createHomeUrl('#'), 'fa fa-list-alt fa-add-action'));
-        $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('New Request',
-            Uri::createHomeUrl('#'), 'fa fa-medkit fa-add-action'));
+        if ($this->pathCase->getId()) {
+            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn(
+                'New Cassette',
+                \Uni\Uri::createHomeUrl('/cassetteEdit.html')->set('pathCaseId', $this->pathCase->getId()),
+                'fa fa-stack-overflow fa-add-action'));
+//        $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('New Request',
+//            Uri::createHomeUrl('#'), 'fa fa-medkit fa-add-action'));
+        }
     }
 
     /**
@@ -125,7 +153,10 @@ class Edit extends AdminEditIface
         if ($this->cassetteTable) {
             $template->appendTemplate('side-panel-cassette', $this->cassetteTable->show());
             $template->setVisible('side-panel-cassette');
-
+        }
+        if ($this->requestTable) {
+            $template->appendTemplate('side-panel-requests', $this->requestTable->show());
+            $template->setVisible('side-panel-requests');
         }
 
         if ($this->pathCase->getId()) {
@@ -146,8 +177,8 @@ class Edit extends AdminEditIface
     <div class="tk-panel" data-panel-title="Case Edit" data-panel-icon="fa fa-paw" var="panel"></div>
   </div>
   <div class="col-4" var="panel2" choice="panel2">
-    <div class="tk-panel" data-panel-title="Cassettes" data-panel-icon="fa fa-list-alt" var="side-panel-cassette" choice1="side-panel-cassette"></div>
-    <div class="tk-panel" data-panel-title="Histology Requests" data-panel-icon="fa fa-medkit" var="side-panel-requests" choice1="side-panel-requests"></div>
+    <div class="tk-panel" data-panel-title="Cassettes" data-panel-icon="fa fa-stack-overflow" var="side-panel-cassette" choice="side-panel-cassette"></div>
+    <div class="tk-panel" data-panel-title="Histology Requests" data-panel-icon="fa fa-medkit" var="side-panel-requests" choice="side-panel-requests"></div>
     <div class="tk-panel" data-panel-title="Files" data-panel-icon="fa fa-floppy-o" var="side-panel-files" choice="side-panel-files"></div>
     <div class="tk-panel" data-panel-title="Status Log" data-panel-icon="fa fa-list" var="side-panel-status" choice="side-panel-status"></div>
   </div>

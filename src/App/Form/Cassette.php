@@ -35,7 +35,7 @@ class Cassette extends \Bs\FormIface
         $layout->removeRow('name', 'col-10');
 
         //$this->appendField(new Field\Select('pathCaseId', array()))->prependOption('-- Select --', '');
-        $list = StorageMap::create()->findFiltered(array('institutionId' => $this->getCassette()->getInstitutionId()));
+        $list = StorageMap::create()->findFiltered(array('institutionId' => $this->getCassette()->getPathCase()->getInstitutionId()));
         $this->appendField(new Field\Select('storageId', $list))->prependOption('-- None --', '');
         $this->appendField(new Field\Input('container'));
         $this->appendField(new Field\Input('number'));      // TODO: Auto determine this number
