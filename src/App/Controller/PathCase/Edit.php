@@ -5,6 +5,7 @@ use App\Db\PathCase;
 use Bs\Controller\AdminEditIface;
 use Dom\Template;
 use Tk\Request;
+use Uni\Uri;
 
 /**
  * TODO: Add Route to routes.php:
@@ -27,6 +28,11 @@ class Edit extends AdminEditIface
      * @var null|\Bs\Table\Status
      */
     protected $statusTable = null;
+
+    /**
+     * @var null|\App\Table\Cassette
+     */
+    protected $cassetteTable = null;
 
 
     /**
@@ -78,6 +84,24 @@ class Edit extends AdminEditIface
         );
         $this->statusTable->setList($this->statusTable->findList($filter, \Tk\Db\Tool::create('created DESC', 0)));
 
+        $this->cassetteTable = \App\Table\Cassette::create();
+        $filter = array(
+            'pathCaseId' => $this->pathCase->getId()
+        );
+        $this->cassetteTable->setList($this->cassetteTable->findList($filter, \Tk\Db\Tool::create('created DESC', 0)));
+
+
+    }
+
+    /**
+     * Add actions here
+     */
+    public function initActionPanel()
+    {
+        $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('New Cassette',
+            Uri::createHomeUrl('#'), 'fa fa-list-alt fa-add-action'));
+        $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('New Request',
+            Uri::createHomeUrl('#'), 'fa fa-medkit fa-add-action'));
     }
 
     /**
@@ -85,6 +109,7 @@ class Edit extends AdminEditIface
      */
     public function show()
     {
+        $this->initActionPanel();
         $template = parent::show();
 
         // Render the form
@@ -96,6 +121,11 @@ class Edit extends AdminEditIface
         if ($this->statusTable) {
             $template->appendTemplate('side-panel-status', $this->statusTable->show());
             $template->setVisible('side-panel-status');
+        }
+        if ($this->cassetteTable) {
+            $template->appendTemplate('side-panel-cassette', $this->cassetteTable->show());
+            $template->setVisible('side-panel-cassette');
+
         }
 
         if ($this->pathCase->getId()) {
@@ -116,8 +146,8 @@ class Edit extends AdminEditIface
     <div class="tk-panel" data-panel-title="Case Edit" data-panel-icon="fa fa-paw" var="panel"></div>
   </div>
   <div class="col-4" var="panel2" choice="panel2">
-    <div class="tk-panel" data-panel-title="Sample Slides" data-panel-icon="fa fa-list-alt" var="side-panel-slides" choice1="side-panel-slides"></div>
-    <div class="tk-panel" data-panel-title="Hisology Requests" data-panel-icon="fa fa-medkit" var="side-panel-requests" choice1="side-panel-requests"></div>
+    <div class="tk-panel" data-panel-title="Cassettes" data-panel-icon="fa fa-list-alt" var="side-panel-cassette" choice1="side-panel-cassette"></div>
+    <div class="tk-panel" data-panel-title="Histology Requests" data-panel-icon="fa fa-medkit" var="side-panel-requests" choice1="side-panel-requests"></div>
     <div class="tk-panel" data-panel-title="Files" data-panel-icon="fa fa-floppy-o" var="side-panel-files" choice="side-panel-files"></div>
     <div class="tk-panel" data-panel-title="Status Log" data-panel-icon="fa fa-list" var="side-panel-status" choice="side-panel-status"></div>
   </div>

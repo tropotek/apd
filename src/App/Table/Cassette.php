@@ -38,7 +38,7 @@ class Cassette extends \Bs\TableIface
         //$this->appendCell(new Cell\Text('storageId'));
         $this->appendCell(new Cell\Text('qty'));
         //$this->appendCell(new Cell\Text('price'));
-        $this->appendCell(new Cell\Date('modified'));
+        //$this->appendCell(new Cell\Date('modified'));
         $this->appendCell(new Cell\Date('created'));
 
         // Filters
