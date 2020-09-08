@@ -1,7 +1,6 @@
 <?php
 namespace App\Controller\Staff;
 
-use Bs\Db\UserIface;
 use Tk\Db\Tool;
 use Tk\Request;
 use Dom\Template;
