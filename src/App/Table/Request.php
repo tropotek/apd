@@ -125,7 +125,7 @@ class Request extends \Bs\TableIface
             $this->appendCell(new Cell\Date('modified'));
             $this->appendCell(new Cell\Date('created'));
         }
-        
+
         // Filters
         if (!$this->isMinMode())
             $this->appendFilter(new Field\Input('keywords'))->setAttr('placeholder', 'Search');
