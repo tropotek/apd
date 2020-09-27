@@ -388,7 +388,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
                 $str = sprintf('%03d-%s', (int)$pidArr[0] + 1, $y);
             }
         }
-        vd($str);
         return $str;
     }
 
