@@ -159,7 +159,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     /**
      * @var string
      */
-    public $gender = '';
+    public $sex = '';
 
     /**
      * @var bool
@@ -195,12 +195,12 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     /**
      * @var string
      */
-    public $vmisWeight = '';
+    public $colour = '';
 
     /**
      * @var string
      */
-    public $necoWeight = '';
+    public $weight = '';
 
     /**
      * Date of birth
@@ -530,21 +530,21 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     }
 
     /**
-     * @param string $gender
+     * @param string $sex
      * @return PathCase
      */
-    public function setGender($gender) : PathCase
+    public function setSex($sex) : PathCase
     {
-        $this->gender = $gender;
+        $this->sex = $sex;
         return $this;
     }
 
     /**
      * @return string
      */
-    public function getGender() : string
+    public function getSex() : string
     {
-        return $this->gender;
+        return $this->sex;
     }
 
     /**
@@ -656,39 +656,39 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     }
 
     /**
-     * @param string $vmisWeight
+     * @return string
+     */
+    public function getColour(): string
+    {
+        return $this->colour;
+    }
+
+    /**
+     * @param string $colour
      * @return PathCase
      */
-    public function setVmisWeight($vmisWeight) : PathCase
+    public function setColour(string $colour): PathCase
     {
-        $this->vmisWeight = $vmisWeight;
+        $this->colour = $colour;
+        return $this;
+    }
+
+    /**
+     * @param string $weight
+     * @return PathCase
+     */
+    public function setWeight($weight) : PathCase
+    {
+        $this->weight = $weight;
         return $this;
     }
 
     /**
      * @return string
      */
-    public function getVmisWeight() : string
+    public function getWeight() : string
     {
-        return $this->vmisWeight;
-    }
-
-    /**
-     * @param string $necoWeight
-     * @return PathCase
-     */
-    public function setNecoWeight($necoWeight) : PathCase
-    {
-        $this->necoWeight = $necoWeight;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getNecoWeight() : string
-    {
-        return $this->necoWeight;
+        return $this->weight;
     }
 
     /**
@@ -1090,9 +1090,9 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
             $errors['species'] = 'Invalid value: species';
         }
 
-        if (!$this->gender) {
-            $errors['gender'] = 'Invalid value: gender';
-        }
+//        if (!$this->sex) {
+//            $errors['gender'] = 'Invalid value: gender';
+//        }
 
         if (!$this->patientNumber) {
             $errors['patientNumber'] = 'Invalid value: patientNumber';

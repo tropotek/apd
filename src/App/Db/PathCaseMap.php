@@ -44,15 +44,15 @@ class PathCaseMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Integer('specimenCount', 'specimen_count'));
             $this->dbMap->addPropertyMap(new Db\Text('animalName', 'animal_name'));
             $this->dbMap->addPropertyMap(new Db\Text('species'));
-            $this->dbMap->addPropertyMap(new Db\Text('gender'));
+            $this->dbMap->addPropertyMap(new Db\Text('sex'));
             $this->dbMap->addPropertyMap(new Db\Boolean('desexed'));
             $this->dbMap->addPropertyMap(new Db\Text('patientNumber', 'patient_number'));
             $this->dbMap->addPropertyMap(new Db\Text('microchip'));
             $this->dbMap->addPropertyMap(new Db\Text('ownerName', 'owner_name'));
             $this->dbMap->addPropertyMap(new Db\Text('origin'));
             $this->dbMap->addPropertyMap(new Db\Text('breed'));
-            $this->dbMap->addPropertyMap(new Db\Text('vmisWeight', 'vmis_weight'));
-            $this->dbMap->addPropertyMap(new Db\Text('necoWeight', 'neco_weight'));
+            $this->dbMap->addPropertyMap(new Db\Text('colour'));
+            $this->dbMap->addPropertyMap(new Db\Text('weight'));
             $this->dbMap->addPropertyMap(new Db\Date('dob'));
             $this->dbMap->addPropertyMap(new Db\Date('dod'));
             $this->dbMap->addPropertyMap(new Db\Boolean('euthanised'));
@@ -103,15 +103,15 @@ class PathCaseMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Integer('specimenCount'));
             $this->formMap->addPropertyMap(new Form\Text('animalName'));
             $this->formMap->addPropertyMap(new Form\Text('species'));
-            $this->formMap->addPropertyMap(new Form\Text('gender'));
+            $this->formMap->addPropertyMap(new Form\Text('sex'));
             $this->formMap->addPropertyMap(new Form\Boolean('desexed'));
             $this->formMap->addPropertyMap(new Form\Text('patientNumber'));
             $this->formMap->addPropertyMap(new Form\Text('microchip'));
             $this->formMap->addPropertyMap(new Form\Text('ownerName'));
             $this->formMap->addPropertyMap(new Form\Text('origin'));
             $this->formMap->addPropertyMap(new Form\Text('breed'));
-            $this->formMap->addPropertyMap(new Form\Text('vmisWeight'));
-            $this->formMap->addPropertyMap(new Form\Text('necoWeight'));
+            $this->formMap->addPropertyMap(new Form\Text('colour'));
+            $this->formMap->addPropertyMap(new Form\Text('weight'));
             $this->formMap->addPropertyMap(new Form\Date('dob'));
             $this->formMap->addPropertyMap(new Form\Date('dod'));
             $this->formMap->addPropertyMap(new Form\Boolean('euthanised'));
@@ -218,8 +218,8 @@ class PathCaseMap extends Mapper
         if (!empty($filter['species'])) {
             $filter->appendWhere('a.species = %s AND ', $this->quote($filter['species']));
         }
-        if (!empty($filter['gender'])) {
-            $filter->appendWhere('a.gender = %s AND ', $this->quote($filter['gender']));
+        if (!empty($filter['sex'])) {
+            $filter->appendWhere('a.sex = %s AND ', $this->quote($filter['sex']));
         }
         if (!empty($filter['desexed'])) {
             $filter->appendWhere('a.desexed = %s AND ', (int)$filter['desexed']);
@@ -236,14 +236,14 @@ class PathCaseMap extends Mapper
         if (!empty($filter['origin'])) {
             $filter->appendWhere('a.origin = %s AND ', $this->quote($filter['origin']));
         }
+        if (!empty($filter['colour'])) {
+            $filter->appendWhere('a.colour = %s AND ', $this->quote($filter['colour']));
+        }
         if (!empty($filter['breed'])) {
             $filter->appendWhere('a.breed = %s AND ', $this->quote($filter['breed']));
         }
-        if (!empty($filter['vmisWeight'])) {
-            $filter->appendWhere('a.vmis_weight = %s AND ', $this->quote($filter['vmisWeight']));
-        }
-        if (!empty($filter['necoWeight'])) {
-            $filter->appendWhere('a.neco_weight = %s AND ', $this->quote($filter['necoWeight']));
+        if (!empty($filter['weight'])) {
+            $filter->appendWhere('a.weight = %s AND ', $this->quote($filter['weight']));
         }
         if (!empty($filter['euthanised'])) {
             $filter->appendWhere('a.euthanised = %s AND ', (int)$filter['euthanised']);

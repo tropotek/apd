@@ -222,16 +222,15 @@ class TestData extends \Bs\Console\TestData
             $case->setSpecimenCount(rand(0, 100));      // TODO: do we really need this???
             $case->setAnimalName($this->createName());
             $case->setSpecies($this->createSpecies());
-            $case->setGender(rand(0, 1) ? 'M' : 'F');
+            $case->setSex(rand(0, 1) ? 'M' : 'F');
             $case->setDesexed((bool)rand(0,1));
             $case->setPatientNumber($this->createStr(8, '123456789'));
             $case->setMicrochip($this->createStr(12, '1234567890'));
             $case->setOwnerName($this->createName() . ' ' . $this->createName());
             $case->setOrigin($this->createStr());
             $case->setBreed($this->createBreed());
-            $case->setVmisWeight(rand(0, 50) . '.' . rand(0, 99));
-            if ($case->getType() == PathCase::TYPE_NECROPSY)
-                $case->setNecoWeight(rand(0, 50) . '.' . rand(0, 99));
+            $case->setColour($this->createColourString());
+            $case->setWeight(rand(0, 50) . '.' . rand(0, 99));
             $case->setDob($this->createRandomDate());
             if ($case->getType() == PathCase::TYPE_NECROPSY)
                 $case->setDod($this->createRandomDate($case->getDob()));

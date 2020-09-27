@@ -101,15 +101,15 @@ CREATE TABLE IF NOT EXISTS `path_case`
     specimen_count INT(10) UNSIGNED NOT NULL DEFAULT 1,       -- ??? TODO: NOT sure if this is needed
     animal_name VARCHAR(128) NOT NULL DEFAULT '',             --
     species VARCHAR(128) NOT NULL DEFAULT '',                 --
-    gender VARCHAR(64) NOT NULL DEFAULT '',                   -- Male/Female
+    sex VARCHAR(3) NOT NULL DEFAULT '',                       -- M/F
     desexed TINYINT(1) NOT NULL DEFAULT 0,                    --  ??? (should we use terms as spayed Female, gelding, steer, etc - gets to complex.)
     patient_number VARCHAR(128) NOT NULL DEFAULT '',          --
     microchip VARCHAR(128) NOT NULL DEFAULT '',               --
     owner_name VARCHAR(128) NOT NULL DEFAULT '',              --
     origin VARCHAR(128) NOT NULL DEFAULT '',                  -- ?? For now a TEXT box, but NOT sure if this should be lookup table
     breed VARCHAR(128) NOT NULL DEFAULT '',                   --
-    vmis_weight VARCHAR(128) NOT NULL DEFAULT '',             --
-    neco_weight VARCHAR(128) NOT NULL DEFAULT '',             --
+    colour VARCHAR(128) NOT NULL DEFAULT '',                  --
+    weight VARCHAR(128) NOT NULL DEFAULT '',                  --
 
     dob DATETIME DEFAULT NULL,                                -- Date of birth
     dod DATETIME DEFAULT NULL,                                -- Date and time of death

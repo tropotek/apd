@@ -6,6 +6,7 @@ use Tk\Db\Tool;
 use Tk\Form\Field;
 use Tk\Form\Event;
 use Tk\Form;
+use Uni\Db\User;
 
 /**
  * Example:
@@ -42,14 +43,19 @@ class PathCase extends \Bs\FormIface
         //     /media => WYSIWYG files, /files => case attached files
         // TODO: Allow WYSIWYG to view all files but only upload to html folder if possible (add this later)
         $mediaPath = $this->getPathCase()->getDataPath().'/media';
+        $mce = 'mce-min';
 
         $layout = $this->getRenderer()->getLayout();
+
+        $layout->removeRow('userId', 'col');
+        $layout->removeRow('status', 'col');
+
 
         // Details
         $layout->removeRow('resident', 'col');
         $layout->removeRow('studentEmail', 'col');
 
-        $layout->removeRow('animalName', 'col');
+        $layout->removeRow('patientNumber', 'col');
         $layout->removeRow('zootonicResult', 'col');
         $layout->removeRow('euthanisedMethod', 'col');
         // Animal
@@ -72,10 +78,15 @@ class PathCase extends \Bs\FormIface
                 ->addCss('tk-input-lock')
                 ->setAttr('placeholder', $this->getPathCase()->getVolatilePathologyId());
 
+        $list  = $this->getConfig()->getUserMapper()->findFiltered(array('institutionId'=> $this->getPathCase()->getInstitutionId(), 'type' => User::TYPE_STAFF), Tool::create('name_first'));
+        $this->appendField(Field\Select::createSelect('userId', $list)->prependOption('-- Select --', ''))
+            ->setTabGroup($tab)->setLabel('Submitter');
+
         // TODO: Add ability to create a new client with a button and dialog box.
-        $list  = ClientMap::create()->findFiltered(array('institutionId'=> $this->getPathCase()->getInstitutionId()), Tool::create('name'));
-        $this->appendField(Field\Select::createSelect('clientId', $list)->prependOption('-- Select --', ''))
-            ->setTabGroup($tab)->setLabel('Client/Clinician');
+        // TODO: Not sure if the client should be linked to the Case???? maybe they are only linked to Requests...
+//        $list  = ClientMap::create()->findFiltered(array('institutionId'=> $this->getPathCase()->getInstitutionId()), Tool::create('name'));
+//        $this->appendField(Field\Select::createSelect('clientId', $list)->prependOption('-- Select --', ''))
+//            ->setTabGroup($tab)->setLabel('Client/Clinician');
 
 
         if (!$this->getPathCase()->getType()) {
@@ -96,6 +107,31 @@ class PathCase extends \Bs\FormIface
                 ->setNotes('Set the status. Use the checkbox to disable notification emails.');
         }
 
+        //$tab = 'Animal';
+        $fieldset = 'Animal';
+            // TODO: would be nice to be able to add fieldsets to a tabgroup
+            //->setFieldset($fieldset);
+        $this->appendField(new Field\Input('animalName'))->setLabel('Animal Name/ID')->setTabGroup($tab);
+        $this->appendField(new Field\Input('patientNumber'))->setTabGroup($tab);
+        $this->appendField(new Field\Input('microchip'))->setTabGroup($tab);
+        $this->appendField(new Field\Input('species'))->setTabGroup($tab);
+        $this->appendField(new Field\Input('breed'))->setTabGroup($tab);
+
+        $this->appendField(new Field\Input('specimenCount'))->setTabGroup($tab);
+        $list = array('-- N/A --' => '', 'Male' => 'M', 'Female' => 'F');
+        $this->appendField(Field\Select::createSelect('sex', $list))
+            ->setTabGroup($tab);
+        $this->appendField(new Field\Checkbox('desexed'))->setTabGroup($tab);
+
+        $this->appendField(new Field\Input('ownerName'))->setTabGroup($tab);
+        $this->appendField(new Field\Input('origin'))->setTabGroup($tab);
+        $this->appendField(new Field\Input('colour'))->setTabGroup($tab);
+        $this->appendField(new Field\Input('weight'))->setTabGroup($tab);
+        $this->appendField(new Field\Input('dob'))->setTabGroup($tab)->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy');
+        $this->appendField(new Field\Input('dod'))->setTabGroup($tab)->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy');
+        // END Animal
+
+
         $list  = $this->getConfig()->getUserMapper()->findFiltered(array('institutionId'=> $this->getPathCase()->getInstitutionId(), 'type' => 'staff'), Tool::create('nameFirst'));
         $this->appendField(Field\Select::createSelect('pathologistId', $list)->prependOption('-- Select --', ''))
             ->setTabGroup($tab)->setLabel('Pathologist');
@@ -103,8 +139,6 @@ class PathCase extends \Bs\FormIface
         $this->appendField(new Field\Input('resident'))->setTabGroup($tab);
         $this->appendField(new Field\Input('student'))->setTabGroup($tab);
         $this->appendField(new Field\Input('studentEmail'))->setTabGroup($tab);
-
-
 
 //        $this->appendField(new Field\Input('submitted'))->setTabGroup($tab)->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy');
 //        $this->appendField(new Field\Input('examined'))->setTabGroup($tab)->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy');
@@ -118,43 +152,13 @@ class PathCase extends \Bs\FormIface
         $this->appendField(new Field\Checkbox('euthanised'))->setTabGroup($tab);
         $this->appendField(new Field\Input('euthanisedMethod'))->setTabGroup($tab);
 
-        $this->appendField(new Field\Textarea('collectedSamples'))
-            ->addCss('mce-min')->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
-
-        $tab = 'Animal';
-        $this->appendField(new Field\Input('ownerName'))->setTabGroup($tab);
-        $this->appendField(new Field\Input('animalName'))->setTabGroup($tab);
-        $this->appendField(new Field\Input('species'))->setTabGroup($tab);
-        $this->appendField(new Field\Input('breed'))->setTabGroup($tab);
-        $this->appendField(new Field\Input('specimenCount'))->setTabGroup($tab);
-        $this->appendField(new Field\Input('patientNumber'))->setTabGroup($tab);
-        $this->appendField(new Field\Input('microchip'))->setTabGroup($tab);
-        $this->appendField(new Field\Input('gender'))->setTabGroup($tab);
-        $this->appendField(new Field\Checkbox('desexed'))->setTabGroup($tab);
-        $this->appendField(new Field\Input('origin'))->setTabGroup($tab);
-        $this->appendField(new Field\Input('vmisWeight'))->setTabGroup($tab);
-        $this->appendField(new Field\Input('necoWeight'))->setTabGroup($tab);
-        $this->appendField(new Field\Input('dob'))->setTabGroup($tab)->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy');
-        $this->appendField(new Field\Input('dod'))->setTabGroup($tab)->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy');
-
-        $tab = 'After Care';
-
-        $this->appendField(Field\Select::createSelect('storageId', array())->prependOption('-- Select --', ''))
-            ->setTabGroup($tab);
-        $this->appendField(new Field\Input('acHold'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy')
-            ->setLabel('Aftercare Hold')->setTabGroup($tab);
-        $list = \Tk\ObjectUtil::getClassConstants($this->getPathCase(), 'AC_');
-        $this->appendField(Field\Select::createSelect('acType', $list)->prependOption('-- None --', ''))
-            ->setLabel('Aftercare Type')->setLabel('Method Of Disposal')->setTabGroup($tab);
-        $this->appendField(new Field\Input('acHold'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy')
-            ->setLabel('Aftercare Hold')->setTabGroup($tab);
-        $this->appendField(new Field\Input('disposal'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy')
-            ->setTabGroup($tab);
-
-        $tab = 'Reporting';
-        $mce = 'mce-min';
         $this->appendField(new Field\Textarea('clinicalHistory'))
             ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
+
+
+        $tab = 'Reporting';
+        $this->appendField(new Field\Textarea('collectedSamples'))
+            ->addCss('mce-min')->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
         $this->appendField(new Field\Textarea('grossPathology'))
             ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
         $this->appendField(new Field\Textarea('grossMorphologicalDiagnosis'))
@@ -187,6 +191,21 @@ class PathCase extends \Bs\FormIface
 
 //        $this->appendField(new Field\File('files'))
 //            ->addCss('')->setAttr('data-path', $mediaPath)->setTabGroup($tab);
+
+
+        $tab = 'After Care';
+        $this->appendField(Field\Select::createSelect('storageId', array())->prependOption('-- Select --', ''))
+            ->setTabGroup($tab);
+        $this->appendField(new Field\Input('acHold'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy')
+            ->setLabel('Aftercare Hold')->setTabGroup($tab);
+        $list = \Tk\ObjectUtil::getClassConstants($this->getPathCase(), 'AC_');
+        $this->appendField(Field\Select::createSelect('acType', $list)->prependOption('-- None --', ''))
+            ->setLabel('Aftercare Type')->setLabel('Method Of Disposal')->setTabGroup($tab);
+        $this->appendField(new Field\Input('acHold'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy')
+            ->setLabel('Aftercare Hold')->setTabGroup($tab);
+        $this->appendField(new Field\Input('disposal'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy')
+            ->setTabGroup($tab);
+
 
 
 
