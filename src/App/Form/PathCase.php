@@ -127,7 +127,10 @@ class PathCase extends \Bs\FormIface
         $this->appendField(new Field\Input('origin'))->setTabGroup($tab);
         $this->appendField(new Field\Input('colour'))->setTabGroup($tab);
         $this->appendField(new Field\Input('weight'))->setTabGroup($tab);
-        $this->appendField(new Field\Input('dob'))->setTabGroup($tab)->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy');
+        $this->appendField(new Field\Input('dob'))->setTabGroup($tab)
+            ->setAttr('data-dod', '#path_case-dod')
+            ->addCss('date tk-age')->setAttr('placeholder', 'dd/mm/yyyy');
+
         $this->appendField(new Field\Input('dod'))->setTabGroup($tab)->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy');
         // END Animal
 
