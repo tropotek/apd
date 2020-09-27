@@ -105,13 +105,13 @@ class Cassette extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     {
         if (!$this->getId() || !$this->getPathCaseId())
             throw new \Tk\Exception('Save Cassette first');
-        if ($this->getQty() < $request->getQty())
-            throw new \Tk\Exception('Not enough Quantity available in cassette');
+//        if ($this->getQty() < $request->getQty())
+//            throw new \Tk\Exception('Not enough Quantity available in cassette');
         if (!$request->getCassetteId())
             $request->setCassetteId($this->getId());
         if (!$request->getPathCaseId())
             $request->setPathCaseId($this->getPathCaseId());
-        $this->setQty($this->getQty() - $request->getQty());
+//        $this->setQty($this->getQty() - $request->getQty());
         return $this;
     }
 

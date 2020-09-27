@@ -378,15 +378,18 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
         }
         /** @var PathCase $prev */
         $y = date('y');
+        $str = '001-'.$y;
         $prev = PathCaseMap::create()->findFiltered(array(
             'institutionId' => $this->getInstitutionId()
-        ), Tool::create('created DESC', 1))->current();
-        $pidArr = explode('-', $prev->getPathologyId());
-        if (count($pidArr) >= 2 && (int)$pidArr[1] && $y == (int)$pidArr[1]) {
-            return sprintf('%03d', $pidArr[0]+1) . '-' . $y;
+        ), Tool::create('id DESC', 1))->current();
+        if ($prev) {
+            $pidArr = explode('-', $prev->getPathologyId());
+            if (count($pidArr) >= 2 && (int)$pidArr[1] && $y == (int)$pidArr[1]) {
+                $str = sprintf('%03d-%s', (int)$pidArr[0] + 1, $y);
+            }
         }
-        // It must be the next year so start counter again
-        return '001-'.$y;
+        vd($str);
+        return $str;
     }
 
     /**

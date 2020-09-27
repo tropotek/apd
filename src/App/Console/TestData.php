@@ -173,7 +173,8 @@ class TestData extends \Bs\Console\TestData
         }
 
 
-        $db->exec('DELETE FROM `path_case` WHERE `notes` = \'***\' ');
+        //$db->exec('DELETE FROM `path_case` WHERE `notes` = \'***\' ');
+        $db->exec('TRUNCATE  `path_case` ');
         for($i = 0; $i < 100; $i++) {
             $case = new PathCase();
             /** @var Client $client */
