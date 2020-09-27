@@ -2,6 +2,7 @@
 namespace App\Db;
 
 use App\Db\Traits\ClientTrait;
+use App\Db\Traits\PathCaseTrait;
 use App\Db\Traits\PathologistTrait;
 use App\Db\Traits\StorageTrait;
 use Bs\Db\Status;
@@ -316,7 +317,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public function __construct()
     {
         $this->_TimestampTrait();
-        $this->institutionId = $this->getConfig()->getInstitutionId();
+        $this->setInstitutionId($this->getConfig()->getInstitutionId());
         if ($this->getConfig()->getAuthUser())
             $this->setUserId($this->getConfig()->getAuthUser()->getId());
     }
@@ -362,6 +363,42 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public function getPathologyId() : string
     {
         return $this->pathologyId;
+    }
+
+    /**
+     * @return string
+     * @throws \Exception
+     */
+    public function getVolatilePathologyId() : string
+    {
+        if (!$this->getInstitutionId())
+            throw new \Tk\Exception('No institutionId set.');
+        if ($this->getPathologyId()) {
+            return $this->getPathologyId();
+        }
+        /** @var PathCase $prev */
+        $y = date('y');
+        $prev = PathCaseMap::create()->findFiltered(array(
+            'institutionId' => $this->getInstitutionId()
+        ), Tool::create('created DESC', 1))->current();
+        $pidArr = explode('-', $prev->getPathologyId());
+        if (count($pidArr) >= 2 && (int)$pidArr[1] && $y == (int)$pidArr[1]) {
+            return sprintf('%03d', $pidArr[0]+1) . '-' . $y;
+        }
+        // It must be the next year so start counter again
+        return '001-'.$y;
+    }
+
+    /**
+     * @return int
+     * @throws \Exception
+     */
+    public function insert()
+    {
+        if (!$this->getPathologyId()) {
+            $this->setPathologyId($this->getVolatilePathologyId());
+        }
+        return parent::insert();
     }
 
     /**

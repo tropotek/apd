@@ -181,7 +181,7 @@ class TestData extends \Bs\Console\TestData
             $case->setClientId($client->getId());
             $staff = $this->getConfig()->getUserMapper()->findFiltered(array('type' => 'staff'), Tool::create('RAND()'))->current();
             $case->setUserId($staff->getId());
-            $case->setPathologyId(rand(100, 999) . '-' . rand(1, 99));
+            //$case->setPathologyId(rand(100, 999) . '-' . rand(1, 99));
             $case->setType(rand(0,1) ? PathCase::TYPE_NECROPSY : PathCase::TYPE_BIOPSY);
             $arr = array_values(ObjectUtil::getClassConstants($case, 'SUBMISSION_'));
             $selected = $arr[rand(0, count($arr)-1)];

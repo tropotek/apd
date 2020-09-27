@@ -68,7 +68,8 @@ class PathCase extends \Bs\FormIface
         $tab = 'Details';
         // TODO: should we autonumber these somehow???
         if (!$this->getPathCase()->getId())
-            $this->appendField(new Field\Input('pathologyId'))->setLabel('Pathology ID')->setTabGroup($tab);
+            $this->appendField(new Field\Input('pathologyId'))->setLabel('Pathology ID')->setTabGroup($tab)
+                ->setAttr('placeholder', $this->getPathCase()->getVolatilePathologyId());
 
         // TODO: Add ability to create a new client with a button and dialog box.
         $list  = ClientMap::create()->findFiltered(array('institutionId'=> $this->getPathCase()->getInstitutionId()), Tool::create('name'));
