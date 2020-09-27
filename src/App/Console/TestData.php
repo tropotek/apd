@@ -215,9 +215,7 @@ class TestData extends \Bs\Console\TestData
 
 
             if (rand(0, 1)) {
-                $case->setZootonicDisease($this->createStr());
-                if (rand(0, 1))
-                    $case->setZootonicResult(rand(0, 1) ? PathCase::ZOO_POSITIVE : PathCase::ZOO_NEGATIVE);
+                $case->setZootonic($this->createStr());
             }
             $case->setSpecimenCount(rand(0, 100));      // TODO: do we really need this???
             $case->setAnimalName($this->createName());

@@ -129,6 +129,7 @@ class PathCase extends \Bs\FormIface
         $this->appendField(new Field\Input('weight'))->setTabGroup($tab);
         $this->appendField(new Field\Input('dob'))->setTabGroup($tab)
             ->setAttr('data-dod', '#path_case-dod')
+            ->setAttr('data-precision', '1')
             ->addCss('date tk-age')->setAttr('placeholder', 'dd/mm/yyyy');
 
         $this->appendField(new Field\Input('dod'))->setTabGroup($tab)->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy');
@@ -147,15 +148,16 @@ class PathCase extends \Bs\FormIface
 //        $this->appendField(new Field\Input('examined'))->setTabGroup($tab)->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy');
 //        $this->appendField(new Field\Input('finalised'))->setTabGroup($tab)->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy');
 
-        $list = \Tk\ObjectUtil::getClassConstants($this->getPathCase(), 'ZOO_');
-        $this->appendField(new Field\Input('zootonicDisease'))->setTabGroup($tab);
-        $this->appendField(Field\Select::createSelect('zootonicResult', $list)->prependOption('-- Select --', ''))
-            ->setTabGroup($tab);
+
+        $this->appendField(new Field\Input('zootonic'))->setTabGroup($tab)->setLabel('Zootonic/Other Risks')
+            ->setNotes('Any data here will be alerted to other users viewing this record.');
 
         $this->appendField(new Field\Checkbox('euthanised'))->setTabGroup($tab);
         $this->appendField(new Field\Input('euthanisedMethod'))->setTabGroup($tab);
 
         $this->appendField(new Field\Textarea('clinicalHistory'))
+            ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
+        $this->appendField(new Field\Textarea('addendum'))
             ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
 
 
@@ -205,9 +207,9 @@ class PathCase extends \Bs\FormIface
         $this->appendField(Field\Select::createSelect('acType', $list)->prependOption('-- None --', ''))
             ->setLabel('Aftercare Type')->setLabel('Method Of Disposal')->setTabGroup($tab);
         $this->appendField(new Field\Input('acHold'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy')
-            ->setLabel('Aftercare Hold')->setTabGroup($tab);
+            ->setLabel('Hold Until')->setTabGroup($tab);
         $this->appendField(new Field\Input('disposal'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy')
-            ->setTabGroup($tab);
+            ->setLabel('Disposal Completion Date')->setTabGroup($tab);
 
 
 

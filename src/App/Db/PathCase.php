@@ -2,7 +2,6 @@
 namespace App\Db;
 
 use App\Db\Traits\ClientTrait;
-use App\Db\Traits\PathCaseTrait;
 use App\Db\Traits\PathologistTrait;
 use App\Db\Traits\StorageTrait;
 use Bs\Db\Status;
@@ -48,10 +47,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     const SUBMISSION_TEACHING       = 'teaching';
     const SUBMISSION_PAID           = 'paid';
     const SUBMISSION_OTHER          = 'other';
-
-    const ZOO_UNKNOWN               = '';
-    const ZOO_POSITIVE              = 'positive';
-    const ZOO_NEGATIVE              = 'negative';
 
     // After Care Options
     const AC_GENERAL                = 'general';
@@ -129,16 +124,10 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public $status = 'pending';
 
     /**
-     * A dropdown of entered diseases
+     * A description of any risks with the animal
      * @var string
      */
-    public $zootonicDisease = '';
-
-    /**
-     * Positive/Negative (Pending???)
-     * @var string
-     */
-    public $zootonicResult = '';
+    public $zootonic = '';
 
     /**
      * TODO: NOT sure if this is needed
@@ -287,6 +276,12 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      * @var string
      */
     public $causeOfDeath = '';
+
+    /**
+     * Any notes added after report submitted
+     * @var string
+     */
+    public $addendum = '';
 
     /**
      * public comments
@@ -440,39 +435,21 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     }
 
     /**
-     * @param string $zootonicDisease
+     * @param string $zootonic
      * @return PathCase
      */
-    public function setZootonicDisease($zootonicDisease) : PathCase
+    public function setZootonic($zootonic) : PathCase
     {
-        $this->zootonicDisease = $zootonicDisease;
+        $this->zootonic = $zootonic;
         return $this;
     }
 
     /**
      * @return string
      */
-    public function getZootonicDisease() : string
+    public function getZootonic() : string
     {
-        return $this->zootonicDisease;
-    }
-
-    /**
-     * @param string $zootonicResult
-     * @return PathCase
-     */
-    public function setZootonicResult($zootonicResult) : PathCase
-    {
-        $this->zootonicResult = $zootonicResult;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getZootonicResult() : string
-    {
-        return $this->zootonicResult;
+        return $this->zootonic;
     }
 
     /**
@@ -1025,6 +1002,24 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public function getCauseOfDeath() : string
     {
         return $this->causeOfDeath;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAddendum(): string
+    {
+        return $this->addendum;
+    }
+
+    /**
+     * @param string $addendum
+     * @return PathCase
+     */
+    public function setAddendum(string $addendum): PathCase
+    {
+        $this->addendum = $addendum;
+        return $this;
     }
 
     /**

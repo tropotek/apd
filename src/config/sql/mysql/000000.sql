@@ -93,8 +93,7 @@ CREATE TABLE IF NOT EXISTS `path_case`
 --    examined DATETIME DEFAULT NULL,                           --
 --    finalised DATETIME DEFAULT NULL,                          --
 
-    zootonic_disease VARCHAR(128) NOT NULL DEFAULT '',        -- A dropdown of entered diseases
-    zootonic_result VARCHAR(128) NOT NULL DEFAULT '',         -- Positive/Negative ????
+    zootonic TEXT,                                              -- If filled show alert to warn user (use session cookie to only show once pre session)
 
     -- Animal/patient details
     -- TODO: in the future create an animal table
@@ -132,6 +131,7 @@ CREATE TABLE IF NOT EXISTS `path_case`
     morphological_diagnosis TEXT,                             --
     cause_of_death TEXT,                                      -- (required) case NOT saved if blank
     comments TEXT,                                            -- public comments
+    addendum TEXT,                                            -- Additional notes after reporting has taken place
     --
 
     notes TEXT,                                               -- Staff only notes

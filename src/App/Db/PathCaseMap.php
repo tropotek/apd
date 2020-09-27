@@ -39,8 +39,7 @@ class PathCaseMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Text('submissionType', 'submission_type'));
             $this->dbMap->addPropertyMap(new Db\Text('status'));
 
-            $this->dbMap->addPropertyMap(new Db\Text('zootonicDisease', 'zootonic_disease'));
-            $this->dbMap->addPropertyMap(new Db\Text('zootonicResult', 'zootonic_result'));
+            $this->dbMap->addPropertyMap(new Db\Text('zootonic', 'zootonic'));
             $this->dbMap->addPropertyMap(new Db\Integer('specimenCount', 'specimen_count'));
             $this->dbMap->addPropertyMap(new Db\Text('animalName', 'animal_name'));
             $this->dbMap->addPropertyMap(new Db\Text('species'));
@@ -71,6 +70,7 @@ class PathCaseMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Text('morphologicalDiagnosis', 'morphological_diagnosis'));
             $this->dbMap->addPropertyMap(new Db\Text('causeOfDeath', 'cause_of_death'));
             $this->dbMap->addPropertyMap(new Db\Text('comments'));
+            $this->dbMap->addPropertyMap(new Db\Text('addendum'));
             $this->dbMap->addPropertyMap(new Db\Text('notes'));
             $this->dbMap->addPropertyMap(new Db\Date('modified'));
             $this->dbMap->addPropertyMap(new Db\Date('created'));
@@ -98,8 +98,7 @@ class PathCaseMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Text('type'));
             $this->formMap->addPropertyMap(new Form\Text('submissionType'));
             $this->formMap->addPropertyMap(new Form\Text('status'));
-            $this->formMap->addPropertyMap(new Form\Text('zootonicDisease'));
-            $this->formMap->addPropertyMap(new Form\Text('zootonicResult'));
+            $this->formMap->addPropertyMap(new Form\Text('zootonic'));
             $this->formMap->addPropertyMap(new Form\Integer('specimenCount'));
             $this->formMap->addPropertyMap(new Form\Text('animalName'));
             $this->formMap->addPropertyMap(new Form\Text('species'));
@@ -129,6 +128,7 @@ class PathCaseMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Text('morphologicalDiagnosis'));
             $this->formMap->addPropertyMap(new Form\Text('causeOfDeath'));
             $this->formMap->addPropertyMap(new Form\Text('comments'));
+            $this->formMap->addPropertyMap(new Form\Text('addendum'));
             $this->formMap->addPropertyMap(new Form\Text('notes'));
 
         }
@@ -202,12 +202,6 @@ class PathCaseMap extends Mapper
         }
         if (!empty($filter['status'])) {
             $filter->appendWhere('a.status = %s AND ', $this->quote($filter['status']));
-        }
-        if (!empty($filter['zootonicDisease'])) {
-            $filter->appendWhere('a.zootonic_disease = %s AND ', $this->quote($filter['zootonicDisease']));
-        }
-        if (!empty($filter['zootonicResult'])) {
-            $filter->appendWhere('a.zootonic_result = %s AND ', $this->quote($filter['zootonicResult']));
         }
         if (!empty($filter['specimenCount'])) {
             $filter->appendWhere('a.specimen_count = %s AND ', (int)$filter['specimenCount']);
