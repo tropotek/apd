@@ -66,9 +66,10 @@ class PathCase extends \Bs\FormIface
 
         // FORM FIELDS
         $tab = 'Details';
-        // TODO: should we autonumber these somehow???
-        if (!$this->getPathCase()->getId())
+
+        if ($this->getPathCase()->getId())
             $this->appendField(new Field\Input('pathologyId'))->setLabel('Pathology ID')->setTabGroup($tab)
+                ->addCss('tk-input-lock')
                 ->setAttr('placeholder', $this->getPathCase()->getVolatilePathologyId());
 
         // TODO: Add ability to create a new client with a button and dialog box.
