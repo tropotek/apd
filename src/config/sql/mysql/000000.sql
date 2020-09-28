@@ -123,6 +123,7 @@ CREATE TABLE IF NOT EXISTS `path_case`
     --
 
     -- Reporting
+    report_status VARCHAR(64) NOT NULL DEFAULT '',            -- The current status of the report. [TODO: Should the main status be used???]
     collected_samples TEXT,                                   -- Save Tissues/Frozen Samples
     clinical_history TEXT,                                    --
     gross_pathology TEXT,                                     --

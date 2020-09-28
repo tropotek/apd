@@ -48,6 +48,11 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     const SUBMISSION_PAID           = 'paid';
     const SUBMISSION_OTHER          = 'other';
 
+    // Report Status
+    const REPORT_STATUS_INTERIM      = 'interim';           //
+    const REPORT_STATUS_COMPLETED   = 'completed';          //
+
+
     // After Care Options
     const AC_GENERAL                = 'general';
     const AC_CREMATION              = 'cremation';
@@ -269,6 +274,12 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      * @var \DateTime
      */
     public $disposal = null;
+
+    /**
+     *
+     * @var string
+     */
+    public $reportStatus = 'interim';
 
     /**
      * @var string
@@ -999,6 +1010,24 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public function setStudentEmail(string $studentEmail): PathCase
     {
         $this->studentEmail = $studentEmail;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReportStatus(): string
+    {
+        return $this->reportStatus;
+    }
+
+    /**
+     * @param string $reportStatus
+     * @return PathCase
+     */
+    public function setReportStatus(string $reportStatus): PathCase
+    {
+        $this->reportStatus = $reportStatus;
         return $this;
     }
 

@@ -196,6 +196,7 @@ class TestData extends \Bs\Console\TestData
             //$arr = array_values(ObjectUtil::getClassConstants($case, 'STATUS_'));
             //$selected = $arr[rand(0, count($arr)-1)];
             $case->setStatus(PathCase::STATUS_PENDING);
+            $case->setReportStatus(rand(0, 1) ? PathCase::REPORT_STATUS_INTERIM : PathCase::REPORT_STATUS_COMPLETED);
 
             if (rand(0, 1)) {
                 $case->setZoonotic($this->createStr());

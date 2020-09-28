@@ -67,6 +67,7 @@ class PathCaseMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Integer('storageId', 'storage_id'));
             $this->dbMap->addPropertyMap(new Db\Date('disposal'));
 
+            $this->dbMap->addPropertyMap(new Db\Text('reportStatus', 'report_status'));
             $this->dbMap->addPropertyMap(new Db\Text('collectedSamples', 'collected_samples'));
             $this->dbMap->addPropertyMap(new Db\Text('clinicalHistory', 'clinical_history'));
             $this->dbMap->addPropertyMap(new Db\Text('grossPathology', 'gross_pathology'));
@@ -131,6 +132,7 @@ class PathCaseMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Date('acHold'));
             $this->formMap->addPropertyMap(new Form\Integer('storageId'));
             $this->formMap->addPropertyMap(new Form\Date('disposal'));
+            $this->formMap->addPropertyMap(new Form\Text('reportStatus'));
             $this->formMap->addPropertyMap(new Form\Text('collectedSamples'));
             $this->formMap->addPropertyMap(new Form\Text('clinicalHistory'));
             $this->formMap->addPropertyMap(new Form\Text('grossPathology'));
@@ -214,6 +216,9 @@ class PathCaseMap extends Mapper
         }
         if (!empty($filter['status'])) {
             $filter->appendWhere('a.status = %s AND ', $this->quote($filter['status']));
+        }
+        if (!empty($filter['reportStatus'])) {
+            $filter->appendWhere('a.report_status = %s AND ', $this->quote($filter['reportStatus']));
         }
         if (!empty($filter['specimenCount'])) {
             $filter->appendWhere('a.specimen_count = %s AND ', (int)$filter['specimenCount']);
