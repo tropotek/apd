@@ -71,6 +71,16 @@ class Edit extends AdminEditIface
             $this->setPageTitle($this->pathCase->getPathologyId() . ' - (' . ucwords($this->pathCase->getType()) . ')');
         }
 
+        if (!$request->has('action')) {     // Avoid duplicated from columns table plugin
+            if ($this->pathCase->isIssueAlert()) {
+                \Tk\Alert::addWarning($this->pathCase->getIssue(), 'Animal Issue Alert!');
+            }
+            if ($this->pathCase->isZoonoticAlert()) {
+                \Tk\Alert::addError($this->pathCase->getZoonotic(), 'Zoonotic Alert!');
+            }
+        }
+
+
         $this->setForm(\App\Form\PathCase::create()->setModel($this->pathCase));
         $this->initForm($request);
         // Only allow save for new path case
@@ -110,10 +120,6 @@ class Edit extends AdminEditIface
             'pathCaseId' => $this->pathCase->getId()
         );
         $this->requestTable->setList($this->requestTable->findList($filter, \Tk\Db\Tool::create('created DESC')));
-
-
-
-
 
     }
 

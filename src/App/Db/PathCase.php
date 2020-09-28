@@ -190,6 +190,21 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public $ownerName = '';
 
     /**
+     * @var string
+     */
+    public $ownerEmail = '';
+
+    /**
+     * @var string
+     */
+    public $ownerPhone = '';
+
+    /**
+     * @var string
+     */
+    public $ownerAddress = '';
+
+    /**
      * TODO: For now a TEXT box, but NOT sure if this should be lookup table
      * @var string
      */
@@ -667,6 +682,60 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public function getOwnerName() : string
     {
         return $this->ownerName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOwnerEmail(): string
+    {
+        return $this->ownerEmail;
+    }
+
+    /**
+     * @param string $ownerEmail
+     * @return PathCase
+     */
+    public function setOwnerEmail(string $ownerEmail): PathCase
+    {
+        $this->ownerEmail = $ownerEmail;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOwnerPhone(): string
+    {
+        return $this->ownerPhone;
+    }
+
+    /**
+     * @param string $ownerPhone
+     * @return PathCase
+     */
+    public function setOwnerPhone(string $ownerPhone): PathCase
+    {
+        $this->ownerPhone = $ownerPhone;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOwnerAddress(): string
+    {
+        return $this->ownerAddress;
+    }
+
+    /**
+     * @param string $ownerAddress
+     * @return PathCase
+     */
+    public function setOwnerAddress(string $ownerAddress): PathCase
+    {
+        $this->ownerAddress = $ownerAddress;
+        return $this;
     }
 
     /**

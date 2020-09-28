@@ -208,6 +208,9 @@ class TestData extends \Bs\Console\TestData
             $case->setPatientNumber($this->createStr(8, '123456789'));
             $case->setMicrochip($this->createStr(12, '1234567890'));
             $case->setOwnerName($this->createName() . ' ' . $this->createName());
+            $case->setOwnerEmail($this->createUniqueEmail());
+            $case->setOwnerPhone($this->createPhone());
+            $case->setOwnerAddress($this->createAddress());
             $case->setOrigin($this->createStr());
             $case->setBreed($this->createBreed());
             $case->setColour($this->createColourString());

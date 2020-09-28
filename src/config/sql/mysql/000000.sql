@@ -103,6 +103,9 @@ CREATE TABLE IF NOT EXISTS `path_case`
     patient_number VARCHAR(128) NOT NULL DEFAULT '',          --
     microchip VARCHAR(128) NOT NULL DEFAULT '',               --
     owner_name VARCHAR(128) NOT NULL DEFAULT '',              --
+    owner_email VARCHAR(128) NOT NULL DEFAULT '',             --
+    owner_phone VARCHAR(32) NOT NULL DEFAULT '',              --
+    owner_address TEXT,                                       --
     origin VARCHAR(128) NOT NULL DEFAULT '',                  -- ?? For now a TEXT box, but NOT sure if this should be lookup table
     breed VARCHAR(128) NOT NULL DEFAULT '',                   --
     colour VARCHAR(128) NOT NULL DEFAULT '',                  --

@@ -51,6 +51,9 @@ class PathCaseMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Text('patientNumber', 'patient_number'));
             $this->dbMap->addPropertyMap(new Db\Text('microchip'));
             $this->dbMap->addPropertyMap(new Db\Text('ownerName', 'owner_name'));
+            $this->dbMap->addPropertyMap(new Db\Text('ownerEmail', 'owner_email'));
+            $this->dbMap->addPropertyMap(new Db\Text('ownerPhone', 'owner_phone'));
+            $this->dbMap->addPropertyMap(new Db\Text('ownerAddress', 'owner_address'));
             $this->dbMap->addPropertyMap(new Db\Text('origin'));
             $this->dbMap->addPropertyMap(new Db\Text('breed'));
             $this->dbMap->addPropertyMap(new Db\Text('colour'));
@@ -238,6 +241,12 @@ class PathCaseMap extends Mapper
         }
         if (!empty($filter['ownerName'])) {
             $filter->appendWhere('a.owner_name = %s AND ', $this->quote($filter['ownerName']));
+        }
+        if (!empty($filter['ownerEmail'])) {
+            $filter->appendWhere('a.owner_email = %s AND ', $this->quote($filter['ownerEmail']));
+        }
+        if (!empty($filter['ownerPhone'])) {
+            $filter->appendWhere('a.owner_phone = %s AND ', $this->quote($filter['ownerPhone']));
         }
         if (!empty($filter['origin'])) {
             $filter->appendWhere('a.origin = %s AND ', $this->quote($filter['origin']));

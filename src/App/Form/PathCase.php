@@ -251,7 +251,6 @@ class PathCase extends \Bs\FormIface
     {
         // Load the object with form data
         \App\Db\PathCaseMap::create()->mapForm($form->getValues(), $this->getPathCase());
-vd($form->getValues());
         // Do Custom Validations
         /** @var \Tk\Form\Field\File $fileField */
         $fileField = $form->getField('files');
