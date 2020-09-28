@@ -62,6 +62,7 @@ class PathCase extends \Bs\FormIface
         $layout->removeRow('breed', 'col');
         $layout->removeRow('specimenCount', 'col-2');
         $layout->removeRow('desexed', 'col-2');
+        $layout->removeRow('ownerPhone', 'col');
 
         $layout->removeRow('microchip', 'col');
 
@@ -124,13 +125,18 @@ class PathCase extends \Bs\FormIface
         $this->appendField(new Field\Checkbox('desexed'))->setTabGroup($tab);
 
         $this->appendField(new Field\Input('ownerName'))->setTabGroup($tab);
+        $this->appendField(new Field\Input('ownerEmail'))->setTabGroup($tab);
+        $this->appendField(new Field\Input('ownerPhone'))->setTabGroup($tab);
+        $this->appendField(new Field\Input('ownerAddress'))->setTabGroup($tab);
         $this->appendField(new Field\Input('origin'))->setTabGroup($tab);
         $this->appendField(new Field\Input('colour'))->setTabGroup($tab);
         $this->appendField(new Field\Input('weight'))->setTabGroup($tab);
-        $this->appendField(new Field\Input('dob'))->setTabGroup($tab)
-            ->setAttr('data-dod', '#path_case-dod')
+        $dob = $this->appendField(new Field\Input('dob'))->setTabGroup($tab)
             ->setAttr('data-precision', '1')
             ->addCss('date tk-age')->setAttr('placeholder', 'dd/mm/yyyy');
+        if ($this->getPathCase()->getDod()) {
+            $dob->setAttr('data-dod', '#path_case-dod');
+        }
 
         $this->appendField(new Field\Input('dod'))->setTabGroup($tab)->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy');
         // END Animal

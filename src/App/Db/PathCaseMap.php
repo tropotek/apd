@@ -116,6 +116,9 @@ class PathCaseMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Text('patientNumber'));
             $this->formMap->addPropertyMap(new Form\Text('microchip'));
             $this->formMap->addPropertyMap(new Form\Text('ownerName'));
+            $this->formMap->addPropertyMap(new Form\Text('ownerEmail'));
+            $this->formMap->addPropertyMap(new Form\Text('ownerPhone'));
+            $this->formMap->addPropertyMap(new Form\Text('ownerAddress'));
             $this->formMap->addPropertyMap(new Form\Text('origin'));
             $this->formMap->addPropertyMap(new Form\Text('breed'));
             $this->formMap->addPropertyMap(new Form\Text('colour'));
