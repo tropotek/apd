@@ -6,6 +6,7 @@ use Tk\Db\Tool;
 use Tk\Form\Field;
 use Tk\Form\Event;
 use Tk\Form;
+use Tk\ObjectUtil;
 use Uni\Db\User;
 
 /**
@@ -164,6 +165,9 @@ class PathCase extends \Bs\FormIface
 
 
         $tab = 'Reporting';
+        $list  = ObjectUtil::getClassConstants($this->getPathCase(), 'REPORT_STATUS');
+        $this->appendField(Field\Select::createSelect('reportStatus', $list)->prependOption('-- Select --', ''))
+            ->setTabGroup($tab);
         $this->appendField(new Field\Textarea('collectedSamples'))
             ->addCss('mce-min')->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
         $this->appendField(new Field\Textarea('grossPathology'))

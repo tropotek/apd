@@ -49,7 +49,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     const SUBMISSION_OTHER          = 'other';
 
     // Report Status
-    const REPORT_STATUS_INTERIM      = 'interim';           //
+    const REPORT_STATUS_INTERIM     = 'interim';           //
     const REPORT_STATUS_COMPLETED   = 'completed';          //
 
 

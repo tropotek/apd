@@ -17,6 +17,7 @@ use App\Db\StorageMap;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Tk\Db\Tool;
+use Tk\Exception;
 use Tk\ObjectUtil;
 use Uni\Db\Permission;
 use Uni\Db\User;
@@ -52,6 +53,10 @@ class TestData extends \Bs\Console\TestData
         // required vars
         $config = \App\Config::getInstance();
         $db = $this->getConfig()->getDb();
+
+        if (!$config->getInstitution()) {
+            throw new Exception('Have you visited the site and finished the install yet! There are no institutions.');
+        }
 
         $this->write('Institution: ' . $config->getInstitution()->getName());
 
