@@ -256,8 +256,6 @@ vd($form->getValues());
         /** @var \Tk\Form\Field\File $fileField */
         $fileField = $form->getField('files');
 
-
-
         $form->addFieldErrors($this->getPathCase()->validate());
         if ($form->hasErrors()) {
             if (!array_key_exists('files', $form->getAllErrors())) {
