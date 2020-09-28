@@ -40,6 +40,9 @@ class PathCaseMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Text('status'));
 
             $this->dbMap->addPropertyMap(new Db\Text('zoonotic'));
+            $this->dbMap->addPropertyMap(new Db\Boolean('zoonoticAlert', 'zoonotic_alert'));
+            $this->dbMap->addPropertyMap(new Db\Text('issue'));
+            $this->dbMap->addPropertyMap(new Db\Boolean('issueAlert', 'issue_alert'));
             $this->dbMap->addPropertyMap(new Db\Integer('specimenCount', 'specimen_count'));
             $this->dbMap->addPropertyMap(new Db\Text('animalName', 'animal_name'));
             $this->dbMap->addPropertyMap(new Db\Text('species'));
@@ -99,6 +102,9 @@ class PathCaseMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Text('submissionType'));
             $this->formMap->addPropertyMap(new Form\Text('status'));
             $this->formMap->addPropertyMap(new Form\Text('zoonotic'));
+            $this->formMap->addPropertyMap(new Form\Boolean('zoonoticAlert'));
+            $this->formMap->addPropertyMap(new Form\Text('issue'));
+            $this->formMap->addPropertyMap(new Form\Boolean('issueAlert'));
             $this->formMap->addPropertyMap(new Form\Integer('specimenCount'));
             $this->formMap->addPropertyMap(new Form\Text('animalName'));
             $this->formMap->addPropertyMap(new Form\Text('species'));
@@ -217,6 +223,12 @@ class PathCaseMap extends Mapper
         }
         if (!empty($filter['desexed'])) {
             $filter->appendWhere('a.desexed = %s AND ', (int)$filter['desexed']);
+        }
+        if (!empty($filter['zoonoticAlert'])) {
+            $filter->appendWhere('a.zoonotic_alert = %s AND ', (int)$filter['zoonoticAlert']);
+        }
+        if (!empty($filter['issueAlert'])) {
+            $filter->appendWhere('a.issue_alert = %s AND ', (int)$filter['issueAlert']);
         }
         if (!empty($filter['patientNumber'])) {
             $filter->appendWhere('a.patient_number = %s AND ', $this->quote($filter['patientNumber']));
