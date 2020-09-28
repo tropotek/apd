@@ -127,7 +127,26 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      * A description of any risks with the animal
      * @var string
      */
-    public $zootonic = '';
+    public $zoonotic = '';
+
+    /**
+     * If true then alert user of this info when viewing the case
+     * @var bool
+     */
+    public $zoonoticAlert = false;
+
+    /**
+     * Any issues the staff should be alerted to when dealing with this animal
+     * @var string
+     */
+    public $issue = '';
+
+    /**
+     * If true then alert user of this info when viewing the case
+     * @var bool
+     */
+    public $issueAlert = false;
+
 
     /**
      * TODO: NOT sure if this is needed
@@ -435,21 +454,75 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     }
 
     /**
-     * @param string $zootonic
+     * @param string $zoonotic
      * @return PathCase
      */
-    public function setZootonic($zootonic) : PathCase
+    public function setZoonotic($zoonotic) : PathCase
     {
-        $this->zootonic = $zootonic;
+        $this->zoonotic = $zoonotic;
         return $this;
     }
 
     /**
      * @return string
      */
-    public function getZootonic() : string
+    public function getZoonotic() : string
     {
-        return $this->zootonic;
+        return $this->zoonotic;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isZoonoticAlert(): bool
+    {
+        return $this->zoonoticAlert;
+    }
+
+    /**
+     * @param bool $zoonoticAlert
+     * @return PathCase
+     */
+    public function setZoonoticAlert(bool $zoonoticAlert): PathCase
+    {
+        $this->zoonoticAlert = $zoonoticAlert;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIssue(): string
+    {
+        return $this->issue;
+    }
+
+    /**
+     * @param string $issue
+     * @return PathCase
+     */
+    public function setIssue(string $issue): PathCase
+    {
+        $this->issue = $issue;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isIssueAlert(): bool
+    {
+        return $this->issueAlert;
+    }
+
+    /**
+     * @param bool $issueAlert
+     * @return PathCase
+     */
+    public function setIssueAlert(bool $issueAlert): PathCase
+    {
+        $this->issueAlert = $issueAlert;
+        return $this;
     }
 
     /**

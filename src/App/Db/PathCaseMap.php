@@ -39,7 +39,7 @@ class PathCaseMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Text('submissionType', 'submission_type'));
             $this->dbMap->addPropertyMap(new Db\Text('status'));
 
-            $this->dbMap->addPropertyMap(new Db\Text('zootonic', 'zootonic'));
+            $this->dbMap->addPropertyMap(new Db\Text('zoonotic'));
             $this->dbMap->addPropertyMap(new Db\Integer('specimenCount', 'specimen_count'));
             $this->dbMap->addPropertyMap(new Db\Text('animalName', 'animal_name'));
             $this->dbMap->addPropertyMap(new Db\Text('species'));
@@ -98,7 +98,7 @@ class PathCaseMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Text('type'));
             $this->formMap->addPropertyMap(new Form\Text('submissionType'));
             $this->formMap->addPropertyMap(new Form\Text('status'));
-            $this->formMap->addPropertyMap(new Form\Text('zootonic'));
+            $this->formMap->addPropertyMap(new Form\Text('zoonotic'));
             $this->formMap->addPropertyMap(new Form\Integer('specimenCount'));
             $this->formMap->addPropertyMap(new Form\Text('animalName'));
             $this->formMap->addPropertyMap(new Form\Text('species'));

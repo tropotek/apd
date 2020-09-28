@@ -215,7 +215,7 @@ class TestData extends \Bs\Console\TestData
 
 
             if (rand(0, 1)) {
-                $case->setZootonic($this->createStr());
+                $case->setZoonotic($this->createStr());
             }
             $case->setSpecimenCount(rand(0, 100));      // TODO: do we really need this???
             $case->setAnimalName($this->createName());

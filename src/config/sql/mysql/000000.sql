@@ -87,13 +87,11 @@ CREATE TABLE IF NOT EXISTS `path_case`
     submission_type VARCHAR(64) NULL DEFAULT '',              -- Direct client/external vet/internal vet/researcher/ Other - Specify
     status VARCHAR(64) NOT NULL DEFAULT '',                   -- Pending/frozen storage/examined/reported/awaiting review (if applicable)/completed
 
-    -- TODO: These fields will be redundant when using the status log
-    --       We should remove these fields...
---    submitted DATETIME DEFAULT NULL,                          --
---    examined DATETIME DEFAULT NULL,                           --
---    finalised DATETIME DEFAULT NULL,                          --
+    zoonotic TEXT,                                              -- If filled show alert to warn user (use session cookie to only show once pre session)
+    zoonotic_alert TINYINT(1) NOT NULL DEFAULT 0,               -- If true then alert user of this info when viewing the case
 
-    zootonic TEXT,                                              -- If filled show alert to warn user (use session cookie to only show once pre session)
+    issue TEXT,                                              -- Any issues the staff should be alerted to when dealing with this animal
+    issue_alert TINYINT(1) NOT NULL DEFAULT 0,               -- If true then alert user of this info when viewing the case
 
     -- Animal/patient details
     -- TODO: in the future create an animal table

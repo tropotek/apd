@@ -144,20 +144,16 @@ class PathCase extends \Bs\FormIface
         $this->appendField(new Field\Input('student'))->setTabGroup($tab);
         $this->appendField(new Field\Input('studentEmail'))->setTabGroup($tab);
 
-//        $this->appendField(new Field\Input('submitted'))->setTabGroup($tab)->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy');
-//        $this->appendField(new Field\Input('examined'))->setTabGroup($tab)->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy');
-//        $this->appendField(new Field\Input('finalised'))->setTabGroup($tab)->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy');
-
-
-        $this->appendField(new Field\Input('zootonic'))->setTabGroup($tab)->setLabel('Zootonic/Other Risks')
-            ->setNotes('Any data here will be alerted to other users viewing this record.');
+        $this->appendField(Field\CheckboxInput::create('zoonotic'))->setTabGroup($tab)->setLabel('Zoonotic/Other Risks')
+            ->setNotes('Tick the checkbox to alert users of this risk when viewing this case.');
 
         $this->appendField(new Field\Checkbox('euthanised'))->setTabGroup($tab);
         $this->appendField(new Field\Input('euthanisedMethod'))->setTabGroup($tab);
 
+        $this->appendField(Field\CheckboxInput::create('issue'))->setTabGroup($tab)
+            ->setNotes('Tick the checkbox to alert users of these issues when viewing this case.');
+
         $this->appendField(new Field\Textarea('clinicalHistory'))
-            ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
-        $this->appendField(new Field\Textarea('addendum'))
             ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
 
 
@@ -178,7 +174,8 @@ class PathCase extends \Bs\FormIface
             ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
         $this->appendField(new Field\Textarea('comments'))
             ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
-        //$this->appendField(new Field\Textarea('notes'));
+        $this->appendField(new Field\Textarea('addendum'))
+            ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
 
 
         $tab = 'Files';
@@ -210,10 +207,6 @@ class PathCase extends \Bs\FormIface
             ->setLabel('Hold Until')->setTabGroup($tab);
         $this->appendField(new Field\Input('disposal'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy')
             ->setLabel('Disposal Completion Date')->setTabGroup($tab);
-
-
-
-
 
         $this->appendField(new Event\Submit('update', array($this, 'doSubmit')));
         $this->appendField(new Event\Submit('save', array($this, 'doSubmit')));
@@ -258,7 +251,7 @@ class PathCase extends \Bs\FormIface
     {
         // Load the object with form data
         \App\Db\PathCaseMap::create()->mapForm($form->getValues(), $this->getPathCase());
-
+vd($form->getValues());
         // Do Custom Validations
         /** @var \Tk\Form\Field\File $fileField */
         $fileField = $form->getField('files');
