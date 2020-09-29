@@ -31,7 +31,7 @@ class CassetteMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Text('number'));
             $this->dbMap->addPropertyMap(new Db\Text('name'));
             $this->dbMap->addPropertyMap(new Db\Integer('qty'));
-            $this->dbMap->addPropertyMap(new Db\Decimal('price'));
+            $this->dbMap->addPropertyMap(new Db\Decimal('cost'));
             $this->dbMap->addPropertyMap(new Db\Text('comments'));
             $this->dbMap->addPropertyMap(new Db\Text('notes'));
             $this->dbMap->addPropertyMap(new Db\Date('modified'));
@@ -55,7 +55,7 @@ class CassetteMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Text('number'));
             $this->formMap->addPropertyMap(new Form\Text('name'));
             $this->formMap->addPropertyMap(new Form\Integer('qty'));
-            $this->formMap->addPropertyMap(new Form\Decimal('price'));
+            $this->formMap->addPropertyMap(new Form\Decimal('cost'));
             $this->formMap->addPropertyMap(new Form\Text('comments'));
             $this->formMap->addPropertyMap(new Form\Text('notes'));
 
@@ -116,8 +116,8 @@ class CassetteMap extends Mapper
         if (!empty($filter['qty'])) {
             $filter->appendWhere('a.qty = %s AND ', (int)$filter['qty']);
         }
-        if (!empty($filter['price'])) {
-            $filter->appendWhere('a.price = %s AND ', (float)$filter['price']);
+        if (!empty($filter['cost'])) {
+            $filter->appendWhere('a.cost = %s AND ', (float)$filter['cost']);
         }
 
         if (!empty($filter['exclude'])) {

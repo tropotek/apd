@@ -2,6 +2,7 @@
 namespace App\Db;
 
 use Bs\Db\Traits\TimestampTrait;
+use Tk\Money;
 use Uni\Db\Traits\InstitutionTrait;
 
 /**
@@ -33,9 +34,9 @@ class Service extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 
     /**
      * This should be a cost per service
-     * @var float
+     * @var Money
      */
-    public $price = 0;
+    public $cost = null;
 
     /**
      * public comments
@@ -67,6 +68,7 @@ class Service extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     {
         $this->_TimestampTrait();
         $this->institutionId = $this->getConfig()->getInstitutionId();
+        $this->cost = Money::create(0);
     }
 
     /**
@@ -88,21 +90,24 @@ class Service extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     }
 
     /**
-     * @param float $price
+     * @param Money|float $cost
      * @return Service
      */
-    public function setPrice($price) : Service
+    public function setCost($cost) : Service
     {
-        $this->price = $price;
+        if (!is_object($cost)) {
+            $cost = Money::create((float)$cost);
+        }
+        $this->cost = $cost;
         return $this;
     }
 
     /**
-     * @return float
+     * @return Money
      */
-    public function getPrice() : float
+    public function getCost() : Money
     {
-        return $this->price;
+        return $this->cost;
     }
 
     /**
@@ -157,9 +162,9 @@ class Service extends \Tk\Db\Map\Model implements \Tk\ValidInterface
             $errors['name'] = 'Invalid value: name';
         }
 
-        if (!$this->price) {
-            $errors['price'] = 'Invalid value: price';
-        }
+//        if (!$this->cost) {
+//            $errors['cost'] = 'Invalid value: cost';
+//        }
 
         return $errors;
     }

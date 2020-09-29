@@ -80,16 +80,9 @@ class PathCase extends \Bs\FormIface
                 ->addCss('tk-input-lock')
                 ->setAttr('placeholder', $this->getPathCase()->getVolatilePathologyId());
 
-        $list  = $this->getConfig()->getUserMapper()->findFiltered(array('institutionId'=> $this->getPathCase()->getInstitutionId(), 'type' => User::TYPE_STAFF), Tool::create('name_first'));
-        $this->appendField(Field\Select::createSelect('userId', $list)->prependOption('-- Select --', ''))
-            ->setTabGroup($tab)->setLabel('Submitter');
-
-        // TODO: Add ability to create a new client with a button and dialog box.
-        // TODO: Not sure if the client should be linked to the Case???? maybe they are only linked to Requests...
-//        $list  = ClientMap::create()->findFiltered(array('institutionId'=> $this->getPathCase()->getInstitutionId()), Tool::create('name'));
-//        $this->appendField(Field\Select::createSelect('clientId', $list)->prependOption('-- Select --', ''))
-//            ->setTabGroup($tab)->setLabel('Client/Clinician');
-
+        $list  = ClientMap::create()->findFiltered(array('institutionId'=> $this->getPathCase()->getInstitutionId()), Tool::create('name'));
+        $this->appendField(Field\Select::createSelect('clientId', $list)->prependOption('-- Select --', ''))
+            ->setTabGroup($tab)->setLabel('Submitting Client')->setNotes('This is the Client Record that will be billed if sent.');
 
         if (!$this->getPathCase()->getType()) {
             $list = \Tk\ObjectUtil::getClassConstants($this->getPathCase(), 'TYPE_');
@@ -125,10 +118,11 @@ class PathCase extends \Bs\FormIface
             ->setTabGroup($tab);
         $this->appendField(new Field\Checkbox('desexed'))->setTabGroup($tab);
 
-        $this->appendField(new Field\Input('ownerName'))->setTabGroup($tab);
-        $this->appendField(new Field\Input('ownerEmail'))->setTabGroup($tab);
-        $this->appendField(new Field\Input('ownerPhone'))->setTabGroup($tab);
-        $this->appendField(new Field\Input('ownerAddress'))->setTabGroup($tab);
+        $list  = ClientMap::create()->findFiltered(array('institutionId'=> $this->getPathCase()->getInstitutionId()), Tool::create('name'));
+        $this->appendField(Field\Select::createSelect('ownerId', $list)->prependOption('-- Select --', ''))
+            ->setTabGroup($tab)->setLabel('Owner Name')->setNotes('This is the Client Record of the animal owner.');
+        ///$this->appendField(new Field\Input('ownerName'))->setTabGroup($tab);
+        ///
         $this->appendField(new Field\Input('origin'))->setTabGroup($tab);
         $this->appendField(new Field\Input('colour'))->setTabGroup($tab);
         $this->appendField(new Field\Input('weight'))->setTabGroup($tab);

@@ -29,30 +29,19 @@ class Client extends \Bs\FormIface
     {
         $layout = $this->getForm()->getRenderer()->getLayout();
 
-        $layout->removeRow('billingEmail', 'col');
+        $layout->removeRow('email', 'col');
         $layout->removeRow('fax', 'col');
         $layout->removeRow('postcode', 'col');
         $layout->removeRow('country', 'col');
-        $layout->removeRow('bPostcode', 'col');
-        $layout->removeRow('bCountry', 'col');
 
         $tab = 'Details';
-
-        $this->appendField(new Field\Select(
-            'userId',
-            $this->getConfig()->getUserMapper()->findFiltered(array('institutionId' => $this->getClient()->getInstitutionId()))
-        ))->prependOption('-- None --', '')->setLabel('')->setTabGroup($tab);
-        $this->appendField(new Field\Input('accountCode'))->setTabGroup($tab)->setNotes('Add an internal account code if available.');
-
-//        $this->appendField(new Field\Input('uid'))->setTabGroup($tab);
         $this->appendField(new Field\Input('name'))->setTabGroup($tab);
         $this->appendField(new Field\Input('email'))->setTabGroup($tab);
-        $this->appendField(new Field\Input('billingEmail'))->setTabGroup($tab);
         $this->appendField(new Field\Input('phone'))->setTabGroup($tab);
         $this->appendField(new Field\Input('fax'))->setTabGroup($tab);
+        $this->appendField(new Field\Input('accountCode'))->setTabGroup($tab)
+            ->setNotes('The clients billing account code if available.');
         $this->appendField(new Field\Textarea('notes'))->setTabGroup($tab);
-
-        //$this->appendField(new Field\Select('addressId', array()))->prependOption('-- Select --', '');
 
         $tab = 'Address';
         $this->appendField(new Field\Input('street'))->setTabGroup($tab);
@@ -61,37 +50,10 @@ class Client extends \Bs\FormIface
         $this->appendField(new Field\Input('state'))->setTabGroup($tab);
         $this->appendField(new Field\Input('country'))->setTabGroup($tab);
 
-        $tab = 'Billing';
-        $this->appendField(new Field\Checkbox('useAddress'))->setLabel('')->setCheckboxLabel('Use Address as Billing Address')->setTabGroup($tab);
-        $this->appendField(new Field\Input('bStreet'))->setLabel('Billing Street')->setTabGroup($tab);
-        $this->appendField(new Field\Input('bCity'))->setLabel('Billing City')->setTabGroup($tab);
-        $this->appendField(new Field\Input('bPostcode'))->setLabel('Billing Postcode')->setTabGroup($tab);
-        $this->appendField(new Field\Input('bState'))->setLabel('Billing State')->setTabGroup($tab);
-        $this->appendField(new Field\Input('bCountry'))->setLabel('Billing Country')->setTabGroup($tab);
 
         $this->appendField(new Event\Submit('update', array($this, 'doSubmit')));
         $this->appendField(new Event\Submit('save', array($this, 'doSubmit')));
         $this->appendField(new Event\Link('cancel', $this->getBackUrl()));
-
-        $js = <<<JS
-jQuery(function($) {
-  // Force the use billing address checkbox off
-    $('#clientBilling input').not('#client-useAddress').on('change', function () {
-        if ($('#clientBilling input').not('#client-useAddress').filter(function () { return $.trim($(this).val()).length === 0}).length !== 0) {
-          $('#clientBilling #client-useAddress').prop('checked', false);
-        }
-    });
-    $('#client-useAddress').on('change', function () {
-      if ($(this).prop('checked')) {
-        $('#clientBilling input').not('#client-useAddress').attr('disabled', 'disabled');
-      } else {
-        $('#clientBilling input').not('#client-useAddress').removeAttr('disabled');
-      }
-    });
-});
-JS;
-        $this->getRenderer()->getTemplate()->appendJs($js);
-
 
     }
 

@@ -31,17 +31,17 @@
 
 -- ----------------------------
 --  company/client table
+--  Animal Owner, Case Submitter
 -- ----------------------------
 CREATE TABLE IF NOT EXISTS client
 (
     id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     institution_id INT(10) UNSIGNED NOT NULL DEFAULT 0,
     user_id INT(10) UNSIGNED NOT NULL DEFAULT 0,                -- Use this if the client is a staff member
-    uid VARCHAR(64) NOT NULL DEFAULT '',                        -- Farm Shed id
-    account_code VARCHAR(64) NOT NULL DEFAULT '',               --
-    name VARCHAR(255) NOT NULL DEFAULT '',
+    uid VARCHAR(64) NOT NULL DEFAULT '',                        -- Unused at this time, [Farm Shed id???]
+    account_code VARCHAR(64) NOT NULL DEFAULT '',               -- institution/business accounting code
+    name VARCHAR(255) NOT NULL DEFAULT '',                      -- Client, Dep., Business name
     email VARCHAR(255) NOT NULL DEFAULT '',
-    billing_email VARCHAR(255) NOT NULL DEFAULT '',             -- use email if blank
     phone VARCHAR(32) NOT NULL DEFAULT '',
     fax VARCHAR(32) NOT NULL DEFAULT '',
 
@@ -50,13 +50,6 @@ CREATE TABLE IF NOT EXISTS client
     country VARCHAR(255) NOT NULL DEFAULT '',
     state VARCHAR(255) NOT NULL DEFAULT '',
     postcode VARCHAR(255) NOT NULL DEFAULT '',
-
-    use_address TINYINT(1) NOT NULL DEFAULT 1,                  -- use address as billing address
-    b_street VARCHAR(255) NOT NULL DEFAULT '',
-    b_city VARCHAR(255) NOT NULL DEFAULT '',
-    b_country VARCHAR(255) NOT NULL DEFAULT '',
-    b_state VARCHAR(255) NOT NULL DEFAULT '',
-    b_postcode VARCHAR(255) NOT NULL DEFAULT '',
 
     notes TEXT,                                                 -- Staff only Notes
     del TINYINT(1) NOT NULL DEFAULT 0,
@@ -73,10 +66,12 @@ CREATE TABLE IF NOT EXISTS `path_case`
 (
     id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     institution_id INT(10) UNSIGNED NOT NULL DEFAULT 0,
-    user_id INT(10) UNSIGNED NOT NULL DEFAULT 0,              -- Case Author
-    client_id INT(10) UNSIGNED NOT NULL DEFAULT 0,            -- Client/Clinician Could be an external users...
+    user_id INT(10) UNSIGNED NOT NULL DEFAULT 0,              -- Cause author, staff who created the case record
+    client_id INT(10) UNSIGNED NOT NULL DEFAULT 0,            -- The submitting client_id we are billing (auto populate owner_id  if 0 as they are usually the same)
+    owner_id INT(10) UNSIGNED NOT NULL DEFAULT 0,             -- The animal owner client_id
 
     pathologist_id INT(10) UNSIGNED NOT NULL DEFAULT 0,       -- Pathologist user_id from the user table
+
     resident VARCHAR(128) NOT NULL DEFAULT '',                -- Name of the resident Pathologist???
     student VARCHAR(128) NOT NULL DEFAULT '',                 --
     student_email VARCHAR(128) NOT NULL DEFAULT '',           --
@@ -85,10 +80,14 @@ CREATE TABLE IF NOT EXISTS `path_case`
     pathology_id VARCHAR(64) NOT NULL DEFAULT '',             -- Pathology Number  (ie: title, name)
     type VARCHAR(64) NOT NULL DEFAULT '',                     -- BIOPSY, NECROPSY, ...
     submission_type VARCHAR(64) NULL DEFAULT '',              -- Direct client/external vet/internal vet/researcher/ Other - Specify
-    status VARCHAR(64) NOT NULL DEFAULT '',                   -- Pending/frozen storage/examined/reported/awaiting review (if applicable)/completed
 
-    zoonotic TEXT,                                              -- If filled show alert to warn user (use session cookie to only show once pre session)
-    zoonotic_alert TINYINT(1) NOT NULL DEFAULT 0,               -- If true then alert user of this info when viewing the case
+    status VARCHAR(64) NOT NULL DEFAULT '',                   -- Pending/frozen storage/examined/reported/awaiting review (if applicable)/completed
+    report_status VARCHAR(64) NOT NULL DEFAULT '',            -- The current status of the report.
+    account_status VARCHAR(64) NOT NULL DEFAULT '',           -- The current status of the billing account [Pending, billed, paid]
+    cost DECIMAL(9,2) NOT NULL DEFAULT 0.0,                   -- Money amount to invoice for External
+
+    zoonotic TEXT,                                            -- If filled show alert to warn user (use session cookie to only show once pre session)
+    zoonotic_alert TINYINT(1) NOT NULL DEFAULT 0,             -- If true then alert user of this info when viewing the case
 
     issue TEXT,                                              -- Any issues the staff should be alerted to when dealing with this animal
     issue_alert TINYINT(1) NOT NULL DEFAULT 0,               -- If true then alert user of this info when viewing the case
@@ -102,10 +101,11 @@ CREATE TABLE IF NOT EXISTS `path_case`
     desexed TINYINT(1) NOT NULL DEFAULT 0,                    --  ??? (should we use terms as spayed Female, gelding, steer, etc - gets to complex.)
     patient_number VARCHAR(128) NOT NULL DEFAULT '',          --
     microchip VARCHAR(128) NOT NULL DEFAULT '',               --
-    owner_name VARCHAR(128) NOT NULL DEFAULT '',              --
-    owner_email VARCHAR(128) NOT NULL DEFAULT '',             --
-    owner_phone VARCHAR(32) NOT NULL DEFAULT '',              --
-    owner_address TEXT,                                       --
+    -- moved to client table (owner_id)
+--    owner_name VARCHAR(128) NOT NULL DEFAULT '',              --
+--    owner_email VARCHAR(128) NOT NULL DEFAULT '',             --
+--    owner_phone VARCHAR(32) NOT NULL DEFAULT '',              --
+--    owner_address TEXT,                                       --
     origin VARCHAR(128) NOT NULL DEFAULT '',                  -- ?? For now a TEXT box, but NOT sure if this should be lookup table
     breed VARCHAR(128) NOT NULL DEFAULT '',                   --
     colour VARCHAR(128) NOT NULL DEFAULT '',                  --
@@ -123,7 +123,6 @@ CREATE TABLE IF NOT EXISTS `path_case`
     --
 
     -- Reporting
-    report_status VARCHAR(64) NOT NULL DEFAULT '',            -- The current status of the report. [TODO: Should the main status be used???]
     collected_samples TEXT,                                   -- Save Tissues/Frozen Samples
     clinical_history TEXT,                                    --
     gross_pathology TEXT,                                     --
@@ -182,7 +181,7 @@ CREATE TABLE IF NOT EXISTS service
     institution_id INT(10) UNSIGNED NOT NULL DEFAULT 0,
 
     name VARCHAR(64) NOT NULL DEFAULT '',
-    price DECIMAL(9,2) NOT NULL DEFAULT 0.0,                  -- This should be a cost per service
+    cost DECIMAL(9,2) NOT NULL DEFAULT 0.0,                   -- This should be a cost per service
     comments TEXT,                                            -- public comments
     notes TEXT,                                               -- Staff only notes
 
@@ -206,7 +205,7 @@ CREATE TABLE IF NOT EXISTS cassette
     number VARCHAR(64) NOT NULL DEFAULT '',                   -- Generally just increments by 1 for each group in a case
     name VARCHAR(64) NOT NULL DEFAULT '',                     -- Usually the tissue type name
     qty INT(10) NOT NULL DEFAULT 0,                           -- Quantity of samples available
-    price DECIMAL(9,2) NOT NULL DEFAULT 0.0,                  -- I assume this is price per sample ???
+    cost DECIMAL(9,2) NOT NULL DEFAULT 0.0,                   -- I assume this is price per sample ???
     comments TEXT,                                            -- public comments
     notes TEXT,                                               -- Staff only notes
 
@@ -230,7 +229,7 @@ CREATE TABLE IF NOT EXISTS request
     client_id INT(10) UNSIGNED NOT NULL DEFAULT 0,            -- The client requesting the samples (NOT sure if this could be staff, client, etc)
     status VARCHAR(64) NOT NULL DEFAULT '',                   -- ???
     qty INT(10) NOT NULL DEFAULT 0,                           -- Quantity of samples requested (check available tissue.qty on submit)
-    price DECIMAL(9,2) NOT NULL DEFAULT 0.0,                  -- The total cost based on qty requested + the service cost
+    cost DECIMAL(9,2) NOT NULL DEFAULT 0.0,                   -- The total cost based on qty requested + the service cost
     comments TEXT,                                            -- public comments
     notes TEXT,                                               -- Staff only notes
 

@@ -31,22 +31,15 @@ class ClientMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Text('accountCode', 'account_code'));
             $this->dbMap->addPropertyMap(new Db\Text('name'));
             $this->dbMap->addPropertyMap(new Db\Text('email'));
-            $this->dbMap->addPropertyMap(new Db\Text('billingEmail', 'billing_email'));
             $this->dbMap->addPropertyMap(new Db\Text('phone'));
             $this->dbMap->addPropertyMap(new Db\Text('fax'));
+            $this->dbMap->addPropertyMap(new Db\Text('address'));
 
             $this->dbMap->addPropertyMap(new Db\Text('street'));
             $this->dbMap->addPropertyMap(new Db\Text('city'));
             $this->dbMap->addPropertyMap(new Db\Text('country'));
             $this->dbMap->addPropertyMap(new Db\Text('state'));
             $this->dbMap->addPropertyMap(new Db\Text('postcode'));
-
-            $this->dbMap->addPropertyMap(new Db\Boolean('useAddress', 'use_address'));
-            $this->dbMap->addPropertyMap(new Db\Text('bStreet', 'b_street'));
-            $this->dbMap->addPropertyMap(new Db\Text('bCity', 'b_city'));
-            $this->dbMap->addPropertyMap(new Db\Text('bCountry', 'b_country'));
-            $this->dbMap->addPropertyMap(new Db\Text('bState', 'b_state'));
-            $this->dbMap->addPropertyMap(new Db\Text('bPostcode', 'b_postcode'));
 
             $this->dbMap->addPropertyMap(new Db\Text('notes'));
             $this->dbMap->addPropertyMap(new Db\Date('modified'));
@@ -70,7 +63,6 @@ class ClientMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Text('accountCode'));
             $this->formMap->addPropertyMap(new Form\Text('name'));
             $this->formMap->addPropertyMap(new Form\Text('email'));
-            $this->formMap->addPropertyMap(new Form\Text('billingEmail'));
             $this->formMap->addPropertyMap(new Form\Text('phone'));
             $this->formMap->addPropertyMap(new Form\Text('fax'));
 
@@ -79,13 +71,6 @@ class ClientMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Text('country'));
             $this->formMap->addPropertyMap(new Form\Text('state'));
             $this->formMap->addPropertyMap(new Form\Text('postcode'));
-
-            $this->formMap->addPropertyMap(new Form\Boolean('useAddress'));
-            $this->formMap->addPropertyMap(new Form\Text('bStreet'));
-            $this->formMap->addPropertyMap(new Form\Text('bCity'));
-            $this->formMap->addPropertyMap(new Form\Text('bCountry'));
-            $this->formMap->addPropertyMap(new Form\Text('bState'));
-            $this->formMap->addPropertyMap(new Form\Text('bPostcode'));
 
             $this->formMap->addPropertyMap(new Form\Text('notes'));
 
@@ -146,9 +131,6 @@ class ClientMap extends Mapper
         if (!empty($filter['email'])) {
             $filter->appendWhere('a.email = %s AND ', $this->quote($filter['email']));
         }
-        if (!empty($filter['billingEmail'])) {
-            $filter->appendWhere('a.billing_email = %s AND ', $this->quote($filter['billingEmail']));
-        }
         if (!empty($filter['phone'])) {
             $filter->appendWhere('a.phone = %s AND ', $this->quote($filter['phone']));
         }
@@ -156,10 +138,6 @@ class ClientMap extends Mapper
             $filter->appendWhere('a.fax = %s AND ', $this->quote($filter['fax']));
         }
 
-
-//        if (!empty($filter['street'])) {
-//            $filter->appendWhere('a.street = %s AND ', $this->quote($filter['street']));
-//        }
         if (!empty($filter['city'])) {
             $filter->appendWhere('a.city = %s AND ', $this->quote($filter['city']));
         }
@@ -171,25 +149,6 @@ class ClientMap extends Mapper
         }
         if (!empty($filter['postcode'])) {
             $filter->appendWhere('a.postcode = %s AND ', $this->quote($filter['postcode']));
-        }
-
-        if (!empty($filter['useAddress'])) {
-            $filter->appendWhere('a.use_address = %s AND ', (int)$filter['useAddress']);
-        }
-//        if (!empty($filter['bStreet'])) {
-//            $filter->appendWhere('a.b_street = %s AND ', $this->quote($filter['bStreet']));
-//        }
-        if (!empty($filter['bCity'])) {
-            $filter->appendWhere('a.b_city = %s AND ', $this->quote($filter['bCity']));
-        }
-        if (!empty($filter['bCountry'])) {
-            $filter->appendWhere('a.b_country = %s AND ', $this->quote($filter['bCountry']));
-        }
-        if (!empty($filter['bState'])) {
-            $filter->appendWhere('a.b_state = %s AND ', $this->quote($filter['bState']));
-        }
-        if (!empty($filter['bPostcode'])) {
-            $filter->appendWhere('a.b_postcode = %s AND ', $this->quote($filter['bPostcode']));
         }
 
         if (!empty($filter['exclude'])) {

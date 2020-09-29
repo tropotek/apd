@@ -2,6 +2,7 @@
 namespace App\Db;
 
 use App\Db\Traits\ClientTrait;
+use App\Db\Traits\OwnerTrait;
 use App\Db\Traits\PathologistTrait;
 use App\Db\Traits\StorageTrait;
 use Bs\Db\Status;
@@ -9,6 +10,7 @@ use Bs\Db\Traits\StatusTrait;
 use Bs\Db\Traits\TimestampTrait;
 use Bs\Db\Traits\UserTrait;
 use Tk\Db\Tool;
+use Tk\Money;
 use Uni\Db\Traits\InstitutionTrait;
 
 /**
@@ -22,6 +24,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     use TimestampTrait;
     use InstitutionTrait;
     use ClientTrait;
+    use OwnerTrait;
     use StorageTrait;
     use StatusTrait;
     use UserTrait;
@@ -49,9 +52,14 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     const SUBMISSION_OTHER          = 'other';
 
     // Report Status
-    const REPORT_STATUS_INTERIM     = 'interim';           //
+    const REPORT_STATUS_INTERIM     = 'interim';            //
     const REPORT_STATUS_COMPLETED   = 'completed';          //
 
+    // Report Status
+    const ACCOUNT_STATUS_PENDING     = 'pending';           //
+    const ACCOUNT_STATUS_INVOICED    = 'invoiced';          //
+    const ACCOUNT_STATUS_PAID        = 'paid';              //
+    const ACCOUNT_STATUS_CANCELLED   = 'cancelled';         //
 
     // After Care Options
     const AC_GENERAL                = 'general';
@@ -77,10 +85,17 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public $userId = 0;
 
     /**
-     * Client/Clinician
+     * Submitting Client (the billable client)
      * @var int
      */
     public $clientId = 0;
+
+    /**
+     * Animal Owner, (the owner client id)
+     * Generally the same as client ID, so pre populate in new cases when this is 0
+     * @var int
+     */
+    public $ownerId = 0;
 
     /**
      * userId of the pathologist user
@@ -128,6 +143,28 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      */
     public $status = 'pending';
 
+
+    // TODO: should report, invoice objects be created to manage these statuses
+    //       This would allow for more control
+    /**
+     *
+     * @var string
+     */
+    public $reportStatus = 'interim';
+
+    /**
+     *
+     * @var string
+     */
+    public $accountStatus = 'pending';
+
+
+    /**
+     * This should be a cost for the case billed to the clientId
+     * @var Money
+     */
+    public $cost = null;
+
     /**
      * A description of any risks with the animal
      * @var string
@@ -159,6 +196,9 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      */
     public $specimenCount = 1;
 
+
+    // TODO: Should the animal be its own record ?????????
+
     /**
      * @var string
      */
@@ -188,26 +228,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      * @var string
      */
     public $microchip = '';
-
-    /**
-     * @var string
-     */
-    public $ownerName = '';
-
-    /**
-     * @var string
-     */
-    public $ownerEmail = '';
-
-    /**
-     * @var string
-     */
-    public $ownerPhone = '';
-
-    /**
-     * @var string
-     */
-    public $ownerAddress = '';
 
     /**
      * TODO: For now a TEXT box, but NOT sure if this should be lookup table
@@ -274,12 +294,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      * @var \DateTime
      */
     public $disposal = null;
-
-    /**
-     *
-     * @var string
-     */
-    public $reportStatus = 'interim';
 
     /**
      * @var string
@@ -441,6 +455,27 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
             $this->setPathologyId($this->getVolatilePathologyId());
         }
         return parent::insert();
+    }
+
+    /**
+     * @param Money|float $cost
+     * @return PathCase
+     */
+    public function setCost($cost) : PathCase
+    {
+        if (!is_object($cost)) {
+            $cost = Money::create((float)$cost);
+        }
+        $this->cost = $cost;
+        return $this;
+    }
+
+    /**
+     * @return Money
+     */
+    public function getCost() : Money
+    {
+        return $this->cost;
     }
 
     /**
@@ -684,68 +719,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public function setOwnerName($ownerName) : PathCase
     {
         $this->ownerName = $ownerName;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getOwnerName() : string
-    {
-        return $this->ownerName;
-    }
-
-    /**
-     * @return string
-     */
-    public function getOwnerEmail(): string
-    {
-        return $this->ownerEmail;
-    }
-
-    /**
-     * @param string $ownerEmail
-     * @return PathCase
-     */
-    public function setOwnerEmail(string $ownerEmail): PathCase
-    {
-        $this->ownerEmail = $ownerEmail;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getOwnerPhone(): string
-    {
-        return $this->ownerPhone;
-    }
-
-    /**
-     * @param string $ownerPhone
-     * @return PathCase
-     */
-    public function setOwnerPhone(string $ownerPhone): PathCase
-    {
-        $this->ownerPhone = $ownerPhone;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getOwnerAddress(): string
-    {
-        return $this->ownerAddress;
-    }
-
-    /**
-     * @param string $ownerAddress
-     * @return PathCase
-     */
-    public function setOwnerAddress(string $ownerAddress): PathCase
-    {
-        $this->ownerAddress = $ownerAddress;
         return $this;
     }
 
@@ -1264,9 +1237,9 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
             $errors['patientNumber'] = 'Invalid value: patientNumber';
         }
 
-        if (!$this->ownerName) {
-            $errors['ownerName'] = 'Invalid value: ownerName';
-        }
+//        if (!$this->ownerName) {
+//            $errors['ownerName'] = 'Invalid value: ownerName';
+//        }
 
         return $errors;
     }

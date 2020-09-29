@@ -106,12 +106,12 @@ class NavRendererHandler implements Subscriber
             $menu->append(Item::create('Mail Log', \Uni\Uri::createHomeUrl(MailLog::createMailLogUrl('/manager.html', $this->getAuthUser()->getInstitution())), 'fa fa-envelope'));
         }
         if ($user->isStaff()) {
-//            if ($user->hasPermission(Permission::MANAGE_SITE))
-//                $menu->append(Item::create('Settings', \Uni\Uri::createHomeUrl('/settings.html'), 'fa fa-cogs'));
+            if ($user->hasPermission(Permission::MANAGE_SITE))
+                $menu->append(Item::create('Settings', \Uni\Uri::createHomeUrl('/settings.html'), 'fa fa-cogs'));
 
             // Temp links
 
-            //$menu->append(Item::create('Client List', \Uni\Uri::createHomeUrl('/clientManager.html'), 'fa fa-question'));
+            $menu->append(Item::create('Client List', \Uni\Uri::createHomeUrl('/clientManager.html'), 'fa fa-building'));
             //$menu->append(Item::create('Storage List', \Uni\Uri::createHomeUrl('/storageManager.html'), 'fa fa-question'));
             //$menu->append(Item::create('Service List', \Uni\Uri::createHomeUrl('/serviceManager.html'), 'fa fa-question'));
             $menu->append(Item::create('Cases', \Uni\Uri::createHomeUrl('/pathCaseManager.html'), 'fa fa-paw'));

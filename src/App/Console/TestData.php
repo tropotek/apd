@@ -18,6 +18,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Tk\Db\Tool;
 use Tk\Exception;
+use Tk\Money;
 use Tk\ObjectUtil;
 use Uni\Db\Permission;
 use Uni\Db\User;
@@ -103,28 +104,6 @@ class TestData extends \Bs\Console\TestData
             }
         }
 
-//        $db->exec('DELETE FROM `address` WHERE `postcode` = \'0000\'');
-//        for($i = 0; $i < 50; $i++) {
-//            $address = new Address();
-//            $address->setNumber(rand(3, 3982));
-//            $address->setStreet($this->createWords(rand(1, 3)));
-//            $address->setCity(ucwords($this->createWords(rand(1, 2))));
-//            $address->setCountry(ucwords($this->createWords(rand(1, 2))));
-//            $address->setState(ucwords($this->createWords(rand(1, 2))));
-//            $address->setPostcode('0000');
-//            $address->setAddress(
-//                $address->getNumber() . ' ' .
-//                $address->getStreet() . ' ' .
-//                $address->getCity() . ' ' .
-//                $address->getState() . ' ' .
-//                $address->getCountry() . ' ' .
-//                $address->getPostcode()
-//            );
-//            $address->setMapLat(-40.847602844238);
-//            $address->setMapLng(137.701782226560);
-//            $address->save();
-//        }
-
         $db->exec('DELETE FROM `client` WHERE `notes` = \'***\' ');
         for($i = 0; $i < 25; $i++) {
             $client = new Client();
@@ -132,8 +111,7 @@ class TestData extends \Bs\Console\TestData
             $client->setUid($this->createStr(6));
             $client->setName($this->createName());
             $client->setEmail($this->createUniqueEmail());
-            if (rand(0, 1))
-                $client->setBillingEmail($this->createUniqueEmail());
+
             $client->setPhone($this->createStr(10, '1234567890'));
             if (rand(0, 1))
                 $client->setFax($this->createStr(10, '1234567890'));
@@ -144,14 +122,6 @@ class TestData extends \Bs\Console\TestData
             $client->setState(ucwords($this->createWords(rand(1, 2))));
             $client->setPostcode($this->createStr(4, '1234567890'));
 
-            if (rand(0, 1)) {
-                $client->setUseAddress(false);
-                $client->setBStreet($this->createWords(rand(1, 3)));
-                $client->setBCity(ucwords($this->createWords(rand(1, 2))));
-                $client->setBCountry(ucwords($this->createWords(rand(1, 2))));
-                $client->setBState(ucwords($this->createWords(rand(1, 2))));
-                $client->setBPostcode($this->createStr(4, '1234567890'));
-            }
 
             $client->setNotes('***');
             $client->save();
@@ -172,7 +142,7 @@ class TestData extends \Bs\Console\TestData
         for($i = 0; $i < 10; $i++) {
             $service = new Service();
             $service->setName($this->createName());
-            $service->setPrice(rand(1, 50) . '.' . rand(0, 99));
+            $service->setCost(rand(1, 50) . '.' . rand(0, 99));
             $service->setNotes('***');
             $service->save();
         }
@@ -185,6 +155,9 @@ class TestData extends \Bs\Console\TestData
             /** @var Client $client */
             $client = ClientMap::create()->findAll(Tool::create('RAND()'))->current();
             $case->setClientId($client->getId());
+            $client = ClientMap::create()->findAll(Tool::create('RAND()'))->current();
+            $case->setOwnerId($client->getId());
+
             $staff = $this->getConfig()->getUserMapper()->findFiltered(array('type' => 'staff'), Tool::create('RAND()'))->current();
             $case->setUserId($staff->getId());
             $case->setType(rand(0,1) ? PathCase::TYPE_NECROPSY : PathCase::TYPE_BIOPSY);
@@ -203,9 +176,9 @@ class TestData extends \Bs\Console\TestData
             $case->setStatus(PathCase::STATUS_PENDING);
             $case->setReportStatus(rand(0, 1) ? PathCase::REPORT_STATUS_INTERIM : PathCase::REPORT_STATUS_COMPLETED);
 
-            if (rand(0, 1)) {
+            if (rand(0, 1))
                 $case->setZoonotic($this->createStr());
-            }
+
             $case->setSpecimenCount(rand(0, 100));      // TODO: do we really need this???
             $case->setAnimalName($this->createName());
             $case->setSpecies($this->createSpecies());
@@ -214,11 +187,15 @@ class TestData extends \Bs\Console\TestData
             $case->setPatientNumber($this->createStr(8, '123456789'));
             $case->setMicrochip($this->createStr(12, '1234567890'));
             $case->setOwnerName($this->createName() . ' ' . $this->createName());
-            $case->setOwnerEmail($this->createUniqueEmail());
-            $case->setOwnerPhone($this->createPhone());
-            $case->setOwnerAddress($this->createAddress());
+//            $case->setOwnerEmail($this->createUniqueEmail());
+//            $case->setOwnerPhone($this->createPhone());
+//            $case->setOwnerAddress($this->createAddress());
             $case->setOrigin($this->createStr());
             $case->setBreed($this->createBreed());
+
+            if (rand(0, 1))
+                $case->setCost(Money::create((float)(rand(10, 1500) . '.' . rand(0, 99))));
+
             $case->setColour($this->createColourString());
             $case->setWeight(rand(0, 50) . '.' . rand(0, 99));
             $case->setDob($this->createRandomDate());
@@ -296,7 +273,7 @@ class TestData extends \Bs\Console\TestData
             $cassette->setNumber(Cassette::getNextNumber($cassette->getPathCaseId()));
             $cassette->setName($this->createStr());
             $cassette->setQty(rand(1, 9));
-            $cassette->setPrice(rand(1, 50) . '.' . rand(0, 99));
+            $cassette->setCost(rand(1, 50) . '.' . rand(0, 99));
             if (rand(0,1)) {
                 $cassette->setComments($this->createLipsumHtml(rand(1, 8)));
             }
@@ -323,7 +300,7 @@ class TestData extends \Bs\Console\TestData
             $request->setClientId($client->getId());
 
             $request->setQty(rand(1, $cassette->getQty()));
-            $request->setPrice($service->getPrice()*$request->getQty());
+            $request->setCost($service->getCost()*$request->getQty());
             if (rand(0,1)) {
                 $request->setComments($this->createLipsumHtml(rand(1, 8)));
             }

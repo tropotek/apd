@@ -8,6 +8,7 @@ use App\Db\Traits\ServiceTrait;
 use Bs\Db\Status;
 use Bs\Db\Traits\StatusTrait;
 use Bs\Db\Traits\TimestampTrait;
+use Tk\Money;
 
 /**
  * @author Mick Mifsud
@@ -68,9 +69,9 @@ class Request extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 
     /**
      * The total cost based on qty requested + the service cost
-     * @var float
+     * @var Money
      */
-    public $price = 0;
+    public $cost = null;
 
     /**
      * public comments
@@ -101,7 +102,7 @@ class Request extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public function __construct()
     {
         $this->_TimestampTrait();
-
+        $this->cost = Money::create(0);
     }
 
     public function insert()
@@ -141,21 +142,24 @@ class Request extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     }
 
     /**
-     * @param float $price
+     * @param Money|float $cost
      * @return Request
      */
-    public function setPrice($price) : Request
+    public function setCost($cost) : Request
     {
-        $this->price = $price;
+        if (!is_object($cost)) {
+            $cost = Money::create((float)$cost);
+        }
+        $this->cost = $cost;
         return $this;
     }
 
     /**
-     * @return float
+     * @return Money
      */
-    public function getPrice() : float
+    public function getCost() : Money
     {
-        return $this->price;
+        return $this->cost;
     }
 
     /**
@@ -221,8 +225,8 @@ class Request extends \Tk\Db\Map\Model implements \Tk\ValidInterface
             $errors['qty'] = 'Invalid value: qty';
         }
 
-//        if (!$this->price) {
-//            $errors['price'] = 'Invalid value: price';
+//        if (!$this->cost) {
+//            $errors['cost'] = 'Invalid value: cost';
 //        }
 
         return $errors;

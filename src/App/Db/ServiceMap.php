@@ -27,7 +27,7 @@ class ServiceMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Integer('id'), 'key');
             $this->dbMap->addPropertyMap(new Db\Integer('institutionId', 'institution_id'));
             $this->dbMap->addPropertyMap(new Db\Text('name'));
-            $this->dbMap->addPropertyMap(new Db\Decimal('price'));
+            $this->dbMap->addPropertyMap(new Db\Decimal('cost'));
             $this->dbMap->addPropertyMap(new Db\Text('comments'));
             $this->dbMap->addPropertyMap(new Db\Text('notes'));
             $this->dbMap->addPropertyMap(new Db\Date('modified'));
@@ -47,7 +47,7 @@ class ServiceMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Integer('id'), 'key');
             $this->formMap->addPropertyMap(new Form\Integer('institutionId'));
             $this->formMap->addPropertyMap(new Form\Text('name'));
-            $this->formMap->addPropertyMap(new Form\Decimal('price'));
+            $this->formMap->addPropertyMap(new Form\Money('cost'));
             $this->formMap->addPropertyMap(new Form\Text('comments'));
             $this->formMap->addPropertyMap(new Form\Text('notes'));
 
@@ -96,8 +96,8 @@ class ServiceMap extends Mapper
         if (!empty($filter['name'])) {
             $filter->appendWhere('a.name = %s AND ', $this->quote($filter['name']));
         }
-        if (!empty($filter['price'])) {
-            $filter->appendWhere('a.price = %s AND ', (float)$filter['price']);
+        if (!empty($filter['cost'])) {
+            $filter->appendWhere('a.cost = %s AND ', (float)$filter['cost']);
         }
 
         if (!empty($filter['exclude'])) {

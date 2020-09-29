@@ -62,7 +62,7 @@ class Cassette extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      * price per sample ???
      * @var float
      */
-    public $price = 0;
+    public $cost = 0;
 
     /**
      * public comments
@@ -203,21 +203,21 @@ class Cassette extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     }
 
     /**
-     * @param float $price
+     * @param float $cost
      * @return Cassette
      */
-    public function setPrice($price) : Cassette
+    public function setCost($cost) : Cassette
     {
-        $this->price = $price;
+        $this->cost = $cost;
         return $this;
     }
 
     /**
      * @return float
      */
-    public function getPrice() : float
+    public function getCost() : float
     {
-        return $this->price;
+        return $this->cost;
     }
 
     /**
@@ -302,8 +302,8 @@ class Cassette extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 //            $errors['qty'] = 'Invalid value: qty';
 //        }
 
-//        if (!$this->price) {
-//            $errors['price'] = 'Invalid value: price';
+//        if (!$this->cost) {
+//            $errors['cost'] = 'Invalid value: cost';
 //        }
 
         return $errors;
