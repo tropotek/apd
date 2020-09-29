@@ -55,6 +55,7 @@ class Edit extends AdminEditIface
     public function doDefault(Request $request)
     {
         $this->pathCase = new \App\Db\PathCase();
+        $this->pathCase->setPathologyId($this->pathCase->getVolatilePathologyId());
         if ($request->has('clientId'))
             $this->pathCase->setClientId((int)$request->get('clientId'));
         $types = \Tk\ObjectUtil::getClassConstants($this->pathCase, 'TYPE_');

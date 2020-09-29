@@ -2,6 +2,7 @@
 namespace App\Form;
 
 use App\Db\ClientMap;
+use App\Form\Field\Money;
 use Tk\Db\Tool;
 use Tk\Form\Field;
 use Tk\Form\Event;
@@ -48,51 +49,55 @@ class PathCase extends \Bs\FormIface
 
         $layout = $this->getRenderer()->getLayout();
 
-        $layout->removeRow('userId', 'col');
-        $layout->removeRow('status', 'col');
-
-
-        // Details
-        $layout->removeRow('resident', 'col');
-        $layout->removeRow('studentEmail', 'col');
+        $layout->removeRow('type', 'col');
+        $layout->removeRow('clientId', 'col');
+        $layout->removeRow('cost', 'col');
 
         $layout->removeRow('patientNumber', 'col');
-        $layout->removeRow('zootonicResult', 'col');
-        $layout->removeRow('euthanisedMethod', 'col');
-        // Animal
-        $layout->removeRow('breed', 'col');
-        $layout->removeRow('specimenCount', 'col-2');
-        $layout->removeRow('desexed', 'col-2');
-        $layout->removeRow('ownerPhone', 'col');
-
         $layout->removeRow('microchip', 'col');
 
-        $layout->removeRow('necoWeight', 'col');
+        $layout->removeRow('breed', 'col');
+        $layout->removeRow('specimenCount', 'col-2');
+
+        $layout->removeRow('desexed', 'col');
+
+        $layout->removeRow('colour', 'col');
+        $layout->removeRow('origin', 'col');
+
         $layout->removeRow('dod', 'col');
 
+        $layout->removeRow('resident', 'col');
+
+        $layout->removeRow('studentEmail', 'col');
+
+        $layout->removeRow('euthanisedMethod', 'col');
 
 
         // FORM FIELDS
         $tab = 'Details';
 
-        if ($this->getPathCase()->getId())
+        //if ($this->getPathCase()->getId())
             $this->appendField(new Field\Input('pathologyId'))->setLabel('Pathology ID')->setTabGroup($tab)
-                ->addCss('tk-input-lock')
-                ->setAttr('placeholder', $this->getPathCase()->getVolatilePathologyId());
-
-        $list  = ClientMap::create()->findFiltered(array('institutionId'=> $this->getPathCase()->getInstitutionId()), Tool::create('name'));
-        $this->appendField(Field\Select::createSelect('clientId', $list)->prependOption('-- Select --', ''))
-            ->setTabGroup($tab)->setLabel('Submitting Client')->setNotes('This is the Client Record that will be billed if sent.');
+                ->addCss('tk-input-lock');
 
         if (!$this->getPathCase()->getType()) {
             $list = \Tk\ObjectUtil::getClassConstants($this->getPathCase(), 'TYPE_');
             $this->appendField(Field\Select::createSelect('type', $list)->prependOption('-- Select --', ''))
-                ->setTabGroup($tab);
+                ->setLabel('Case Type')->setTabGroup($tab);
         }
 
         $list = \Tk\ObjectUtil::getClassConstants($this->getPathCase(), 'SUBMISSION_');
         $this->appendField(Field\Select::createSelect('submissionType', $list)->prependOption('-- Select --', ''))
             ->setTabGroup($tab);
+
+        $list  = ClientMap::create()->findFiltered(array('institutionId'=> $this->getPathCase()->getInstitutionId()), Tool::create('name'));
+        $this->appendField(Field\Select::createSelect('clientId', $list)->prependOption('-- Select --', ''))
+            ->setTabGroup($tab)->setLabel('Submitting Client')->setNotes('This is the Client Record that will be billed if sent.');
+
+
+
+        $this->appendField(new Money('cost'))->addCss('money')->setLabel('Billable Amount')->setTabGroup($tab)
+            ->setNotes('(Optional) Amount billed to submitting client.');
 
 
         if ($this->getPathCase()->getId()) {
@@ -106,6 +111,10 @@ class PathCase extends \Bs\FormIface
         $fieldset = 'Animal';
             // TODO: would be nice to be able to add fieldsets to a tabgroup
             //->setFieldset($fieldset);
+
+        $list  = ClientMap::create()->findFiltered(array('institutionId'=> $this->getPathCase()->getInstitutionId()), Tool::create('name'));
+        $this->appendField(Field\Select::createSelect('ownerId', $list)->prependOption('-- Select --', ''))
+            ->setTabGroup($tab)->setLabel('Owner Name')->setNotes('This is the Client Record of the animal owner.');
         $this->appendField(new Field\Input('animalName'))->setLabel('Animal Name/ID')->setTabGroup($tab);
         $this->appendField(new Field\Input('patientNumber'))->setTabGroup($tab);
         $this->appendField(new Field\Input('microchip'))->setTabGroup($tab);
@@ -118,14 +127,9 @@ class PathCase extends \Bs\FormIface
             ->setTabGroup($tab);
         $this->appendField(new Field\Checkbox('desexed'))->setTabGroup($tab);
 
-        $list  = ClientMap::create()->findFiltered(array('institutionId'=> $this->getPathCase()->getInstitutionId()), Tool::create('name'));
-        $this->appendField(Field\Select::createSelect('ownerId', $list)->prependOption('-- Select --', ''))
-            ->setTabGroup($tab)->setLabel('Owner Name')->setNotes('This is the Client Record of the animal owner.');
-        ///$this->appendField(new Field\Input('ownerName'))->setTabGroup($tab);
-        ///
-        $this->appendField(new Field\Input('origin'))->setTabGroup($tab);
-        $this->appendField(new Field\Input('colour'))->setTabGroup($tab);
         $this->appendField(new Field\Input('weight'))->setTabGroup($tab);
+        $this->appendField(new Field\Input('colour'))->setTabGroup($tab);
+        $this->appendField(new Field\Input('origin'))->setTabGroup($tab);
         $dob = $this->appendField(new Field\Input('dob'))->setTabGroup($tab)
             ->setAttr('data-precision', '1')
             ->addCss('date tk-age')->setAttr('placeholder', 'dd/mm/yyyy');
@@ -145,14 +149,16 @@ class PathCase extends \Bs\FormIface
         $this->appendField(new Field\Input('student'))->setTabGroup($tab);
         $this->appendField(new Field\Input('studentEmail'))->setTabGroup($tab);
 
-        $this->appendField(Field\CheckboxInput::create('zoonotic'))->setTabGroup($tab)->setLabel('Zoonotic/Other Risks')
-            ->setNotes('Tick the checkbox to alert users of this risk when viewing this case.');
-
         $this->appendField(new Field\Checkbox('euthanised'))->setTabGroup($tab);
         $this->appendField(new Field\Input('euthanisedMethod'))->setTabGroup($tab);
 
+
+        $this->appendField(Field\CheckboxInput::create('zoonotic'))->setTabGroup($tab)->setLabel('Zoonotic/Other Risks')
+            ->setNotes('Tick the checkbox to alert users of these risks when viewing this case.');
+
         $this->appendField(Field\CheckboxInput::create('issue'))->setTabGroup($tab)
-            ->setNotes('Tick the checkbox to alert users of these issues when viewing this case.');
+            ->setLabel('Case Issues')
+            ->setNotes('Tick the checkbox to alert users of any issues to be aware of when viewing this case.');
 
         $this->appendField(new Field\Textarea('clinicalHistory'))
             ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);

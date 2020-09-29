@@ -378,6 +378,19 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     }
 
     /**
+     * @return int
+     * @throws \Exception
+     */
+    public function insert()
+    {
+        if (!$this->getPathologyId()) {
+            $this->setPathologyId($this->getVolatilePathologyId());
+        }
+        return parent::insert();
+    }
+
+
+    /**
      * @param Tool|null $tool
      * @return File[]|\Tk\Db\Map\ArrayObject
      * @throws \Exception
@@ -445,19 +458,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
         }
         return $str;
     }
-
-    /**
-     * @return int
-     * @throws \Exception
-     */
-    public function insert()
-    {
-        if (!$this->getPathologyId()) {
-            $this->setPathologyId($this->getVolatilePathologyId());
-        }
-        return parent::insert();
-    }
-
     /**
      * @param Money|float $cost
      * @return PathCase
