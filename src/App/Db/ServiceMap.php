@@ -27,7 +27,7 @@ class ServiceMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Integer('id'), 'key');
             $this->dbMap->addPropertyMap(new Db\Integer('institutionId', 'institution_id'));
             $this->dbMap->addPropertyMap(new Db\Text('name'));
-            $this->dbMap->addPropertyMap(new Db\Decimal('cost'));
+            $this->dbMap->addPropertyMap(new Db\Money('cost'));
             $this->dbMap->addPropertyMap(new Db\Text('comments'));
             $this->dbMap->addPropertyMap(new Db\Text('notes'));
             $this->dbMap->addPropertyMap(new Db\Date('modified'));

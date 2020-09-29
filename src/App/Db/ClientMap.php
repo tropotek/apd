@@ -33,7 +33,6 @@ class ClientMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Text('email'));
             $this->dbMap->addPropertyMap(new Db\Text('phone'));
             $this->dbMap->addPropertyMap(new Db\Text('fax'));
-            $this->dbMap->addPropertyMap(new Db\Text('address'));
 
             $this->dbMap->addPropertyMap(new Db\Text('street'));
             $this->dbMap->addPropertyMap(new Db\Text('city'));

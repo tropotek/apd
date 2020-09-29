@@ -300,7 +300,7 @@ class TestData extends \Bs\Console\TestData
             $request->setClientId($client->getId());
 
             $request->setQty(rand(1, $cassette->getQty()));
-            $request->setCost($service->getCost()*$request->getQty());
+            $request->setCost($service->getCost()->getAmount()*$request->getQty());
             if (rand(0,1)) {
                 $request->setComments($this->createLipsumHtml(rand(1, 8)));
             }

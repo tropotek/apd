@@ -28,6 +28,7 @@ class PathCaseMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Integer('institutionId', 'institution_id'));
             $this->dbMap->addPropertyMap(new Db\Integer('userId', 'user_id'));
             $this->dbMap->addPropertyMap(new Db\Integer('clientId', 'client_id'));
+            $this->dbMap->addPropertyMap(new Db\Integer('ownerId', 'owner_id'));
 
             $this->dbMap->addPropertyMap(new Db\Integer('pathologistId', 'pathologist_id'));
             $this->dbMap->addPropertyMap(new Db\Text('resident'));
@@ -38,6 +39,9 @@ class PathCaseMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Text('type'));
             $this->dbMap->addPropertyMap(new Db\Text('submissionType', 'submission_type'));
             $this->dbMap->addPropertyMap(new Db\Text('status'));
+            $this->dbMap->addPropertyMap(new Db\Text('reportStatus', 'report_status'));
+            $this->dbMap->addPropertyMap(new Db\Text('accountStatus', 'account_status'));
+            $this->dbMap->addPropertyMap(new Db\Money('cost'));
 
             $this->dbMap->addPropertyMap(new Db\Text('zoonotic'));
             $this->dbMap->addPropertyMap(new Db\Boolean('zoonoticAlert', 'zoonotic_alert'));
@@ -50,10 +54,10 @@ class PathCaseMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Boolean('desexed'));
             $this->dbMap->addPropertyMap(new Db\Text('patientNumber', 'patient_number'));
             $this->dbMap->addPropertyMap(new Db\Text('microchip'));
-            $this->dbMap->addPropertyMap(new Db\Text('ownerName', 'owner_name'));
-            $this->dbMap->addPropertyMap(new Db\Text('ownerEmail', 'owner_email'));
-            $this->dbMap->addPropertyMap(new Db\Text('ownerPhone', 'owner_phone'));
-            $this->dbMap->addPropertyMap(new Db\Text('ownerAddress', 'owner_address'));
+//            $this->dbMap->addPropertyMap(new Db\Text('ownerName', 'owner_name'));
+//            $this->dbMap->addPropertyMap(new Db\Text('ownerEmail', 'owner_email'));
+//            $this->dbMap->addPropertyMap(new Db\Text('ownerPhone', 'owner_phone'));
+//            $this->dbMap->addPropertyMap(new Db\Text('ownerAddress', 'owner_address'));
             $this->dbMap->addPropertyMap(new Db\Text('origin'));
             $this->dbMap->addPropertyMap(new Db\Text('breed'));
             $this->dbMap->addPropertyMap(new Db\Text('colour'));
@@ -97,6 +101,7 @@ class PathCaseMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Integer('institutionId'));
             $this->formMap->addPropertyMap(new Form\Integer('userId'));
             $this->formMap->addPropertyMap(new Form\Integer('clientId'));
+            $this->formMap->addPropertyMap(new Form\Integer('ownerId'));
             $this->formMap->addPropertyMap(new Form\Integer('pathologistId'));
             $this->formMap->addPropertyMap(new Form\Text('resident'));
             $this->formMap->addPropertyMap(new Form\Text('student'));
@@ -105,6 +110,9 @@ class PathCaseMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Text('type'));
             $this->formMap->addPropertyMap(new Form\Text('submissionType'));
             $this->formMap->addPropertyMap(new Form\Text('status'));
+            $this->formMap->addPropertyMap(new Form\Text('reportStatus'));
+            $this->formMap->addPropertyMap(new Form\Text('accountStatus'));
+            $this->formMap->addPropertyMap(new Form\Money('cost'));
             $this->formMap->addPropertyMap(new Form\Text('zoonotic'));
             $this->formMap->addPropertyMap(new Form\Boolean('zoonoticAlert'));
             $this->formMap->addPropertyMap(new Form\Text('issue'));
@@ -116,10 +124,10 @@ class PathCaseMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Boolean('desexed'));
             $this->formMap->addPropertyMap(new Form\Text('patientNumber'));
             $this->formMap->addPropertyMap(new Form\Text('microchip'));
-            $this->formMap->addPropertyMap(new Form\Text('ownerName'));
-            $this->formMap->addPropertyMap(new Form\Text('ownerEmail'));
-            $this->formMap->addPropertyMap(new Form\Text('ownerPhone'));
-            $this->formMap->addPropertyMap(new Form\Text('ownerAddress'));
+//            $this->formMap->addPropertyMap(new Form\Text('ownerName'));
+//            $this->formMap->addPropertyMap(new Form\Text('ownerEmail'));
+//            $this->formMap->addPropertyMap(new Form\Text('ownerPhone'));
+//            $this->formMap->addPropertyMap(new Form\Text('ownerAddress'));
             $this->formMap->addPropertyMap(new Form\Text('origin'));
             $this->formMap->addPropertyMap(new Form\Text('breed'));
             $this->formMap->addPropertyMap(new Form\Text('colour'));
