@@ -92,7 +92,7 @@ class PathCase extends \Bs\FormIface
 
         $list  = ClientMap::create()->findFiltered(array('institutionId'=> $this->getPathCase()->getInstitutionId()), Tool::create('name'));
         $this->appendField(Field\Select::createSelect('clientId', $list)->prependOption('-- Select --', ''))
-            ->setTabGroup($tab)->setLabel('Submitting Client')->setNotes('This is the Client Record that will be billed if sent.');
+            ->setTabGroup($tab)->setLabel('Submitting Client')->setNotes('This is the Client that will be invoiced.');
 
 
 
@@ -113,8 +113,11 @@ class PathCase extends \Bs\FormIface
             //->setFieldset($fieldset);
 
         $list  = ClientMap::create()->findFiltered(array('institutionId'=> $this->getPathCase()->getInstitutionId()), Tool::create('name'));
-        $this->appendField(Field\Select::createSelect('ownerId', $list)->prependOption('-- Select --', ''))
+//        $this->appendField(Field\Select::createSelect('ownerId', $list)->prependOption('-- Select --', ''))
+//            ->setTabGroup($tab)->setLabel('Owner Name')->setNotes('This is the Client Record of the animal owner.');
+        $this->appendField(Field\AutoSelect::createAutoSelect('ownerId', $list, null)->prependOption('-- Select --', ''))
             ->setTabGroup($tab)->setLabel('Owner Name')->setNotes('This is the Client Record of the animal owner.');
+
         $this->appendField(new Field\Input('animalName'))->setLabel('Animal Name/ID')->setTabGroup($tab);
         $this->appendField(new Field\Input('patientNumber'))->setTabGroup($tab);
         $this->appendField(new Field\Input('microchip'))->setTabGroup($tab);
