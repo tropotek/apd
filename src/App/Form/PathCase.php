@@ -91,7 +91,15 @@ class PathCase extends \Bs\FormIface
             ->setTabGroup($tab);
 
         $list  = ClientMap::create()->findFiltered(array('institutionId'=> $this->getPathCase()->getInstitutionId()), Tool::create('name'));
-        $this->appendField(Field\Select::createSelect('clientId', $list)->prependOption('-- Select --', ''))
+//        $this->appendField(Field\Select::createSelect('clientId', $list)->prependOption('-- Select --', ''))
+//            ->setTabGroup($tab)->setLabel('Submitting Client')->setNotes('This is the Client that will be invoiced.');
+
+        // TODO: -------------------
+        // TODO: Create a client edit dialog form (SEE: EMS company for supervisor field.)
+        $dialog = null;
+        // TODO: -------------------
+
+        $this->appendField(Field\AutoSelect::createAutoSelect('clientId', $list, $dialog)->prependOption('-- Select --', ''))
             ->setTabGroup($tab)->setLabel('Submitting Client')->setNotes('This is the Client that will be invoiced.');
 
 
@@ -107,15 +115,21 @@ class PathCase extends \Bs\FormIface
                 ->setNotes('Set the status. Use the checkbox to disable notification emails.');
         }
 
+        // TODO: would be nice to be able to add fieldsets to a tabgroup
+        //->setFieldset($fieldset);
         //$tab = 'Animal';
         $fieldset = 'Animal';
-            // TODO: would be nice to be able to add fieldsets to a tabgroup
-            //->setFieldset($fieldset);
 
         $list  = ClientMap::create()->findFiltered(array('institutionId'=> $this->getPathCase()->getInstitutionId()), Tool::create('name'));
 //        $this->appendField(Field\Select::createSelect('ownerId', $list)->prependOption('-- Select --', ''))
 //            ->setTabGroup($tab)->setLabel('Owner Name')->setNotes('This is the Client Record of the animal owner.');
-        $this->appendField(Field\AutoSelect::createAutoSelect('ownerId', $list, null)->prependOption('-- Select --', ''))
+
+        // TODO: -------------------
+        // TODO: Create a client edit dialog form (SEE: EMS company for supervisor field.)
+        $dialog = null;
+        // TODO: -------------------
+
+        $this->appendField(Field\AutoSelect::createAutoSelect('ownerId', $list, $dialog)->prependOption('-- Select --', ''))
             ->setTabGroup($tab)->setLabel('Owner Name')->setNotes('This is the Client Record of the animal owner.');
 
         $this->appendField(new Field\Input('animalName'))->setLabel('Animal Name/ID')->setTabGroup($tab);
