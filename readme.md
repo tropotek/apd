@@ -1,9 +1,9 @@
 # apd  
 
 __Project:__ APD (Anatomic Pathology Database)  
-__Published:__ 16 May 2016  
 __Web:__ <https://bitbucket.org/fvas-elearning/apd>  
 __Authors:__ Michael Mifsud <http://www.tropotek.com/>  
+__Steakholders:__ Andrew Stent <andrew.stent@unimelb.edu.au> Richard Ploeg <richard.ploeg@unimelb.edu.au>
 
 
 ## Contents
