@@ -180,7 +180,7 @@ class Edit extends AdminEditIface
     {
         $xhtml = <<<HTML
 <div class="row">
-  <div class="col" var="panel1">
+  <div class="col-8" var="panel1">
     <div class="tk-panel" data-panel-title="Case Edit" data-panel-icon="fa fa-paw" var="panel"></div>
   </div>
   <div class="col-4" var="panel2" choice="panel2">
