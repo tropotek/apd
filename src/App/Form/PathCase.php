@@ -90,19 +90,12 @@ class PathCase extends \Bs\FormIface
         $this->appendField(Field\Select::createSelect('submissionType', $list)->prependOption('-- Select --', ''))
             ->setTabGroup($tab);
 
-        $list  = ClientMap::create()->findFiltered(array('institutionId'=> $this->getPathCase()->getInstitutionId()), Tool::create('name'));
-//        $this->appendField(Field\Select::createSelect('clientId', $list)->prependOption('-- Select --', ''))
-//            ->setTabGroup($tab)->setLabel('Submitting Client')->setNotes('This is the Client that will be invoiced.');
-
-        // TODO: -------------------
-        // TODO: Create a client edit dialog form (SEE: EMS company for supervisor field.)
-        $dialog = null;
-        // TODO: -------------------
-
-        $this->appendField(Field\AutoSelect::createAutoSelect('clientId', $list, $dialog)->prependOption('-- Select --', ''))
+        $client = new \App\Db\Client();
+        $form = \App\Form\Client::create()->setModel($client);
+        $form->removeField('notes');
+        $list = \App\Db\Client::getSelectList();
+        $this->appendField(Field\DialogSelect::createDialogSelect('clientId', $list, $form)->prependOption('-- Select --', ''))
             ->setTabGroup($tab)->setLabel('Submitting Client')->setNotes('This is the Client that will be invoiced.');
-
-
 
         $this->appendField(new Money('cost'))->addCss('money')->setLabel('Billable Amount')->setTabGroup($tab)
             ->setNotes('(Optional) Amount billed to submitting client.');
@@ -120,17 +113,14 @@ class PathCase extends \Bs\FormIface
         //$tab = 'Animal';
         $fieldset = 'Animal';
 
-        $list  = ClientMap::create()->findFiltered(array('institutionId'=> $this->getPathCase()->getInstitutionId()), Tool::create('name'));
-//        $this->appendField(Field\Select::createSelect('ownerId', $list)->prependOption('-- Select --', ''))
-//            ->setTabGroup($tab)->setLabel('Owner Name')->setNotes('This is the Client Record of the animal owner.');
-
-        // TODO: -------------------
-        // TODO: Create a client edit dialog form (SEE: EMS company for supervisor field.)
-        $dialog = null;
-        // TODO: -------------------
-
-        $this->appendField(Field\AutoSelect::createAutoSelect('ownerId', $list, $dialog)->prependOption('-- Select --', ''))
+        $client = new \App\Db\Client();
+        $form = \App\Form\Client::create()->setModel($client);
+        $form->removeField('notes');
+        $list = \App\Db\Client::getSelectList();
+        $this->appendField(Field\DialogSelect::createDialogSelect('ownerId', $list, $form)->prependOption('-- Select --', ''))
             ->setTabGroup($tab)->setLabel('Owner Name')->setNotes('This is the Client Record of the animal owner.');
+
+
 
         $this->appendField(new Field\Input('animalName'))->setLabel('Animal Name/ID')->setTabGroup($tab);
         $this->appendField(new Field\Input('patientNumber'))->setTabGroup($tab);
@@ -247,6 +237,10 @@ class PathCase extends \Bs\FormIface
      */
     public function execute($request = null)
     {
+        if ($this->getRequest()->has('action')) return;        // ignore column requests
+        $this->getForm()->getField('clientId')->getDialog()->execute($request);
+        $this->getForm()->getField('ownerId')->getDialog()->execute($request);
+
         $this->load(\App\Db\PathCaseMap::create()->unmapForm($this->getPathCase()));
         parent::execute($request);
     }

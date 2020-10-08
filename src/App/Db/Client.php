@@ -331,6 +331,29 @@ class Client extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     {
         return $this->notes;
     }
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->getName() . ' (' . $this->getEmail() . ')';
+    }
+
+    /**
+     * @return array
+     * @throws \Exception
+     */
+    public static function getSelectList()
+    {
+        $list = ClientMap::create()->findFiltered(array(
+            'institutionId' => \App\Config::getInstance()->getInstitutionId()
+        ), \Tk\Db\Tool::create('name'));
+        $arr = array();
+        foreach ($list as $item) {
+            $arr[$item->getTitle()] = $item->getId();
+        }
+        return $arr;
+    }
 
     /**
      * @return array
