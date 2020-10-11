@@ -57,12 +57,13 @@ class Cassette extends \Bs\TableIface
         if($this->isMinMode())
             $this->getRenderer()->enableFooter(false);
 
-        if (!$this->isMinMode()) {
-            $this->appendCell(new Cell\Checkbox('id'));
-        } else {
+        $this->appendCell(new Cell\Checkbox('id'));
+        if ($this->isMinMode()) {
+//            $this->appendCell(new Cell\Checkbox('id'));
+//        } else {
             $aCell = $this->getActionCell();
             $url = \Uni\Uri::createHomeUrl('/requestEdit.html');
-            $aCell->addButton(ActionButton::create('Create Request', $url, 'fa fa-flask')->addCss('btn-success'))
+            $aCell->addButton(ActionButton::create('Create Request', $url, 'fa fa-medkit')->addCss('btn-primary'))
                 ->setShowLabel(false)
                 ->addOnShow(function ($cell, $obj, $button) {
                     /* @var $obj \App\Db\Cassette */
@@ -81,8 +82,8 @@ class Cassette extends \Bs\TableIface
         //$this->appendCell(new Cell\Text('storageId'));
         //$this->appendCell(new Cell\Text('price'));
         //$this->appendCell(new Cell\Date('modified'));
-        $this->appendCell(new Cell\Text('container'));
-        $this->appendCell(new Cell\Text('qty'));
+        //$this->appendCell(new Cell\Text('container'));
+        //$this->appendCell(new Cell\Text('qty'));
         $this->appendCell(new Cell\Date('created'));
 
         // Filters
@@ -90,8 +91,10 @@ class Cassette extends \Bs\TableIface
             $this->appendFilter(new Field\Input('keywords'))->setAttr('placeholder', 'Search');
 
         // Actions
-        //$this->appendAction(\Tk\Table\Action\Link::createLink('New Cassette', \Bs\Uri::createHomeUrl('/cassetteEdit.html'), 'fa fa-plus'));
-        $this->appendAction(\Tk\Table\Action\ColumnSelect::create()->setUnselected(array('modified')));
+        if ($this->isMinMode()) {
+            //$this->appendAction(\Tk\Table\Action\Link::createLink('New Cassette', \Bs\Uri::createHomeUrl('/cassetteEdit.html'), 'fa fa-plus'));
+        }
+        $this->appendAction(\Tk\Table\Action\ColumnSelect::create()->setUnselected(array('modified', 'container')));
         if (!$this->isMinMode())
             $this->appendAction(\Tk\Table\Action\Delete::create());
         $this->appendAction(\Tk\Table\Action\Csv::create());
