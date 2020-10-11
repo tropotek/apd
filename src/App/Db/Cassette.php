@@ -257,18 +257,28 @@ class Cassette extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     }
 
     /**
+     * Use ord() a chr():
+     *   $letter = 'A';
+     *   $letterAscii = ord($letter);
+     *   $letterAscii++;
+     *   $letter = chr($letterAscii); // 'B'
+     *
      * @param int|PathCase $pathCaseId
      * @return int
      * @throws \Exception
      */
     static public function getNextNumber($pathCaseId)
     {
+        $num = 'A';
         if ($pathCaseId instanceof \Tk\Db\ModelInterface) $pathCaseId = $pathCaseId->getId();
         /** @var Cassette $cassette */
         $cassette = CassetteMap::create()->findFiltered(array('pathCaseId' => $pathCaseId), Tool::create('number DESC'))->current();
-        if ($cassette)
-            return (int)$cassette->getNumber() + 1;
-        return 1;
+        if ($cassette) {
+            $num = ord($cassette->getNumber()) + 1;     // Convert to Ascii int
+            $num = chr($num);                           // Convert back to char after increment
+            if ($num > 'Z') $num = 'A';         // TODO: max Z then start again, fix this in the future if more are used
+        }
+        return $num;
     }
 
     /**

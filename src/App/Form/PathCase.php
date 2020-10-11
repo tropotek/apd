@@ -81,12 +81,12 @@ class PathCase extends \Bs\FormIface
                 ->addCss('tk-input-lock');
 
         if (!$this->getPathCase()->getType()) {
-            $list = \Tk\ObjectUtil::getClassConstants($this->getPathCase(), 'TYPE_');
+            $list = \Tk\ObjectUtil::getClassConstants($this->getPathCase(), 'TYPE', true);
             $this->appendField(Field\Select::createSelect('type', $list)->prependOption('-- Select --', ''))
                 ->setLabel('Case Type')->setTabGroup($tab);
         }
 
-        $list = \Tk\ObjectUtil::getClassConstants($this->getPathCase(), 'SUBMISSION_');
+        $list = \Tk\ObjectUtil::getClassConstants($this->getPathCase(), 'SUBMISSION', true);
         $this->appendField(Field\Select::createSelect('submissionType', $list)->prependOption('-- Select --', ''))
             ->setTabGroup($tab);
 
@@ -96,6 +96,12 @@ class PathCase extends \Bs\FormIface
         $list = \App\Db\Client::getSelectList();
         $this->appendField(Field\DialogSelect::createDialogSelect('clientId', $list, $form)->prependOption('-- Select --', ''))
             ->setTabGroup($tab)->setLabel('Submitting Client')->setNotes('This is the Client that will be invoiced.');
+
+
+
+        $list = \Tk\ObjectUtil::getClassConstants($this->getPathCase(), 'ACCOUNT_STATUS', true);
+        $this->appendField(Field\Select::createSelect('accountStatus', $list)->prependOption('-- Select --', ''))
+            ->setTabGroup($tab);
 
         $this->appendField(new Money('cost'))->addCss('money')->setLabel('Billable Amount')->setTabGroup($tab)
             ->setNotes('(Optional) Amount billed to submitting client.');
@@ -172,7 +178,7 @@ class PathCase extends \Bs\FormIface
 
 
         $tab = 'Reporting';
-        $list  = ObjectUtil::getClassConstants($this->getPathCase(), 'REPORT_STATUS');
+        $list  = ObjectUtil::getClassConstants($this->getPathCase(), 'REPORT_STATUS', true);
         $this->appendField(Field\Select::createSelect('reportStatus', $list)->prependOption('-- Select --', ''))
             ->setTabGroup($tab);
         $this->appendField(new Field\Textarea('collectedSamples'))
