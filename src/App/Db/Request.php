@@ -26,7 +26,7 @@ class Request extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     use StatusTrait;
 
     const STATUS_PENDING            = 'pending';
-    const STATUS_PROCESSING         = 'processing';
+    //const STATUS_PROCESSING         = 'processing';
     const STATUS_COMPLETED          = 'completed';
     const STATUS_CANCELLED          = 'cancelled';
 
@@ -221,7 +221,7 @@ class Request extends \Tk\Db\Map\Model implements \Tk\ValidInterface
             $errors['clientId'] = 'Invalid value: clientId';
         }
 
-        if (!$this->qty || $this->qty < 1 || $this->qty > $this->getCassette()->getQty()) {
+        if ((int)$this->qty < 1) {
             $errors['qty'] = 'Invalid value: qty';
         }
 
@@ -240,12 +240,13 @@ class Request extends \Tk\Db\Map\Model implements \Tk\ValidInterface
                 if (!$prevStatusName)
                     return true;
                 break;
-            case Request::STATUS_PROCESSING:
-                if (!$prevStatusName || Request::STATUS_PENDING == $prevStatusName)
-                    return true;
-                break;
+//            case Request::STATUS_PROCESSING:
+//                if (!$prevStatusName || Request::STATUS_PENDING == $prevStatusName)
+//                    return true;
+//                break;
             case Request::STATUS_COMPLETED:
-                if (!$prevStatusName || Request::STATUS_PENDING == $prevStatusName || Request::STATUS_PROCESSING == $prevStatusName)
+//                if (!$prevStatusName || Request::STATUS_PENDING == $prevStatusName || Request::STATUS_PROCESSING == $prevStatusName)
+                if (!$prevStatusName || Request::STATUS_PENDING == $prevStatusName)
                     return true;
                 break;
             case Request::STATUS_CANCELLED:

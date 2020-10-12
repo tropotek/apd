@@ -166,6 +166,11 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public $cost = null;
 
     /**
+     * @var bool
+     */
+    public $afterHours = false;
+
+    /**
      * A description of any risks with the animal
      * @var string
      */
@@ -477,6 +482,24 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public function getCost() : Money
     {
         return $this->cost;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAfterHours(): bool
+    {
+        return $this->afterHours;
+    }
+
+    /**
+     * @param bool $afterHours
+     * @return PathCase
+     */
+    public function setAfterHours(bool $afterHours): PathCase
+    {
+        $this->afterHours = $afterHours;
+        return $this;
     }
 
     /**

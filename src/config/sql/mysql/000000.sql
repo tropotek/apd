@@ -85,6 +85,8 @@ CREATE TABLE IF NOT EXISTS `path_case`
     report_status VARCHAR(64) NOT NULL DEFAULT '',            -- The current status of the report.
     account_status VARCHAR(64) NOT NULL DEFAULT '',           -- The current status of the billing account [Pending, billed, paid]
     cost DECIMAL(9,2) NOT NULL DEFAULT 0.0,                   -- Money amount to invoice for External
+    after_hours TINYINT(1) NOT NULL DEFAULT 0,                -- Was this case an after hours case
+    -- TODO: Should we add a date and time for when the job was completed????
 
     zoonotic TEXT,                                            -- If filled show alert to warn user (use session cookie to only show once pre session)
     zoonotic_alert TINYINT(1) NOT NULL DEFAULT 0,             -- If true then alert user of this info when viewing the case
@@ -101,11 +103,6 @@ CREATE TABLE IF NOT EXISTS `path_case`
     desexed TINYINT(1) NOT NULL DEFAULT 0,                    --  ??? (should we use terms as spayed Female, gelding, steer, etc - gets to complex.)
     patient_number VARCHAR(128) NOT NULL DEFAULT '',          --
     microchip VARCHAR(128) NOT NULL DEFAULT '',               --
-    -- moved to client table (owner_id)
---    owner_name VARCHAR(128) NOT NULL DEFAULT '',              --
---    owner_email VARCHAR(128) NOT NULL DEFAULT '',             --
---    owner_phone VARCHAR(32) NOT NULL DEFAULT '',              --
---    owner_address TEXT,                                       --
     origin VARCHAR(128) NOT NULL DEFAULT '',                  -- ?? For now a TEXT box, but NOT sure if this should be lookup table
     breed VARCHAR(128) NOT NULL DEFAULT '',                   --
     colour VARCHAR(128) NOT NULL DEFAULT '',                  --

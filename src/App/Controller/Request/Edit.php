@@ -22,6 +22,11 @@ class Edit extends AdminEditIface
      */
     protected $request = null;
 
+    /**
+     * @var null|\Bs\Table\Status
+     */
+    protected $statusTable = null;
+
 
     /**
      * Iface constructor.
@@ -50,6 +55,15 @@ class Edit extends AdminEditIface
         $this->setForm(\App\Form\Request::create()->setModel($this->request));
         $this->initForm($request);
         $this->getForm()->execute();
+
+        $this->statusTable = \Bs\Table\Status::create()
+            ->setSelectedColumns(array('name', 'message', 'created'))->init();
+            //->setEditUrl(\Uni\Uri::createHomeUrl('/pathCaseManager.html'))->init();
+        $filter = array(
+            'model' => $this->request
+        );
+        $this->statusTable->setList($this->statusTable->findList($filter, \Tk\Db\Tool::create('created DESC', 0)));
+
     }
 
     /**
@@ -61,6 +75,14 @@ class Edit extends AdminEditIface
 
         // Render the form
         $template->appendTemplate('panel', $this->getForm()->show());
+        if ($this->request->getId()) {
+            $template->setVisible('panel2');
+        }
+
+        if ($this->statusTable) {
+            $template->appendTemplate('side-panel-status', $this->statusTable->show());
+            $template->setVisible('side-panel-status');
+        }
 
         return $template;
     }
@@ -71,7 +93,14 @@ class Edit extends AdminEditIface
     public function __makeTemplate()
     {
         $xhtml = <<<HTML
-<div class="tk-panel" data-panel-title="Request Edit" data-panel-icon="fa fa-flask" var="panel"></div>
+<div class="row">
+  <div class="col-8" var="panel1">
+    <div class="tk-panel" data-panel-title="Request Edit" data-panel-icon="fa fa-flask" var="panel"></div>
+  </div>
+  <div class="col-4" var="panel2" choice="panel2">
+    <div class="tk-panel" data-panel-title="Status Log" data-panel-icon="fa fa-list" var="side-panel-status" choice="side-panel-status"></div>
+  </div>
+</div>
 HTML;
         return \Dom\Loader::load($xhtml);
     }

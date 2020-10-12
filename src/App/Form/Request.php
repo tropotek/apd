@@ -76,16 +76,31 @@ class Request extends \Bs\FormIface
     {
         // Load the object with form data
         \App\Db\RequestMap::create()->mapForm($form->getValues(), $this->getRequest());
-
-        // Do Custom Validations
+        $cassetteList = $this->getConfig()->getRequest()->get('cassetteId', null);
+        if ($cassetteList && count($cassetteList)) {
+            $this->getRequest()->setCassetteId($cassetteList[0]);       // Fix cassetteId error
+        }
 
         $form->addFieldErrors($this->getRequest()->validate());
+
         if ($form->hasErrors()) {
+            vd($form->getAllErrors());
             return;
         }
 
         $isNew = (bool)$this->getRequest()->getId();
-        $this->getRequest()->save();
+        if (count($cassetteList)) {
+            $cassetteList = $this->getConfig()->getRequest()->get('cassetteId');
+            foreach ($cassetteList as $i => $v) {
+                $req = new \App\Db\Request();
+                \App\Db\RequestMap::create()->mapForm($form->getValues(), $req);
+                $req->setCassetteId($v);
+                $req->save();
+            }
+        } else {
+            $this->getRequest()->save();
+        }
+
 
         \Tk\Alert::addSuccess('Record saved!');
         $event->setRedirect($this->getBackUrl());

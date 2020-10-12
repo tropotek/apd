@@ -4,6 +4,7 @@ namespace App\Table;
 use Tk\Form\Field;
 use Tk\Table\Cell;
 use Tk\Table\Cell\ActionButton;
+use Tk\Ui\Dialog\JsonForm;
 
 /**
  * Example:
@@ -29,6 +30,16 @@ class Cassette extends \Bs\TableIface
     private $minMode = false;
 
     /**
+     * @var null|JsonForm
+     */
+    protected $requestDialog = null;
+
+
+
+    /**
+     * If true then this table is shown in the Case Edit page on the side bar and requires
+     * the ability to add requests.
+     *
      * @return bool
      */
     public function isMinMode(): bool
@@ -57,21 +68,25 @@ class Cassette extends \Bs\TableIface
         if($this->isMinMode())
             $this->getRenderer()->enableFooter(false);
 
+        $this->requestDialog = \App\Ui\Dialog\Request::createRequest();
+
+
         $this->appendCell(new Cell\Checkbox('id'));
         if ($this->isMinMode()) {
 //            $this->appendCell(new Cell\Checkbox('id'));
 //        } else {
+            $dialog = $this->requestDialog;
             $aCell = $this->getActionCell();
             $url = \Uni\Uri::createHomeUrl('/requestEdit.html');
             $aCell->addButton(ActionButton::create('Create Request', $url, 'fa fa-medkit')->addCss('btn-primary'))
                 ->setShowLabel(false)
-                ->addOnShow(function ($cell, $obj, $button) {
+                ->addOnShow(function ($cell, $obj, $button) use ($dialog) {
                     /* @var $obj \App\Db\Cassette */
                     /* @var $button ActionButton */
                     $button->getUrl()->set('cassetteId', $obj->getId());
-                    if ($obj->getQty() <= 0) {
-                        $button->addCss('btn-dark disabled');
-                    }
+                    $button->setAttr('data-toggle', 'modal');
+                    $button->setAttr('data-target', '#'.$dialog->getId());
+                    $button->setAttr('data-cassette-id', $obj->getId());
                 });
             $this->appendCell($this->getActionCell())->setLabel('');
 
@@ -92,6 +107,7 @@ class Cassette extends \Bs\TableIface
 
         // Actions
         if ($this->isMinMode()) {
+            $this->appendAction(\App\Table\Action\CreateRequest::create()->setRequestDialog($this->requestDialog));
             //$this->appendAction(\Tk\Table\Action\Link::createLink('New Cassette', \Bs\Uri::createHomeUrl('/cassetteEdit.html'), 'fa fa-plus'));
         }
         $this->appendAction(\Tk\Table\Action\ColumnSelect::create()->setUnselected(array('modified', 'container')));
@@ -116,7 +132,24 @@ class Cassette extends \Bs\TableIface
         if (!$tool) $tool = $this->getTool();
         $filter = array_merge($this->getFilterValues(), $filter);
         $list = \App\Db\CassetteMap::create()->findFiltered($filter, $tool);
+
+        $this->requestDialog->execute();
         return $list;
     }
 
+    /**
+     * Execute the renderer.
+     * Return an object that your framework can interpret and display.
+     *
+     * @return null|Template|Renderer
+     */
+    public function show()
+    {
+        if ($this->requestDialog) {
+            $this->getTemplate()->appendBodyTemplate($this->requestDialog->show());
+        }
+
+
+        return parent::show();
+    }
 }

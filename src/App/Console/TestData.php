@@ -193,8 +193,10 @@ class TestData extends \Bs\Console\TestData
             $case->setOrigin($this->createStr());
             $case->setBreed($this->createBreed());
 
-            if (rand(0, 1))
+            if (rand(0, 1)) {
                 $case->setCost(Money::create((float)(rand(10, 1500) . '.' . rand(0, 99))));
+                $case->setAfterHours((bool)rand(0, 1));
+            }
 
             $case->setColour($this->createColourString());
             $case->setWeight(rand(0, 50) . '.' . rand(0, 99));

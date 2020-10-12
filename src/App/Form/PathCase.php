@@ -52,6 +52,7 @@ class PathCase extends \Bs\FormIface
         $layout->removeRow('type', 'col');
         $layout->removeRow('clientId', 'col');
         $layout->removeRow('cost', 'col');
+        $layout->removeRow('afterHours', 'col');
 
         $layout->removeRow('patientNumber', 'col');
         $layout->removeRow('microchip', 'col');
@@ -106,6 +107,7 @@ class PathCase extends \Bs\FormIface
         $this->appendField(new Money('cost'))->addCss('money')->setLabel('Billable Amount')->setTabGroup($tab)
             ->setNotes('(Optional) Amount billed to submitting client.');
 
+        $this->appendField(new Field\Checkbox('afterHours'))->setTabGroup($tab)->setNotes('Is this case billed with after hours rates?');
 
         if ($this->getPathCase()->getId()) {
             $list = \App\Db\PathCase::getStatusList($this->getPathCase()->getStatus());

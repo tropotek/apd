@@ -34,10 +34,40 @@ class Request extends \Bs\TableIface
     {
         parent::__construct($tableId);
 
+        if ($this->getConfig()->getRequest()->has('rComplete')) {
+            $this->doComplete($this->getConfig()->getRequest()->get('rComplete'));
+        }
+
+        if ($this->getConfig()->getRequest()->has('rCancel')) {
+            $this->doCancel($this->getConfig()->getRequest()->get('rCancel'));
+        }
+
         if ($this->getConfig()->getRequest()->has('rDel')) {
             $this->doDelete($this->getConfig()->getRequest()->get('rDel'));
         }
 
+    }
+
+    public function doComplete($requestId)
+    {
+        /** @var \App\Db\Request $request */
+        $request = \App\Db\RequestMap::create()->find($requestId);
+        if ($request) {
+            $request->setStatus(\App\Db\Request::STATUS_COMPLETED);
+            $request->save();
+            \Tk\Uri::create()->remove('rComplete')->redirect();
+        }
+    }
+
+    public function doCancel($requestId)
+    {
+        /** @var \App\Db\Request $request */
+        $request = \App\Db\RequestMap::create()->find($requestId);
+        if ($request) {
+            $request->setStatus(\App\Db\Request::STATUS_CANCELLED);
+            $request->save();
+            \Tk\Uri::create()->remove('rCancel')->redirect();
+        }
     }
 
     public function doDelete($requestId)
@@ -84,25 +114,38 @@ class Request extends \Bs\TableIface
             $this->appendCell(new Cell\Checkbox('id'));
         }else {
             $aCell = $this->getActionCell();
+            $aCell->addButton(Cell\ActionButton::create('Complete', Uri::create(), 'fa fa-thumbs-up')->addCss('btn-success'))
+                ->setShowLabel(false)
+                ->addOnShow(function ($cell, \App\Db\Request $obj, Cell\ActionButton $button) {
+                    $button->getUrl()->set('rComplete', $obj->getId());
+                    $button->setAttr('data-confirm', 'Are you sure you want to mark request completed?');
+                    if ($obj->getStatus() == \App\Db\Request::STATUS_COMPLETED) {
+                        $button->setAttr('disabled');
+                    }
+                });
+            $aCell->addButton(Cell\ActionButton::create('Cancel', Uri::create(), 'fa fa-thumbs-down')->addCss('btn-warning'))
+                ->setShowLabel(false)
+                ->addOnShow(function ($cell, \App\Db\Request $obj, Cell\ActionButton $button) {
+                    $button->getUrl()->set('rCancel', $obj->getId());
+                    $button->setAttr('data-confirm', 'Are you sure you want to cancel this request?');
+                    if ($obj->getStatus() == \App\Db\Request::STATUS_CANCELLED) {
+                        $button->setAttr('disabled');
+                    }
+                });
             $aCell->addButton(Cell\ActionButton::create('Delete', Uri::create(), 'fa fa-trash')->addCss('btn-danger'))
                 ->setShowLabel(false)
-                ->addOnShow(function ($cell, \App\Db\Request$obj, Cell\ActionButton $button) {
+                ->addOnShow(function ($cell, \App\Db\Request $obj, Cell\ActionButton $button) {
                     $button->getUrl()->set('rDel', $obj->getId());
                     $button->setAttr('data-confirm', 'Are you sure you want to remove this request?');
                 });
+
             $this->appendCell($this->getActionCell())->setLabel('');
 
         }
 
         //$this->appendCell(new Cell\Text('pathCaseId'));
-        $this->appendCell(new Cell\Text('cassetteId'))->addCss('key')->setUrl($this->getEditUrl())->
-            addOnPropertyValue(function (Cell\Text $cell, \App\Db\Request $obj, $value) {
-                if ($obj->getCassette()) {
-                    $value = $obj->getCassette()->getName();
-                }
-                return $value;
-            });
-
+        $this->appendCell(new Cell\Text('status'));
+        $this->appendCell(new Cell\Text('qty'));
         $this->appendCell(new Cell\Text('serviceId'))->
             addOnPropertyValue(function (Cell\Text $cell, \App\Db\Request $obj, $value) {
                 if ($obj->getService()) {
@@ -110,6 +153,15 @@ class Request extends \Bs\TableIface
                 }
                 return $value;
             });
+
+        $this->appendCell(new Cell\Text('cassetteId'))->addCss('key')->setUrl($this->getEditUrl())->
+            addOnPropertyValue(function (Cell\Text $cell, \App\Db\Request $obj, $value) {
+                if ($obj->getCassette()) {
+                    $value = sprintf('[%s] %s', $obj->getCassette()->getNumber() , $obj->getCassette()->getName());
+                }
+                return $value;
+            });
+
         $this->appendCell(new Cell\Text('clientId'))->
             addOnPropertyValue(function (Cell\Text $cell, \App\Db\Request $obj, $value) {
                 if ($obj->getClient()) {
@@ -118,8 +170,6 @@ class Request extends \Bs\TableIface
                 return $value;
             });
 
-        $this->appendCell(new Cell\Text('status'));
-        $this->appendCell(new Cell\Text('qty'));
 
         if (!$this->isMinMode()) {
             $this->appendCell(new Cell\Date('modified'));

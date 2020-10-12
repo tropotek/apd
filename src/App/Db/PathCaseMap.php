@@ -42,6 +42,7 @@ class PathCaseMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Text('reportStatus', 'report_status'));
             $this->dbMap->addPropertyMap(new Db\Text('accountStatus', 'account_status'));
             $this->dbMap->addPropertyMap(new Db\Money('cost'));
+            $this->dbMap->addPropertyMap(new Db\Boolean('afterHours', 'after_hours'));
 
             $this->dbMap->addPropertyMap(new Db\Text('zoonotic'));
             $this->dbMap->addPropertyMap(new Db\Boolean('zoonoticAlert', 'zoonotic_alert'));
@@ -113,6 +114,7 @@ class PathCaseMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Text('reportStatus'));
             $this->formMap->addPropertyMap(new Form\Text('accountStatus'));
             $this->formMap->addPropertyMap(new Form\Money('cost'));
+            $this->formMap->addPropertyMap(new Form\Boolean('afterHours'));
             $this->formMap->addPropertyMap(new Form\Text('zoonotic'));
             $this->formMap->addPropertyMap(new Form\Boolean('zoonoticAlert'));
             $this->formMap->addPropertyMap(new Form\Text('issue'));
@@ -224,6 +226,9 @@ class PathCaseMap extends Mapper
         }
         if (!empty($filter['status'])) {
             $filter->appendWhere('a.status = %s AND ', $this->quote($filter['status']));
+        }
+        if (!empty($filter['afterHours'])) {
+            $filter->appendWhere('a.after_hours = %s AND ', (int)$filter['afterHours']);
         }
         if (!empty($filter['reportStatus'])) {
             $filter->appendWhere('a.report_status = %s AND ', $this->quote($filter['reportStatus']));

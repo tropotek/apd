@@ -185,7 +185,7 @@ class Edit extends AdminEditIface
   </div>
   <div class="col-4" var="panel2" choice="panel2">
     <div class="tk-panel" data-panel-title="Cassettes" data-panel-icon="fa fa-stack-overflow" var="side-panel-cassette" choice="side-panel-cassette"></div>
-    <div class="tk-panel" data-panel-title="Histology Requests" data-panel-icon="fa fa-medkit" var="side-panel-requests" choice="side-panel-requests"></div>
+    <div class="tk-panel tk-request-list" data-panel-title="Histology Requests" data-panel-icon="fa fa-medkit" var="side-panel-requests" choice="side-panel-requests"></div>
     <div class="tk-panel" data-panel-title="Files" data-panel-icon="fa fa-floppy-o" var="side-panel-files" choice="side-panel-files"></div>
     <div class="tk-panel" data-panel-title="Status Log" data-panel-icon="fa fa-list" var="side-panel-status" choice="side-panel-status"></div>
   </div>
