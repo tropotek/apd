@@ -52,32 +52,41 @@ class PathCase extends \Bs\TableIface
         $this->appendCell(new Cell\Text('submissionType'));
         $this->appendCell(new Cell\Text('status'));
 
-        /*
+
         $this->appendCell(new Cell\Text('cost'));
         $this->appendCell(new Cell\Boolean('afterHours'));
-        $this->appendCell(new Cell\Text('zootonicDisease'));
-        $this->appendCell(new Cell\Text('zootonicResult'));
+        $this->appendCell(new Cell\Text('zootonic'));
+        $this->appendCell(new Cell\Text('issue'));
         $this->appendCell(new Cell\Text('specimenCount'));
         $this->appendCell(new Cell\Text('animalName'));
         $this->appendCell(new Cell\Text('species'));
-        $this->appendCell(new Cell\Text('gender'));
+        $this->appendCell(new Cell\Text('sex'));
         $this->appendCell(new Cell\Boolean('desexed'));
         $this->appendCell(new Cell\Text('patientNumber'));
         $this->appendCell(new Cell\Text('microchip'));
-        $this->appendCell(new Cell\Text('ownerName'));
+        $this->appendCell(new Cell\Text('owner'))
+            ->addOnPropertyValue(function (Cell\Text $cell, \App\Db\PathCase $obj, $value) {
+                $owner = $obj->getOwner();
+                $value = '';
+                if ($owner) {
+                    $value = $owner->getName();
+                }
+                return $value;
+            });
         $this->appendCell(new Cell\Text('origin'));
         $this->appendCell(new Cell\Text('breed'));
-        $this->appendCell(new Cell\Text('vmisWeight'));
-        $this->appendCell(new Cell\Text('necoWeight'));
+        $this->appendCell(new Cell\Text('colour'));
+        $this->appendCell(new Cell\Text('weight'));
         $this->appendCell(new Cell\Date('dob'));
         $this->appendCell(new Cell\Date('dod'));
         $this->appendCell(new Cell\Boolean('euthanised'));
         $this->appendCell(new Cell\Text('euthanisedMethod'));
         $this->appendCell(new Cell\Text('acType'));
         $this->appendCell(new Cell\Date('acHold'));
-        */
-        $this->appendCell(new Cell\Text('storageId'));  // Not sure (show address text)
-        //$this->appendCell(new Cell\Date('disposal'));
+        //$this->appendCell(new Cell\Text('storageId'));
+        $this->appendCell(new Cell\Date('disposal'));
+
+
 
         $this->appendCell(new Cell\Date('modified'));
         $this->appendCell(new Cell\Date('created'));
@@ -87,7 +96,11 @@ class PathCase extends \Bs\TableIface
 
         // Actions
         //$this->appendAction(\Tk\Table\Action\Link::createLink('New Path Case', \Bs\Uri::createHomeUrl('/pathCaseEdit.html'), 'fa fa-plus'));
-        $this->appendAction(\Tk\Table\Action\ColumnSelect::create()->setUnselected(array('modified')));
+        //$this->appendAction(\Tk\Table\Action\ColumnSelect::create()->setUnselected(array('modified')));
+        $this->appendAction(\Tk\Table\Action\ColumnSelect::create()->setSelected(
+                array('id', 'pathologyId', 'userId', 'clientId', 'type', 'submissionType', 'status', 'created')
+            )->setHidden(array('id'))
+        );
         $this->appendAction(\Tk\Table\Action\Delete::create());
         $this->appendAction(\Tk\Table\Action\Csv::create());
 
