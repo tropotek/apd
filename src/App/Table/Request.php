@@ -112,36 +112,38 @@ class Request extends \Bs\TableIface
 
         if (!$this->isMinMode()) {
             $this->appendCell(new Cell\Checkbox('id'));
-        }else {
-            $aCell = $this->getActionCell();
-            $aCell->addButton(Cell\ActionButton::create('Complete', Uri::create(), 'fa fa-thumbs-up')->addCss('btn-success'))
-                ->setShowLabel(false)
-                ->addOnShow(function ($cell, \App\Db\Request $obj, Cell\ActionButton $button) {
-                    $button->getUrl()->set('rComplete', $obj->getId());
-                    $button->setAttr('data-confirm', 'Are you sure you want to mark request completed?');
-                    if ($obj->getStatus() == \App\Db\Request::STATUS_COMPLETED) {
-                        $button->setAttr('disabled');
-                    }
-                });
-            $aCell->addButton(Cell\ActionButton::create('Cancel', Uri::create(), 'fa fa-thumbs-down')->addCss('btn-warning'))
-                ->setShowLabel(false)
-                ->addOnShow(function ($cell, \App\Db\Request $obj, Cell\ActionButton $button) {
-                    $button->getUrl()->set('rCancel', $obj->getId());
-                    $button->setAttr('data-confirm', 'Are you sure you want to cancel this request?');
-                    if ($obj->getStatus() == \App\Db\Request::STATUS_CANCELLED) {
-                        $button->setAttr('disabled');
-                    }
-                });
+        }
+
+        $aCell = $this->getActionCell();
+        $aCell->addButton(Cell\ActionButton::create('Complete', Uri::create(), 'fa fa-thumbs-up')->addCss('btn-success'))
+            ->setShowLabel(false)
+            ->addOnShow(function ($cell, \App\Db\Request $obj, Cell\ActionButton $button) {
+                $button->getUrl()->set('rComplete', $obj->getId());
+                $button->setAttr('data-confirm', 'Are you sure you want to mark request completed?');
+                if ($obj->getStatus() == \App\Db\Request::STATUS_COMPLETED) {
+                    $button->setAttr('disabled');
+                }
+            });
+        $aCell->addButton(Cell\ActionButton::create('Cancel', Uri::create(), 'fa fa-thumbs-down')->addCss('btn-warning'))
+            ->setShowLabel(false)
+            ->addOnShow(function ($cell, \App\Db\Request $obj, Cell\ActionButton $button) {
+                $button->getUrl()->set('rCancel', $obj->getId());
+                $button->setAttr('data-confirm', 'Are you sure you want to cancel this request?');
+                if ($obj->getStatus() == \App\Db\Request::STATUS_CANCELLED) {
+                    $button->setAttr('disabled');
+                }
+            });
+
+        if ($this->isMinMode()) {
             $aCell->addButton(Cell\ActionButton::create('Delete', Uri::create(), 'fa fa-trash')->addCss('btn-danger'))
                 ->setShowLabel(false)
                 ->addOnShow(function ($cell, \App\Db\Request $obj, Cell\ActionButton $button) {
                     $button->getUrl()->set('rDel', $obj->getId());
                     $button->setAttr('data-confirm', 'Are you sure you want to remove this request?');
                 });
-
-            $this->appendCell($this->getActionCell())->setLabel('');
-
         }
+        $this->appendCell($this->getActionCell())->setLabel('');
+
 
         //$this->appendCell(new Cell\Text('pathCaseId'));
         $this->appendCell(new Cell\Text('status'));

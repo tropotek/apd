@@ -131,6 +131,16 @@ class Edit extends AdminEditIface
     {
         if ($this->pathCase->getId()) {
             $this->getActionPanel()->append(\Tk\Ui\Link::createBtn(
+                'Cassette List',
+                \Uni\Uri::createHomeUrl('/cassetteManager.html')->set('pathCaseId', $this->pathCase->getId()),
+                'fa fa-stack-overflow fa-add-action'));
+            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn(
+                'Request List',
+                \Uni\Uri::createHomeUrl('/requestManager.html')->set('pathCaseId', $this->pathCase->getId()),
+                'fa fa-medkit fa-add-action'));
+
+
+            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn(
                 'New Cassette',
                 \Uni\Uri::createHomeUrl('/cassetteEdit.html')->set('pathCaseId', $this->pathCase->getId()),
                 'fa fa-stack-overflow fa-add-action'));
