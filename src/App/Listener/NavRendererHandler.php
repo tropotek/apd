@@ -109,17 +109,16 @@ class NavRendererHandler implements Subscriber
             if ($user->hasPermission(Permission::MANAGE_SITE))
                 $menu->append(Item::create('Settings', \Uni\Uri::createHomeUrl('/settings.html'), 'fa fa-cogs'));
 
-            // Temp links
-
+            $menu->append(Item::create('Cases', \Uni\Uri::createHomeUrl('/pathCaseManager.html'), 'fa fa-paw'));
             $menu->append(Item::create('Client List', \Uni\Uri::createHomeUrl('/clientManager.html'), 'fa fa-building'));
             //$menu->append(Item::create('Storage List', \Uni\Uri::createHomeUrl('/storageManager.html'), 'fa fa-question'));
             //$menu->append(Item::create('Service List', \Uni\Uri::createHomeUrl('/serviceManager.html'), 'fa fa-question'));
-            $menu->append(Item::create('Cases', \Uni\Uri::createHomeUrl('/pathCaseManager.html'), 'fa fa-paw'));
-            //$menu->append(Item::create('Request List', \Uni\Uri::createHomeUrl('/requestManager.html'), 'fa fa-flask'));
-
+            //$menu->append(Item::create('Request List', \Uni\Uri::createHomeUrl('/requestManager.html'), 'fa fa-flask'));\
             //$menu->append(Item::create('Cassette List', \Uni\Uri::createHomeUrl('/cassetteManager.html'), 'fa fa-question'));
-
             //$menu->append(Item::create('Mail Log', \Uni\Uri::createHomeUrl(MailLog::createMailLogUrl('/manager.html', $this->getConfig()->getInstitution())), 'fa fa-envelope'));
+
+
+
 
         }
 
