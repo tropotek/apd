@@ -98,8 +98,6 @@ class PathCase extends \Bs\FormIface
         $this->appendField(Field\DialogSelect::createDialogSelect('clientId', $list, $form)->prependOption('-- Select --', ''))
             ->setTabGroup($tab)->setLabel('Submitting Client')->setNotes('This is the Client that will be invoiced.');
 
-
-
         $list = \Tk\ObjectUtil::getClassConstants($this->getPathCase(), 'ACCOUNT_STATUS', true);
         $this->appendField(Field\Select::createSelect('accountStatus', $list)->prependOption('-- Select --', ''))
             ->setTabGroup($tab);
@@ -128,8 +126,6 @@ class PathCase extends \Bs\FormIface
         $this->appendField(Field\DialogSelect::createDialogSelect('ownerId', $list, $form)->prependOption('-- Select --', ''))
             ->setTabGroup($tab)->setLabel('Owner Name')->setNotes('This is the Client Record of the animal owner.');
 
-
-
         $this->appendField(new Field\Input('animalName'))->setLabel('Animal Name/ID')->setTabGroup($tab);
         $this->appendField(new Field\Input('patientNumber'))->setTabGroup($tab);
         $this->appendField(new Field\Input('microchip'))->setTabGroup($tab);
@@ -152,12 +148,17 @@ class PathCase extends \Bs\FormIface
             $dob->setAttr('data-dod', '#path_case-dod');
         }
 
-        $this->appendField(new Field\Input('dod'))->setTabGroup($tab)->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy');
+        $this->appendField(new Field\Input('dod'))->setTabGroup($tab)->addCss('date')
+            ->setAttr('placeholder', 'dd/mm/yyyy');
         // END Animal
 
 
-        $list  = $this->getConfig()->getUserMapper()->findFiltered(array('institutionId'=> $this->getPathCase()->getInstitutionId(), 'type' => 'staff'), Tool::create('nameFirst'));
-        $this->appendField(Field\Select::createSelect('pathologistId', $list)->prependOption('-- Select --', ''))
+        $list  = $this->getConfig()->getUserMapper()->findFiltered(
+            array('institutionId'=> $this->getPathCase()->getInstitutionId(), 'type' => 'staff'),
+            Tool::create('nameFirst')
+        );
+        $this->appendField(Field\Select::createSelect('pathologistId', $list)
+            ->prependOption('-- Select --', ''))
             ->setTabGroup($tab)->setLabel('Pathologist');
 
         $this->appendField(new Field\Input('resident'))->setTabGroup($tab);
@@ -218,7 +219,6 @@ class PathCase extends \Bs\FormIface
 
 //        $this->appendField(new Field\File('files'))
 //            ->addCss('')->setAttr('data-path', $mediaPath)->setTabGroup($tab);
-
 
         $tab = 'After Care';
         $this->appendField(Field\Select::createSelect('storageId', array())->prependOption('-- Select --', ''))

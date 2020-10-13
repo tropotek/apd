@@ -185,6 +185,10 @@ class PathCaseMap extends Mapper
             if (is_numeric($filter['keywords'])) {
                 $id = (int)$filter['keywords'];
                 $w .= sprintf('a.id = %d OR ', $id);
+                $w .= sprintf('a.pathology_id = %d OR ', $id);
+                $w .= sprintf('a.animal_name = %d OR ', $id);
+                $w .= sprintf('a.patient_number = %d OR ', $id);
+                $w .= sprintf('a.microchip = %d OR ', $id);
             }
             if ($w) $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
         }
@@ -194,16 +198,20 @@ class PathCaseMap extends Mapper
             if ($w) $filter->appendWhere('(%s) AND ', $w);
         }
 
-        if (isset($filter['institutionId'])) {
+        if (!empty($filter['age'])) {
+            $filter->appendWhere('a.age = %s AND ', $this->quote($filter['age']));
+        }
+
+        if (!empty($filter['institutionId'])) {
             $filter->appendWhere('a.institution_id = %s AND ', (int)$filter['institutionId']);
         }
-        if (isset($filter['clientId'])) {
+        if (!empty($filter['clientId'])) {
             $filter->appendWhere('a.client_id = %s AND ', (int)$filter['clientId']);
         }
-        if (isset($filter['userId'])) {
+        if (!empty($filter['userId'])) {
             $filter->appendWhere('a.user_id = %s AND ', (int)$filter['userId']);
         }
-        if (isset($filter['pathologistId'])) {
+        if (!empty($filter['pathologistId'])) {
             $filter->appendWhere('a.pathologist_id = %s AND ', (int)$filter['pathologistId']);
         }
         if (!empty($filter['pathologyId'])) {

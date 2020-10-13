@@ -112,7 +112,6 @@ class Edit extends AdminEditIface
         );
         $this->cassetteTable->setList($this->cassetteTable->findList($filter, \Tk\Db\Tool::create('number')));
 
-
         $this->requestTable = \App\Table\Request::create();
         $this->requestTable->setEditUrl(\Bs\Uri::createHomeUrl('/requestEdit.html'));
         $this->requestTable->setMinMode(true);
@@ -138,8 +137,6 @@ class Edit extends AdminEditIface
                 'Request List',
                 \Uni\Uri::createHomeUrl('/requestManager.html')->set('pathCaseId', $this->pathCase->getId()),
                 'fa fa-medkit fa-add-action'));
-
-
             $this->getActionPanel()->append(\Tk\Ui\Link::createBtn(
                 'New Cassette',
                 \Uni\Uri::createHomeUrl('/cassetteEdit.html')->set('pathCaseId', $this->pathCase->getId()),

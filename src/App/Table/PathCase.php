@@ -1,8 +1,10 @@
 <?php
 namespace App\Table;
 
+use App\Db\ClientMap;
 use Tk\Form\Field;
 use Tk\Table\Cell;
+use Uni\Db\User;
 
 /**
  * Example:
@@ -79,6 +81,18 @@ class PathCase extends \Bs\TableIface
         $this->appendCell(new Cell\Text('weight'));
         $this->appendCell(new Cell\Date('dob'));
         $this->appendCell(new Cell\Date('dod'));
+        $this->appendCell(new Cell\Text('age'))
+            ->addOnPropertyValue(function (Cell\Text $cell, \App\Db\PathCase $obj, $value) {
+                $value = '';
+                $dob = $obj->getDob();
+                if ($dob) {
+                    $dod = \Tk\Date::create();
+                    if ($obj->getDod())
+                        $dod = $obj->getDod();
+                    $value = sprintf('%s.%s', $dob->diff($dod)->y, $dob->diff($dod)->m);
+                }
+                return $value;
+            });
         $this->appendCell(new Cell\Boolean('euthanised'));
         $this->appendCell(new Cell\Text('euthanisedMethod'));
         $this->appendCell(new Cell\Text('acType'));
@@ -94,11 +108,33 @@ class PathCase extends \Bs\TableIface
         // Filters
         $this->appendFilter(new Field\Input('keywords'))->setAttr('placeholder', 'Search');
 
+        $this->appendFilter(new Field\Input('age'))->setAttr('placeholder', 'Age');
+
+        $list = $this->getConfig()->getUserMapper()->findFiltered(array(
+            'institutionId' => $this->getConfig()->getInstitutionId(),
+            'type' => User::TYPE_STAFF
+        ));
+        $this->appendFilter(Field\Select::createSelect('userId', $list)->prependOption('-- Staff --'));
+        
+        $list = ClientMap::create()->findFiltered(array(
+            'institutionId' => $this->getConfig()->getInstitutionId()
+        ));
+        $this->appendFilter(Field\Select::createSelect('clientId', $list)->prependOption('-- Submitter/Client --'));
+        $this->appendFilter(Field\Select::createSelect('ownerId', $list)->prependOption('-- Owner --'));
+
+        $list = \Tk\ObjectUtil::getClassConstants(\App\Db\PathCase::class, 'TYPE', true);
+        $this->appendFilter(Field\Select::createSelect('type', $list)->prependOption('-- Case Type --'));
+        $list = \Tk\ObjectUtil::getClassConstants(\App\Db\PathCase::class, 'TYPE', true);
+        $this->appendFilter(Field\Select::createSelect('submissionType', $list)->prependOption('-- Submission Type --'));
+        $list = \Tk\ObjectUtil::getClassConstants(\App\Db\PathCase::class, 'STATUS', true);
+        $this->appendFilter(Field\Select::createSelect('status', $list)->prependOption('-- Status --'));
+
+
         // Actions
         //$this->appendAction(\Tk\Table\Action\Link::createLink('New Path Case', \Bs\Uri::createHomeUrl('/pathCaseEdit.html'), 'fa fa-plus'));
         //$this->appendAction(\Tk\Table\Action\ColumnSelect::create()->setUnselected(array('modified')));
         $this->appendAction(\Tk\Table\Action\ColumnSelect::create()->setSelected(
-                array('id', 'pathologyId', 'userId', 'clientId', 'type', 'submissionType', 'status', 'created')
+                array('id', 'pathologyId', 'userId', 'clientId', 'owner', 'age', 'patientNumber', 'type', 'submissionType', 'status', 'created')
             )->setHidden(array('id'))
         );
         $this->appendAction(\Tk\Table\Action\Delete::create());
@@ -120,6 +156,7 @@ class PathCase extends \Bs\TableIface
     {
         if (!$tool) $tool = $this->getTool();
         $filter = array_merge($this->getFilterValues(), $filter);
+        vd($filter);
         $list = \App\Db\PathCaseMap::create()->findFiltered($filter, $tool);
         return $list;
     }
