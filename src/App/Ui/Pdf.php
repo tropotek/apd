@@ -50,7 +50,7 @@ class Pdf extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterfa
      * @param string $watermark
      * @throws \Exception
      */
-    public function __construct($html, $title = 'EMS PDF DOCUMENT', $watermark = '')
+    public function __construct($html, $title = 'PDF DOCUMENT', $watermark = '')
     {
         $this->html = $html;
         $this->title = $title;
@@ -61,13 +61,14 @@ class Pdf extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterfa
 
     /**
      * @param string $html
+     * @param string $title
      * @param string $watermark
      * @return Pdf
      * @throws \Exception
      */
-    public static function create($html, $watermark = '')
+    public static function create($html, $title = 'PDF DOCUMENT', $watermark = '')
     {
-        $obj = new self($html, $watermark);
+        $obj = new self($html, $title, $watermark);
         return $obj;
     }
 
@@ -166,6 +167,7 @@ class Pdf extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterfa
     public function show()
     {
         $template = $this->getTemplate();
+        $template->setTitleText($this->getTitle());
         if ($this->rendered) return $template;
         $this->rendered = true;
 

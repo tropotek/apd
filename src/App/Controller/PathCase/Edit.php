@@ -121,6 +121,25 @@ class Edit extends AdminEditIface
         );
         $this->requestTable->setList($this->requestTable->findList($filter, \Tk\Db\Tool::create('created DESC')));
 
+        // Add view count to Content
+        if ($request->has('pdf')) {
+            return $this->doPdf($request);
+        }
+    }
+
+    /**
+     * @param \Tk\Request $request
+     * @return \Dom\Renderer\Renderer|\Dom\Template|null
+     * @throws \Exception
+     */
+    public function doPdf(\Tk\Request $request)
+    {
+        $ren = \App\Ui\Pdf::create(
+            '<p>Testing</p>',
+            $this->pathCase->getPathologyId() . ' - ' . ucwords($this->pathCase->getType())
+        );
+        //$ren->output();     // comment this to see html version
+        return $ren->show();
     }
 
     /**
@@ -143,6 +162,8 @@ class Edit extends AdminEditIface
                 'fa fa-stack-overflow fa-add-action'));
 //        $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('New Request',
 //            Uri::createHomeUrl('#'), 'fa fa-medkit fa-add-action'));
+            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Report', \Uni\Uri::create()->set('pdf'), 'fa fa-file-pdf-o'))
+                ->setAttr('target', '_blank');
         }
     }
 
