@@ -82,10 +82,13 @@ class PathCase extends \Bs\TableIface
         $this->appendCell(new Cell\Date('dob'));
         $this->appendCell(new Cell\Date('dod'));
         $this->appendCell(new Cell\Text('age'))
+            ->setOrderProperty('b.age')
             ->addOnPropertyValue(function (Cell\Text $cell, \App\Db\PathCase $obj, $value) {
                 $value = '';
                 $dob = $obj->getDob();
-                if ($dob) {
+                if (property_exists($obj, 'age') && property_exists($obj, 'age_m')) {
+                    $value = sprintf('%s.%s', $obj->age, $obj->age_m);
+                } else if ($dob) {
                     $dod = \Tk\Date::create();
                     if ($obj->getDod())
                         $dod = $obj->getDod();
@@ -99,7 +102,6 @@ class PathCase extends \Bs\TableIface
         $this->appendCell(new Cell\Date('acHold'));
         //$this->appendCell(new Cell\Text('storageId'));
         $this->appendCell(new Cell\Date('disposal'));
-
 
 
         $this->appendCell(new Cell\Date('modified'));
@@ -156,7 +158,6 @@ class PathCase extends \Bs\TableIface
     {
         if (!$tool) $tool = $this->getTool();
         $filter = array_merge($this->getFilterValues(), $filter);
-        vd($filter);
         $list = \App\Db\PathCaseMap::create()->findFiltered($filter, $tool);
         return $list;
     }

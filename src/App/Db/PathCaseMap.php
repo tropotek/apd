@@ -176,19 +176,28 @@ class PathCaseMap extends Mapper
      */
     public function makeQuery(Filter $filter)
     {
+        $filter->appendSelect(' a.*, b.age, b.age_m');
+
         $filter->appendFrom('%s a', $this->quoteParameter($this->getTable()));
+        $filter->appendFrom(',
+     (
+         SELECT id,
+            TIMESTAMPDIFF(YEAR, a1.dob, if (ISNULL(a1.dod), now(), a1.dod)) as \'age\',
+            TIMESTAMPDIFF(MONTH, a1.dob, if (ISNULL(a1.dod), now(), a1.dod)) % 12 as \'age_m\'
+         FROM `path_case` a1
+     ) b');
+            $filter->appendWhere('a.id = b.id AND ', $this->quote($filter['age']));
 
         if (!empty($filter['keywords'])) {
             $kw = '%' . $this->escapeString($filter['keywords']) . '%';
             $w = '';
-            //$w .= sprintf('a.name LIKE %s OR ', $this->quote($kw));
+            $w .= sprintf('a.pathology_id LIKE %s OR ', $this->quote($kw));
+            $w .= sprintf('a.animal_name LIKE %s OR ', $this->quote($kw));
+            $w .= sprintf('a.patient_number LIKE %s OR ', $this->quote($kw));
+            $w .= sprintf('a.microchip LIKE %s OR ', $this->quote($kw));
             if (is_numeric($filter['keywords'])) {
                 $id = (int)$filter['keywords'];
                 $w .= sprintf('a.id = %d OR ', $id);
-                $w .= sprintf('a.pathology_id = %d OR ', $id);
-                $w .= sprintf('a.animal_name = %d OR ', $id);
-                $w .= sprintf('a.patient_number = %d OR ', $id);
-                $w .= sprintf('a.microchip = %d OR ', $id);
             }
             if ($w) $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
         }
@@ -199,7 +208,7 @@ class PathCaseMap extends Mapper
         }
 
         if (!empty($filter['age'])) {
-            $filter->appendWhere('a.age = %s AND ', $this->quote($filter['age']));
+            $filter->appendWhere('b.age = %s AND ', $this->quote($filter['age']));
         }
 
         if (!empty($filter['institutionId'])) {
