@@ -9,11 +9,11 @@ $config = \Uni\Config::getInstance();
 try {
     $data = \Tk\Db\Data::create();
     if (!$data->get('site.title')) {
-        $data->set('site.title', 'Uni Base Project');
-        $data->set('site.short.title', 'TkUni');
+        $data->set('site.title', '');
+        $data->set('site.short.title', 'APD');
     }
     if (!$data->get('site.email'))
-        $data->set('site.email', 'fvas-elearning@unimelb.edu.au');
+        $data->set('site.email', 'anat-vet@unimelb.edu.au');
 
     if (!$data->get('site.meta.keywords'))
         $data->set('site.meta.keywords', '');

@@ -84,16 +84,7 @@ class PathCase extends \Bs\TableIface
         $this->appendCell(new Cell\Text('age'))
             ->setOrderProperty('b.age')
             ->addOnPropertyValue(function (Cell\Text $cell, \App\Db\PathCase $obj, $value) {
-                $value = '';
-                $dob = $obj->getDob();
-                if (property_exists($obj, 'age') && property_exists($obj, 'age_m')) {
-                    $value = sprintf('%s.%s', $obj->age, $obj->age_m);
-                } else if ($dob) {
-                    $dod = \Tk\Date::create();
-                    if ($obj->getDod())
-                        $dod = $obj->getDod();
-                    $value = sprintf('%s.%s', $dob->diff($dod)->y, $dob->diff($dod)->m);
-                }
+                $value = sprintf('%s.%s', $obj->getAge(), $obj->getAgeMonths());
                 return $value;
             });
         $this->appendCell(new Cell\Boolean('euthanised'));

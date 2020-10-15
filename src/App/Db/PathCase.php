@@ -861,6 +861,50 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     }
 
     /**
+     * return the age years componenet
+     * @return int
+     */
+    public function getAge()
+    {
+        $age = 0;
+        if ($this->getDob()) {
+            if (property_exists($this, 'age')) {
+                $age = $this->age;
+            } else {
+                $dod = \Tk\Date::create();
+                if ($this->getDod())
+                    $dod = $this->getDod();
+                $age = $this->getDob()->diff($dod)->y;
+            }
+        }
+        return $age;
+    }
+
+    /**
+     * return the age months component excluding the years
+     * @return int
+     */
+    public function getAgeMonths()
+    {
+        $age_m = 0;
+        if ($this->getDob()) {
+            if (property_exists($this, 'age_m')) {
+                $age_m = $this->age_m;
+            } else {
+                $dod = \Tk\Date::create();
+                if ($this->getDod())
+                    $dod = $this->getDod();
+                $age_m = $this->getDob()->diff($dod)->m;
+            }
+        }
+        return $age_m;
+    }
+
+
+
+
+
+    /**
      * @param bool $euthanised
      * @return PathCase
      */

@@ -134,12 +134,9 @@ class Edit extends AdminEditIface
      */
     public function doPdf(\Tk\Request $request)
     {
-        $ren = \App\Ui\Pdf::create(
-            '<p>Testing</p>',
-            $this->pathCase->getPathologyId() . ' - ' . ucwords($this->pathCase->getType())
-        );
-        //$ren->output();     // comment this to see html version
-        return $ren->show();
+        $pdf = \App\Ui\CaseReportPdf::createReport($this->pathCase);
+        $pdf->output();     // comment this to see html version
+        return $pdf->show();
     }
 
     /**

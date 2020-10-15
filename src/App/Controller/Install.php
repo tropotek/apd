@@ -30,7 +30,7 @@ class Install extends \Uni\Controller\Install
         if ($this->getConfig()->isDebug()) {
             $sql = <<<SQL
 -- TODO: see if this can be run here??
--- UPDATE dev_apd.institution t SET t.name = 'University of Melbourne Veterinary Anatomic Pathology', t.email = 'anat-vet@unimelb.edu.au' WHERE t.id = 1;
+UPDATE institution t SET t.name = 'Faculty of Veterinary and Agricultural Sciences', t.phone = '(03) 9731 2274', t.email = 'anat-vet@unimelb.edu.au' WHERE t.id = 1;
 
 INSERT INTO user (institution_id, type, username, password ,name_first, name_last, email, active, hash, modified, created)
 VALUES

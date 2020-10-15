@@ -30,7 +30,7 @@ class Pdf extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterfa
     /**
      * @var bool
      */
-    private $rendered = false;
+    protected $rendered = false;
 
     /**
      * @var string
