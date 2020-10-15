@@ -4,6 +4,7 @@ namespace App\Controller\PathCase;
 use App\Db\PathCase;
 use Bs\Controller\AdminEditIface;
 use Dom\Template;
+use Tk\Crumbs;
 use Tk\Request;
 use Uni\Uri;
 
@@ -159,7 +160,7 @@ class Edit extends AdminEditIface
                 'fa fa-stack-overflow fa-add-action'));
 //        $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('New Request',
 //            Uri::createHomeUrl('#'), 'fa fa-medkit fa-add-action'));
-            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Report', \Uni\Uri::create()->set('pdf'), 'fa fa-file-pdf-o'))
+            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Report', \Uni\Uri::create()->set('pdf')->set(Crumbs::CRUMB_IGNORE), 'fa fa-file-pdf-o'))
                 ->setAttr('target', '_blank');
         }
     }
