@@ -92,9 +92,7 @@ class Request extends \Bs\FormIface
         }
 
         $form->addFieldErrors($this->getRequest()->validate());
-
         if ($form->hasErrors()) {
-            vd($form->getAllErrors());
             return;
         }
 

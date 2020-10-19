@@ -184,13 +184,14 @@ class CaseReportPdf extends Pdf
 body {
   font-size: 0.8em;
 }
-h1, h2, h3, h4, h5, h6 {
-  margin: 0;
-  padding: 0;
-  line-height: 1;
-}
 table td {
   vertical-align: top;
+}
+table.border {
+  border: 1px solid #CCC;
+}
+table.details td {
+  padding: 4px 10px;
 }
 img.logo {
   width: 128px;
@@ -221,7 +222,7 @@ CSS;
   <div class="content">
     <h2 style="text-align: center;" var="pageTitle"></h2>
     <div class="header">
-      <table width="100%" style="border: 1px solid #CCC;">
+      <table width="100%" style="" class="border">
         <tr>
           <td width="18%" style="">
             <img src="#" alt="Logo" class="logo" var="logo" choice="logo"/>
@@ -237,7 +238,7 @@ CSS;
       </table>
       
       <br/>
-      <table width="100%" style="border: 1px solid #CCC;" >
+      <table width="100%" style="" class="border details">
         <tr>
           <td width="50%"><b>Client Details:</b></td>
           <td width="50%"></td>
@@ -257,7 +258,7 @@ CSS;
       </table>
       
       <br/>
-      <table width="100%" style="border: 1px solid #CCC;">
+      <table width="100%" style="" class="border details">
         <tr>
           <td width="50%"><b>Patient Details:</b></td>
           <td width="50%"></td>
@@ -278,7 +279,7 @@ CSS;
       <br/>
       
       
-      <h3 style="text-align: center; margin: 10px;padding: 0;" var="name"></h3>
+      <h3 style="text-align: center; margin: 0px;padding: 0;" var="name"></h3>
       
       <div class="textBlock" style="page-break-inside: avoid;" repeat="textBlock" var="textBlock">
         <h4 var="title"></h4>

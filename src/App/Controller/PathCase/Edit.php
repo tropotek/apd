@@ -2,6 +2,7 @@
 namespace App\Controller\PathCase;
 
 use App\Db\PathCase;
+use App\Ui\Dialog\EmailReport;
 use Bs\Controller\AdminEditIface;
 use Dom\Template;
 use Tk\Crumbs;
@@ -39,6 +40,11 @@ class Edit extends AdminEditIface
      * @var null|\App\Table\Request
      */
     protected $requestTable = null;
+
+    /**
+     * @var null|EmailReport
+     */
+    protected $emailReportDialog = null;
 
 
     /**
@@ -92,7 +98,7 @@ class Edit extends AdminEditIface
         $this->getForm()->execute();
 
         // No need to do the reset for new cases
-        if (!$this->pathCase->getId()) return;
+        if (!$this->pathCase->getId()) return null;
 
 
         $this->statusTable = \Bs\Table\Status::create()
@@ -121,6 +127,9 @@ class Edit extends AdminEditIface
             'pathCaseId' => $this->pathCase->getId()
         );
         $this->requestTable->setList($this->requestTable->findList($filter, \Tk\Db\Tool::create('created DESC')));
+
+        $this->emailReportDialog = new EmailReport($this->pathCase);
+        $this->emailReportDialog->execute();
 
         // Add view count to Content
         if ($request->has('pdf')) {
@@ -164,7 +173,7 @@ class Edit extends AdminEditIface
 
             // Need a dialog here
             $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Email Report', \Uni\Uri::create()->set('pdf')->set(Crumbs::CRUMB_IGNORE), 'fa fa-envelope-o'))
-                ->setAttr('target', '_blank');
+                ->setAttr('data-toggle', 'modal')->setAttr('data-target', '#'.$this->emailReportDialog->getId());
         }
     }
 
@@ -198,6 +207,9 @@ class Edit extends AdminEditIface
         if ($this->pathCase->getId()) {
             $template->setVisible('panel2');
         }
+
+        if ($this->emailReportDialog)
+            $template->appendBodyTemplate($this->emailReportDialog->show());
 
         return $template;
     }

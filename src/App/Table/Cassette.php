@@ -1,6 +1,8 @@
 <?php
 namespace App\Table;
 
+use Dom\Renderer\Renderer;
+use Dom\Template;
 use Tk\Form\Field;
 use Tk\Table\Cell;
 use Tk\Table\Cell\ActionButton;
@@ -148,7 +150,6 @@ class Cassette extends \Bs\TableIface
         if ($this->requestDialog) {
             $this->getTemplate()->appendBodyTemplate($this->requestDialog->show());
         }
-
 
         return parent::show();
     }
