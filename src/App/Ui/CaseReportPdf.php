@@ -169,10 +169,12 @@ class CaseReportPdf extends Pdf
 
         $pathologist = $this->pathCase->getPathologist();
         if ($pathologist) {
-            $template->appendText('pathologistTitle', $pathologist->getTitle());
             $template->appendText('pathologistName', $pathologist->getName());
-            $template->appendText('pathologistCreds', $pathologist->getCredentials());
-            $template->appendText('pathologistPosition', $pathologist->getPosition());
+            if ($pathologist->getCredentials())
+                $template->appendText('pathologistCreds', ' ('.$pathologist->getCredentials().')');
+            if ($pathologist->getPosition())
+                $template->appendText('pathologistPosition', $pathologist->getPosition());
+
             $template->setVisible('pathologist');
         }
         $template->appendText('date', \Tk\Date::create()->format(\Tk\Date::FORMAT_SHORT_DATE));
@@ -181,6 +183,11 @@ class CaseReportPdf extends Pdf
         $css = <<<CSS
 body {
   font-size: 0.8em;
+}
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  padding: 0;
+  line-height: 1;
 }
 table td {
   vertical-align: top;
@@ -268,21 +275,26 @@ CSS;
           <td>Sex: <span var="sex"></span></td>
         </tr>
       </table>
+      <br/>
       
-      <h3 var="name"></h3>
+      
+      <h3 style="text-align: center; margin: 10px;padding: 0;" var="name"></h3>
       
       <div class="textBlock" style="page-break-inside: avoid;" repeat="textBlock" var="textBlock">
-        <h3 var="title"></h3>
+        <h4 var="title"></h4>
         <div var="content"></div>
       </div>
-    </div>  
-    <p>&nbsp;</p>
-    <p choice="pathologist" style="page-break-inside: avoid;" >
-      <b>Pathologist:</b><br/>
-      <span var="pathologistTitle"></span> <span var="pathologistName"></span> <span var="pathologistCreds"></span><br/>
-      <span var="pathologistPosition"></span> 
-    </p>
-    <p>Date: <span var="date"></span></p>
+    </div>
+    
+    
+    <div choice="pathologist" style="page-break-inside: avoid;" >
+      <p><b>Pathologist:</b></p>
+      <p style="margin-left: 20px;">
+        <span var="pathologistName"></span> <small var="pathologistCreds"></small><br/>
+        <span var="pathologistPosition"></span>
+      </p> 
+      <p style="text-align: right; margin-right: 20px;">Date: <span var="date"></span></p>
+    </div>
   </div>
 </body>
 </html>

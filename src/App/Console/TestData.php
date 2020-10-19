@@ -86,7 +86,7 @@ class TestData extends \Bs\Console\TestData
             $user = $config->createUser();
             $user->setInstitutionId($institution->getId());
             $user->setName($this->createFullName());
-            $tit = \Bs\Db\User::getTitleList();
+            $tit = array_keys(\Bs\Db\User::getTitleList());
             $user->setTitle($tit[rand(0, count($tit)-1)]);
             do {
                 $user->setUsername(strtolower($this->createName()) . '.' . rand(1000, 10000000));
