@@ -156,11 +156,4 @@ class NavRendererHandler implements Subscriber
         );
     }
 
-    /**
-     * @return \Tk\Config|\Uni\Config
-     */
-    public function getConfig()
-    {
-        return \Uni\Config::getInstance();
-    }
 }
