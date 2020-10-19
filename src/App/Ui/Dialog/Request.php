@@ -1,14 +1,9 @@
 <?php
 namespace App\Ui\Dialog;
 
-
-
 use Tk\Ui\Dialog\JsonForm;
 
 /**
- *
- *
- *
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2016 Michael Mifsud
@@ -23,7 +18,7 @@ class Request extends JsonForm
 
         $request = new \App\Db\Request();
         $request->setPathCaseId($this->getRequest()->get('pathCaseId'));
-        $form = \App\Form\Request::create()->setModel($request);
+        $form = \App\Form\Request::create()->setDialog($this)->setModel($request);
 
         parent::__construct($form, 'Create Request');
     }

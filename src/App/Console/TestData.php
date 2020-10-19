@@ -174,6 +174,7 @@ class TestData extends \Bs\Console\TestData
             $case->setResident($this->createFullName());
             $case->setStudent($this->createFullName());
             $case->setStudentEmail($this->createEmail());
+            $case->setName($this->createFullName() . ' ' . $this->createSpecies() . ' ' . $this->createBreed());
 
             //$arr = array_values(ObjectUtil::getClassConstants($case, 'STATUS_'));
             //$selected = $arr[rand(0, count($arr)-1)];

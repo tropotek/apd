@@ -158,9 +158,12 @@ class Edit extends AdminEditIface
                 'New Cassette',
                 \Uni\Uri::createHomeUrl('/cassetteEdit.html')->set('pathCaseId', $this->pathCase->getId()),
                 'fa fa-stack-overflow fa-add-action'));
-//        $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('New Request',
-//            Uri::createHomeUrl('#'), 'fa fa-medkit fa-add-action'));
+
             $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Report', \Uni\Uri::create()->set('pdf')->set(Crumbs::CRUMB_IGNORE), 'fa fa-file-pdf-o'))
+                ->setAttr('target', '_blank');
+
+            // Need a dialog here
+            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Email Report', \Uni\Uri::create()->set('pdf')->set(Crumbs::CRUMB_IGNORE), 'fa fa-envelope-o'))
                 ->setAttr('target', '_blank');
         }
     }

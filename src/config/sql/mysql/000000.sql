@@ -69,7 +69,6 @@ CREATE TABLE IF NOT EXISTS `path_case`
     user_id INT(10) UNSIGNED NOT NULL DEFAULT 0,              -- Cause author, staff who created the case record
     client_id INT(10) UNSIGNED NOT NULL DEFAULT 0,            -- The submitting client_id we are billing (auto populate owner_id  if 0 as they are usually the same)
     owner_id INT(10) UNSIGNED NOT NULL DEFAULT 0,             -- The animal owner client_id
-
     pathologist_id INT(10) UNSIGNED NOT NULL DEFAULT 0,       -- Pathologist user_id from the user table
 
     resident VARCHAR(128) NOT NULL DEFAULT '',                -- Name of the resident Pathologist???
@@ -78,6 +77,7 @@ CREATE TABLE IF NOT EXISTS `path_case`
 
     -- Case
     pathology_id VARCHAR(64) NOT NULL DEFAULT '',             -- Pathology Number  (ie: title, name)
+    name VARCHAR(255) NOT NULL DEFAULT '',                    -- The name/title of the case (optional)
     type VARCHAR(64) NOT NULL DEFAULT '',                     -- BIOPSY, NECROPSY, ...
     submission_type VARCHAR(64) NULL DEFAULT '',              -- Direct client/external vet/internal vet/researcher/ Other - Specify
 

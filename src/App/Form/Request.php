@@ -23,6 +23,10 @@ use Tk\Form;
  */
 class Request extends \Bs\FormIface
 {
+    /**
+     * @var null|\App\Ui\Dialog\Request
+     */
+    protected $dialog = null;
 
     /**
      * @throws \Exception
@@ -48,7 +52,13 @@ class Request extends \Bs\FormIface
         }
         $this->appendField(new Field\Input('qty'));
         //$this->appendField(new Field\Input('price'));
-        $this->appendField(new Field\Textarea('comments'));
+        $comm = $this->appendField(new Field\Textarea('comments'));
+        if ($this->dialog) {
+            $comm->setAttr('rows', 2);
+            $comm->setAttr('style', 'height: 4.4em;min-height: unset;');
+        }
+
+
         //$this->appendField(new Field\Textarea('notes'));
 
         $this->appendField(new Event\Submit('update', array($this, 'doSubmit')));
@@ -124,6 +134,24 @@ class Request extends \Bs\FormIface
     public function setRequest($request)
     {
         return $this->setModel($request);
+    }
+
+    /**
+     * @return \App\Ui\Dialog\Request|null
+     */
+    public function getDialog(): ?\App\Ui\Dialog\Request
+    {
+        return $this->dialog;
+    }
+
+    /**
+     * @param \App\Ui\Dialog\Request|null $dialog
+     * @return Request
+     */
+    public function setDialog(?\App\Ui\Dialog\Request $dialog): Request
+    {
+        $this->dialog = $dialog;
+        return $this;
     }
 
 }

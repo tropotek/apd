@@ -36,6 +36,7 @@ class PathCaseMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Text('studentEmail', 'student_email'));
 
             $this->dbMap->addPropertyMap(new Db\Text('pathologyId', 'pathology_id'));
+            $this->dbMap->addPropertyMap(new Db\Text('name'));
             $this->dbMap->addPropertyMap(new Db\Text('type'));
             $this->dbMap->addPropertyMap(new Db\Text('submissionType', 'submission_type'));
             $this->dbMap->addPropertyMap(new Db\Text('status'));
@@ -55,10 +56,6 @@ class PathCaseMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Boolean('desexed'));
             $this->dbMap->addPropertyMap(new Db\Text('patientNumber', 'patient_number'));
             $this->dbMap->addPropertyMap(new Db\Text('microchip'));
-//            $this->dbMap->addPropertyMap(new Db\Text('ownerName', 'owner_name'));
-//            $this->dbMap->addPropertyMap(new Db\Text('ownerEmail', 'owner_email'));
-//            $this->dbMap->addPropertyMap(new Db\Text('ownerPhone', 'owner_phone'));
-//            $this->dbMap->addPropertyMap(new Db\Text('ownerAddress', 'owner_address'));
             $this->dbMap->addPropertyMap(new Db\Text('origin'));
             $this->dbMap->addPropertyMap(new Db\Text('breed'));
             $this->dbMap->addPropertyMap(new Db\Text('colour'));
@@ -108,6 +105,7 @@ class PathCaseMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Text('student'));
             $this->formMap->addPropertyMap(new Form\Text('studentEmail'));
             $this->formMap->addPropertyMap(new Form\Text('pathologyId'));
+            $this->formMap->addPropertyMap(new Form\Text('name'));
             $this->formMap->addPropertyMap(new Form\Text('type'));
             $this->formMap->addPropertyMap(new Form\Text('submissionType'));
             $this->formMap->addPropertyMap(new Form\Text('status'));
@@ -126,10 +124,6 @@ class PathCaseMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Boolean('desexed'));
             $this->formMap->addPropertyMap(new Form\Text('patientNumber'));
             $this->formMap->addPropertyMap(new Form\Text('microchip'));
-//            $this->formMap->addPropertyMap(new Form\Text('ownerName'));
-//            $this->formMap->addPropertyMap(new Form\Text('ownerEmail'));
-//            $this->formMap->addPropertyMap(new Form\Text('ownerPhone'));
-//            $this->formMap->addPropertyMap(new Form\Text('ownerAddress'));
             $this->formMap->addPropertyMap(new Form\Text('origin'));
             $this->formMap->addPropertyMap(new Form\Text('breed'));
             $this->formMap->addPropertyMap(new Form\Text('colour'));
@@ -191,6 +185,7 @@ class PathCaseMap extends Mapper
         if (!empty($filter['keywords'])) {
             $kw = '%' . $this->escapeString($filter['keywords']) . '%';
             $w = '';
+            $w .= sprintf('a.name LIKE %s OR ', $this->quote($kw));
             $w .= sprintf('a.pathology_id LIKE %s OR ', $this->quote($kw));
             $w .= sprintf('a.animal_name LIKE %s OR ', $this->quote($kw));
             $w .= sprintf('a.patient_number LIKE %s OR ', $this->quote($kw));

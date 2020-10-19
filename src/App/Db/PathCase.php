@@ -126,6 +126,12 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public $pathologyId = '';
 
     /**
+     * Case Name/title
+     * @var string
+     */
+    public $name = '';
+
+    /**
      * BIOPSY, NECROPSY
      * @var string
      */
@@ -436,6 +442,24 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public function getPathologyId() : string
     {
         return $this->pathologyId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     * @return PathCase
+     */
+    public function setName(string $name): PathCase
+    {
+        $this->name = $name;
+        return $this;
     }
 
     /**

@@ -31,7 +31,8 @@ class CaseReportPdf extends Pdf
     {
         $this->pathCase = $pathCase;
         parent::__construct('',
-            $this->pathCase->getPathologyId() . ' - ' . ucwords($this->pathCase->getType())
+            $this->pathCase->getPathologyId() . ' - ' . ucwords($this->pathCase->getType()) . '  ' .
+            $this->pathCase->getName()
         );
     }
 
@@ -82,6 +83,7 @@ class CaseReportPdf extends Pdf
 
         $template->appendText('submissionDate', $this->pathCase->getCreated(\Tk\Date::FORMAT_SHORT_DATE));
         $template->appendText('pathologyId', $this->pathCase->getPathologyId());
+        $template->appendText('name', $this->pathCase->getName());
         $template->appendText('clientName', $this->pathCase->getClient()->getName());
 
         $owner = $this->pathCase->getOwner();
@@ -210,7 +212,7 @@ CSS;
 </head>
 <body class="" style="">
   <div class="content">
-    <h3 style="text-align: center;" var="pageTitle"></h3>
+    <h2 style="text-align: center;" var="pageTitle"></h2>
     <div class="header">
       <table width="100%" style="border: 1px solid #CCC;">
         <tr>
@@ -267,6 +269,7 @@ CSS;
         </tr>
       </table>
       
+      <h3 var="name"></h3>
       
       <div class="textBlock" style="page-break-inside: avoid;" repeat="textBlock" var="textBlock">
         <h3 var="title"></h3>

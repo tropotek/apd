@@ -77,10 +77,11 @@ class PathCase extends \Bs\FormIface
         // FORM FIELDS
         $tab = 'Details';
 
-        //if ($this->getPathCase()->getId())
-            $this->appendField(new Field\Input('pathologyId'))->setLabel('Pathology ID')->setTabGroup($tab)
+        
+        $this->appendField(new Field\Input('pathologyId'))->setLabel('Pathology ID')->setTabGroup($tab)
                 ->addCss('tk-input-lock');
-
+        $this->appendField(new Field\Input('name'))->setLabel('Case Title')->setTabGroup($tab);
+            
         if (!$this->getPathCase()->getType()) {
             $list = \Tk\ObjectUtil::getClassConstants($this->getPathCase(), 'TYPE', true);
             $this->appendField(Field\Select::createSelect('type', $list)->prependOption('-- Select --', ''))
