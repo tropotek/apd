@@ -74,7 +74,7 @@ class CaseReportPdf extends Pdf
             $institution->getStreet(),
             $institution->getCity() . ' ' . $institution->getState() . ' ' . $institution->getPostcode(),
             'Phone: ' . $institution->getPhone(),
-            'Fax: ' . $institution->getData()->get('fax'),
+            'Fax: ' . $institution->getData()->get(\App\Controller\Institution\Edit::INSTITUTION_FAX),
             'Email: ' . $institution->getEmail()
         );
         //$template->replaceHtml('institution', $inst);
@@ -167,10 +167,10 @@ class CaseReportPdf extends Pdf
 
         $pathologist = $this->pathCase->getPathologist();
         if ($pathologist) {
-            $template->appendText('pathologistTitle', $pathologist->getData()->get('title'));
+            $template->appendText('pathologistTitle', $pathologist->getTitle());
             $template->appendText('pathologistName', $pathologist->getName());
-            $template->appendText('pathologistCreds', $pathologist->getData()->get('credentials'));
-            $template->appendText('pathologistPosition', $pathologist->getData()->get('position'));
+            $template->appendText('pathologistCreds', $pathologist->getCredentials());
+            $template->appendText('pathologistPosition', $pathologist->getPosition());
             $template->setVisible('pathologist');
         }
         $template->appendText('date', \Tk\Date::create()->format(\Tk\Date::FORMAT_SHORT_DATE));

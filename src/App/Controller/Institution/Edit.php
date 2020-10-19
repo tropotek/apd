@@ -1,9 +1,8 @@
 <?php
 namespace App\Controller\Institution;
 
-
 use Tk\Ml\Db\MailLog;
-use Uni\Db\Permission;
+use Tk\Form\Field;
 
 /**
  * @author Michael Mifsud <info@tropotek.com>
@@ -12,7 +11,14 @@ use Uni\Db\Permission;
  */
 class Edit extends \Uni\Controller\Institution\Edit
 {
+    const INSTITUTION_FAX = 'inst.fax';
 
+    public function initForm(\Tk\Request $request)
+    {
+        // Nedded for the PDF report
+        $this->getForm()->appendField(new Field\Input(self::INSTITUTION_FAX), 'phone')
+            ->setLabel('Fax')->setTabGroup('Details');
+    }
 
     /**
      * @throws \Exception

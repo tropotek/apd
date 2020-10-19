@@ -86,12 +86,16 @@ class TestData extends \Bs\Console\TestData
             $user = $config->createUser();
             $user->setInstitutionId($institution->getId());
             $user->setName($this->createFullName());
+            $tit = \Bs\Db\User::getTitleList();
+            $user->setTitle($tit[rand(0, count($tit)-1)]);
             do {
                 $user->setUsername(strtolower($this->createName()) . '.' . rand(1000, 10000000));
             } while($config->getUserMapper()->findByUsername($user->getUsername()) != null);
             $user->setEmail($this->createUniqueEmail());
             //$user->setType((rand(1, 10) <= 5) ? \Uni\Db\User::TYPE_STAFF : \Uni\Db\User::TYPE_STUDENT);
             $user->setType(\Uni\Db\User::TYPE_STAFF);
+            $user->setCredentials('BVSc, MPhil, MANZCVSc, Dip ACVP');
+            $user->setPosition('Senior Lecturer');
             $user->setNotes('***');
             $user->save();
             $user->setNewPassword('password');
