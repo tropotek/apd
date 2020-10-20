@@ -22,7 +22,7 @@ use Uni\Uri;
  * @link http://tropotek.com.au/
  * @license Copyright 2020 Tropotek
  */
-class Request extends \Bs\TableIface
+class RequestMin extends \Bs\TableIface
 {
     /**
      * @var bool
@@ -145,24 +145,7 @@ class Request extends \Bs\TableIface
         $this->appendCell($this->getActionCell())->setLabel('');
 
 
-
-        $this->appendCell(new Cell\Text('cassetteId'))->addCss('key')->setUrl($this->getEditUrl())->
-        addOnPropertyValue(function (Cell\Text $cell, \App\Db\Request $obj, $value) {
-            if ($obj->getCassette()) {
-                $value = sprintf('[%s] %s', $obj->getCassette()->getNumber() , $obj->getCassette()->getName());
-            }
-            return $value;
-        });
-        $this->appendCell(\Tk\Table\Cell\Text::create('pathologyId'))->setLabel('Pathology #')
-            ->addOnPropertyValue(function (\Tk\Table\Cell\Iface $cell, \App\Db\Request $obj, $value) {
-                if ($obj->getPathCase()) {
-                    $cell->setUrl(\Bs\Uri::createHomeUrl('/pathCaseEdit.html')->set('pathCaseId', $obj->getPathCaseId()));
-                    $value = $obj->getPathCase()->getPathologyId();
-                }
-                return $value;
-            });
-
-
+        //$this->appendCell(new Cell\Text('pathCaseId'));
         $this->appendCell(new Cell\Text('status'));
         $this->appendCell(new Cell\Text('qty'));
         $this->appendCell(new Cell\Text('serviceId'))->
@@ -172,6 +155,15 @@ class Request extends \Bs\TableIface
                 }
                 return $value;
             });
+
+        $this->appendCell(new Cell\Text('cassetteId'))->addCss('key')->setUrl($this->getEditUrl())->
+            addOnPropertyValue(function (Cell\Text $cell, \App\Db\Request $obj, $value) {
+                if ($obj->getCassette()) {
+                    $value = sprintf('[%s] %s', $obj->getCassette()->getNumber() , $obj->getCassette()->getName());
+                }
+                return $value;
+            });
+
         $this->appendCell(new Cell\Text('clientId'))->
             addOnPropertyValue(function (Cell\Text $cell, \App\Db\Request $obj, $value) {
                 if ($obj->getClient()) {

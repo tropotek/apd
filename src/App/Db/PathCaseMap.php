@@ -41,6 +41,7 @@ class PathCaseMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Text('submissionType', 'submission_type'));
             $this->dbMap->addPropertyMap(new Db\Text('status'));
             $this->dbMap->addPropertyMap(new Db\Text('reportStatus', 'report_status'));
+            $this->dbMap->addPropertyMap(new Db\Boolean('billable'));
             $this->dbMap->addPropertyMap(new Db\Text('accountStatus', 'account_status'));
             $this->dbMap->addPropertyMap(new Db\Money('cost'));
             $this->dbMap->addPropertyMap(new Db\Boolean('afterHours', 'after_hours'));
@@ -110,6 +111,7 @@ class PathCaseMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Text('submissionType'));
             $this->formMap->addPropertyMap(new Form\Text('status'));
             $this->formMap->addPropertyMap(new Form\Text('reportStatus'));
+            $this->formMap->addPropertyMap(new Form\Boolean('billable'));
             $this->formMap->addPropertyMap(new Form\Text('accountStatus'));
             $this->formMap->addPropertyMap(new Form\Money('cost'));
             $this->formMap->addPropertyMap(new Form\Boolean('afterHours'));
@@ -180,7 +182,7 @@ class PathCaseMap extends Mapper
             TIMESTAMPDIFF(MONTH, a1.dob, if (ISNULL(a1.dod), now(), a1.dod)) % 12 as \'age_m\'
          FROM `path_case` a1
      ) b');
-            $filter->appendWhere('a.id = b.id AND ', $this->quote($filter['age']));
+            $filter->appendWhere('a.id = b.id AND ');
 
         if (!empty($filter['keywords'])) {
             $kw = '%' . $this->escapeString($filter['keywords']) . '%';

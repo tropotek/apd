@@ -81,6 +81,9 @@ class RequestMap extends Mapper
     public function makeQuery(Filter $filter)
     {
         $filter->appendFrom('%s a', $this->quoteParameter($this->getTable()));
+        $filter->appendFrom(', %s b', $this->quoteParameter('path_case'));
+        $filter->appendSelect(' a.*, b.*');
+        $filter->appendWhere('a.path_case_id = b.id AND ');
 
         if (!empty($filter['keywords'])) {
             $kw = '%' . $this->escapeString($filter['keywords']) . '%';
@@ -103,6 +106,12 @@ class RequestMap extends Mapper
         }
         if (isset($filter['cassetteId'])) {
             $filter->appendWhere('a.cassette_id = %s AND ', (int)$filter['cassetteId']);
+        }
+        if (isset($filter['pathologistId'])) {
+            $filter->appendWhere('b.pathologist_id = %s AND ', (int)$filter['pathologistId']);
+        }
+        if (isset($filter['userId'])) {
+            $filter->appendWhere('b.user_id = %s AND ', (int)$filter['userId']);
         }
         if (isset($filter['serviceId'])) {
             $filter->appendWhere('a.service_id = %s AND ', (int)$filter['serviceId']);

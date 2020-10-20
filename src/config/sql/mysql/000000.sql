@@ -83,6 +83,7 @@ CREATE TABLE IF NOT EXISTS `path_case`
 
     status VARCHAR(64) NOT NULL DEFAULT '',                   -- Pending/frozen storage/examined/reported/awaiting review (if applicable)/completed
     report_status VARCHAR(64) NOT NULL DEFAULT '',            -- The current status of the report.
+    billable TINYINT(1) NOT NULL DEFAULT 0,                   -- Is this case billable
     account_status VARCHAR(64) NOT NULL DEFAULT '',           -- The current status of the billing account [Pending, billed, paid]
     cost DECIMAL(9,2) NOT NULL DEFAULT 0.0,                   -- Money amount to invoice for External
     after_hours TINYINT(1) NOT NULL DEFAULT 0,                -- Was this case an after hours case

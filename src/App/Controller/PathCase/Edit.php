@@ -119,7 +119,7 @@ class Edit extends AdminEditIface
         );
         $this->cassetteTable->setList($this->cassetteTable->findList($filter, \Tk\Db\Tool::create('number')));
 
-        $this->requestTable = \App\Table\Request::create();
+        $this->requestTable = \App\Table\RequestMin::create();
         $this->requestTable->setEditUrl(\Bs\Uri::createHomeUrl('/requestEdit.html'));
         $this->requestTable->setMinMode(true);
         $this->requestTable->init();

@@ -36,7 +36,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     const STATUS_FROZEN_STORAGE     = 'frozenStorage';      //
     const STATUS_EXAMINED           = 'examined';           //
     const STATUS_REPORTED           = 'reported';           //
-    const STATUS_DISPOSED           = 'disposed';           //
+//    const STATUS_DISPOSED           = 'disposed';           //
     const STATUS_COMPLETED          = 'completed';          //
     const STATUS_CANCELLED          = 'cancelled';          // case cancelled
 
@@ -44,11 +44,9 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     const TYPE_NECROPSY             = 'necropsy';
 
     // TODO: Go ovber these types with stakeholder's b4 release
-    const SUBMISSION_EXTERNAL_VET   = 'externalVet';
-    const SUBMISSION_INTERNAL_VET   = 'internalVet';
+    const SUBMISSION_INTERNAL_DIAG   = 'internalDiagnostic';
+    const SUBMISSION_EXTERNAL_DIAG   = 'externalDiagnostic';
     const SUBMISSION_RESEARCH       = 'research';
-    const SUBMISSION_TEACHING       = 'teaching';
-    const SUBMISSION_PAID           = 'paid';
     const SUBMISSION_OTHER          = 'other';
 
     // Report Status
@@ -118,7 +116,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      */
     public $studentEmail = '';
 
-
     /**
      * Pathology Number
      * @var string
@@ -159,17 +156,22 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public $reportStatus = 'interim';
 
     /**
+     * @var bool
+     */
+    public $billable = false;
+
+    /**
      *
      * @var string
      */
     public $accountStatus = 'pending';
-
 
     /**
      * This should be a cost for the case billed to the clientId
      * @var Money
      */
     public $cost = null;
+
 
     /**
      * @var bool
@@ -487,6 +489,25 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
         }
         return $str;
     }
+
+    /**
+     * @return bool
+     */
+    public function isBillable(): bool
+    {
+        return $this->billable;
+    }
+
+    /**
+     * @param bool $billable
+     * @return PathCase
+     */
+    public function setBillable(bool $billable): PathCase
+    {
+        $this->billable = $billable;
+        return $this;
+    }
+
     /**
      * @param Money|float $cost
      * @return PathCase

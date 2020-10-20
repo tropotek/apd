@@ -54,6 +54,15 @@ class Dashboard extends \Uni\Controller\AdminIface
         $this->caseTable->setList($this->caseTable->findList($filter, Tool::create('created DESC')));
 
 
+        $this->requestTable = \App\Table\Request::create();
+        $this->requestTable->setEditUrl(\Bs\Uri::createHomeUrl('/requestEdit.html'));
+        $this->requestTable->init();
+        $filter = array(
+            //'userId' => $this->getAuthUser()->getId(),
+            'pathologistId' => $this->getAuthUser()->getId()
+        );
+        $this->requestTable->setList($this->requestTable->findList($filter, Tool::create('created DESC')));
+
 
     }
 
@@ -62,8 +71,11 @@ class Dashboard extends \Uni\Controller\AdminIface
         $template = parent::show();
 
         $template->appendTemplate('cases', $this->caseTable->show());
-        $template->appendHtml('files', '<p><i>{TODO: Add an image/file gallery here...}</i></p>');
+        //$template->appendHtml('files', '<p><i>{TODO: Add an image/file gallery here...}</i></p>');
 
+        if ($this->requestTable) {
+            $template->appendTemplate('requests', $this->requestTable->show());
+        }
 
         return $template;
     }
@@ -81,11 +93,15 @@ class Dashboard extends \Uni\Controller\AdminIface
     <div class="col-12">
       <div class="tk-panel" data-panel-title="My Case List" data-panel-icon="fa fa-paw" var="cases"></div>
     </div>
-<!--    <div class="col-4">-->
-<!--      <div class="tk-panel" data-panel-title="Requests" data-panel-icon="fa fa-paw" var="Requests"></div>-->
-<!--    </div>-->
   </div>
   <div class="row">
+    <div class="col-12">
+      <div class="tk-panel" data-panel-title="My Requests" data-panel-icon="fa fa-paw" var="requests"></div>
+    </div>
+  </div>
+  
+  
+  <div class="row" choice="todo">
     <div class="col-12">
       <div class="tk-panel" data-panel-title="My Recent Files" data-panel-icon="fa fa-image" var="files"></div>
     </div>

@@ -51,8 +51,12 @@ class PathCase extends \Bs\FormIface
 
         $layout->removeRow('type', 'col');
         $layout->removeRow('clientId', 'col');
+
+        $layout->addRow('billable', 'col-2');
+        $layout->removeRow('accountStatus', 'col');
         $layout->removeRow('cost', 'col');
-        $layout->removeRow('afterHours', 'col');
+
+        //$layout->removeRow('afterHours', 'col');
 
         $layout->removeRow('patientNumber', 'col');
         $layout->removeRow('microchip', 'col');
@@ -65,6 +69,7 @@ class PathCase extends \Bs\FormIface
         $layout->removeRow('colour', 'col');
         $layout->removeRow('origin', 'col');
 
+        $layout->removeRow('dob', 'col');
         $layout->removeRow('dod', 'col');
 
         $layout->removeRow('resident', 'col');
@@ -96,16 +101,43 @@ class PathCase extends \Bs\FormIface
         $form->removeField('notes');
         $list = \App\Db\Client::getSelectList();
         $this->appendField(Field\DialogSelect::createDialogSelect('clientId', $list, $form)->prependOption('-- Select --', ''))
-            ->setTabGroup($tab)->setLabel('Submitting Client')->setNotes('This is the Client that will be invoiced.');
+            ->setTabGroup($tab)->setLabel('Submitting Client')->setNotes('This is the client that will be invoiced.');
+
+
+        $this->appendField(new Field\Checkbox('billable'))->setTabGroup($tab)
+            ->setNotes('Is this case billable?');
+        $js = <<<JS
+jQuery(function ($) {
+  
+  function updateBillable(el) {
+    var d = 'disabled';
+    if (el.prop('checked') === true) {
+      $('#path_case-accountStatus').removeAttr(d, d);
+      $('#path_case-cost').removeAttr(d, d);
+    } else {
+      $('#path_case-accountStatus').attr(d, d);
+      $('#path_case-cost').attr(d, d);
+    }
+  }
+  $('#path_case-billable').on('change', function () {
+    updateBillable($(this));
+  });
+  updateBillable($('#path_case-billable'));
+  
+});
+JS;
+        $this->getRenderer()->getTemplate()->appendJs($js);
 
         $list = \Tk\ObjectUtil::getClassConstants($this->getPathCase(), 'ACCOUNT_STATUS', true);
         $this->appendField(Field\Select::createSelect('accountStatus', $list)->prependOption('-- Select --', ''))
             ->setTabGroup($tab);
 
         $this->appendField(new Money('cost'))->addCss('money')->setLabel('Billable Amount')->setTabGroup($tab)
-            ->setNotes('(Optional) Amount billed to submitting client.');
+            ->setNotes('');
 
-        $this->appendField(new Field\Checkbox('afterHours'))->setTabGroup($tab)->setNotes('Is this case billed with after hours rates?');
+        $this->appendField(new Field\Checkbox('afterHours'))->setTabGroup($tab)
+            ->setNotes('Was this case worked after normal open hours?');
+
 
         if ($this->getPathCase()->getId()) {
             $list = \App\Db\PathCase::getStatusList($this->getPathCase()->getStatus());
@@ -141,13 +173,13 @@ class PathCase extends \Bs\FormIface
         $this->appendField(new Field\Input('weight'))->setTabGroup($tab);
         $this->appendField(new Field\Input('colour'))->setTabGroup($tab);
         $this->appendField(new Field\Input('origin'))->setTabGroup($tab);
-        $dob = $this->appendField(new Field\Input('dob'))->setTabGroup($tab)
-            ->setAttr('data-precision', '1')
-            ->addCss('date tk-age')->setAttr('placeholder', 'dd/mm/yyyy');
-        if ($this->getPathCase()->getDod()) {
-            $dob->setAttr('data-dod', '#path_case-dod');
-        }
 
+
+        $this->appendField(new \App\Form\Field\Age('age'))->setTabGroup($tab);
+
+        // TODO: we need to validate the dob is < dod at some point
+        $this->appendField(new Field\Input('dob'))->setTabGroup($tab)->addCss('date')
+            ->setAttr('placeholder', 'dd/mm/yyyy');
         $this->appendField(new Field\Input('dod'))->setTabGroup($tab)->addCss('date')
             ->setAttr('placeholder', 'dd/mm/yyyy');
         // END Animal
