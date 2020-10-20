@@ -41,6 +41,12 @@ class Dashboard extends \Uni\Controller\AdminIface
         $this->caseTable = \App\Table\PathCase::create();
         $this->caseTable->setEditUrl(\Bs\Uri::createHomeUrl('/pathCaseEdit.html'));
         $this->caseTable->init();
+        $this->caseTable->removeFilter('userId');
+        $this->caseTable->removeFilter('clientId');
+        $this->caseTable->removeFilter('ownerId');
+        $this->caseTable->removeFilter('type');
+        $this->caseTable->removeFilter('submissionType');
+        $this->caseTable->removeFilter('status');
 
         $filter = array(
             'userId' => $this->getAuthUser()->getId()

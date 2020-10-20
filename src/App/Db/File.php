@@ -339,6 +339,11 @@ class File extends Model implements ValidInterface
         $this->mime = $mime;
     }
 
+    public function isImage()
+    {
+        return preg_match('/^image\//', $this->getMime());
+    }
+
     /**
      * @return string
      */

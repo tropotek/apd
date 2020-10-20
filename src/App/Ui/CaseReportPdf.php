@@ -84,7 +84,8 @@ class CaseReportPdf extends Pdf
         $template->appendText('submissionDate', $this->pathCase->getCreated(\Tk\Date::FORMAT_SHORT_DATE));
         $template->appendText('pathologyId', $this->pathCase->getPathologyId());
         $template->appendText('name', $this->pathCase->getName());
-        $template->appendText('clientName', $this->pathCase->getClient()->getName());
+        if ($this->pathCase->getClient())
+            $template->appendText('clientName', $this->pathCase->getClient()->getName());
 
         $owner = $this->pathCase->getOwner();
         if ($owner) {
@@ -180,6 +181,43 @@ class CaseReportPdf extends Pdf
         $template->appendText('date', \Tk\Date::create()->format(\Tk\Date::FORMAT_SHORT_DATE));
 
 
+        $allFiles = $this->pathCase->getFiles();
+        if ($allFiles->count()) {
+            $template->setVisible('media');
+            $images = array();
+            $files = array();
+            foreach ($allFiles as $file) {     // Sort files
+                if ($file->isImage()) $images[] = $file;
+                else $files[] = $file;
+            }
+            if (count($images)) {
+                $template->setVisible('image-list');
+                foreach ($images as $i => $file) {
+                    $filename = basename($file->getPath());
+                    $t = $template->getRepeat('image-block');
+                    $t->setAttr('image', 'src', $file->getUrl());
+                    $t->setAttr('image', 'alt', $filename);
+                    $t->appendHtml('image-caption', 'Fig ' . ($i+1) . '<br/>Name: '. $filename);
+                    $t->appendRepeat();
+                }
+            }
+            if (count($files)) {
+                $template->setVisible('file-list');
+                foreach ($files as $file) {
+                    $filename = basename($file->getPath());
+                    $t = $template->getRepeat('item');
+                    $t->setAttr('link', 'href', $file->getUrl());
+                    $t->appendText('link', $filename);
+                    $t->appendRepeat();
+                }
+            }
+
+        }
+
+
+
+
+
         $css = <<<CSS
 body {
   font-size: 0.8em;
@@ -198,6 +236,21 @@ img.logo {
 }
 .textBlock {
   margin-top: 10px;
+}
+.image-block {
+  border: 1px solid #CCC;
+  margin-bottom: 10px;
+  padding-top: 20px;
+  text-align: center;
+}
+.image-block img {
+}
+.image-block figcaption {
+  border-top: 1px solid #CCC;
+  text-align: left;
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #EFEFEF;
 }
 CSS;
         $template->appendCss($css);
@@ -285,8 +338,6 @@ CSS;
         <h4 var="title"></h4>
         <div var="content"></div>
       </div>
-    </div>
-    
     
     <div choice="pathologist" style="page-break-inside: avoid;" >
       <p><b>Pathologist:</b></p>
@@ -296,6 +347,32 @@ CSS;
       </p> 
       <p style="text-align: right; margin-right: 20px;">Date: <span var="date"></span></p>
     </div>
+      
+      <!-- Files and media -->      
+      <div class="media" choice="media">
+      
+        <div class="file-list" style="page-break-inside: avoid;" choice="file-list">
+          <h4>Files:</h4>
+          <ul var="list">
+            <li var="item" repeat="item"><a href="#" target="_blank" var="link"></a></li>
+          </ul>
+        </div>
+        
+        <div class="image-list" choice="image-list">
+          <h4>Images:</h4>
+          <figure class="image-block" style="page-break-inside: avoid;" var="image-block" repeat="image-block">
+            <img src="#" alt="" var="image" />
+            <figcaption var="image-caption"></figcaption>
+          </figure>
+        </div>
+        <p>&nbsp;</p>
+      </div>
+      
+      
+      
+    </div>
+    
+    
   </div>
 </body>
 </html>
