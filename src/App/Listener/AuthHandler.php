@@ -49,9 +49,10 @@ class AuthHandler extends \Bs\Listener\AuthHandler
 
                     if (!$user) { // Create a user record if none exists
                         if (!$config->get('auth.ldap.auto.account')) {
-                            $msg = sprintf('Please <a href="mailto:%s">contact your site administrator</a> to request access. Please provide the following details',
+                            $msg = sprintf('Please contact %s to request access. Please provide the following details',
                                 $this->getConfig()->getInstitution()->getEmail());
-                            $event->setResult(new \Tk\Auth\Result(\Tk\Auth\Result::FAILURE_CREDENTIAL_INVALID, $adapter->get('username'), $msg));
+                            $event->setResult(new \Tk\Auth\Result(\Tk\Auth\Result::FAILURE_CREDENTIAL_INVALID,
+                                $adapter->get('username'), $msg));
                             return;
                         }
 
@@ -83,8 +84,8 @@ class AuthHandler extends \Bs\Listener\AuthHandler
                                 }
                             }
                         } else {
-                            $msg = sprintf('Only institution staff can access "%s". Please contact <a href="mailto:%s">%s</a> for more information.',
-                                $this->getConfig()->getSiteTitle(), $this->getConfig()->getInstitution()->getEmail(), $this->getConfig()->getInstitution()->getEmail());
+                            $msg = sprintf('Only institution staff can access "%s". Please contact %s for more information.',
+                                $this->getConfig()->getSiteTitle(), $this->getConfig()->getInstitution()->getEmail());
                             $event->setResult(new \Tk\Auth\Result(\Tk\Auth\Result::FAILURE_CREDENTIAL_INVALID, $adapter->get('username'), $msg));
                             return;
                         }
@@ -132,8 +133,8 @@ class AuthHandler extends \Bs\Listener\AuthHandler
             $ltiData = $adapter->getLaunchData();
 
             if ($userData['type'] != \Uni\Db\User::TYPE_STAFF) {
-                $msg = sprintf('Only institution staff can access "%s". Please contact <a href="mailto:%s">%s</a> for more information.',
-                    $this->getConfig()->getSiteTitle(), $this->getConfig()->getInstitution()->getEmail(), $this->getConfig()->getInstitution()->getEmail());
+                $msg = sprintf('Only institution staff can access "%s". Please contact %s for more information.',
+                    $this->getConfig()->getSiteTitle(), $this->getConfig()->getInstitution()->getEmail());
                 $event->setResult(new \Tk\Auth\Result(\Tk\Auth\Result::FAILURE_CREDENTIAL_INVALID, $adapter->get('username'), $msg));
                 return;
             }
