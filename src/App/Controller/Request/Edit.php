@@ -43,6 +43,7 @@ class Edit extends AdminEditIface
     public function doDefault(Request $request)
     {
         $this->request = new \App\Db\Request();
+        $this->request->setPathCaseId($request->get('pathCaseId', 0));
         if ($request->get('cassetteId')) {
             $this->request->setCassetteId($request->get('cassetteId'));
         }

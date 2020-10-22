@@ -1,6 +1,7 @@
 <?php
 namespace App\Form;
 
+use App\Db\CassetteMap;
 use App\Db\ClientMap;
 use App\Db\ServiceMap;
 use Tk\Form\Field;
@@ -38,7 +39,22 @@ class Request extends \Bs\FormIface
         $layout->removeRow('clientId', 'col');
 
         //$this->appendField(new Field\Select('pathCaseId', array()))->prependOption('-- Select --', '');
-        //$this->appendField(new Field\Select('cassetteId', array()))->prependOption('-- Select --', '');
+        if (!$this->getDialog()) {
+            if (!$this->getRequest()->getCassetteId()) {
+                $list = CassetteMap::create()->findFiltered(array('pathCaseId' => $this->getRequest()->getPathCaseId()));
+                $this->appendField(Field\Select::createSelect('cassetteId', $list)
+                    ->addOnShowOption(function (\Dom\Template $template, \Tk\Form\Field\Option $option, $var) {
+                        /** @var \App\Db\Cassette $cassette */
+                        $cassette = CassetteMap::create()->find($option->getValue());
+                        if ($cassette)
+                            $option->setName('[' . $cassette->getNumber() . '] ' . $cassette->getName());
+                    }))->prependOption('-- Select --', '');
+            } else {
+                // TODO: Add a text field with cassete name
+                $cassette = $this->getRequest()->getCassette();
+                $this->appendField(new Field\Html('cassette'))->setValue($cassette->getName());
+            }
+        }
         $list = ServiceMap::create()->findFiltered(array('institutionId' => $this->getRequest()->getPathCase()->getInstitutionId()));
         $this->appendField(new Field\Select('serviceId', $list))->prependOption('-- Select --', '');
         $list = ClientMap::create()->findFiltered(array('institutionId' => $this->getRequest()->getPathCase()->getInstitutionId()));

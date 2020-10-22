@@ -71,17 +71,17 @@ class Age extends \Tk\Form\Field\Iface
     {
         $t = $this->getTemplate();
 
-        $this->decorateElement($t, 'min');
-        $this->decorateElement($t, 'max');
+        $this->decorateElement($t, 'year');
+        $this->decorateElement($t, 'month');
 
         $t->setAttr('age-input', 'data-dob-target', '#'.$this->getForm()->getId().'-'.$this->dobName);
         $t->setAttr('age-input', 'data-dod-target', '#'.$this->getForm()->getId().'-'.$this->dodName);
 
-        $t->setAttr('min', 'name', $this->getName());
-        $t->setAttr('max', 'name', $this->ageMName);
+        $t->setAttr('year', 'name', $this->getName());
+        $t->setAttr('month', 'name', $this->ageMName);
 
-        $t->setAttr('min', 'id', $this->getId().'_'.$this->getName());
-        $t->setAttr('max', 'id', $this->getId().'_'.$this->ageMName);
+        $t->setAttr('year', 'id', $this->getId().'_'.$this->getName());
+        $t->setAttr('month', 'id', $this->getId().'_'.$this->ageMName);
 
         // Set the input type attribute
 
@@ -89,9 +89,9 @@ class Age extends \Tk\Form\Field\Iface
         $value = $this->getValue();
         if (is_array($value)) {
             if (isset($value[$this->getName()]))
-                $t->setAttr('min', 'value', $value[$this->getName()]);
+                $t->setAttr('year', 'value', $value[$this->getName()]);
             if (isset($value[$this->ageMName]))
-                $t->setAttr('max', 'value', $value[$this->ageMName]);
+                $t->setAttr('month', 'value', $value[$this->ageMName]);
         }
 
         $js = <<<JS
@@ -101,36 +101,44 @@ jQuery(function($) {
     var el = $(this);
     var dobEl = $(el.data('dobTarget'));
     var dob = dobEl.data("datetimepicker").getDate();
-    console.log(dob);
     var dodEl = $(el.data('dodTarget'));
-    var dod = dodEl.data("datetimepicker").getDate();
-    console.log(dod);
+    var dod = dodEl.data("datetimepicker").getDate(); // Auto assigns nnow() when empty
+    
     var yearEl = el.find('input[name="age"]');
     var monthEl = el.find('input[name="age_m"]');
     
+    function updateAge() {
+      var months = (parseInt(yearEl.val()) * 12) + parseInt(monthEl.val());
+      var newDob = dod.clone();
+      newDob.setMonth(newDob.getMonth() - months);
+      
+      // Update the el values
+      dobEl.data("datetimepicker").setDate(newDob);
+      yearEl.val(Math.floor(months/12));
+      monthEl.val(months%12);
+    }
+    function updateDates() {
+      dob = dobEl.data("datetimepicker").getDate();
+      dod = dodEl.data("datetimepicker").getDate();
+      if (dob.getTime() > dod.getTime()) {
+        alert('DOD must be > DOB');
+        return;
+      }
+      var years = dod.getFullYear() - dob.getFullYear();
+      var months = dod.getMonth() - dob.getMonth();
+      yearEl.val(years);
+      monthEl.val(months);
+      updateAge();
+    }
     
     el.find('input').on('change', function () {
-      // Update DOB field
-      var input = $(this);
-      if (input.attr('name') === 'age') {
-        // years updated
-        console.log('YEARS updated');
-      } else {
-        // months updated
-        console.log('MONTHS updated');
-      }
-      
+      updateAge();
     });
-    
     dobEl.on('change', function () {
-      // Update age fields
-      console.log('DOB updated');
-      
+      updateDates();
     })
     dodEl.on('change', function () {
-      // Update age fields
-      console.log('DOD updated');
-      
+      updateDates();
     })
     
     
@@ -157,11 +165,11 @@ JS;
     <div class="input-group-prepend" title="Years">
       <span class="input-group-text">Y</span>
     </div>
-    <input type="text" class="form-control" var="min" title="Years" />
+    <input type="text" class="form-control" var="year" title="Years" />
     <div class="input-group-prepend" title="Months">
       <span class="input-group-text">M</span>
     </div>
-    <input type="text" class="form-control" var="max" title="Months" />
+    <input type="text" class="form-control" var="month" title="Months" />
 </div>
 HTML;
         return \Dom\Loader::load($xhtml);

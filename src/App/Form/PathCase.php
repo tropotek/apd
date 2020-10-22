@@ -67,12 +67,12 @@ class PathCase extends \Bs\FormIface
         $layout->removeRow('desexed', 'col');
 
         $layout->removeRow('colour', 'col');
-        $layout->removeRow('origin', 'col');
+        //$layout->removeRow('origin', 'col');
 
         $layout->removeRow('dob', 'col');
         $layout->removeRow('dod', 'col');
 
-        $layout->removeRow('resident', 'col');
+        //$layout->removeRow('resident', 'col');
 
         $layout->removeRow('studentEmail', 'col');
 
@@ -172,7 +172,7 @@ JS;
 
         $this->appendField(new Field\Input('weight'))->setTabGroup($tab);
         $this->appendField(new Field\Input('colour'))->setTabGroup($tab);
-        $this->appendField(new Field\Input('origin'))->setTabGroup($tab);
+        //$this->appendField(new Field\Input('origin'))->setTabGroup($tab);
 
 
         $this->appendField(new \App\Form\Field\Age('age'))->setTabGroup($tab);
@@ -193,7 +193,7 @@ JS;
             ->prependOption('-- Select --', ''))
             ->setTabGroup($tab)->setLabel('Pathologist');
 
-        $this->appendField(new Field\Input('resident'))->setTabGroup($tab);
+        //$this->appendField(new Field\Input('resident'))->setTabGroup($tab);
         $this->appendField(new Field\Input('student'))->setTabGroup($tab);
         $this->appendField(new Field\Input('studentEmail'))->setTabGroup($tab);
 
@@ -253,18 +253,21 @@ JS;
 //        $this->appendField(new Field\File('files'))
 //            ->addCss('')->setAttr('data-path', $mediaPath)->setTabGroup($tab);
 
-        $tab = 'After Care';
-        $this->appendField(Field\Select::createSelect('storageId', array())->prependOption('-- Select --', ''))
-            ->setTabGroup($tab);
-        $this->appendField(new Field\Input('acHold'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy')
-            ->setLabel('Aftercare Hold')->setTabGroup($tab);
-        $list = \Tk\ObjectUtil::getClassConstants($this->getPathCase(), 'AC_');
-        $this->appendField(Field\Select::createSelect('acType', $list)->prependOption('-- None --', ''))
-            ->setLabel('Aftercare Type')->setLabel('Method Of Disposal')->setTabGroup($tab);
-        $this->appendField(new Field\Input('acHold'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy')
-            ->setLabel('Hold Until')->setTabGroup($tab);
-        $this->appendField(new Field\Input('disposal'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy')
-            ->setLabel('Disposal Completion Date')->setTabGroup($tab);
+        if ($this->getPathCase()->getType() != \App\Db\PathCase::TYPE_BIOPSY) {
+            $tab = 'After Care';
+            $this->appendField(Field\Select::createSelect('storageId', array())->prependOption('-- Select --', ''))
+                ->setTabGroup($tab);
+            $this->appendField(new Field\Input('acHold'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy')
+                ->setLabel('Aftercare Hold')->setTabGroup($tab);
+            $list = \Tk\ObjectUtil::getClassConstants($this->getPathCase(), 'AC_');
+            $this->appendField(Field\Select::createSelect('acType', $list)->prependOption('-- None --', ''))
+                ->setLabel('Aftercare Type')->setLabel('Method Of Disposal')->setTabGroup($tab);
+            $this->appendField(new Field\Input('acHold'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy')
+                ->setLabel('Hold Until')->setTabGroup($tab);
+            $this->appendField(new Field\Input('disposal'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy')
+                ->setLabel('Disposal Completion Date')->setTabGroup($tab);
+        }
+
 
         $this->appendField(new Event\Submit('update', array($this, 'doSubmit')));
         $this->appendField(new Event\Submit('save', array($this, 'doSubmit')));

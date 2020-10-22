@@ -65,7 +65,7 @@ class Request extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      * Quantity of samples requested (check available tissue.qty on submit)
      * @var int
      */
-    public $qty = 0;
+    public $qty = 1;
 
     /**
      * The total cost based on qty requested + the service cost
