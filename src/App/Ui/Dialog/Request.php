@@ -11,18 +11,14 @@ use Tk\Ui\Dialog\JsonForm;
 class Request extends JsonForm
 {
 
-
-
     public function __construct()
     {
-
         $request = new \App\Db\Request();
         $request->setPathCaseId($this->getRequest()->get('pathCaseId'));
         $form = \App\Form\Request::create()->setDialog($this)->setModel($request);
 
         parent::__construct($form, 'Create Request');
     }
-
 
     /**
      * @return static

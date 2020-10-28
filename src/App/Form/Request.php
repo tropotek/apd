@@ -74,7 +74,6 @@ class Request extends \Bs\FormIface
             $comm->setAttr('style', 'height: 4.4em;min-height: unset;');
         }
 
-
         //$this->appendField(new Field\Textarea('notes'));
 
         $this->appendField(new Event\Submit('update', array($this, 'doSubmit')));

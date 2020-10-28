@@ -268,7 +268,6 @@ JS;
                 ->setLabel('Disposal Completion Date')->setTabGroup($tab);
         }
 
-
         $this->appendField(new Event\Submit('update', array($this, 'doSubmit')));
         $this->appendField(new Event\Submit('save', array($this, 'doSubmit')));
         $this->appendField(new Event\Link('cancel', $this->getBackUrl()));
