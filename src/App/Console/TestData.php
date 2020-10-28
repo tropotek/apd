@@ -266,7 +266,8 @@ class TestData extends \Bs\Console\TestData
             $case->save();
         }
 
-        $db->exec('DELETE FROM `cassette` WHERE `notes` = \'***\' ');
+        //$db->exec('DELETE FROM `cassette` WHERE `notes` = \'***\' ');
+        $db->exec('TRUNCATE `cassette`');
         for($i = 0; $i < 450; $i++) {
             $cassette = new Cassette();
             /** @var PathCase $case */
@@ -290,7 +291,8 @@ class TestData extends \Bs\Console\TestData
             $cassette->save();
         }
 
-        $db->exec('DELETE FROM `request` WHERE `notes` = \'***\' ');
+        //$db->exec('DELETE FROM `request` WHERE `notes` = \'***\' ');
+        $db->exec('TRUNCATE `request`');
         for($i = 0; $i < 100; $i++) {
             $request = new Request();
             /** @var PathCase $case */
