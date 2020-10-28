@@ -1,7 +1,9 @@
 <?php
 namespace App\Controller\PathCase;
 
+use App\Config;
 use App\Db\PathCase;
+use App\Form\Note;
 use App\Ui\Dialog\EmailReport;
 use Bs\Controller\AdminEditIface;
 use Dom\Template;
@@ -211,6 +213,21 @@ class Edit extends AdminEditIface
         if ($this->emailReportDialog)
             $template->appendBodyTemplate($this->emailReportDialog->show());
 
+        if ($this->pathCase->getId()) {
+            $notesList = \App\Table\Note::create('note-table')->init();
+            $filter = array('model' => $this->pathCase);
+            $notesList->setList($notesList->findList($filter, $notesList->getTool('created DESC')));
+            if ($notesList->getList()->count()) {
+                $template->appendTemplate('notes-body', $notesList->show());
+            }
+            $notesForm = new Note($this->pathCase, Config::getInstance()->getAuthUser());
+            $template->appendTemplate('notes-body', $notesForm->show());
+            $template->setVisible('notes-panel');
+        }
+
+
+
+
         return $template;
     }
 
@@ -225,6 +242,7 @@ class Edit extends AdminEditIface
     <div class="tk-panel" data-panel-title="Case Edit" data-panel-icon="fa fa-paw" var="panel"></div>
   </div>
   <div class="col-4" var="panel2" choice="panel2">
+    <div class="tk-panel" data-panel-title="Staff Notes" data-panel-icon="fa fa-sticky-note" var="notes-body" choice="notes-panel"></div>
     <div class="tk-panel" data-panel-title="Cassettes" data-panel-icon="fa fa-stack-overflow" var="side-panel-cassette" choice="side-panel-cassette"></div>
     <div class="tk-panel tk-request-list" data-panel-title="Histology Requests" data-panel-icon="fa fa-medkit" var="side-panel-requests" choice="side-panel-requests"></div>
     <div class="tk-panel" data-panel-title="Files" data-panel-icon="fa fa-floppy-o" var="side-panel-files" choice="side-panel-files"></div>

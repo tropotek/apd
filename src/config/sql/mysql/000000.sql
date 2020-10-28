@@ -330,7 +330,24 @@ CREATE TABLE IF NOT EXISTS `status` (
 ) ENGINE = InnoDB;
 
 
-
+-- --------------------------------------------------
+--
+--
+--
+-- --------------------------------------------------
+CREATE TABLE IF NOT EXISTS `note` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `user_id` INTEGER NOT NULL DEFAULT 0,                       -- (optional) Author: If 0 then this is assumed to be a system generated note
+    `fkey` VARCHAR(64) NOT NULL DEFAULT '',                     -- Foreign object key  EG: '\App\Db\Company', '\App\Db\Placement', etc
+    `fid` INTEGER NOT NULL DEFAULT 0,                           -- foreign id  EG: '2'
+    `message` TEXT,                                             -- The HTML Text to be shown in the message?
+    `data` TEXT,                                                -- (optional) JSON data object for internal processes
+    `del` TINYINT(1) NOT NULL DEFAULT 0,
+    `modified` DATETIME NOT NULL,
+    `created` DATETIME NOT NULL,
+    KEY (user_id),
+    KEY (fkey, fid)
+) ENGINE=InnoDB;
 
 
 /*

@@ -1,6 +1,8 @@
 <?php
 namespace App\Controller\Request;
 
+use App\Config;
+use App\Form\Note;
 use Bs\Controller\AdminEditIface;
 use Dom\Template;
 use Tk\Request;
@@ -85,6 +87,18 @@ class Edit extends AdminEditIface
             $template->setVisible('side-panel-status');
         }
 
+        if ($this->request->getId()) {
+            $notesList = \App\Table\Note::create('note-table')->init();
+            $filter = array('model' => $this->request);
+            $notesList->setList($notesList->findList($filter, $notesList->getTool('created DESC')));
+            if ($notesList->getList()->count()) {
+                $template->appendTemplate('notes-body', $notesList->show());
+            }
+            $notesForm = new Note($this->request, Config::getInstance()->getAuthUser());
+            $template->appendTemplate('notes-body', $notesForm->show());
+            $template->setVisible('notes-panel');
+        }
+
         return $template;
     }
 
@@ -99,6 +113,7 @@ class Edit extends AdminEditIface
     <div class="tk-panel" data-panel-title="Request Edit" data-panel-icon="fa fa-flask" var="panel"></div>
   </div>
   <div class="col-4" var="panel2" choice="panel2">
+  <div class="tk-panel" data-panel-title="Staff Notes" data-panel-icon="fa fa-sticky-note" var="notes-body" choice="notes-panel"></div>
     <div class="tk-panel" data-panel-title="Status Log" data-panel-icon="fa fa-list" var="side-panel-status" choice="side-panel-status"></div>
   </div>
 </div>
