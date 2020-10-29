@@ -99,7 +99,7 @@ class PathCase extends \Bs\FormIface
         $client = new \App\Db\Client();
         $form = \App\Form\Client::create()->setModel($client);
         $form->removeField('notes');
-        $list = \App\Db\Client::getSelectList();
+        $list = \App\Db\Client::getSelectList(\App\Db\Client::TYPE_CLIENT);
         $this->appendField(Field\DialogSelect::createDialogSelect('clientId', $list, $form)->prependOption('-- Select --', ''))
             ->setTabGroup($tab)->setLabel('Submitting Client')->setNotes('This is the client that will be invoiced.');
 
@@ -154,7 +154,7 @@ JS;
         $client = new \App\Db\Client();
         $form = \App\Form\Client::create()->setModel($client);
         $form->removeField('notes');
-        $list = \App\Db\Client::getSelectList();
+        $list = \App\Db\Client::getSelectList(\App\Db\Client::TYPE_OWNER);
         $this->appendField(Field\DialogSelect::createDialogSelect('ownerId', $list, $form)->prependOption('-- Select --', ''))
             ->setTabGroup($tab)->setLabel('Owner Name')->setNotes('This is the Client Record of the animal owner.');
 

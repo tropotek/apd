@@ -28,6 +28,8 @@ class ClientMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Integer('institutionId', 'institution_id'));
             $this->dbMap->addPropertyMap(new Db\Integer('userId', 'user_id'));
             $this->dbMap->addPropertyMap(new Db\Text('uid'));
+            $this->dbMap->addPropertyMap(new Db\Text('type'));
+            $this->dbMap->addPropertyMap(new Db\Text('name'));
             $this->dbMap->addPropertyMap(new Db\Text('accountCode', 'account_code'));
             $this->dbMap->addPropertyMap(new Db\Text('name'));
             $this->dbMap->addPropertyMap(new Db\Text('email'));
@@ -59,6 +61,7 @@ class ClientMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Integer('institutionId'));
             $this->formMap->addPropertyMap(new Form\Integer('userId'));
             $this->formMap->addPropertyMap(new Form\Text('uid'));
+            $this->formMap->addPropertyMap(new Form\Text('type'));
             $this->formMap->addPropertyMap(new Form\Text('accountCode'));
             $this->formMap->addPropertyMap(new Form\Text('name'));
             $this->formMap->addPropertyMap(new Form\Text('email'));
@@ -121,6 +124,9 @@ class ClientMap extends Mapper
         if (!empty($filter['uid'])) {
             $filter->appendWhere('a.uid = %s AND ', $this->quote($filter['uid']));
         }
+        if (!empty($filter['type'])) {
+            $filter->appendWhere('a.type = %s AND ', $this->quote($filter['type']));
+        }
         if (!empty($filter['accountCode'])) {
             $filter->appendWhere('a.account_code = %s AND ', $this->quote($filter['accountCode']));
         }
@@ -153,6 +159,12 @@ class ClientMap extends Mapper
         if (!empty($filter['exclude'])) {
             $w = $this->makeMultiQuery($filter['exclude'], 'a.id', 'AND', '!=');
             if ($w) $filter->appendWhere('(%s) AND ', $w);
+        }
+
+        if (!empty($filter['pathCaseId'])) {
+            // link to path_case_has_contact ???
+            $filter->appendFrom(', %s z', $this->quoteTable('path_case_has_contact'));
+            $filter->appendWhere('a.id = z.contact_id AND z.path_case_id = %s AND ', (int)$filter['pathCaseId']);
         }
 
         return $filter;

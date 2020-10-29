@@ -33,6 +33,7 @@ class Client extends \Bs\TableIface
         $this->appendCell(new Cell\Checkbox('id'));
         $this->appendCell(new Cell\Text('name'))->addCss('key')->setUrl($this->getEditUrl());
         //$this->appendCell(new Cell\Text('userId'));
+        $this->appendCell(new Cell\Text('type'));
         //$this->appendCell(new Cell\Text('uid'));
         $this->appendCell(new Cell\Text('email'));
         $this->appendCell(new Cell\Text('billingEmail'));
@@ -46,6 +47,12 @@ class Client extends \Bs\TableIface
 
         // Filters
         $this->appendFilter(new Field\Input('keywords'))->setAttr('placeholder', 'Search');
+
+        if (!$this->getConfig()->getRequest()->query->has('type')) {
+            $list = \App\Db\Client::getTypeList();
+            $this->appendFilter(new Field\Select('type', $list))
+                ->setRequired()->prependOption('-- Contact Type --', '');
+        }
 
         // Actions
         //$this->appendAction(\Tk\Table\Action\Link::createLink('New Client', \Bs\Uri::createHomeUrl('/clientEdit.html'), 'fa fa-plus'));

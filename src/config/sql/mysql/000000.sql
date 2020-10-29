@@ -30,21 +30,23 @@
 # ) ENGINE=InnoDB;
 
 -- ----------------------------
---  company/client table
---  Animal Owner, Case Submitter
+--  contact table
+--  Animal Owner, Client / Student details
 -- ----------------------------
 CREATE TABLE IF NOT EXISTS client
 (
     id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     institution_id INT(10) UNSIGNED NOT NULL DEFAULT 0,
-    user_id INT(10) UNSIGNED NOT NULL DEFAULT 0,                -- Use this if the client is a staff member
+    user_id INT(10) UNSIGNED NOT NULL DEFAULT 0,                -- Use this if the contact has a login account on the system
     uid VARCHAR(64) NOT NULL DEFAULT '',                        -- Unused at this time, [Farm Shed id???]
+    type VARCHAR(64) NOT NULL DEFAULT '',                       -- contact type [client/owner/student]
     account_code VARCHAR(64) NOT NULL DEFAULT '',               -- institution/business accounting code
     name VARCHAR(255) NOT NULL DEFAULT '',                      -- Client, Dep., Business name
     email VARCHAR(255) NOT NULL DEFAULT '',
     phone VARCHAR(32) NOT NULL DEFAULT '',
     fax VARCHAR(32) NOT NULL DEFAULT '',
 
+    -- Optional
     street VARCHAR(255) NOT NULL DEFAULT '',
     city VARCHAR(255) NOT NULL DEFAULT '',
     country VARCHAR(255) NOT NULL DEFAULT '',
@@ -59,6 +61,15 @@ CREATE TABLE IF NOT EXISTS client
     KEY user_id (user_id)
 ) ENGINE=InnoDB;
 
+-- --------------------------------------------------------
+-- contats linked to a case (Generally students)
+-- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `path_case_has_contact` (
+     `path_case_id` int(10) unsigned NOT NULL,
+     `contact_id` int(10) unsigned NOT NULL,
+     PRIMARY KEY `path_case_id_contact_id` (`path_case_id`, `contact_id`)
+) ENGINE=InnoDB;
+
 -- ----------------------------
 --   case table
 -- ----------------------------
@@ -67,11 +78,13 @@ CREATE TABLE IF NOT EXISTS `path_case`
     id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     institution_id INT(10) UNSIGNED NOT NULL DEFAULT 0,
     user_id INT(10) UNSIGNED NOT NULL DEFAULT 0,              -- Cause author, staff who created the case record
-    client_id INT(10) UNSIGNED NOT NULL DEFAULT 0,            -- The submitting client_id we are billing (auto populate owner_id  if 0 as they are usually the same)
-    owner_id INT(10) UNSIGNED NOT NULL DEFAULT 0,             -- The animal owner client_id
+    client_id INT(10) UNSIGNED NOT NULL DEFAULT 0,            -- The submitting contact_id[client] we are billing (auto populate owner_id  if 0 as they are usually the same)
+    owner_id INT(10) UNSIGNED NOT NULL DEFAULT 0,             -- The animal owner contact_id[owner]
     pathologist_id INT(10) UNSIGNED NOT NULL DEFAULT 0,       -- Pathologist user_id from the user table
 
     resident VARCHAR(128) NOT NULL DEFAULT '',                -- Name of the resident Pathologist???
+
+    -- TODO: create a list for multiple students
     student VARCHAR(128) NOT NULL DEFAULT '',                 --
     student_email VARCHAR(128) NOT NULL DEFAULT '',           --
 
@@ -150,6 +163,8 @@ CREATE TABLE IF NOT EXISTS `path_case`
 
 ) ENGINE=InnoDB;
 
+
+
 -- ----------------------------
 --  storage table
 -- ----------------------------
@@ -224,7 +239,7 @@ CREATE TABLE IF NOT EXISTS request
     path_case_id INT(10) UNSIGNED NOT NULL DEFAULT 0,         --
     cassette_id INT(10) UNSIGNED NOT NULL DEFAULT 0,          --
     service_id INT(10) UNSIGNED NOT NULL DEFAULT 0,           --
-    client_id INT(10) UNSIGNED NOT NULL DEFAULT 0,            -- The client requesting the samples (NOT sure if this could be staff, client, etc)
+    client_id INT(10) UNSIGNED NOT NULL DEFAULT 0,            -- The contact_id[client] requesting the samples (NOT sure if this could be staff, client, etc)
     status VARCHAR(64) NOT NULL DEFAULT '',                   -- ???
     qty INT(10) NOT NULL DEFAULT 0,                           -- Quantity of samples requested (check available tissue.qty on submit)
     cost DECIMAL(9,2) NOT NULL DEFAULT 0.0,                   -- The total cost based on qty requested + the service cost

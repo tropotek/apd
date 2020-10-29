@@ -17,6 +17,10 @@ class Client extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     use InstitutionTrait;
     use UserTrait;
 
+    const TYPE_CLIENT               = 'client';
+    const TYPE_OWNER                = 'owner';
+    const TYPE_STUDENT              = 'student';
+
     /**
      * @var int
      */
@@ -38,6 +42,11 @@ class Client extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      * @var string
      */
     public $uid = '';
+
+    /**
+     * @var string
+     */
+    public $type = '';
 
     /**
      * University account code or their accounts dep. account code for invoicing
@@ -111,8 +120,9 @@ class Client extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      */
     public function __construct()
     {
+        $this->setType(self::TYPE_CLIENT);
         $this->_TimestampTrait();
-        $this->institutionId = $this->getConfig()->getInstitutionId();
+        $this->setInstitutionId($this->getConfig()->getInstitutionId());
     }
 
     /**
@@ -131,6 +141,46 @@ class Client extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public function getUid() : string
     {
         return $this->uid;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string $type
+     * @return Client
+     */
+    public function setType(string $type): Client
+    {
+        $this->type = $type;
+        return $this;
+    }
+
+    /**
+     * return the status list for a select field
+     * @param null|string $selected
+     * @return array
+     */
+    public static function getTypeList($selected = null)
+    {
+        $arr = \Tk\Form\Field\Select::arrayToSelectList(\Tk\ObjectUtil::getClassConstants(__CLASS__, 'TYPE'));
+        if (is_string($selected)) {
+            $arr2 = array();
+            foreach ($arr as $k => $v) {
+                if ($v == $selected) {
+                    $arr2[$k.' (Current)'] = $v;
+                } else {
+                    $arr2[$k] = $v;
+                }
+            }
+            $arr = $arr2;
+        }
+        return $arr;
     }
 
     /**
@@ -343,11 +393,15 @@ class Client extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      * @return array
      * @throws \Exception
      */
-    public static function getSelectList()
+    public static function getSelectList($type = '')
     {
-        $list = ClientMap::create()->findFiltered(array(
+        $filter = array(
             'institutionId' => \App\Config::getInstance()->getInstitutionId()
-        ), \Tk\Db\Tool::create('name'));
+        );
+        if ($type) {
+            $filter['type'] = $type;
+        }
+        $list = ClientMap::create()->findFiltered($filter, \Tk\Db\Tool::create('name'));
         $arr = array();
         foreach ($list as $item) {
             $arr[$item->getTitle()] = $item->getId();
@@ -364,6 +418,10 @@ class Client extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 
         if (!$this->institutionId) {
             $errors['institutionId'] = 'Invalid value: institutionId';
+        }
+
+        if (!$this->getType()) {
+            $errors['type'] = 'Invalid value: type';
         }
 
         if (!$this->name) {

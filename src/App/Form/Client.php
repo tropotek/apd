@@ -35,6 +35,12 @@ class Client extends \Bs\FormIface
         $layout->removeRow('country', 'col');
 
         $tab = 'Details';
+        if (!$this->getConfig()->getRequest()->query->has('type')) {
+            $list = \App\Db\Client::getTypeList($this->getClient()->getType());
+            $this->appendField(new Field\Select('type', $list))
+                ->setRequired()->prependOption('-- Contact Type --', '')->setTabGroup($tab);
+        }
+
         $this->appendField(new Field\Input('name'))->setTabGroup($tab);
         $this->appendField(new Field\Input('email'))->setTabGroup($tab);
         $this->appendField(new Field\Input('phone'))->setTabGroup($tab);

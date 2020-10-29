@@ -187,15 +187,30 @@ class Request extends \Bs\TableIface
         }
 
         // Filters
-        if (!$this->isMinMode())
+        if (!$this->isMinMode()) {
             $this->appendFilter(new Field\Input('keywords'))->setAttr('placeholder', 'Search');
+
+            $this->appendFilter(new Field\Input('pathCaseId'))->setAttr('placeholder', 'Case ID');
+
+            $list = \Tk\ObjectUtil::getClassConstants(\App\Db\Request::class, 'STATUS', true);
+            $this->appendFilter(Field\Select::createSelect('status', $list)->prependOption('-- Status --'));
+
+            // TODO:
+            // User (pathologistId)
+            // Contact (Client)
+            // Contact (Owner)
+            // Contact (Student)
+        }
+
 
         // Actions
         //$this->appendAction(\Tk\Table\Action\Link::createLink('New Request', \Bs\Uri::createHomeUrl('/requestEdit.html'), 'fa fa-plus'));
-
         $this->appendAction(\Tk\Table\Action\ColumnSelect::create()->setUnselected(array('modified')));
-        if (!$this->isMinMode())
+
+        if (!$this->isMinMode()) {
             $this->appendAction(\Tk\Table\Action\Delete::create());
+        }
+
         $this->appendAction(\Tk\Table\Action\Csv::create());
 
         // load table

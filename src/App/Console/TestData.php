@@ -109,10 +109,13 @@ class TestData extends \Bs\Console\TestData
         }
 
         $db->exec('DELETE FROM `client` WHERE `notes` = \'***\' ');
-        for($i = 0; $i < 25; $i++) {
+        for($i = 0; $i < 50; $i++) {
             $client = new Client();
             //$client->setUserId();     // TODO
             $client->setUid($this->createStr(6));
+            $list = \App\Db\Client::getTypeList();
+            $r = rand(0, count($list)-1);
+            $client->setType($list[$r]);
             $client->setName($this->createName());
             $client->setEmail($this->createUniqueEmail());
 

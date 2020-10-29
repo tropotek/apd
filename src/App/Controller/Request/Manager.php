@@ -32,11 +32,13 @@ class Manager extends AdminManagerIface
     public function doDefault(Request $request)
     {
         $this->setTable(\App\Table\Request::create());
-        $this->getTable()->setEditUrl(\Bs\Uri::createHomeUrl('/requestEdit.html')->set('pathCaseId', $request->get('pathCaseId')));
+        $this->getTable()->setEditUrl(\Bs\Uri::createHomeUrl('/requestEdit.html')->set('pathCaseId', $request->query->get('pathCaseId')));
         $this->getTable()->init();
 
         $filter = array();
-        $filter['pathCaseId'] = $request->get('pathCaseId');
+        if ($request->query->get('pathCaseId')) {
+            $filter['pathCaseId'] = $request->get('pathCaseId');
+        }
         $this->getTable()->setList($this->getTable()->findList($filter));
     }
 
@@ -45,8 +47,10 @@ class Manager extends AdminManagerIface
      */
     public function initActionPanel()
     {
-        $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('New Request',
-            $this->getTable()->getEditUrl(), 'fa fa-flask fa-add-action'));
+        if ($this->getConfig()->getRequest()->query->has('pathCaseId')) {
+            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('New Request',
+                $this->getTable()->getEditUrl(), 'fa fa-flask fa-add-action'));
+        }
     }
 
     /**
