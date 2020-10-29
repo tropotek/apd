@@ -191,7 +191,9 @@ JS;
             ->prependOption('-- Select --', ''))
             ->setTabGroup($tab)->setLabel('Pathologist');
 
-        //$this->appendField(new Field\Input('resident'))->setTabGroup($tab);
+
+
+        
         $client = new \App\Db\Contact();
         $form = \App\Form\Contact::create()->setModel($client);
         $form->removeField('notes');
@@ -199,6 +201,8 @@ JS;
         $this->appendField(Field\DialogSelect::createDialogSelect('students', $list, $form)->prependOption('-- Select --', ''))
             ->setTabGroup($tab)->setLabel('Students')->setNotes('Add any students');
         // TODO: Populate existing contacts
+
+
 
 
         $this->appendField(new Field\Checkbox('euthanised'))->setTabGroup($tab);

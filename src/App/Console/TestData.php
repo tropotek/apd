@@ -68,11 +68,11 @@ class TestData extends \Bs\Console\TestData
 
         // Clear DB: Make this a command on it own
         $db->exec('DELETE FROM `user` WHERE `notes` = \'***\' ');
-        $db->exec(' ');
         $db->exec('DELETE FROM `storage` WHERE `notes` = \'***\' ');
         $db->exec('DELETE FROM `service` WHERE `notes` = \'***\' ');
         $db->exec('DELETE FROM `path_case` WHERE `notes` = \'***\' ');
         $db->exec('DELETE FROM `cassette` WHERE `notes` = \'***\' ');
+        $db->exec('DELETE FROM `contact` WHERE `notes` = \'***\' ');
         $db->exec('DELETE FROM `request` WHERE `notes` = \'***\' ');
 
 
