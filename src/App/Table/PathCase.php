@@ -1,7 +1,7 @@
 <?php
 namespace App\Table;
 
-use App\Db\ClientMap;
+use App\Db\ContactMap;
 use Tk\Form\Field;
 use Tk\Table\Cell;
 use Uni\Db\User;
@@ -53,7 +53,6 @@ class PathCase extends \Bs\TableIface
         $this->appendCell(new Cell\Text('type'));
         $this->appendCell(new Cell\Text('submissionType'));
         $this->appendCell(new Cell\Text('status'));
-
 
         $this->appendCell(new Cell\Text('cost'));
         $this->appendCell(new Cell\Boolean('afterHours'));
@@ -109,7 +108,7 @@ class PathCase extends \Bs\TableIface
         ));
         $this->appendFilter(Field\Select::createSelect('userId', $list)->prependOption('-- Staff --'));
         
-        $list = ClientMap::create()->findFiltered(array(
+        $list = ContactMap::create()->findFiltered(array(
             'institutionId' => $this->getConfig()->getInstitutionId()
         ));
         $this->appendFilter(Field\Select::createSelect('clientId', $list)->prependOption('-- Submitter/Client --'));

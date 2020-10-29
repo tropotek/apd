@@ -1,5 +1,5 @@
 <?php
-namespace App\Controller\Client;
+namespace App\Controller\Contact;
 
 use Bs\Controller\AdminManagerIface;
 use Dom\Template;
@@ -7,7 +7,7 @@ use Tk\Request;
 
 /**
  * TODO: Add Route to routes.php:
- *      $routes->add('client-manager', Route::create('/staff/clientManager.html', 'App\Controller\Client\Manager::doDefault'));
+ *      $routes->add('contact-manager', Route::create('/staff/contactManager.html', 'App\Controller\Contact\Manager::doDefault'));
  *
  * @author Mick Mifsud
  * @created 2020-07-29
@@ -22,7 +22,7 @@ class Manager extends AdminManagerIface
      */
     public function __construct()
     {
-        $this->setPageTitle('Client Manager');
+        $this->setPageTitle('Contact Manager');
     }
 
     /**
@@ -31,8 +31,8 @@ class Manager extends AdminManagerIface
      */
     public function doDefault(Request $request)
     {
-        $this->setTable(\App\Table\Client::create());
-        $this->getTable()->setEditUrl(\Bs\Uri::createHomeUrl('/clientEdit.html'));
+        $this->setTable(\App\Table\Contact::create());
+        $this->getTable()->setEditUrl(\Bs\Uri::createHomeUrl('/contactEdit.html'));
         $this->getTable()->init();
 
         $filter = array();
@@ -44,8 +44,8 @@ class Manager extends AdminManagerIface
      */
     public function initActionPanel()
     {
-        $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('New Client',
-            $this->getTable()->getEditUrl(), 'fa fa-building fa-add-action'));
+        $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('New Contact',
+            $this->getTable()->getEditUrl(), 'fa fa-user-o fa-add-action'));
     }
 
     /**
@@ -67,7 +67,7 @@ class Manager extends AdminManagerIface
     public function __makeTemplate()
     {
         $xhtml = <<<HTML
-<div class="tk-panel" data-panel-title="Clients" data-panel-icon="fa fa-building" var="panel"></div>
+<div class="tk-panel" data-panel-title="Contacts" data-panel-icon="fa fa-user-o" var="panel"></div>
 HTML;
         return \Dom\Loader::load($xhtml);
     }

@@ -74,7 +74,7 @@ class RequestDecorator
             if ($request->getPathCase() && $request->getPathCase()->getInstitution())
                 $message->replace(Collection::prefixArrayKeys(\Uni\Db\InstitutionMap::create()->unmapForm($request->getPathCase()->getInstitution()), 'institution::'));
             if ($request->getClient())
-                $message->replace(Collection::prefixArrayKeys(\App\Db\ClientMap::create()->unmapForm($request->getClient()), 'client::'));
+                $message->replace(Collection::prefixArrayKeys(\App\Db\ContactMap::create()->unmapForm($request->getClient()), 'client::'));
             if ($request->getPathCase())
                 $message->replace(Collection::prefixArrayKeys(\App\Db\PathCaseMap::create()->unmapForm($request->getPathCase()), 'pathCase::'));
 

@@ -33,7 +33,7 @@
 --  contact table
 --  Animal Owner, Client / Student details
 -- ----------------------------
-CREATE TABLE IF NOT EXISTS client
+CREATE TABLE IF NOT EXISTS contact
 (
     id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     institution_id INT(10) UNSIGNED NOT NULL DEFAULT 0,
@@ -85,8 +85,8 @@ CREATE TABLE IF NOT EXISTS `path_case`
     resident VARCHAR(128) NOT NULL DEFAULT '',                -- Name of the resident Pathologist???
 
     -- TODO: create a list for multiple students
-    student VARCHAR(128) NOT NULL DEFAULT '',                 --
-    student_email VARCHAR(128) NOT NULL DEFAULT '',           --
+    -- student VARCHAR(128) NOT NULL DEFAULT '',                 --
+    -- student_email VARCHAR(128) NOT NULL DEFAULT '',           --
 
     -- Case
     pathology_id VARCHAR(64) NOT NULL DEFAULT '',             -- Pathology Number  (ie: title, name)

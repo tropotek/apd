@@ -19,7 +19,7 @@ use Tk\Form;
  * @link http://tropotek.com.au/
  * @license Copyright 2020 Tropotek
  */
-class Client extends \Bs\FormIface
+class Contact extends \Bs\FormIface
 {
 
     /**
@@ -36,7 +36,7 @@ class Client extends \Bs\FormIface
 
         $tab = 'Details';
         if (!$this->getConfig()->getRequest()->query->has('type')) {
-            $list = \App\Db\Client::getTypeList($this->getClient()->getType());
+            $list = \App\Db\Contact::getTypeList($this->getClient()->getType());
             $this->appendField(new Field\Select('type', $list))
                 ->setRequired()->prependOption('-- Contact Type --', '')->setTabGroup($tab);
         }
@@ -69,7 +69,7 @@ class Client extends \Bs\FormIface
      */
     public function execute($request = null)
     {
-        $this->load(\App\Db\ClientMap::create()->unmapForm($this->getClient()));
+        $this->load(\App\Db\ContactMap::create()->unmapForm($this->getClient()));
         parent::execute($request);
     }
 
@@ -81,7 +81,7 @@ class Client extends \Bs\FormIface
     public function doSubmit($form, $event)
     {
         // Load the object with form data
-        \App\Db\ClientMap::create()->mapForm($form->getValues(), $this->getClient());
+        \App\Db\ContactMap::create()->mapForm($form->getValues(), $this->getClient());
 
         // Do Custom Validations
 
@@ -98,12 +98,12 @@ class Client extends \Bs\FormIface
         \Tk\Alert::addSuccess('Record saved!');
         $event->setRedirect($this->getBackUrl());
         if ($form->getTriggeredEvent()->getName() == 'save') {
-            $event->setRedirect(\Tk\Uri::create()->set('clientId', $this->getClient()->getId()));
+            $event->setRedirect(\Tk\Uri::create()->set('contactId', $this->getClient()->getId()));
         }
     }
 
     /**
-     * @return \Tk\Db\ModelInterface|\App\Db\Client
+     * @return \Tk\Db\ModelInterface|\App\Db\Contact
      */
     public function getClient()
     {
@@ -111,7 +111,7 @@ class Client extends \Bs\FormIface
     }
 
     /**
-     * @param \App\Db\Client $client
+     * @param \App\Db\Contact $client
      * @return $this
      */
     public function setClient($client)

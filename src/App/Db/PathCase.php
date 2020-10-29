@@ -103,18 +103,10 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 
     /**
      * @var string
+     * @deprecated
      */
     public $resident = '';
 
-    /**
-     * @var string
-     */
-    public $student = '';
-
-    /**
-     * @var string
-     */
-    public $studentEmail = '';
 
     /**
      * Pathology Number
@@ -1064,38 +1056,26 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     }
 
     /**
-     * @return string
+     * @param null|\Tk\Db\Tool $tool
+     * @return array|\Tk\Db\Map\ArrayObject|Contact[]
+     * @throws \Exception
      */
-    public function getStudent(): string
+    public function getStudentList($tool = null)
     {
-        return $this->student;
+        $list = ContactMap::create()->findFiltered(array(
+            'pathCaseId' => $this->getVolatileId()
+        ), $tool);
+        return $list;
     }
 
     /**
-     * @param string $student
+     * @param int|Contact $contactId
      * @return PathCase
      */
-    public function setStudent(string $student): PathCase
+    public function addStudent($contactId): PathCase
     {
-        $this->student = $student;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStudentEmail(): string
-    {
-        return $this->studentEmail;
-    }
-
-    /**
-     * @param string $studentEmail
-     * @return PathCase
-     */
-    public function setStudentEmail(string $studentEmail): PathCase
-    {
-        $this->studentEmail = $studentEmail;
+        if ($contactId instanceof Contact) $contactId = $contactId->getVolatileId();
+        PathCaseMap::create()->addContact($this->getVolatileId(), $contactId);
         return $this;
     }
 
@@ -1377,7 +1357,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
                 if (PathCase::STATUS_PENDING == $prevStatusName || PathCase::STATUS_REPORTED == $prevStatusName || PathCase::STATUS_EXAMINED == $prevStatusName)
                     return true;
                 break;
-            case PathCase::STATUS_DISPOSED:
             case PathCase::STATUS_HOLD:
             case PathCase::STATUS_FROZEN_STORAGE:
             case Request::STATUS_CANCELLED:

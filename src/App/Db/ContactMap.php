@@ -14,7 +14,7 @@ use Tk\Db\Filter;
  * @link http://tropotek.com.au/
  * @license Copyright 2020 Tropotek
  */
-class ClientMap extends Mapper
+class ContactMap extends Mapper
 {
 
     /**
@@ -83,7 +83,7 @@ class ClientMap extends Mapper
     /**
      * @param array|Filter $filter
      * @param Tool $tool
-     * @return ArrayObject|Client[]
+     * @return ArrayObject|Contact[]
      * @throws \Exception
      */
     public function findFiltered($filter, $tool = null)

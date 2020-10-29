@@ -2,7 +2,7 @@
 namespace App\Form;
 
 use App\Db\CassetteMap;
-use App\Db\ClientMap;
+use App\Db\ContactMap;
 use App\Db\ServiceMap;
 use Tk\Form\Field;
 use Tk\Form\Event;
@@ -57,7 +57,7 @@ class Request extends \Bs\FormIface
         }
         $list = ServiceMap::create()->findFiltered(array('institutionId' => $this->getRequest()->getPathCase()->getInstitutionId()));
         $this->appendField(new Field\Select('serviceId', $list))->prependOption('-- Select --', '');
-        $list = ClientMap::create()->findFiltered(array('institutionId' => $this->getRequest()->getPathCase()->getInstitutionId()));
+        $list = ContactMap::create()->findFiltered(array('institutionId' => $this->getRequest()->getPathCase()->getInstitutionId()));
         $this->appendField(new Field\Select('clientId', $list))->prependOption('-- Select --', '');
 
         if ($this->getRequest()->getId()) {

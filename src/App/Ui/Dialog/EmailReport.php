@@ -1,6 +1,7 @@
 <?php
 namespace App\Ui\Dialog;
 
+use App\Db\Contact;
 use App\Db\PathCase;
 use Tk\Form;
 use Tk\Form\Event\Submit;
@@ -54,8 +55,15 @@ class EmailReport extends JsonForm
         if ($path && $path->getEmail())
             $list[$path->getName() . ' (' . $path->getEmail() . ')'] = $path->getEmail();
 
+        /** @var Contact $student */
+        foreach ($this->getPathCase()->getStudentList() as $student) {
+            $list[$student->getName() . ' (' . $student->getEmail() . ')'] = $student->getEmail();
+        }
+
+        /*
         if ($this->getPathCase()->getStudentEmail())
             $list[$this->getPathCase()->getStudent() . ' (' . $this->getPathCase()->getStudentEmail() . ')'] = $this->getPathCase()->getStudentEmail();
+        */
 
         $form->appendField(CheckboxGroup::createSelect('to', $list))->setValue(array($selected));
         $form->appendField(Input::create('toText'))->setLabel('To')->setNotes('Other emails to send the report to separate by comma, space, semi-colin.');

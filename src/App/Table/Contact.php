@@ -20,7 +20,7 @@ use Tk\Table\Cell;
  * @link http://tropotek.com.au/
  * @license Copyright 2020 Tropotek
  */
-class Client extends \Bs\TableIface
+class Contact extends \Bs\TableIface
 {
 
     /**
@@ -49,7 +49,7 @@ class Client extends \Bs\TableIface
         $this->appendFilter(new Field\Input('keywords'))->setAttr('placeholder', 'Search');
 
         if (!$this->getConfig()->getRequest()->query->has('type')) {
-            $list = \App\Db\Client::getTypeList();
+            $list = \App\Db\Contact::getTypeList();
             $this->appendFilter(new Field\Select('type', $list))
                 ->setRequired()->prependOption('-- Contact Type --', '');
         }
@@ -69,14 +69,14 @@ class Client extends \Bs\TableIface
     /**
      * @param array $filter
      * @param null|\Tk\Db\Tool $tool
-     * @return \Tk\Db\Map\ArrayObject|\App\Db\Client[]
+     * @return \Tk\Db\Map\ArrayObject|\App\Db\Contact[]
      * @throws \Exception
      */
     public function findList($filter = array(), $tool = null)
     {
         if (!$tool) $tool = $this->getTool();
         $filter = array_merge($this->getFilterValues(), $filter);
-        $list = \App\Db\ClientMap::create()->findFiltered($filter, $tool);
+        $list = \App\Db\ContactMap::create()->findFiltered($filter, $tool);
         return $list;
     }
 

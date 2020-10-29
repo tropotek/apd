@@ -5,8 +5,8 @@ use App\Db\Address;
 use App\Db\AddressMap;
 use App\Db\Cassette;
 use App\Db\CassetteMap;
-use App\Db\Client;
-use App\Db\ClientMap;
+use App\Db\Contact;
+use App\Db\ContactMap;
 use App\Db\PathCase;
 use App\Db\PathCaseMap;
 use App\Db\Request;
@@ -68,7 +68,7 @@ class TestData extends \Bs\Console\TestData
 
         // Clear DB: Make this a command on it own
         $db->exec('DELETE FROM `user` WHERE `notes` = \'***\' ');
-        $db->exec('DELETE FROM `client` WHERE `notes` = \'***\' ');
+        $db->exec(' ');
         $db->exec('DELETE FROM `storage` WHERE `notes` = \'***\' ');
         $db->exec('DELETE FROM `service` WHERE `notes` = \'***\' ');
         $db->exec('DELETE FROM `path_case` WHERE `notes` = \'***\' ');
@@ -108,33 +108,35 @@ class TestData extends \Bs\Console\TestData
             }
         }
 
-        $db->exec('DELETE FROM `client` WHERE `notes` = \'***\' ');
-        for($i = 0; $i < 50; $i++) {
-            $client = new Client();
-            //$client->setUserId();     // TODO
-            $client->setUid($this->createStr(6));
-            $list = \App\Db\Client::getTypeList();
-            $r = rand(0, count($list)-1);
-            $client->setType($list[$r]);
-            $client->setName($this->createName());
-            $client->setEmail($this->createUniqueEmail());
+        //$db->exec('DELETE FROM `contact` WHERE `notes` = \'***\' ');
+        $db->exec('TRUNCATE `contact`');
+        foreach (Contact::getTypeList() as $type) {
+            for($i = 0; $i < 25; $i++) {
+                $contact = new Contact();
+                //$client->setUserId();     // TODO
+                $contact->setUid($this->createStr(6));
+                $contact->setType($type);
+                $contact->setName($this->createName());
+                $contact->setEmail($this->createUniqueEmail());
 
-            $client->setPhone($this->createStr(10, '1234567890'));
-            if (rand(0, 1))
-                $client->setFax($this->createStr(10, '1234567890'));
+                $contact->setPhone($this->createStr(10, '1234567890'));
+                if (rand(0, 1))
+                    $contact->setFax($this->createStr(10, '1234567890'));
 
-            $client->setStreet($this->createWords(rand(1, 3)));
-            $client->setCity(ucwords($this->createWords(rand(1, 2))));
-            $client->setCountry(ucwords($this->createWords(rand(1, 2))));
-            $client->setState(ucwords($this->createWords(rand(1, 2))));
-            $client->setPostcode($this->createStr(4, '1234567890'));
+                $contact->setStreet($this->createWords(rand(1, 3)));
+                $contact->setCity(ucwords($this->createWords(rand(1, 2))));
+                $contact->setCountry(ucwords($this->createWords(rand(1, 2))));
+                $contact->setState(ucwords($this->createWords(rand(1, 2))));
+                $contact->setPostcode($this->createStr(4, '1234567890'));
 
+                $contact->setNotes('***');
+                $contact->save();
+            }
 
-            $client->setNotes('***');
-            $client->save();
         }
 
-        $db->exec('DELETE FROM `storage` WHERE `notes` = \'***\' ');
+        //$db->exec('DELETE FROM `storage` WHERE `notes` = \'***\' ');
+        $db->exec('TRUNCATE `storage`');
         for($i = 0; $i < 10; $i++) {
             $storage = new Storage();
             $storage->setUid($this->createStr(6));
@@ -159,11 +161,11 @@ class TestData extends \Bs\Console\TestData
         $db->exec('TRUNCATE  `path_case` ');
         for($i = 0; $i < 100; $i++) {
             $case = new PathCase();
-            /** @var Client $client */
-            $client = ClientMap::create()->findAll(Tool::create('RAND()'))->current();
-            $case->setClientId($client->getId());
-            $client = ClientMap::create()->findAll(Tool::create('RAND()'))->current();
-            $case->setOwnerId($client->getId());
+            /** @var Contact $contact */
+            $contact = ContactMap::create()->findAll(Tool::create('RAND()'))->current();
+            $case->setClientId($contact->getId());
+            $contact = ContactMap::create()->findAll(Tool::create('RAND()'))->current();
+            $case->setOwnerId($contact->getId());
 
             $staff = $this->getConfig()->getUserMapper()->findFiltered(array('type' => 'staff'), Tool::create('RAND()'))->current();
             $case->setUserId($staff->getId());
@@ -175,8 +177,13 @@ class TestData extends \Bs\Console\TestData
             $staff1 = $this->getConfig()->getUserMapper()->findFiltered(array('type' => 'staff'), Tool::create('RAND()'))->current();
             $case->setPathologistId($staff1->getId());
             $case->setResident($this->createFullName());
-            $case->setStudent($this->createFullName());
-            $case->setStudentEmail($this->createEmail());
+
+            $list = ContactMap::create()->findFiltered(array(
+                'type' => Contact::TYPE_STUDENT
+            ), \Tk\Db\Tool::create('RAND()', rand(1, 3)));
+            foreach ($list as $student) {
+                $case->addStudent($student);
+            }
             $case->setName($this->createFullName() . ' ' . $this->createSpecies() . ' ' . $this->createBreed());
 
             //$arr = array_values(ObjectUtil::getClassConstants($case, 'STATUS_'));
@@ -195,9 +202,6 @@ class TestData extends \Bs\Console\TestData
             $case->setPatientNumber($this->createStr(8, '123456789'));
             $case->setMicrochip($this->createStr(12, '1234567890'));
             $case->setOwnerName($this->createName() . ' ' . $this->createName());
-//            $case->setOwnerEmail($this->createUniqueEmail());
-//            $case->setOwnerPhone($this->createPhone());
-//            $case->setOwnerAddress($this->createAddress());
             $case->setOrigin($this->createStr());
             $case->setBreed($this->createBreed());
 
@@ -308,9 +312,9 @@ class TestData extends \Bs\Console\TestData
             /** @var Service $service */
             $service = ServiceMap::create()->findAll(Tool::create('RAND()'))->current();
             $request->setServiceId($service->getId());
-            /** @var Client $client */
-            $client = ClientMap::create()->findAll(Tool::create('RAND()'))->current();
-            $request->setClientId($client->getId());
+            /** @var Contact $contact */
+            $contact = ContactMap::create()->findAll(Tool::create('RAND()'))->current();
+            $request->setClientId($contact->getId());
 
             $request->setQty(rand(1, $cassette->getQty()));
             $request->setCost($service->getCost()->getAmount()*$request->getQty());

@@ -74,7 +74,7 @@ class PathCaseDecorator
             if ($case->getInstitution())
                 $message->replace(Collection::prefixArrayKeys(\Uni\Db\InstitutionMap::create()->unmapForm($case->getInstitution()), 'institution::'));
             if ($case->getClient())
-                $message->replace(Collection::prefixArrayKeys(\App\Db\ClientMap::create()->unmapForm($case->getClient()), 'client::'));
+                $message->replace(Collection::prefixArrayKeys(\App\Db\ContactMap::create()->unmapForm($case->getClient()), 'client::'));
 
             $event->addMessage($message);
         }

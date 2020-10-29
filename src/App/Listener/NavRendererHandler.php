@@ -67,7 +67,7 @@ class NavRendererHandler implements Subscriber
 
             $menu->append(Item::create('Storage Locations', \Uni\Uri::createHomeUrl('/storageManager.html'), 'fa fa-archive'));
             $menu->append(Item::create('Available Services', \Uni\Uri::createHomeUrl('/serviceManager.html'), 'fa fa-tags'));
-            $menu->append(Item::create('Clients', \Uni\Uri::createHomeUrl('/clientManager.html'), 'fa fa-building'));
+            $menu->append(Item::create('Contact', \Uni\Uri::createHomeUrl('/contactManager.html'), 'fa fa-user-o'));
         }
         if ($user->hasPermission(Permission::MANAGE_SITE))
             $menu->append(Item::create('Settings', \Uni\Uri::createHomeUrl('/settings.html'), 'fa fa-cogs'), 'Staff');
@@ -111,7 +111,7 @@ class NavRendererHandler implements Subscriber
 
             $menu->append(Item::create('Cases', \Uni\Uri::createHomeUrl('/pathCaseManager.html'), 'fa fa-paw'));
             $menu->append(Item::create('Requests', \Uni\Uri::createHomeUrl('/requestManager.html'), 'fa fa-medkit'));
-            $menu->append(Item::create('Client List', \Uni\Uri::createHomeUrl('/clientManager.html'), 'fa fa-building'));
+            $menu->append(Item::create('Contacts', \Uni\Uri::createHomeUrl('/contactManager.html'), 'fa fa-user-o'));
             //$menu->append(Item::create('Storage List', \Uni\Uri::createHomeUrl('/storageManager.html'), 'fa fa-question'));
             //$menu->append(Item::create('Service List', \Uni\Uri::createHomeUrl('/serviceManager.html'), 'fa fa-question'));
             //$menu->append(Item::create('Request List', \Uni\Uri::createHomeUrl('/requestManager.html'), 'fa fa-flask'));\

@@ -1,7 +1,7 @@
 <?php
 namespace App\Form;
 
-use App\Db\ClientMap;
+use App\Db\ContactMap;
 use App\Form\Field\Money;
 use Tk\Db\Tool;
 use Tk\Form\Field;
@@ -74,8 +74,6 @@ class PathCase extends \Bs\FormIface
 
         //$layout->removeRow('resident', 'col');
 
-        $layout->removeRow('studentEmail', 'col');
-
         $layout->removeRow('euthanisedMethod', 'col');
 
 
@@ -96,10 +94,10 @@ class PathCase extends \Bs\FormIface
         $this->appendField(Field\Select::createSelect('submissionType', $list)->prependOption('-- Select --', ''))
             ->setTabGroup($tab);
 
-        $client = new \App\Db\Client();
-        $form = \App\Form\Client::create()->setModel($client);
+        $client = new \App\Db\Contact();
+        $form = \App\Form\Contact::create()->setModel($client);
         $form->removeField('notes');
-        $list = \App\Db\Client::getSelectList(\App\Db\Client::TYPE_CLIENT);
+        $list = \App\Db\Contact::getSelectList(\App\Db\Contact::TYPE_CLIENT);
         $this->appendField(Field\DialogSelect::createDialogSelect('clientId', $list, $form)->prependOption('-- Select --', ''))
             ->setTabGroup($tab)->setLabel('Submitting Client')->setNotes('This is the client that will be invoiced.');
 
@@ -151,10 +149,10 @@ JS;
         //$tab = 'Animal';
         $fieldset = 'Animal';
 
-        $client = new \App\Db\Client();
-        $form = \App\Form\Client::create()->setModel($client);
+        $client = new \App\Db\Contact();
+        $form = \App\Form\Contact::create()->setModel($client);
         $form->removeField('notes');
-        $list = \App\Db\Client::getSelectList(\App\Db\Client::TYPE_OWNER);
+        $list = \App\Db\Contact::getSelectList(\App\Db\Contact::TYPE_OWNER);
         $this->appendField(Field\DialogSelect::createDialogSelect('ownerId', $list, $form)->prependOption('-- Select --', ''))
             ->setTabGroup($tab)->setLabel('Owner Name')->setNotes('This is the Client Record of the animal owner.');
 
@@ -194,8 +192,14 @@ JS;
             ->setTabGroup($tab)->setLabel('Pathologist');
 
         //$this->appendField(new Field\Input('resident'))->setTabGroup($tab);
-        $this->appendField(new Field\Input('student'))->setTabGroup($tab);
-        $this->appendField(new Field\Input('studentEmail'))->setTabGroup($tab);
+        $client = new \App\Db\Contact();
+        $form = \App\Form\Contact::create()->setModel($client);
+        $form->removeField('notes');
+        $list = \App\Db\Contact::getSelectList(\App\Db\Contact::TYPE_STUDENT);
+        $this->appendField(Field\DialogSelect::createDialogSelect('students', $list, $form)->prependOption('-- Select --', ''))
+            ->setTabGroup($tab)->setLabel('Students')->setNotes('Add any students');
+        // TODO: Populate existing contacts
+
 
         $this->appendField(new Field\Checkbox('euthanised'))->setTabGroup($tab);
         $this->appendField(new Field\Input('euthanisedMethod'))->setTabGroup($tab);

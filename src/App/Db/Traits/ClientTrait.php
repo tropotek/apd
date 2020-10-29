@@ -2,8 +2,8 @@
 
 namespace App\Db\Traits;
 
-use App\Db\Client;
-use App\Db\ClientMap;
+use App\Db\Contact;
+use App\Db\ContactMap;
 use Exception;
 
 /**
@@ -15,7 +15,7 @@ trait ClientTrait
 {
 
     /**
-     * @var Client
+     * @var Contact
      */
     private $_client = null;
 
@@ -41,13 +41,13 @@ trait ClientTrait
     /**
      * Get the subject related to this object
      *
-     * @return Client|null
+     * @return Contact|null
      */
     public function getClient()
     {
         if (!$this->_client) {
             try {
-                $this->_client = ClientMap::create()->find($this->getClientId());
+                $this->_client = ContactMap::create()->find($this->getClientId());
             } catch (Exception $e) {
             }
         }

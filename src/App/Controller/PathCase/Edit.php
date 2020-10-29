@@ -189,6 +189,7 @@ class Edit extends AdminEditIface
 
         // Render the form
         $template->appendTemplate('panel', $this->getForm()->show());
+
         if ($this->pathCase->getId()) {
             $template->setAttr('panel', 'data-panel-title', $this->pathCase->getPathologyId() . ' - (' . ucwords($this->pathCase->getType()) . ')');
         }

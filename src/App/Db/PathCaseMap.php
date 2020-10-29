@@ -33,8 +33,8 @@ class PathCaseMap extends Mapper
 
             $this->dbMap->addPropertyMap(new Db\Integer('pathologistId', 'pathologist_id'));
             $this->dbMap->addPropertyMap(new Db\Text('resident'));
-            $this->dbMap->addPropertyMap(new Db\Text('student'));
-            $this->dbMap->addPropertyMap(new Db\Text('studentEmail', 'student_email'));
+//            $this->dbMap->addPropertyMap(new Db\Text('student'));
+//            $this->dbMap->addPropertyMap(new Db\Text('studentEmail', 'student_email'));
 
             $this->dbMap->addPropertyMap(new Db\Text('pathologyId', 'pathology_id'));
             $this->dbMap->addPropertyMap(new Db\Text('name'));
@@ -104,8 +104,8 @@ class PathCaseMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Integer('ownerId'));
             $this->formMap->addPropertyMap(new Form\Integer('pathologistId'));
             $this->formMap->addPropertyMap(new Form\Text('resident'));
-            $this->formMap->addPropertyMap(new Form\Text('student'));
-            $this->formMap->addPropertyMap(new Form\Text('studentEmail'));
+//            $this->formMap->addPropertyMap(new Form\Text('student'));
+//            $this->formMap->addPropertyMap(new Form\Text('studentEmail'));
             $this->formMap->addPropertyMap(new Form\Text('pathologyId'));
             $this->formMap->addPropertyMap(new Form\Text('name'));
             $this->formMap->addPropertyMap(new Form\Text('type'));
@@ -226,12 +226,6 @@ class PathCaseMap extends Mapper
         }
         if (!empty($filter['resident'])) {
             $filter->appendWhere('a.resident = %s AND ', $this->quote($filter['resident']));
-        }
-        if (!empty($filter['student'])) {
-            $filter->appendWhere('a.student = %s AND ', $this->quote($filter['student']));
-        }
-        if (!empty($filter['studentEmail'])) {
-            $filter->appendWhere('a.student_email = %s AND ', $this->quote($filter['studentEmail']));
         }
         if (!empty($filter['type'])) {
             $filter->appendWhere('a.type = %s AND ', $this->quote($filter['type']));
@@ -357,7 +351,7 @@ class PathCaseMap extends Mapper
      * @param int $contactId
      * @throws Exception
      */
-    public function addCompany($pathCaseId, $contactId)
+    public function addContact($pathCaseId, $contactId)
     {
         if ($this->hasContact($pathCaseId, $contactId)) return;
         $stm = $this->getDb()->prepare('INSERT INTO path_case_has_contact (path_case_id, contact_id)  VALUES (?, ?) ');

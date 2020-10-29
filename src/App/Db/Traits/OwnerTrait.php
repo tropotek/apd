@@ -2,8 +2,8 @@
 
 namespace App\Db\Traits;
 
-use App\Db\Client;
-use App\Db\ClientMap;
+use App\Db\Contact;
+use App\Db\ContactMap;
 use Exception;
 
 /**
@@ -15,7 +15,7 @@ trait OwnerTrait
 {
 
     /**
-     * @var Client
+     * @var Contact
      */
     private $_owner = null;
 
@@ -41,13 +41,13 @@ trait OwnerTrait
     /**
      * Get the subject related to this object
      *
-     * @return Client|null
+     * @return Contact|null
      */
     public function getOwner()
     {
         if (!$this->_owner) {
             try {
-                $this->_owner = ClientMap::create()->find($this->getOwnerId());
+                $this->_owner = ContactMap::create()->find($this->getOwnerId());
             } catch (Exception $e) {
             }
         }

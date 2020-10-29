@@ -1,5 +1,5 @@
 <?php
-namespace App\Controller\Client;
+namespace App\Controller\Contact;
 
 use Bs\Controller\AdminEditIface;
 use Dom\Template;
@@ -18,9 +18,9 @@ class Edit extends AdminEditIface
 {
 
     /**
-     * @var \App\Db\Client
+     * @var \App\Db\Contact
      */
-    protected $client = null;
+    protected $contact = null;
 
 
     /**
@@ -28,7 +28,7 @@ class Edit extends AdminEditIface
      */
     public function __construct()
     {
-        $this->setPageTitle('Client Edit');
+        $this->setPageTitle('Contact Edit');
     }
 
     /**
@@ -37,12 +37,12 @@ class Edit extends AdminEditIface
      */
     public function doDefault(Request $request)
     {
-        $this->client = new \App\Db\Client();
-        if ($request->get('clientId')) {
-            $this->client = \App\Db\ClientMap::create()->find($request->get('clientId'));
+        $this->contact = new \App\Db\Contact();
+        if ($request->get('contactId')) {
+            $this->contact = \App\Db\ContactMap::create()->find($request->get('contactId'));
         }
 
-        $this->setForm(\App\Form\Client::create()->setModel($this->client));
+        $this->setForm(\App\Form\Contact::create()->setModel($this->contact));
         $this->initForm($request);
         $this->getForm()->execute();
     }
@@ -66,7 +66,7 @@ class Edit extends AdminEditIface
     public function __makeTemplate()
     {
         $xhtml = <<<HTML
-<div class="tk-panel" data-panel-title="Client Edit" data-panel-icon="fa fa-building" var="panel"></div>
+<div class="tk-panel" data-panel-title="Contact Edit" data-panel-icon="fa fa-user-o" var="panel"></div>
 HTML;
         return \Dom\Loader::load($xhtml);
     }

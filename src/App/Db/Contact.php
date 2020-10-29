@@ -11,7 +11,7 @@ use Uni\Db\Traits\InstitutionTrait;
  * @link http://tropotek.com.au/
  * @license Copyright 2020 Tropotek
  */
-class Client extends \Tk\Db\Map\Model implements \Tk\ValidInterface
+class Contact extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 {
     use TimestampTrait;
     use InstitutionTrait;
@@ -127,9 +127,9 @@ class Client extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 
     /**
      * @param string $uid
-     * @return Client
+     * @return Contact
      */
-    public function setUid($uid) : Client
+    public function setUid($uid) : Contact
     {
         $this->uid = $uid;
         return $this;
@@ -153,9 +153,9 @@ class Client extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 
     /**
      * @param string $type
-     * @return Client
+     * @return Contact
      */
-    public function setType(string $type): Client
+    public function setType(string $type): Contact
     {
         $this->type = $type;
         return $this;
@@ -185,9 +185,9 @@ class Client extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 
     /**
      * @param string $accountCode
-     * @return Client
+     * @return Contact
      */
-    public function setAccountCode($accountCode) : Client
+    public function setAccountCode($accountCode) : Contact
     {
         $this->accountCode = $accountCode;
         return $this;
@@ -203,9 +203,9 @@ class Client extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 
     /**
      * @param string $name
-     * @return Client
+     * @return Contact
      */
-    public function setName($name) : Client
+    public function setName($name) : Contact
     {
         $this->name = $name;
         return $this;
@@ -221,9 +221,9 @@ class Client extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 
     /**
      * @param string $email
-     * @return Client
+     * @return Contact
      */
-    public function setEmail($email) : Client
+    public function setEmail($email) : Contact
     {
         $this->email = $email;
         return $this;
@@ -239,9 +239,9 @@ class Client extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 
     /**
      * @param string $phone
-     * @return Client
+     * @return Contact
      */
-    public function setPhone($phone) : Client
+    public function setPhone($phone) : Contact
     {
         $this->phone = $phone;
         return $this;
@@ -257,9 +257,9 @@ class Client extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 
     /**
      * @param string $fax
-     * @return Client
+     * @return Contact
      */
-    public function setFax($fax) : Client
+    public function setFax($fax) : Contact
     {
         $this->fax = $fax;
         return $this;
@@ -275,9 +275,9 @@ class Client extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 
     /**
      * @param string $street
-     * @return Client
+     * @return Contact
      */
-    public function setStreet($street) : Client
+    public function setStreet($street) : Contact
     {
         $this->street = $street;
         return $this;
@@ -293,9 +293,9 @@ class Client extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 
     /**
      * @param string $city
-     * @return Client
+     * @return Contact
      */
-    public function setCity($city) : Client
+    public function setCity($city) : Contact
     {
         $this->city = $city;
         return $this;
@@ -311,9 +311,9 @@ class Client extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 
     /**
      * @param string $country
-     * @return Client
+     * @return Contact
      */
-    public function setCountry($country) : Client
+    public function setCountry($country) : Contact
     {
         $this->country = $country;
         return $this;
@@ -329,9 +329,9 @@ class Client extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 
     /**
      * @param string $state
-     * @return Client
+     * @return Contact
      */
-    public function setState($state) : Client
+    public function setState($state) : Contact
     {
         $this->state = $state;
         return $this;
@@ -347,9 +347,9 @@ class Client extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 
     /**
      * @param string $postcode
-     * @return Client
+     * @return Contact
      */
-    public function setPostcode($postcode) : Client
+    public function setPostcode($postcode) : Contact
     {
         $this->postcode = $postcode;
         return $this;
@@ -366,9 +366,9 @@ class Client extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 
     /**
      * @param string $notes
-     * @return Client
+     * @return Contact
      */
-    public function setNotes($notes) : Client
+    public function setNotes($notes) : Contact
     {
         $this->notes = $notes;
         return $this;
@@ -401,7 +401,7 @@ class Client extends \Tk\Db\Map\Model implements \Tk\ValidInterface
         if ($type) {
             $filter['type'] = $type;
         }
-        $list = ClientMap::create()->findFiltered($filter, \Tk\Db\Tool::create('name'));
+        $list = ContactMap::create()->findFiltered($filter, \Tk\Db\Tool::create('name'));
         $arr = array();
         foreach ($list as $item) {
             $arr[$item->getTitle()] = $item->getId();

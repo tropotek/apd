@@ -52,8 +52,8 @@ $routes->add('staff-institution-edit', Route::create('/staff/settings.html', 'Ap
 $routes->add('cassette-manager', Route::create('/staff/cassetteManager.html', 'App\Controller\Cassette\Manager::doDefault'));
 $routes->add('cassette-edit', Route::create('/staff/cassetteEdit.html', 'App\Controller\Cassette\Edit::doDefault'));
 
-$routes->add('client-manager', Route::create('/staff/clientManager.html', 'App\Controller\Client\Manager::doDefault'));
-$routes->add('client-edit', Route::create('/staff/clientEdit.html', 'App\Controller\Client\Edit::doDefault'));
+$routes->add('contact-manager', Route::create('/staff/contactManager.html', 'App\Controller\Contact\Manager::doDefault'));
+$routes->add('contact-edit', Route::create('/staff/contactEdit.html', 'App\Controller\Contact\Edit::doDefault'));
 
 $routes->add('storage-manager', Route::create('/staff/storageManager.html', 'App\Controller\Storage\Manager::doDefault'));
 $routes->add('storage-edit', Route::create('/staff/storageEdit.html', 'App\Controller\Storage\Edit::doDefault'));
@@ -69,10 +69,6 @@ $routes->add('mail-template-edit', Route::create('/staff/mailTemplateEdit.html',
 
 $routes->add('request-manager', Route::create('/staff/requestManager.html', 'App\Controller\Request\Manager::doDefault'));
 $routes->add('request-edit', Route::create('/staff/requestEdit.html', 'App\Controller\Request\Edit::doDefault'));
-
-
-
-
 
 
 

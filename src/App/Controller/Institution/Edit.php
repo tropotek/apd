@@ -39,8 +39,8 @@ class Edit extends \Uni\Controller\Institution\Edit
             \Uni\Uri::createHomeUrl('/storageManager.html'), 'fa fa-archive'));
         $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Available Services',
             \Uni\Uri::createHomeUrl('/serviceManager.html'), 'fa fa-tags'));
-        $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Clients',
-            \Uni\Uri::createHomeUrl('/clientManager.html'), 'fa fa-building'));
+        $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Contacts',
+            \Uni\Uri::createHomeUrl('/contactManager.html'), 'fa fa-user-o'));
 
     }
 
