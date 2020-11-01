@@ -33,8 +33,6 @@ class PathCaseMap extends Mapper
 
             $this->dbMap->addPropertyMap(new Db\Integer('pathologistId', 'pathologist_id'));
             $this->dbMap->addPropertyMap(new Db\Text('resident'));
-//            $this->dbMap->addPropertyMap(new Db\Text('student'));
-//            $this->dbMap->addPropertyMap(new Db\Text('studentEmail', 'student_email'));
 
             $this->dbMap->addPropertyMap(new Db\Text('pathologyId', 'pathology_id'));
             $this->dbMap->addPropertyMap(new Db\Text('name'));
@@ -104,8 +102,6 @@ class PathCaseMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Integer('ownerId'));
             $this->formMap->addPropertyMap(new Form\Integer('pathologistId'));
             $this->formMap->addPropertyMap(new Form\Text('resident'));
-//            $this->formMap->addPropertyMap(new Form\Text('student'));
-//            $this->formMap->addPropertyMap(new Form\Text('studentEmail'));
             $this->formMap->addPropertyMap(new Form\Text('pathologyId'));
             $this->formMap->addPropertyMap(new Form\Text('name'));
             $this->formMap->addPropertyMap(new Form\Text('type'));
@@ -154,6 +150,60 @@ class PathCaseMap extends Mapper
 
         }
         return $this->formMap;
+    }
+
+    /**
+     * @return array
+     * @throws Exception
+     */
+    public function findSpeciesList()
+    {
+        $sql = <<<SQL
+SELECT DISTINCT species
+FROM path_case a
+WHERE a.del = 0
+GROUP BY species
+ORDER BY species
+SQL;
+
+        $res = $this->getDb()->query($sql);
+        $arr = array();
+        foreach ($res as $row) {
+            if (!$row->species) continue;
+            $spec = $row->species;
+            $arr[$spec] = $spec;
+        }
+        return $arr;
+    }
+
+    /**
+     * @param string $species (optional)
+     * @return array
+     * @throws \Tk\Db\Exception
+     */
+    public function findBreedList($species = '')
+    {
+        $wSpecies = '';
+        if ($species) {
+            $wSpecies = sprintf(', species = %s', $this->quote($species));
+        }
+
+        $sql = <<<SQL
+SELECT DISTINCT breed
+FROM path_case a
+WHERE a.del = 0 $wSpecies
+GROUP BY breed
+ORDER BY breed
+SQL;
+
+        $res = $this->getDb()->query($sql);
+        $arr = array();
+        foreach ($res as $row) {
+            if (!$row->breed) continue;
+            $spec = $row->breed;
+            $arr[$spec] = $spec;
+        }
+        return $arr;
     }
 
     /**

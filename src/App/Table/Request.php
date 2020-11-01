@@ -229,6 +229,7 @@ class Request extends \Bs\TableIface
     {
         if (!$tool) $tool = $this->getTool();
         $filter = array_merge($this->getFilterValues(), $filter);
+        vd($filter);
         $list = \App\Db\RequestMap::create()->findFiltered($filter, $tool);
         return $list;
     }

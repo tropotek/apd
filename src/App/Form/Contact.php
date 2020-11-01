@@ -44,7 +44,8 @@ class Contact extends \Bs\FormIface
 
         $tab = 'Details';
         //if (!$this->getConfig()->getRequest()->query->has('type') && !$this->isTypeHidden()) {
-        if ($this->getType()) {
+        vd($this->getType());
+        if ($this->getType() == '') {
             $list = \App\Db\Contact::getTypeList($this->getClient()->getType());
             $this->appendField(new Field\Select('type', $list))
                 ->setRequired()->prependOption('-- Contact Type --', '')->setTabGroup($tab);
@@ -93,7 +94,8 @@ class Contact extends \Bs\FormIface
     {
         // Load the object with form data
         \App\Db\ContactMap::create()->mapForm($form->getValues(), $this->getClient());
-
+        if ($this->getType() && !$this->getClient()->getType())
+            $this->getClient()->setType($this->getType());
         // Do Custom Validations
 
         $form->addFieldErrors($this->getClient()->validate());

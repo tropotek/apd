@@ -2,6 +2,7 @@
 namespace App\Table;
 
 use App\Db\ContactMap;
+use App\Db\PathCaseMap;
 use Tk\Form\Field;
 use Tk\Table\Cell;
 use Uni\Db\User;
@@ -120,6 +121,15 @@ class PathCase extends \Bs\TableIface
         $this->appendFilter(Field\Select::createSelect('submissionType', $list)->prependOption('-- Submission Type --'));
         $list = \Tk\ObjectUtil::getClassConstants(\App\Db\PathCase::class, 'STATUS', true);
         $this->appendFilter(Field\Select::createSelect('status', $list)->prependOption('-- Status --'));
+
+        // Species Filter
+        $speciesList = PathCaseMap::create()->findSpeciesList();
+        $this->appendFilter(Field\Select::createSelect('species', $speciesList)->prependOption('-- Species --'));
+
+        // Breed Filter
+        $breedList = PathCaseMap::create()->findBreedList();
+        $this->appendFilter(Field\Select::createSelect('breed', $breedList)->prependOption('-- Breed --'));
+        // TODO: create an auto update JS when the species is selected repopulate the breed select options.
 
 
         // Actions

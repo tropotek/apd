@@ -98,7 +98,7 @@ class PathCase extends \Bs\FormIface
         $form = \App\Form\Contact::create()->setType(\App\Db\Contact::TYPE_CLIENT)->setModel($contact);
         $form->removeField('notes');
         $list = \App\Db\Contact::getSelectList(\App\Db\Contact::TYPE_CLIENT);
-        $this->appendField(Field\DialogSelect::createDialogSelect('clientId', $list, $form)->prependOption('-- Select --', ''))
+        $this->appendField(Field\DialogSelect::createDialogSelect('clientId', $list, $form, 'Create Client')->prependOption('-- Select --', ''))
             ->setTabGroup($tab)->setLabel('Submitting Client')->setNotes('This is the contact that will be invoiced.');
 
 
@@ -153,7 +153,7 @@ JS;
         $form = \App\Form\Contact::create()->setType(\App\Db\Contact::TYPE_OWNER)->setModel($contact);
         $form->removeField('notes');
         $list = \App\Db\Contact::getSelectList(\App\Db\Contact::TYPE_OWNER);
-        $this->appendField(Field\DialogSelect::createDialogSelect('ownerId', $list, $form)->prependOption('-- Select --', ''))
+        $this->appendField(Field\DialogSelect::createDialogSelect('ownerId', $list, $form, 'Create Owner')->prependOption('-- Select --', ''))
             ->setTabGroup($tab)->setLabel('Owner Name')->setNotes('This is the Client Record of the animal owner.');
 
         $this->appendField(new Field\Input('animalName'))->setLabel('Animal Name/ID')->setTabGroup($tab);
@@ -198,7 +198,7 @@ JS;
         $form = \App\Form\Contact::create()->setType(\App\Db\Contact::TYPE_STUDENT)->setModel($contact);
         $form->removeField('notes');
         $list = \App\Db\Contact::getSelectList(\App\Db\Contact::TYPE_STUDENT);
-        $this->appendField(Field\DialogSelect::createDialogSelect('students[]', $list, $form)->prependOption('-- Select --', ''))
+        $this->appendField(Field\DialogSelect::createDialogSelect('students[]', $list, $form,'Create Student')->prependOption('-- Select --', ''))
             ->addCss('tk-multiselect2')
             ->setTabGroup($tab)->setLabel('Students')->setNotes('Add any students')
             ->setValue($this->getPathCase()->getStudentList()->toArray('id'));
