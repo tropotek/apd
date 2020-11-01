@@ -279,7 +279,7 @@ JS;
                 ->setLabel('Aftercare Hold')->setTabGroup($tab);
             $list = \Tk\ObjectUtil::getClassConstants($this->getPathCase(), 'AC_');
             $this->appendField(Field\Select::createSelect('acType', $list)->prependOption('-- None --', ''))
-                ->setLabel('Aftercare Type')->setLabel('Method Of Disposal')->setTabGroup($tab);
+                ->setLabel('Method Of Disposal')->setTabGroup($tab);
             $this->appendField(new Field\Input('acHold'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy')
                 ->setLabel('Hold Until')->setTabGroup($tab);
             $this->appendField(new Field\Input('disposal'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy')

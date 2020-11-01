@@ -96,27 +96,30 @@ class RequestMap extends Mapper
             if ($w) $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
         }
 
-        if (isset($filter['id'])) {
+        if (!empty($filter['id'])) {
             $w = $this->makeMultiQuery($filter['id'], 'a.id');
             if ($w) $filter->appendWhere('(%s) AND ', $w);
         }
 
-        if (isset($filter['pathCaseId'])) {
+        if (!empty($filter['pathCaseId'])) {
             $filter->appendWhere('a.path_case_id = %s AND ', (int)$filter['pathCaseId']);
         }
-        if (isset($filter['cassetteId'])) {
+        if (!empty($filter['cassetteId'])) {
             $filter->appendWhere('a.cassette_id = %s AND ', (int)$filter['cassetteId']);
         }
-        if (isset($filter['pathologistId'])) {
+        if (!empty($filter['pathologistId'])) {
             $filter->appendWhere('b.pathologist_id = %s AND ', (int)$filter['pathologistId']);
         }
-        if (isset($filter['userId'])) {
+        if (!empty($filter['ownerId'])) {
+            $filter->appendWhere('b.owner_id = %s AND ', (int)$filter['ownerId']);
+        }
+        if (!empty($filter['userId'])) {
             $filter->appendWhere('b.user_id = %s AND ', (int)$filter['userId']);
         }
-        if (isset($filter['serviceId'])) {
+        if (!empty($filter['serviceId'])) {
             $filter->appendWhere('a.service_id = %s AND ', (int)$filter['serviceId']);
         }
-        if (isset($filter['clientId'])) {
+        if (!empty($filter['clientId'])) {
             $filter->appendWhere('a.client_id = %s AND ', (int)$filter['clientId']);
         }
         if (!empty($filter['status'])) {

@@ -110,9 +110,14 @@ class PathCase extends \Bs\TableIface
         $this->appendFilter(Field\Select::createSelect('userId', $list)->prependOption('-- Staff --'));
         
         $list = ContactMap::create()->findFiltered(array(
-            'institutionId' => $this->getConfig()->getInstitutionId()
+            'institutionId' => $this->getConfig()->getInstitutionId(),
+            'type' => \App\Db\Contact::TYPE_CLIENT
         ));
         $this->appendFilter(Field\Select::createSelect('clientId', $list)->prependOption('-- Submitter/Client --'));
+        $list = ContactMap::create()->findFiltered(array(
+            'institutionId' => $this->getConfig()->getInstitutionId(),
+            'type' => \App\Db\Contact::TYPE_OWNER
+        ));
         $this->appendFilter(Field\Select::createSelect('ownerId', $list)->prependOption('-- Owner --'));
 
         $list = \Tk\ObjectUtil::getClassConstants(\App\Db\PathCase::class, 'TYPE', true);
@@ -131,12 +136,19 @@ class PathCase extends \Bs\TableIface
         $this->appendFilter(Field\Select::createSelect('breed', $breedList)->prependOption('-- Breed --'));
         // TODO: create an auto update JS when the species is selected repopulate the breed select options.
 
+        $list = array('Yes' => 1, 'No' => 0);
+        $this->appendFilter(Field\Select::createSelect('isDisposed', $list)->prependOption('-- Is Disposed --', ''));
+
+        $list = \Tk\ObjectUtil::getClassConstants(\App\Db\PathCase::class, 'AC_');
+        $this->appendFilter(Field\Select::createSelect('acType', $list)->prependOption('-- Method Of Disposal --', ''));
+
 
         // Actions
         //$this->appendAction(\Tk\Table\Action\Link::createLink('New Path Case', \Bs\Uri::createHomeUrl('/pathCaseEdit.html'), 'fa fa-plus'));
         //$this->appendAction(\Tk\Table\Action\ColumnSelect::create()->setUnselected(array('modified')));
         $this->appendAction(\Tk\Table\Action\ColumnSelect::create()->setSelected(
-                array('id', 'pathologyId', 'userId', 'clientId', 'owner', 'age', 'patientNumber', 'type', 'submissionType', 'status', 'created')
+                array('id', 'pathologyId', 'userId', 'clientId', 'owner', 'age',
+                    'patientNumber', 'type', 'submissionType', 'status', 'created')
             )->setHidden(array('id'))
         );
         $this->appendAction(\Tk\Table\Action\Delete::create());

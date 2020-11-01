@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Db;
 
 use Tk\Db\Tool;
@@ -23,7 +24,7 @@ class PathCaseMap extends Mapper
      */
     public function getDbMap()
     {
-        if (!$this->dbMap) { 
+        if (!$this->dbMap) {
             $this->dbMap = new \Tk\DataMap\DataMap();
             $this->dbMap->addPropertyMap(new Db\Integer('id'), 'key');
             $this->dbMap->addPropertyMap(new Db\Integer('institutionId', 'institution_id'));
@@ -227,13 +228,13 @@ SQL;
 
         $filter->appendFrom('%s a', $this->quoteParameter($this->getTable()));
         $filter->appendFrom(',
-     (
-         SELECT id,
-            TIMESTAMPDIFF(YEAR, a1.dob, if (ISNULL(a1.dod), now(), a1.dod)) as \'age\',
-            TIMESTAMPDIFF(MONTH, a1.dob, if (ISNULL(a1.dod), now(), a1.dod)) % 12 as \'age_m\'
-         FROM `path_case` a1
-     ) b');
-            $filter->appendWhere('a.id = b.id AND ');
+            (
+                SELECT id,
+                   TIMESTAMPDIFF(YEAR, a1.dob, if (ISNULL(a1.dod), now(), a1.dod)) as \'age\',
+                   TIMESTAMPDIFF(MONTH, a1.dob, if (ISNULL(a1.dod), now(), a1.dod)) % 12 as \'age_m\'
+                FROM `path_case` a1
+            ) b');
+        $filter->appendWhere('a.id = b.id AND ');
 
         if (!empty($filter['keywords'])) {
             $kw = '%' . $this->escapeString($filter['keywords']) . '%';
@@ -351,6 +352,18 @@ SQL;
         }
         if (!empty($filter['storageId'])) {
             $filter->appendWhere('a.storage_id = %s AND ', (int)$filter['storageId']);
+        }
+        if (isset($filter['isDisposed']) && $filter['isDisposed'] !== '' && $filter['isDisposed'] !== null) {
+            if ($filter['isDisposed'] > 0) {
+                $filter->appendWhere('a.disposal IS NOT NULL');
+            } else {
+                $filter->appendWhere('a.disposal IS NULL');
+            }
+        }
+        if (!empty($filter['disposedAfter']) && $filter['disposedAfter'] !== '' && $filter['disposedAfter'] !== null) {
+            if (!$filter['disposedAfter'] instanceof \DateTime)
+                $filter['disposedAfter'] = \Tk\Date::createFormDate($filter['disposedAfter']);
+            $filter->appendWhere('a.disposal IS NOT NULL AND d.disposal <= %s AND ', $this->quote($filter['disposedAfter']->format(\Tk\Date::FORMAT_ISO_DATETIME)));
         }
 
         if (!empty($filter['exclude'])) {

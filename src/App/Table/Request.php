@@ -2,8 +2,10 @@
 namespace App\Table;
 
 
+use App\Db\ContactMap;
 use Tk\Form\Field;
 use Tk\Table\Cell;
+use Uni\Db\User;
 use Uni\Uri;
 
 /**
@@ -144,8 +146,6 @@ class Request extends \Bs\TableIface
         }
         $this->appendCell($this->getActionCell())->setLabel('');
 
-
-
         $this->appendCell(new Cell\Text('cassetteId'))->addCss('key')->setUrl($this->getEditUrl())->
         addOnPropertyValue(function (Cell\Text $cell, \App\Db\Request $obj, $value) {
             if ($obj->getCassette()) {
@@ -196,10 +196,26 @@ class Request extends \Bs\TableIface
             $this->appendFilter(Field\Select::createSelect('status', $list)->prependOption('-- Status --'));
 
             // TODO:
+
+            $list = $this->getConfig()->getUserMapper()->findFiltered(array(
+                'institutionId' => $this->getConfig()->getInstitutionId(),
+                'type' => User::TYPE_STAFF
+            ));
+            $this->appendFilter(Field\Select::createSelect('pathologistId', $list)->prependOption('-- Pathologist --'));
+
+            $list = ContactMap::create()->findFiltered(array(
+                'institutionId' => $this->getConfig()->getInstitutionId(),
+                'type' => \App\Db\Contact::TYPE_CLIENT
+            ));
+            $this->appendFilter(Field\Select::createSelect('clientId', $list)->prependOption('-- Submitter/Client --'));
+            $list = ContactMap::create()->findFiltered(array(
+                'institutionId' => $this->getConfig()->getInstitutionId(),
+                'type' => \App\Db\Contact::TYPE_OWNER
+            ));
+            $this->appendFilter(Field\Select::createSelect('ownerId', $list)->prependOption('-- Owner --'));
             // User (pathologistId)
             // Contact (Client)
             // Contact (Owner)
-            // Contact (Student)
         }
 
 
@@ -229,7 +245,6 @@ class Request extends \Bs\TableIface
     {
         if (!$tool) $tool = $this->getTool();
         $filter = array_merge($this->getFilterValues(), $filter);
-        vd($filter);
         $list = \App\Db\RequestMap::create()->findFiltered($filter, $tool);
         return $list;
     }

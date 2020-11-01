@@ -222,9 +222,6 @@ class TestData extends \Bs\Console\TestData
                 $case->setEuthanisedMethod($this->createStr());
 
             if ($case->getType() == PathCase::TYPE_NECROPSY) {
-                $arr = array_values(ObjectUtil::getClassConstants($case, 'AC_'));
-                $selected = $arr[rand(0, count($arr) - 1)];
-                $case->setAcType($selected);
                 if (rand(0, 1)) {
                     $case->setAcHold($this->createRandomDate($case->getCreated(), $case->getCreated()->add(new \DateInterval('P60D'))));
                 }
@@ -235,6 +232,9 @@ class TestData extends \Bs\Console\TestData
                 }
                 if (rand(0,1)) {
                     $case->setDisposal($this->createRandomDate($case->getCreated(), $case->getCreated()->add(new \DateInterval('P60D'))));
+                    $arr = array_values(ObjectUtil::getClassConstants($case, 'AC_'));
+                    $selected = $arr[rand(0, count($arr) - 1)];
+                    $case->setAcType($selected);
                 }
             }
 
