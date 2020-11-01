@@ -21,12 +21,20 @@ use Tk\Form;
  */
 class Contact extends \Bs\FormIface
 {
+    /**
+     * @var string
+     */
+    protected $type = '';
 
     /**
      * @throws \Exception
      */
     public function init()
     {
+        if ($this->getConfig()->getRequest()->query->has('type') && !$this->getType()) {
+            $this->setType($this->getConfig()->getRequest()->query->has('type'));
+        }
+
         $layout = $this->getForm()->getRenderer()->getLayout();
 
         $layout->removeRow('email', 'col');
@@ -35,10 +43,13 @@ class Contact extends \Bs\FormIface
         $layout->removeRow('country', 'col');
 
         $tab = 'Details';
-        if (!$this->getConfig()->getRequest()->query->has('type')) {
+        //if (!$this->getConfig()->getRequest()->query->has('type') && !$this->isTypeHidden()) {
+        if ($this->getType()) {
             $list = \App\Db\Contact::getTypeList($this->getClient()->getType());
             $this->appendField(new Field\Select('type', $list))
                 ->setRequired()->prependOption('-- Contact Type --', '')->setTabGroup($tab);
+        } else {
+            $this->appendField(new Field\Hidden('type'));
         }
 
         $this->appendField(new Field\Input('name'))->setTabGroup($tab);
@@ -117,6 +128,24 @@ class Contact extends \Bs\FormIface
     public function setClient($client)
     {
         return $this->setModel($client);
+    }
+
+    /**
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string $type
+     * @return Contact
+     */
+    public function setType(string $type): Contact
+    {
+        $this->type = $type;
+        return $this;
     }
 
 }

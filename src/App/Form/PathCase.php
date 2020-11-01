@@ -94,12 +94,12 @@ class PathCase extends \Bs\FormIface
         $this->appendField(Field\Select::createSelect('submissionType', $list)->prependOption('-- Select --', ''))
             ->setTabGroup($tab);
 
-        $client = new \App\Db\Contact();
-        $form = \App\Form\Contact::create()->setModel($client);
+        $contact = new \App\Db\Contact();
+        $form = \App\Form\Contact::create()->setType(\App\Db\Contact::TYPE_CLIENT)->setModel($contact);
         $form->removeField('notes');
         $list = \App\Db\Contact::getSelectList(\App\Db\Contact::TYPE_CLIENT);
         $this->appendField(Field\DialogSelect::createDialogSelect('clientId', $list, $form)->prependOption('-- Select --', ''))
-            ->setTabGroup($tab)->setLabel('Submitting Client')->setNotes('This is the client that will be invoiced.');
+            ->setTabGroup($tab)->setLabel('Submitting Client')->setNotes('This is the contact that will be invoiced.');
 
 
         $this->appendField(new Field\Checkbox('billable'))->setTabGroup($tab)
@@ -149,8 +149,8 @@ JS;
         //$tab = 'Animal';
         $fieldset = 'Animal';
 
-        $client = new \App\Db\Contact();
-        $form = \App\Form\Contact::create()->setModel($client);
+        $contact = new \App\Db\Contact();
+        $form = \App\Form\Contact::create()->setType(\App\Db\Contact::TYPE_OWNER)->setModel($contact);
         $form->removeField('notes');
         $list = \App\Db\Contact::getSelectList(\App\Db\Contact::TYPE_OWNER);
         $this->appendField(Field\DialogSelect::createDialogSelect('ownerId', $list, $form)->prependOption('-- Select --', ''))
@@ -194,15 +194,25 @@ JS;
 
 
         
-        $client = new \App\Db\Contact();
-        $form = \App\Form\Contact::create()->setModel($client);
+        $contact = new \App\Db\Contact();
+        $form = \App\Form\Contact::create()->setType(\App\Db\Contact::TYPE_STUDENT)->setModel($contact);
         $form->removeField('notes');
         $list = \App\Db\Contact::getSelectList(\App\Db\Contact::TYPE_STUDENT);
-        $this->appendField(Field\DialogSelect::createDialogSelect('students', $list, $form)->prependOption('-- Select --', ''))
-            ->setTabGroup($tab)->setLabel('Students')->setNotes('Add any students');
-        // TODO: Populate existing contacts
+        $this->appendField(Field\DialogSelect::createDialogSelect('students[]', $list, $form)->prependOption('-- Select --', ''))
+            ->addCss('tk-multiselect2')
+            ->setTabGroup($tab)->setLabel('Students')->setNotes('Add any students')
+            ->setValue($this->getPathCase()->getStudentList()->toArray('id'));
 
-
+        // Enable select2 multi select for student field
+        $js = <<<JS
+jQuery(function ($) {
+  	$('select.tk-multiselect2').select2({
+        placeholder: 'Select a Student',
+        allowClear: false
+    });
+});
+JS;
+        $this->getRenderer()->getTemplate()->appendJs($js);
 
 
         $this->appendField(new Field\Checkbox('euthanised'))->setTabGroup($tab);
