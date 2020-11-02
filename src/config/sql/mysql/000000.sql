@@ -5,30 +5,6 @@
 -- ---------------------------------
 
 
-
-
--- ----------------------------
---  address table
--- ----------------------------
-# CREATE TABLE IF NOT EXISTS address
-# (
-#     id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-#     institution_id INT(10) UNSIGNED NOT NULL DEFAULT 0,
-#
-#     street VARCHAR(255) NOT NULL DEFAULT '',
-#     city VARCHAR(255) NOT NULL DEFAULT '',
-#     country VARCHAR(255) NOT NULL DEFAULT '',
-#     state VARCHAR(255) NOT NULL DEFAULT '',
-#     postcode VARCHAR(255) NOT NULL DEFAULT '',
-#     map_zoom DECIMAL(4, 2) NOT NULL DEFAULT 14,
-#     map_lng DECIMAL(11, 8) NOT NULL DEFAULT 0,
-#     map_lat DECIMAL(11, 8) NOT NULL DEFAULT 0,
-#
-#     modified DATETIME NOT NULL,
-#     created DATETIME NOT NULL,
-#     KEY institution_id (institution_id)
-# ) ENGINE=InnoDB;
-
 -- ----------------------------
 --  contact table
 --  Animal Owner, Client / Student details
@@ -83,10 +59,6 @@ CREATE TABLE IF NOT EXISTS `path_case`
     pathologist_id INT(10) UNSIGNED NOT NULL DEFAULT 0,       -- Pathologist user_id from the user table
 
     resident VARCHAR(128) NOT NULL DEFAULT '',                -- Name of the resident Pathologist???
-
-    -- TODO: create a list for multiple students
-    -- student VARCHAR(128) NOT NULL DEFAULT '',                 --
-    -- student_email VARCHAR(128) NOT NULL DEFAULT '',           --
 
     -- Case
     pathology_id VARCHAR(64) NOT NULL DEFAULT '',             -- Pathology Number  (ie: title, name)
