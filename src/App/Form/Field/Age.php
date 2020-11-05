@@ -129,9 +129,9 @@ jQuery(function($) {
         return;
       }
       
-      // TODO: Bug, god -1 month, myst convert dod and dob to months then subject???
       var years = dod.getFullYear() - dob.getFullYear();
       var months = dod.getMonth() - dob.getMonth();
+      // TODO: If years is less than 1 at this point we have an error (Should not happen)
       if (months < 0 && years > 0) {
         years--;
         months = 12+months;
