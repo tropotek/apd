@@ -54,7 +54,7 @@ class Edit extends AdminEditIface
      */
     public function __construct()
     {
-        $this->setPageTitle('Create Case');
+        $this->setPageTitle('Edit Case');
     }
 
     /**
@@ -68,8 +68,9 @@ class Edit extends AdminEditIface
         if ($request->has('clientId'))
             $this->pathCase->setClientId((int)$request->get('clientId'));
         $types = \Tk\ObjectUtil::getClassConstants($this->pathCase, 'TYPE_');
-        if ($request->has('type') && in_array($request->get('type'), $types))
+        if ($request->has('type') && in_array($request->get('type'), $types)) {
             $this->pathCase->setType($request->get('type'));
+        }
         $sTypes = \Tk\ObjectUtil::getClassConstants($this->pathCase, 'SUBMISSION_');
         if ($request->has('submissionType') && in_array($request->get('submissionType'), $sTypes))
             $this->pathCase->setSubmissionType($request->get('submissionType'));
@@ -90,6 +91,8 @@ class Edit extends AdminEditIface
             }
         }
 
+        if ($this->pathCase->getType())
+            $this->setPageTitle('Edit Case ['.ucwords($this->pathCase->getType()).']');
 
         $this->setForm(\App\Form\PathCase::create()->setModel($this->pathCase));
         $this->initForm($request);
@@ -190,8 +193,10 @@ class Edit extends AdminEditIface
         // Render the form
         $template->appendTemplate('panel', $this->getForm()->show());
 
-        if ($this->pathCase->getId()) {
+        if ($this->pathCase->getType()) {
             $template->setAttr('panel', 'data-panel-title', $this->pathCase->getPathologyId() . ' - (' . ucwords($this->pathCase->getType()) . ')');
+        } else {
+            $template->setAttr('panel', 'data-panel-title', $this->pathCase->getPathologyId());
         }
 
         if ($this->statusTable) {
