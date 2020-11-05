@@ -109,9 +109,9 @@ jQuery(function($) {
     var monthEl = el.find('input[name="age_m"]');
     
     function updateDates() {
-      var yearVal = yearEl.val();
+      var yearVal = 0;
       if (yearEl.val()) yearVal = parseInt(yearEl.val());
-      var monthVal = monthEl.val();
+      var monthVal = 0;
       if (monthEl.val()) monthVal = parseInt(monthEl.val());
       var months = (yearVal * 12) + monthVal;
       var newDob = dod.clone();
