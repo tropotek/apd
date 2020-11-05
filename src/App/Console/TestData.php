@@ -50,7 +50,18 @@ class TestData extends \Bs\Console\TestData
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         parent::execute($input, $output);
+        $this->testData();
+    }
 
+
+    /**
+     * @return int|null|void
+     * @throws \Exception
+     * @todo: create this so we can run as a standalone function without the console
+     *        This will allow us to run it from the install script
+     */
+    protected function testData()
+    {
         // required vars
         $config = \App\Config::getInstance();
         $db = $this->getConfig()->getDb();
@@ -74,8 +85,6 @@ class TestData extends \Bs\Console\TestData
         $db->exec('DELETE FROM `cassette` WHERE `notes` = \'***\' ');
         $db->exec('DELETE FROM `contact` WHERE `notes` = \'***\' ');
         $db->exec('DELETE FROM `request` WHERE `notes` = \'***\' ');
-
-
 
 
         /** @var \Uni\Db\Institution $institution */

@@ -138,7 +138,7 @@ jQuery(function($) {
       }
       yearEl.val(years);
       monthEl.val(months);
-      updateAge();
+      updateDates();
     }
     
     el.find('input').on('change', function () {
@@ -151,6 +151,8 @@ jQuery(function($) {
       updateAge();
     })
     
+    // Initalise age field
+    updateAge();
     
   });
   
