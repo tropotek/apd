@@ -28,6 +28,7 @@ class Age extends \Tk\Form\Field\Iface
         parent::__construct($age);
         $this->ageMName = $ageM;
         //$this->setLabel(ucwords($age) . '/' . ucwords($ageM));
+        $this->setValue([$this->getName() => '0', $this->ageMName => '0']);
     }
 
 
@@ -44,7 +45,7 @@ class Age extends \Tk\Form\Field\Iface
         if (isset($values[$this->ageMName])) {
             $v[$this->ageMName] =  $values[$this->ageMName];
         }
-        if (!count($v)) $v = null;
+        if (!count($v)) $v = [$this->getName() => '0', $this->ageMName => '0'];
 
         if (!$v && !empty($values[$this->dobName])) {
             $dob = \Tk\Date::createFormDate($values[$this->dobName]);
@@ -107,17 +108,20 @@ jQuery(function($) {
     var yearEl = el.find('input[name="age"]');
     var monthEl = el.find('input[name="age_m"]');
     
-    function updateAge() {
-      var months = (parseInt(yearEl.val()) * 12) + parseInt(monthEl.val());
+    function updateDates() {
+      var yearVal = yearEl.val();
+      if (yearEl.val()) yearVal = parseInt(yearEl.val());
+      var monthVal = monthEl.val();
+      if (monthEl.val()) monthVal = parseInt(monthEl.val());
+      var months = (yearVal * 12) + monthVal;
       var newDob = dod.clone();
       newDob.setMonth(newDob.getMonth() - months);
-      
       // Update the el values
       dobEl.data("datetimepicker").setDate(newDob);
       yearEl.val(Math.floor(months/12));
       monthEl.val(months%12);
     }
-    function updateDates() {
+    function updateAge() {
       dob = dobEl.data("datetimepicker").getDate();
       dod = dodEl.data("datetimepicker").getDate();
       if (dob.getTime() > dod.getTime()) {
@@ -132,13 +136,13 @@ jQuery(function($) {
     }
     
     el.find('input').on('change', function () {
-      updateAge();
+      updateDates();
     });
     dobEl.on('change', function () {
-      updateDates();
+      updateAge();
     })
     dodEl.on('change', function () {
-      updateDates();
+      updateAge();
     })
     
     

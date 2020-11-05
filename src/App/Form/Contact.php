@@ -44,7 +44,6 @@ class Contact extends \Bs\FormIface
 
         $tab = 'Details';
         //if (!$this->getConfig()->getRequest()->query->has('type') && !$this->isTypeHidden()) {
-        vd($this->getType());
         if ($this->getType() == '') {
             $list = \App\Db\Contact::getTypeList($this->getClient()->getType());
             $this->appendField(new Field\Select('type', $list))

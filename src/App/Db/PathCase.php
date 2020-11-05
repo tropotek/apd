@@ -379,6 +379,8 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
         $this->setInstitutionId($this->getConfig()->getInstitutionId());
         if ($this->getConfig()->getAuthUser())
             $this->setUserId($this->getConfig()->getAuthUser()->getId());
+
+        //$this->dob = new \DateTime();
         $this->cost = Money::create(0);
     }
 
