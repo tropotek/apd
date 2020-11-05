@@ -128,8 +128,14 @@ jQuery(function($) {
         alert('DOD must be > DOB');
         return;
       }
+      
+      // TODO: Bug, god -1 month, myst convert dod and dob to months then subject???
       var years = dod.getFullYear() - dob.getFullYear();
       var months = dod.getMonth() - dob.getMonth();
+      if (months < 0 && years > 0) {
+        years--;
+        months = 12+months;
+      }
       yearEl.val(years);
       monthEl.val(months);
       updateAge();
