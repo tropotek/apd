@@ -147,7 +147,7 @@ class PathCase extends \Bs\TableIface
         $list = array('Yes' => 1, 'No' => 0);
         $this->appendFilter(Field\Select::createSelect('billable', $list)->prependOption('-- Is Billable --', ''));
 
-        $this->appendFilter(new Field\DateRange('date'));
+        $this->appendFilter(new Field\DateRange('arrival'));
 
         // Actions
         //$this->appendAction(\Tk\Table\Action\Link::createLink('New Path Case', \Bs\Uri::createHomeUrl('/pathCaseEdit.html'), 'fa fa-plus'));

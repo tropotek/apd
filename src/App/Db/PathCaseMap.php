@@ -372,20 +372,20 @@ SQL;
             $filter->appendWhere('a.billable = %s AND ', (int)$filter['billable']);
         }
 
-        $dates = array('dateStart', 'dateEnd');
+        $dates = array('arrivalStart', 'arrivalEnd');
         foreach ($dates as $name) {
             if (!empty($filter[$name]) && !$filter[$name] instanceof \DateTime) {
                 $filter[$name] = Date::createFormDate($filter[$name]);
             }
         }
-        if (!empty($filter['dateStart'])) {
+        if (!empty($filter['arrivalStart'])) {
             /** @var \DateTime $date */
-            $date = Date::floor($filter['dateStart']);
+            $date = Date::floor($filter['arrivalStart']);
             $filter->appendWhere('a.arrival >= %s AND ', $this->quote($date->format(Date::FORMAT_ISO_DATETIME)));
         }
-        if (!empty($filter['dateEnd'])) {
+        if (!empty($filter['arrivalEnd'])) {
             /** @var \DateTime $date */
-            $date = Date::floor($filter['dateEnd']);
+            $date = Date::floor($filter['arrivalEnd']);
             $filter->appendWhere('a.arrival <= %s AND ', $this->quote($date->format(Date::FORMAT_ISO_DATETIME)));
         }
 
