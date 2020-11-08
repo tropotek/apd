@@ -381,7 +381,7 @@ CREATE TABLE IF NOT EXISTS
 -- FOR TEMPLATE TESTING (REMOVE FOR LIVE INSTALL)
 
 TRUNCATE mail_template;
-INSERT INTO dev_apd.mail_template (id, institution_id, mail_template_event_id, recipient_type, template, active, modified, created) VALUES (1, 1, 1, 'client', '<p>Hi {recipient::name},</p>
+INSERT INTO mail_template (id, institution_id, mail_template_event_id, recipient_type, template, active, modified, created) VALUES (1, 1, 1, 'client', '<p>Hi {recipient::name},</p>
 <p>Pathology Case:</p>
 <ul>
 <li>Pathology #: {pathCase::pathologyId}</li>
@@ -403,7 +403,7 @@ INSERT INTO dev_apd.mail_template (id, institution_id, mail_template_event_id, r
 <p>&nbsp;</p>
 <p>Thanks,</p>
 <p>{institution::name}</p>', 1, NOW(), NOW());
-INSERT INTO dev_apd.mail_template (id, institution_id, mail_template_event_id, recipient_type, template, active, modified, created) VALUES (2, 1, 2, 'client', '<p>Hi {recipient::name},</p>
+INSERT INTO mail_template (id, institution_id, mail_template_event_id, recipient_type, template, active, modified, created) VALUES (2, 1, 2, 'client', '<p>Hi {recipient::name},</p>
 <p>Case status is ON HOLD</p>
 <p>Pathology Case:</p>
 <ul>
@@ -426,7 +426,7 @@ INSERT INTO dev_apd.mail_template (id, institution_id, mail_template_event_id, r
 <p>&nbsp;</p>
 <p>Thanks,</p>
 <p>{institution::name}</p>', 1, NOW(), NOW());
-INSERT INTO dev_apd.mail_template (id, institution_id, mail_template_event_id, recipient_type, template, active, modified, created) VALUES (3, 1, 3, 'client', '<p>Hi {recipient::name},</p>
+INSERT INTO mail_template (id, institution_id, mail_template_event_id, recipient_type, template, active, modified, created) VALUES (3, 1, 3, 'client', '<p>Hi {recipient::name},</p>
 <p>Case status is FROZEN STORAGE</p>
 <p>Pathology Case:</p>
 <ul>
@@ -449,7 +449,7 @@ INSERT INTO dev_apd.mail_template (id, institution_id, mail_template_event_id, r
 <p>&nbsp;</p>
 <p>Thanks,</p>
 <p>{institution::name}</p>', 1, NOW(), NOW());
-INSERT INTO dev_apd.mail_template (id, institution_id, mail_template_event_id, recipient_type, template, active, modified, created) VALUES (4, 1, 4, 'staff', '<p>Hi {recipient::name},</p>
+INSERT INTO mail_template (id, institution_id, mail_template_event_id, recipient_type, template, active, modified, created) VALUES (4, 1, 4, 'staff', '<p>Hi {recipient::name},</p>
 <p>Case status is APPROVED</p>
 <p>Pathology Case:</p>
 <ul>
@@ -472,7 +472,7 @@ INSERT INTO dev_apd.mail_template (id, institution_id, mail_template_event_id, r
 <p>&nbsp;</p>
 <p>Thanks,</p>
 <p>{institution::name}</p>', 1, NOW(), NOW());
-INSERT INTO dev_apd.mail_template (id, institution_id, mail_template_event_id, recipient_type, template, active, modified, created) VALUES (5, 1, 5, 'staff', '<p>Hi {recipient::name},</p>
+INSERT INTO mail_template (id, institution_id, mail_template_event_id, recipient_type, template, active, modified, created) VALUES (5, 1, 5, 'staff', '<p>Hi {recipient::name},</p>
 <p>Case status is REPORTED</p>
 <p>Pathology Case:</p>
 <ul>
@@ -495,7 +495,7 @@ INSERT INTO dev_apd.mail_template (id, institution_id, mail_template_event_id, r
 <p>&nbsp;</p>
 <p>Thanks,</p>
 <p>{institution::name}</p>', 1, NOW(), NOW());
-INSERT INTO dev_apd.mail_template (id, institution_id, mail_template_event_id, recipient_type, template, active, modified, created) VALUES (6, 1, 8, 'client', '<p>Hi {recipient::name},</p>
+INSERT INTO mail_template (id, institution_id, mail_template_event_id, recipient_type, template, active, modified, created) VALUES (6, 1, 8, 'client', '<p>Hi {recipient::name},</p>
 <p>Request status is PENDING</p>
 <p>Pathology Case:</p>
 <ul>
@@ -515,7 +515,7 @@ INSERT INTO dev_apd.mail_template (id, institution_id, mail_template_event_id, r
 <p>&nbsp;</p>
 <p>Thanks,</p>
 <p>{institution::name}</p>', 1, NOW(), NOW());
-INSERT INTO dev_apd.mail_template (id, institution_id, mail_template_event_id, recipient_type, template, active, modified, created) VALUES (7, 1, 9, 'client', '<p>Hi {recipient::name},</p>
+INSERT INTO mail_template (id, institution_id, mail_template_event_id, recipient_type, template, active, modified, created) VALUES (7, 1, 9, 'client', '<p>Hi {recipient::name},</p>
 <p>Request status is PROCESSING</p>
 <p>Pathology Case:</p>
 <ul>
@@ -535,7 +535,7 @@ INSERT INTO dev_apd.mail_template (id, institution_id, mail_template_event_id, r
 <p>&nbsp;</p>
 <p>Thanks,</p>
 <p>{institution::name}</p>', 1, NOW(), NOW());
-INSERT INTO dev_apd.mail_template (id, institution_id, mail_template_event_id, recipient_type, template, active, modified, created) VALUES (8, 1, 10, 'staff', '<p>Hi {recipient::name},</p>
+INSERT INTO mail_template (id, institution_id, mail_template_event_id, recipient_type, template, active, modified, created) VALUES (8, 1, 10, 'staff', '<p>Hi {recipient::name},</p>
 <p>Request status is COMPLETED</p>
 <p>Pathology Case:</p>
 <ul>
