@@ -82,15 +82,6 @@ class Edit extends AdminEditIface
             $this->setPageTitle($this->pathCase->getPathologyId() . ' - (' . ucwords($this->pathCase->getType()) . ')');
         }
 
-        if (!$request->has('action')) {     // Avoid duplicated from columns table plugin
-            if ($this->pathCase->isIssueAlert()) {
-                \Tk\Alert::addWarning($this->pathCase->getIssue(), 'Animal Issue Alert!');
-            }
-            if ($this->pathCase->isZoonoticAlert()) {
-                \Tk\Alert::addError($this->pathCase->getZoonotic(), 'Zoonotic Alert!');
-            }
-        }
-
         if ($this->pathCase->getType())
             $this->setPageTitle('Edit Case ['.ucwords($this->pathCase->getType()).']');
 
@@ -150,7 +141,8 @@ class Edit extends AdminEditIface
     public function doPdf(\Tk\Request $request)
     {
         $pdf = \App\Ui\CaseReportPdf::createReport($this->pathCase);
-        $pdf->output();     // comment this to see html version
+        $filename = $this->pathCase->getPathologyId() . '_' . $this->pathCase->getPatientNumber().'.pdf';
+        $pdf->output($filename);     // comment this to see html version
         return $pdf->show();
     }
 
@@ -189,6 +181,13 @@ class Edit extends AdminEditIface
     {
         $this->initActionPanel();
         $template = parent::show();
+
+        if ($this->pathCase->isIssueAlert()) {
+            \Tk\Alert::addWarning($this->pathCase->getIssue(), 'Animal Issue Alert!');
+        }
+        if ($this->pathCase->isZoonoticAlert()) {
+            \Tk\Alert::addError($this->pathCase->getZoonotic(), 'Zoonotic Alert!');
+        }
 
         // Render the form
         $template->appendTemplate('panel', $this->getForm()->show());

@@ -3,6 +3,8 @@ namespace App\Table;
 
 
 use App\Db\ContactMap;
+use App\Db\ServiceMap;
+use Tk\Db\Tool;
 use Tk\Form\Field;
 use Tk\Table\Cell;
 use Uni\Db\User;
@@ -153,7 +155,8 @@ class Request extends \Bs\TableIface
             }
             return $value;
         });
-        $this->appendCell(\Tk\Table\Cell\Text::create('pathologyId'))->setLabel('Pathology #')
+        $this->appendCell(\Tk\Table\Cell\Text::create('pathologyId'))
+            ->setOrderProperty('b.pathology_id')->setLabel('Pathology #')
             ->addOnPropertyValue(function (\Tk\Table\Cell\Iface $cell, \App\Db\Request $obj, $value) {
                 if ($obj->getPathCase()) {
                     $cell->setUrl(\Bs\Uri::createHomeUrl('/pathCaseEdit.html')->set('pathCaseId', $obj->getPathCaseId()));
@@ -192,10 +195,15 @@ class Request extends \Bs\TableIface
 
             $this->appendFilter(new Field\Input('pathCaseId'))->setAttr('placeholder', 'Case ID');
 
+            $serviceList = ServiceMap::create()->findFiltered(['institutionId' => $this->getConfig()->getInstitutionId()]);
+            $this->appendFilter(Field\Select::createSelect('serviceId', $serviceList)->prependOption('-- Service --'));
+
+            $serviceList = ServiceMap::create()->findFiltered(['institutionId' => $this->getConfig()->getInstitutionId(), 'type' => \App\Db\Contact::TYPE_CLIENT], Tool::create('name'));
+            $this->appendFilter(Field\Select::createSelect('clientId', $serviceList)->prependOption('-- Service --'));
+
             $list = \Tk\ObjectUtil::getClassConstants(\App\Db\Request::class, 'STATUS', true);
             $this->appendFilter(Field\Select::createSelect('status', $list)->prependOption('-- Status --'));
 
-            // TODO:
 
             $list = $this->getConfig()->getUserMapper()->findFiltered(array(
                 'institutionId' => $this->getConfig()->getInstitutionId(),
@@ -213,9 +221,10 @@ class Request extends \Bs\TableIface
                 'type' => \App\Db\Contact::TYPE_OWNER
             ));
             $this->appendFilter(Field\Select::createSelect('ownerId', $list)->prependOption('-- Owner --'));
-            // User (pathologistId)
-            // Contact (Client)
-            // Contact (Owner)
+
+
+            $this->appendFilter(new Field\DateRange('date'));
+
         }
 
 
@@ -228,6 +237,8 @@ class Request extends \Bs\TableIface
         }
 
         $this->appendAction(\Tk\Table\Action\Csv::create());
+
+        $this->appendAction(\App\Table\Action\Status::create(\App\Db\Request::getStatusList()));
 
         // load table
         //$this->setList($this->findList());

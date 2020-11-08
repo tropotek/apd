@@ -15,13 +15,10 @@ use Dom\Template;
  */
 class CaseReportPdf extends Pdf
 {
-
-
     /**
      * @var PathCase
      */
     protected $pathCase = null;
-
 
     /**
      * @param PathCase $pathCase
@@ -30,10 +27,21 @@ class CaseReportPdf extends Pdf
     public function __construct(PathCase $pathCase)
     {
         $this->pathCase = $pathCase;
+        $watermark = '';
+        if($pathCase->getReportStatus() === PathCase::REPORT_STATUS_INTERIM) {
+            $watermark = 'INTERIM';
+        }
+        if ($pathCase->isStudentReport()) {
+            $watermark = 'Student Report';
+        }
         parent::__construct('',
-            $this->pathCase->getPathologyId() . ' - ' . ucwords($this->pathCase->getType()) . '  ' .
-            $this->pathCase->getName()
+            $this->pathCase->getPathologyId() . ' - ' . ucwords($this->pathCase->getType()),
+            $watermark
         );
+
+        $this->mpdf->SetHTMLHeaderByName('myHeader1');
+        $this->mpdf->SetHTMLFooterByName('myFooter1');
+
     }
 
     /**
@@ -68,7 +76,10 @@ class CaseReportPdf extends Pdf
             $template->setVisible('logo');
         }
 
-        $template->appendText('pageTitle', 'Veterinary Anatomic Pathology');
+        $template->appendText('pageTitle', $institution->getName());
+        //$template->appendText('pageTitle', 'Veterinary Anatomic Pathology');
+
+        $template->appendText('headerTitle', 'ID: ' . $this->pathCase->getPathologyId());
 
         $inst = sprintf('%s<br/>%s<br/>%s<br/>%s<br/>%s<br/>%s',
             $institution->getName(),
@@ -78,12 +89,12 @@ class CaseReportPdf extends Pdf
             'Fax: ' . $institution->getData()->get(\App\Controller\Institution\Edit::INSTITUTION_FAX),
             'Email: ' . $institution->getEmail()
         );
-        //$template->replaceHtml('institution', $inst);
         $template->appendHtml('institution', $inst);
 
         $template->appendText('submissionDate', $this->pathCase->getCreated(\Tk\Date::FORMAT_SHORT_DATE));
         $template->appendText('pathologyId', $this->pathCase->getPathologyId());
-        $template->appendText('name', $this->pathCase->getName());
+        $template->appendText('name', ucwords($this->pathCase->getReportStatus()) . ' Report');
+
         if ($this->pathCase->getClient())
             $template->appendText('clientName', $this->pathCase->getClient()->getName());
 
@@ -219,6 +230,11 @@ class CaseReportPdf extends Pdf
 
 
         $css = <<<CSS
+@page {
+ header: myHeader1;
+ footer: myFooter1;
+}
+
 body {
   font-size: 0.8em;
 }
@@ -272,6 +288,25 @@ CSS;
   <title></title>
 </head>
 <body class="" style="">
+
+  <htmlpageheader name="myHeader1">
+    <table width="100%">
+      <tr>
+        <td width="50%">Case Report</td>
+        <td width="50%" style="text-align: right;" var="headerTitle"></td>
+      </tr>
+    </table>
+  </htmlpageheader>
+  <htmlpagefooter name="myFooter1">
+    <table width="100%">
+      <tr>
+        <td width="50%">Date: {DATE j-m-Y}</td>
+        <td width="50%" style="text-align: right;">{PAGENO}/{nbpg}</td>
+      </tr>
+    </table>
+  </htmlpagefooter>
+
+
   <div class="content">
     <h2 style="text-align: center;" var="pageTitle"></h2>
     <div class="header">

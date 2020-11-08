@@ -124,7 +124,7 @@ class Pdf extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterfa
             $mpdf->SetWatermarkText($this->watermark);
             $mpdf->showWatermarkText = true;
             $mpdf->watermark_font = 'DejaVuSansCondensed';
-            $mpdf->watermarkTextAlpha = 0.1;
+            $mpdf->watermarkTextAlpha = 0.08;
         }
         $mpdf->SetDisplayMode('fullpage');
         $mpdf->WriteHTML($parsedHtml);

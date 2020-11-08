@@ -30,9 +30,7 @@
 <p>&#160;</p>
 <hr />
 <div class="footer">
-  <p>
-    {_user_agent}User Agent: {_user_agent}<br/>{/_user_agent}
-  </p>
+  <p>&#160;</p>
 </div>
 </body>
 </html>

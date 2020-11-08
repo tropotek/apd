@@ -55,6 +55,7 @@ class Request extends \Bs\FormIface
                 $this->appendField(new Field\Html('cassette'))->setValue($cassette->getName());
             }
         }
+
         $list = ServiceMap::create()->findFiltered(array('institutionId' => $this->getRequest()->getPathCase()->getInstitutionId()));
         $this->appendField(new Field\Select('serviceId', $list))->prependOption('-- Select --', '');
         $list = ContactMap::create()->findFiltered(array('institutionId' => $this->getRequest()->getPathCase()->getInstitutionId()));

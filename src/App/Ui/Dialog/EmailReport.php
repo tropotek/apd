@@ -67,7 +67,10 @@ class EmailReport extends JsonForm
 
         $form->appendField(CheckboxGroup::createSelect('to', $list))->setValue(array($selected));
         $form->appendField(Input::create('toText'))->setLabel('To')->setNotes('Other emails to send the report to separate by comma, space, semi-colin.');
-        $form->appendField(Textarea::create('message'));
+
+        $form->appendField(Textarea::create('message'))
+            ->addCss('mce-min')->setLabel('Report Email Message')->setAttr('data-elfinder-path', $this->getConfig()->getInstitution()->getDataPath().'/media')
+            ->setValue($this->getConfig()->getInstitution()->getData()->get(\App\Controller\Institution\Edit::INSTITUTION_REPORT_TEMPLATE));
 
         $form->appendField(new Submit('save', array($this, 'doSubmit')))->setLabel('Send');
         $form->appendField(new Form\Event\Link('cancel', $this->getBackUrl()));
@@ -130,7 +133,8 @@ class EmailReport extends JsonForm
         // Create message
         $message = $this->getConfig()->createMessage();
         $message->setFrom($this->getConfig()->getInstitution()->getEmail());
-        $s = $this->pathCase->getPathologyId() . ': ' . $this->pathCase->getName();
+        //$s = $this->pathCase->getPathologyId() . ': ' . $this->pathCase->getName();
+        $s = $this->pathCase->getPathologyId();
         $message->setSubject($s);
 
         // Attach PDF
@@ -139,9 +143,7 @@ class EmailReport extends JsonForm
         $pdfString = $pdf->getPdfAttachment($filename);
         $message->addStringAttachment($pdfString, $filename);
 
-        $msg = sprintf("Hi, \n\n%s\n\nPlease see the attached report.\n", $values['message']);
-
-        $message->setContent(nl2br($msg));
+        $message->setContent($values['message']);
         $message->set('sig', '');
 
         // Email individually to selected email addresses

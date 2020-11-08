@@ -12,12 +12,18 @@ use Tk\Form\Field;
 class Edit extends \Uni\Controller\Institution\Edit
 {
     const INSTITUTION_FAX = 'inst.fax';
+    const INSTITUTION_REPORT_TEMPLATE = 'inst.report.mail.tpl';
 
     public function initForm(\Tk\Request $request)
     {
         // Nedded for the PDF report
+        $this->getForm()->removeField('description');
+        $this->getForm()->removeField('feature');
+
         $this->getForm()->appendField(new Field\Input(self::INSTITUTION_FAX), 'phone')
             ->setLabel('Fax')->setTabGroup('Details');
+        $this->getForm()->appendField(new Field\Textarea(self::INSTITUTION_REPORT_TEMPLATE))->setTabGroup('Details')
+            ->addCss('mce-min')->setLabel('Report Email Template')->setAttr('data-elfinder-path', $this->getInstitution()->getDataPath().'/media');
     }
 
     /**

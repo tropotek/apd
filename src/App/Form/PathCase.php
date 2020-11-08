@@ -162,7 +162,7 @@ JS;
         $this->appendField(new Field\Input('species'))->setTabGroup($tab);
         $this->appendField(new Field\Input('breed'))->setTabGroup($tab);
 
-        $this->appendField(new Field\Input('specimenCount'))->setTabGroup($tab);
+        $this->appendField(new Field\Input('specimenCount'))->setLabel('Animal Count')->setTabGroup($tab);
         $list = array('-- N/A --' => '', 'Male' => 'M', 'Female' => 'F');
         $this->appendField(Field\Select::createSelect('sex', $list))
             ->setTabGroup($tab);
@@ -232,7 +232,9 @@ JS;
 
         $tab = 'Reporting';
         $list  = ObjectUtil::getClassConstants($this->getPathCase(), 'REPORT_STATUS', true);
-        $this->appendField(new Field\Input('name'))->setLabel('Report Title')->setTabGroup($tab);
+
+        $this->appendField(new Field\Checkbox('studentReport'))->setTabGroup($tab);
+
         $this->appendField(Field\Select::createSelect('reportStatus', $list)->prependOption('-- Select --', ''))
             ->setTabGroup($tab);
         $this->appendField(new Field\Textarea('collectedSamples'))

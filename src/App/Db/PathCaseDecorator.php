@@ -9,6 +9,7 @@ use Tk\Collection;
 use Tk\Mail\CurlyMessage;
 use Tk\Mail\Message;
 use Bs\Db\Status;
+use Tk\ObjectUtil;
 use Uni\Db\User;
 
 class PathCaseDecorator
@@ -24,6 +25,10 @@ class PathCaseDecorator
     {
         /** @var PathCase $case */
         $case = $event->getStatus()->getModel();
+        if (!$case instanceof PathCase) {
+            return;
+        }
+
         $status = $event->getStatus();
         $messageList = array();
 
@@ -56,9 +61,15 @@ class PathCaseDecorator
             }
         }
 
+
+
+
+
+
+
         foreach ($messageList as $message) {
 
-            $message->setSubject('[#' . $case->getId() . '] ' . ucfirst($status->getName()) . ': ' . $case->getPathologyId());
+            $message->setSubject('[#' . $case->getId() . '] ' . ObjectUtil::basename($model) . ' ' . ucfirst($status->getName()) . ': ' . $case->getPathologyId());
             $message->setFrom(Message::joinEmail($case->getInstitution()->getEmail(), $case->getInstitution()->getName()));
 
             // Setup default message dynamic vars

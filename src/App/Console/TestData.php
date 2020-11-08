@@ -193,7 +193,7 @@ class TestData extends \Bs\Console\TestData
             foreach ($list as $student) {
                 $case->addStudent($student);
             }
-            $case->setName($this->createFullName() . ' ' . $this->createSpecies() . ' ' . $this->createBreed());
+            //$case->setName($this->createFullName() . ' ' . $this->createSpecies() . ' ' . $this->createBreed());
 
             //$arr = array_values(ObjectUtil::getClassConstants($case, 'STATUS_'));
             //$selected = $arr[rand(0, count($arr)-1)];

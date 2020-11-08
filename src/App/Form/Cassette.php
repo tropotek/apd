@@ -30,7 +30,7 @@ class Cassette extends \Bs\FormIface
     {
         $layout = $this->getForm()->getRenderer()->getLayout();
 
-        $layout->removeRow('container', 'col');
+        //$layout->removeRow('container', 'col');
         $layout->removeRow('qty', 'col');
         $layout->removeRow('name', 'col-10');
 
@@ -40,8 +40,8 @@ class Cassette extends \Bs\FormIface
 
         //$this->appendField(new Field\Select('pathCaseId', array()))->prependOption('-- Select --', '');
         $list = StorageMap::create()->findFiltered(array('institutionId' => $this->getCassette()->getPathCase()->getInstitutionId()));
-        $this->appendField(new Field\Select('storageId', $list))->prependOption('-- None --', '');
-        $this->appendField(new Field\Input('container'));
+        //$this->appendField(new Field\Select('storageId', $list))->prependOption('-- None --', '');
+        //$this->appendField(new Field\Input('container'));
 
         //$this->appendField(new Field\Input('price'));
         $this->appendField(new Field\Textarea('comments'));

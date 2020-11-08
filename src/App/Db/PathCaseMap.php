@@ -31,12 +31,10 @@ class PathCaseMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Integer('userId', 'user_id'));
             $this->dbMap->addPropertyMap(new Db\Integer('clientId', 'client_id'));
             $this->dbMap->addPropertyMap(new Db\Integer('ownerId', 'owner_id'));
-
             $this->dbMap->addPropertyMap(new Db\Integer('pathologistId', 'pathologist_id'));
             $this->dbMap->addPropertyMap(new Db\Text('resident'));
-
             $this->dbMap->addPropertyMap(new Db\Text('pathologyId', 'pathology_id'));
-            $this->dbMap->addPropertyMap(new Db\Text('name'));
+            //$this->dbMap->addPropertyMap(new Db\Text('name'));
             $this->dbMap->addPropertyMap(new Db\Text('type'));
             $this->dbMap->addPropertyMap(new Db\Text('submissionType', 'submission_type'));
             $this->dbMap->addPropertyMap(new Db\Text('status'));
@@ -45,7 +43,6 @@ class PathCaseMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Text('accountStatus', 'account_status'));
             $this->dbMap->addPropertyMap(new Db\Money('cost'));
             $this->dbMap->addPropertyMap(new Db\Boolean('afterHours', 'after_hours'));
-
             $this->dbMap->addPropertyMap(new Db\Text('zoonotic'));
             $this->dbMap->addPropertyMap(new Db\Boolean('zoonoticAlert', 'zoonotic_alert'));
             $this->dbMap->addPropertyMap(new Db\Text('issue'));
@@ -69,7 +66,7 @@ class PathCaseMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Date('acHold', 'ac_hold'));
             $this->dbMap->addPropertyMap(new Db\Integer('storageId', 'storage_id'));
             $this->dbMap->addPropertyMap(new Db\Date('disposal'));
-
+            $this->dbMap->addPropertyMap(new Db\Boolean('studentReport', 'student_report'));
             $this->dbMap->addPropertyMap(new Db\Text('reportStatus', 'report_status'));
             $this->dbMap->addPropertyMap(new Db\Text('collectedSamples', 'collected_samples'));
             $this->dbMap->addPropertyMap(new Db\Text('clinicalHistory', 'clinical_history'));
@@ -104,7 +101,7 @@ class PathCaseMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Integer('pathologistId'));
             $this->formMap->addPropertyMap(new Form\Text('resident'));
             $this->formMap->addPropertyMap(new Form\Text('pathologyId'));
-            $this->formMap->addPropertyMap(new Form\Text('name'));
+            //$this->formMap->addPropertyMap(new Form\Text('name'));
             $this->formMap->addPropertyMap(new Form\Text('type'));
             $this->formMap->addPropertyMap(new Form\Text('submissionType'));
             $this->formMap->addPropertyMap(new Form\Text('status'));
@@ -136,6 +133,7 @@ class PathCaseMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Date('acHold'));
             $this->formMap->addPropertyMap(new Form\Integer('storageId'));
             $this->formMap->addPropertyMap(new Form\Date('disposal'));
+            $this->formMap->addPropertyMap(new Form\Boolean('studentReport'));
             $this->formMap->addPropertyMap(new Form\Text('reportStatus'));
             $this->formMap->addPropertyMap(new Form\Text('collectedSamples'));
             $this->formMap->addPropertyMap(new Form\Text('clinicalHistory'));
@@ -239,7 +237,6 @@ SQL;
         if (!empty($filter['keywords'])) {
             $kw = '%' . $this->escapeString($filter['keywords']) . '%';
             $w = '';
-            $w .= sprintf('a.name LIKE %s OR ', $this->quote($kw));
             $w .= sprintf('a.pathology_id LIKE %s OR ', $this->quote($kw));
             $w .= sprintf('a.animal_name LIKE %s OR ', $this->quote($kw));
             $w .= sprintf('a.patient_number LIKE %s OR ', $this->quote($kw));
@@ -355,15 +352,21 @@ SQL;
         }
         if (isset($filter['isDisposed']) && $filter['isDisposed'] !== '' && $filter['isDisposed'] !== null) {
             if ($filter['isDisposed'] > 0) {
-                $filter->appendWhere('a.disposal IS NOT NULL');
+                $filter->appendWhere('a.disposal IS NOT NULL AND ');
             } else {
-                $filter->appendWhere('a.disposal IS NULL');
+                $filter->appendWhere('a.disposal IS NULL AND ');
             }
         }
         if (!empty($filter['disposedAfter']) && $filter['disposedAfter'] !== '' && $filter['disposedAfter'] !== null) {
             if (!$filter['disposedAfter'] instanceof \DateTime)
                 $filter['disposedAfter'] = \Tk\Date::createFormDate($filter['disposedAfter']);
             $filter->appendWhere('a.disposal IS NOT NULL AND d.disposal <= %s AND ', $this->quote($filter['disposedAfter']->format(\Tk\Date::FORMAT_ISO_DATETIME)));
+        }
+        if (isset($filter['studentReport']) && $filter['studentReport'] !== '' && $filter['studentReport'] !== null) {
+            $filter->appendWhere('a.student_report = %s AND ', (int)$filter['studentReport']);
+        }
+        if (isset($filter['billable']) && $filter['billable'] !== '' && $filter['billable'] !== null) {
+            $filter->appendWhere('a.billable = %s AND ', (int)$filter['billable']);
         }
 
         if (!empty($filter['exclude'])) {

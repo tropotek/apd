@@ -55,6 +55,7 @@ class PathCase extends \Bs\TableIface
         $this->appendCell(new Cell\Text('submissionType'));
         $this->appendCell(new Cell\Text('status'));
 
+        $this->appendCell(new Cell\Boolean('billable'));
         $this->appendCell(new Cell\Text('cost'));
         $this->appendCell(new Cell\Boolean('afterHours'));
         $this->appendCell(new Cell\Text('zootonic'));
@@ -142,6 +143,8 @@ class PathCase extends \Bs\TableIface
         $list = \Tk\ObjectUtil::getClassConstants(\App\Db\PathCase::class, 'AC_');
         $this->appendFilter(Field\Select::createSelect('acType', $list)->prependOption('-- Method Of Disposal --', ''));
 
+        $list = array('Yes' => 1, 'No' => 0);
+        $this->appendFilter(Field\Select::createSelect('billable', $list)->prependOption('-- Is Billable --', ''));
 
         // Actions
         //$this->appendAction(\Tk\Table\Action\Link::createLink('New Path Case', \Bs\Uri::createHomeUrl('/pathCaseEdit.html'), 'fa fa-plus'));

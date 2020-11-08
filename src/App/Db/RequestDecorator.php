@@ -21,6 +21,12 @@ class RequestDecorator
      */
     public static function onCreateMessages(StatusEvent $event, MailTemplate $mailTemplate)
     {
+        /** @var Request $case */
+        $request = $event->getStatus()->getModel();
+        if (!$request instanceof Request) {
+            return;
+        }
+
         /** @var Request $request */
         $request = $event->getStatus()->getModel();
         $status = $event->getStatus();

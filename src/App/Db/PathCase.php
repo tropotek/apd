@@ -36,7 +36,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     const STATUS_FROZEN_STORAGE     = 'frozenStorage';      //
     const STATUS_EXAMINED           = 'examined';           //
     const STATUS_REPORTED           = 'reported';           //
-//    const STATUS_DISPOSED           = 'disposed';           //
     const STATUS_COMPLETED          = 'completed';          //
     const STATUS_CANCELLED          = 'cancelled';          // case cancelled
 
@@ -113,12 +112,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      * @var string
      */
     public $pathologyId = '';
-
-    /**
-     * Case Name/title
-     * @var string
-     */
-    public $name = '';
 
     /**
      * BIOPSY, NECROPSY
@@ -296,6 +289,11 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public $storageId = 0;
 
     /**
+     * @var bool
+     */
+    public $studentReport = false;
+
+    /**
      * @var \DateTime
      */
     public $disposal = null;
@@ -440,23 +438,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
         return $this->pathologyId;
     }
 
-    /**
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param string $name
-     * @return PathCase
-     */
-    public function setName(string $name): PathCase
-    {
-        $this->name = $name;
-        return $this;
-    }
 
     /**
      * @return string
@@ -1054,6 +1035,24 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public function setResident(string $resident): PathCase
     {
         $this->resident = $resident;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isStudentReport(): bool
+    {
+        return $this->studentReport;
+    }
+
+    /**
+     * @param bool $studentReport
+     * @return PathCase
+     */
+    public function setStudentReport(bool $studentReport): PathCase
+    {
+        $this->studentReport = $studentReport;
         return $this;
     }
 

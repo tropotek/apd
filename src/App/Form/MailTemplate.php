@@ -33,7 +33,8 @@ class MailTemplate extends \Bs\FormIface
         //vd($mediaPath);
 
         $list = MailTemplateEventMap::create()->findFiltered(array()); //->toArray('id', 'name');
-        $this->appendField(new Field\Select('eventId', $list))->prependOption('-- Select --', '');
+        $this->appendField(new Field\Select('mailTemplateEventId', $list))->prependOption('-- Select --', '');
+
         $list = array('Client' => 'client', 'Staff' => 'staff');
         $this->appendField(new Field\Select('recipientType', $list))->prependOption('-- Select --', '');
         $this->appendField(new Field\Checkbox('active'));
