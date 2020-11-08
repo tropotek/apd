@@ -40,12 +40,12 @@ class AuthHandler extends \Bs\Listener\AuthHandler
                     $username = $adapter->get('username');
 
                     /* @var \Uni\Db\User $user */
-                    $user = $config->getUserMapper()->findByUsername($adapter->get('username'), $config->getInstitutionId());
-                    if (!$user) {   // Error out if no user
-                        $event->setResult(new \Tk\Auth\Result(\Tk\Auth\Result::FAILURE_CREDENTIAL_INVALID,
-                                $adapter->get('username'), 'Invalid username. Please contact your administrator to setup an account.'));
-                        return;
-                    }
+//                    $user = $config->getUserMapper()->findByUsername($adapter->get('username'), $config->getInstitutionId());
+//                    if (!$user) {   // Error out if no user
+//                        $event->setResult(new \Tk\Auth\Result(\Tk\Auth\Result::FAILURE_CREDENTIAL_INVALID,
+//                                $adapter->get('username'), 'Invalid username. Please contact your administrator to setup an account.'));
+//                        return;
+//                    }
 
                     if (!$user) { // Create a user record if none exists
                         if (!$config->get('auth.ldap.auto.account')) {
