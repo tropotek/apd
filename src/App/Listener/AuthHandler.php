@@ -47,6 +47,7 @@ class AuthHandler extends \Bs\Listener\AuthHandler
 //                        return;
 //                    }
 
+
                     if (!$user) { // Create a user record if none exists
                         if (!$config->get('auth.ldap.auto.account')) {
                             $msg = sprintf('Please contact %s to request access. Please provide the following details',
