@@ -24,6 +24,7 @@ try {
     if (!$data->get('site.global.css'))
         $data->set('site.global.css', '');
 
+
     $data->save();
 
 } catch (\Exception $e) {}
