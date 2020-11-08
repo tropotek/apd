@@ -103,7 +103,7 @@ CREATE TABLE IF NOT EXISTS `path_case`
     ac_type VARCHAR(64) NULL DEFAULT '',                      -- after care type: General Disposal/cremation/internal incineration
     ac_hold DATETIME DEFAULT NULL,                            -- after care Date to wait until processing animal
     storage_id INT(10) UNSIGNED NOT NULL DEFAULT 0,           -- The current location of the animal (cleared when disposal is completed)
-    disposal DATETIME DEFAULT NULL,                           -- 
+    disposal DATETIME DEFAULT NULL,                           -- The date the animal was disposed of
     --
 
     -- Reporting
