@@ -49,6 +49,8 @@ class PathCase extends \Bs\FormIface
 
         $layout = $this->getRenderer()->getLayout();
 
+        $layout->removeRow('arrival', 'col');
+
         $layout->removeRow('type', 'col');
         $layout->removeRow('clientId', 'col');
 
@@ -83,6 +85,8 @@ class PathCase extends \Bs\FormIface
         
         $this->appendField(new Field\Input('pathologyId'))->setLabel('Pathology ID')->setTabGroup($tab)
                 ->addCss('tk-input-lock');
+        $this->appendField(new Field\Input('arrival'))->setTabGroup($tab)->addCss('date')
+            ->setAttr('placeholder', 'dd/mm/yyyy')->setNotes('The date the case was received.');
             
         if (!$this->getPathCase()->getType()) {
             $list = \Tk\ObjectUtil::getClassConstants($this->getPathCase(), 'TYPE', true);

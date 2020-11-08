@@ -222,7 +222,6 @@ class Request extends \Bs\TableIface
             ));
             $this->appendFilter(Field\Select::createSelect('ownerId', $list)->prependOption('-- Owner --'));
 
-
             $this->appendFilter(new Field\DateRange('date'));
 
         }

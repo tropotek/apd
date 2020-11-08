@@ -120,10 +120,16 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public $type = '';
 
     /**
-     * direct client/external vet/INTernal vet/researcher/ Other - Specify
+     * direct client/external vet/Inernal vet/researcher/ Other - Specify
      * @var string
      */
     public $submissionType = '';
+
+    /**
+     * Date the case arrived/seen (Generally the same as the created but editable)
+     * @var \DateTime
+     */
+    public $arrival = null;
 
     /**
      * Pending/frozen storage/examined/reported/awaiting review (if applicable)/completed
@@ -189,7 +195,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 
 
     /**
-     * TODO: NOT sure if this is needed
+     * Is in fact the animal count (Generally 1 but could be a heard of 10 cattle for example.)
      * @var int
      */
     public $specimenCount = 1;
@@ -378,7 +384,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
         if ($this->getConfig()->getAuthUser())
             $this->setUserId($this->getConfig()->getAuthUser()->getId());
 
-        //$this->dob = new \DateTime();
+        $this->arrival = new \DateTime();
         $this->cost = Money::create(0);
     }
 
@@ -556,6 +562,27 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public function getSubmissionType() : string
     {
         return $this->submissionType;
+    }
+
+    /**
+     * @param null|string $format
+     * @return \DateTime|string
+     */
+    public function getArrival($format = null): \DateTime
+    {
+        if ($format && $this->arrival)
+            return $this->arrival->format($format);
+        return $this->arrival;
+    }
+
+    /**
+     * @param \DateTime $arrival
+     * @return PathCase
+     */
+    public function setArrival(\DateTime $arrival): PathCase
+    {
+        $this->arrival = $arrival;
+        return $this;
     }
 
     /**

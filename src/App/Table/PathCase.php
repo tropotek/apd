@@ -95,6 +95,7 @@ class PathCase extends \Bs\TableIface
         //$this->appendCell(new Cell\Text('storageId'));
         $this->appendCell(new Cell\Date('disposal'));
 
+        $this->appendCell(new Cell\Date('arrival'));
 
         $this->appendCell(new Cell\Date('modified'));
         $this->appendCell(new Cell\Date('created'));
@@ -146,16 +147,19 @@ class PathCase extends \Bs\TableIface
         $list = array('Yes' => 1, 'No' => 0);
         $this->appendFilter(Field\Select::createSelect('billable', $list)->prependOption('-- Is Billable --', ''));
 
+        $this->appendFilter(new Field\DateRange('date'));
+
         // Actions
         //$this->appendAction(\Tk\Table\Action\Link::createLink('New Path Case', \Bs\Uri::createHomeUrl('/pathCaseEdit.html'), 'fa fa-plus'));
         //$this->appendAction(\Tk\Table\Action\ColumnSelect::create()->setUnselected(array('modified')));
         $this->appendAction(\Tk\Table\Action\ColumnSelect::create()->setSelected(
                 array('id', 'pathologyId', 'userId', 'clientId', 'owner', 'age',
-                    'patientNumber', 'type', 'submissionType', 'status', 'created')
+                    'patientNumber', 'type', 'submissionType', 'status', 'arrival')
             )->setHidden(array('id'))
         );
         $this->appendAction(\Tk\Table\Action\Delete::create());
         $this->appendAction(\Tk\Table\Action\Csv::create());
+        $this->appendAction(\App\Table\Action\Status::create(\App\Db\Request::getStatusList()));
 
         // load table
         //$this->setList($this->findList());

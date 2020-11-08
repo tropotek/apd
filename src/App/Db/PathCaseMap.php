@@ -2,6 +2,7 @@
 
 namespace App\Db;
 
+use Tk\Date;
 use Tk\Db\Tool;
 use Tk\Db\Map\ArrayObject;
 use Tk\DataMap\Db;
@@ -34,9 +35,10 @@ class PathCaseMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Integer('pathologistId', 'pathologist_id'));
             $this->dbMap->addPropertyMap(new Db\Text('resident'));
             $this->dbMap->addPropertyMap(new Db\Text('pathologyId', 'pathology_id'));
-            //$this->dbMap->addPropertyMap(new Db\Text('name'));
+            $this->dbMap->addPropertyMap(new Db\Text('name'));
             $this->dbMap->addPropertyMap(new Db\Text('type'));
             $this->dbMap->addPropertyMap(new Db\Text('submissionType', 'submission_type'));
+            $this->dbMap->addPropertyMap(new Db\Date('arrival'));
             $this->dbMap->addPropertyMap(new Db\Text('status'));
             $this->dbMap->addPropertyMap(new Db\Text('reportStatus', 'report_status'));
             $this->dbMap->addPropertyMap(new Db\Boolean('billable'));
@@ -101,9 +103,10 @@ class PathCaseMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Integer('pathologistId'));
             $this->formMap->addPropertyMap(new Form\Text('resident'));
             $this->formMap->addPropertyMap(new Form\Text('pathologyId'));
-            //$this->formMap->addPropertyMap(new Form\Text('name'));
+            $this->formMap->addPropertyMap(new Form\Text('name'));
             $this->formMap->addPropertyMap(new Form\Text('type'));
             $this->formMap->addPropertyMap(new Form\Text('submissionType'));
+            $this->formMap->addPropertyMap(new Form\Date('arrival'));
             $this->formMap->addPropertyMap(new Form\Text('status'));
             $this->formMap->addPropertyMap(new Form\Text('reportStatus'));
             $this->formMap->addPropertyMap(new Form\Boolean('billable'));
@@ -367,6 +370,23 @@ SQL;
         }
         if (isset($filter['billable']) && $filter['billable'] !== '' && $filter['billable'] !== null) {
             $filter->appendWhere('a.billable = %s AND ', (int)$filter['billable']);
+        }
+
+        $dates = array('dateStart', 'dateEnd');
+        foreach ($dates as $name) {
+            if (!empty($filter[$name]) && !$filter[$name] instanceof \DateTime) {
+                $filter[$name] = Date::createFormDate($filter[$name]);
+            }
+        }
+        if (!empty($filter['dateStart'])) {
+            /** @var \DateTime $date */
+            $date = Date::floor($filter['dateStart']);
+            $filter->appendWhere('a.arrival >= %s AND ', $this->quote($date->format(Date::FORMAT_ISO_DATETIME)));
+        }
+        if (!empty($filter['dateEnd'])) {
+            /** @var \DateTime $date */
+            $date = Date::floor($filter['dateEnd']);
+            $filter->appendWhere('a.arrival <= %s AND ', $this->quote($date->format(Date::FORMAT_ISO_DATETIME)));
         }
 
         if (!empty($filter['exclude'])) {

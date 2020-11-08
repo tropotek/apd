@@ -1,6 +1,7 @@
 <?php
 namespace App\Db;
 
+use Tk\Date;
 use Tk\Db\Tool;
 use Tk\Db\Map\ArrayObject;
 use Tk\DataMap\Db;
@@ -130,6 +131,23 @@ class RequestMap extends Mapper
         }
         if (!empty($filter['cost'])) {
             $filter->appendWhere('a.cost = %s AND ', (float)$filter['cost']);
+        }
+
+        $dates = array('dateStart', 'dateEnd');
+        foreach ($dates as $name) {
+            if (!empty($filter[$name]) && !$filter[$name] instanceof \DateTime) {
+                $filter[$name] = Date::createFormDate($filter[$name]);
+            }
+        }
+        if (!empty($filter['dateStart'])) {
+            /** @var \DateTime $date */
+            $date = Date::floor($filter['dateStart']);
+            $filter->appendWhere('a.created >= %s AND ', $this->quote($date->format(Date::FORMAT_ISO_DATETIME)));
+        }
+        if (!empty($filter['dateEnd'])) {
+            /** @var \DateTime $date */
+            $date = Date::floor($filter['dateEnd']);
+            $filter->appendWhere('a.created <= %s AND ', $this->quote($date->format(Date::FORMAT_ISO_DATETIME)));
         }
 
         if (!empty($filter['exclude'])) {

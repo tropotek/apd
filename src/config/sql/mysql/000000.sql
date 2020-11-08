@@ -62,10 +62,11 @@ CREATE TABLE IF NOT EXISTS `path_case`
 
     -- Case
     pathology_id VARCHAR(64) NOT NULL DEFAULT '',             -- Pathology Number  (ie: title, name)
---    name VARCHAR(255) NOT NULL DEFAULT '',                    -- The name/title of the case (optional)
+    name VARCHAR(255) NOT NULL DEFAULT '',                    -- The name/title of the case (optional)
     type VARCHAR(64) NOT NULL DEFAULT '',                     -- BIOPSY, NECROPSY, ...
     submission_type VARCHAR(64) NULL DEFAULT '',              -- Direct client/external vet/internal vet/researcher/ Other - Specify
 
+    arrival DATETIME NOT NULL,                                -- Date the case arrived/seen (Generally the same as the created but editable)
     status VARCHAR(64) NOT NULL DEFAULT '',                   -- Pending/frozen storage/examined/reported/awaiting review (if applicable)/completed
     report_status VARCHAR(64) NOT NULL DEFAULT '',            -- The current status of the report.
     billable TINYINT(1) NOT NULL DEFAULT 0,                   -- Is this case billable
@@ -102,7 +103,7 @@ CREATE TABLE IF NOT EXISTS `path_case`
     ac_type VARCHAR(64) NULL DEFAULT '',                      -- after care type: General Disposal/cremation/internal incineration
     ac_hold DATETIME DEFAULT NULL,                            -- after care Date to wait until processing animal
     storage_id INT(10) UNSIGNED NOT NULL DEFAULT 0,           -- The current location of the animal (cleared when disposal is completed)
-    disposal DATETIME DEFAULT NULL,
+    disposal DATETIME DEFAULT NULL,                           -- 
     --
 
     -- Reporting
