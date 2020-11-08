@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS `path_case`
 
     -- Case
     pathology_id VARCHAR(64) NOT NULL DEFAULT '',             -- Pathology Number  (ie: title, name)
-    name VARCHAR(255) NOT NULL DEFAULT '',                    -- The name/title of the case (optional)
+    name VARCHAR(255) DEFAULT '',                             -- The name/title of the case (optional)
     type VARCHAR(64) NOT NULL DEFAULT '',                     -- BIOPSY, NECROPSY, ...
     submission_type VARCHAR(64) NULL DEFAULT '',              -- Direct client/external vet/internal vet/researcher/ Other - Specify
 

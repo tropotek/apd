@@ -106,6 +106,12 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      */
     public $resident = '';
 
+    /**
+     * Staff only notes
+     * @var string
+     * @deprecated Not in use for now
+     */
+    public $name = '';
 
     /**
      * Pathology Number

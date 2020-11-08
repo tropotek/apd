@@ -170,6 +170,9 @@ class TestData extends \Bs\Console\TestData
         $db->exec('TRUNCATE  `path_case` ');
         for($i = 0; $i < 100; $i++) {
             $case = new PathCase();
+            $arrival = \Tk\Date::create()->sub(new \DateInterval('P'.rand(0, 5000).'D'));
+            $case->setArrival($arrival);
+
             /** @var Contact $contact */
             $contact = ContactMap::create()->findAll(Tool::create('RAND()'))->current();
             $case->setClientId($contact->getId());

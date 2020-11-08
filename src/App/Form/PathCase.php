@@ -2,6 +2,7 @@
 namespace App\Form;
 
 use App\Db\ContactMap;
+use App\Db\StorageMap;
 use App\Form\Field\Money;
 use Tk\Db\Tool;
 use Tk\Form\Field;
@@ -279,7 +280,8 @@ JS;
 
         if ($this->getPathCase()->getType() != \App\Db\PathCase::TYPE_BIOPSY) {
             $tab = 'After Care';
-            $this->appendField(Field\Select::createSelect('storageId', array())->prependOption('-- Select --', ''))
+            $list = StorageMap::create()->findFiltered(['institutionId' => $this->getConfig()->getInstitutionId()], Tool::create('name'));
+            $this->appendField(Field\Select::createSelect('storageId', $list)->prependOption('-- Select --', ''))
                 ->setTabGroup($tab);
             $this->appendField(new Field\Input('acHold'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy')
                 ->setLabel('Aftercare Hold')->setTabGroup($tab);
