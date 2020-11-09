@@ -268,10 +268,13 @@ JS;
 
 
         $tab = 'Files';
+        /** @var Field\File $fileField */
         $fileField = $this->appendField(Field\File::create('files[]', $this->getPathCase()->getDataPath()))
             ->setTabGroup($tab)->addCss('tk-multiinput')
+            ->setAttr('multiple', 'multiple')
             //->setAttr('accept', '.png,.jpg,.jpeg,.gif')
             ->setNotes('Upload any related files');
+
 
         if ($this->getPathCase()->getId()) {
             $v = json_encode($this->getPathCase()->getFiles()->toArray());
