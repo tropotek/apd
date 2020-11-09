@@ -50,7 +50,7 @@ class AuthHandler extends \Bs\Listener\AuthHandler
 
                     if (!$user) { // Create a user record if none exists
                         if (!$config->get('auth.ldap.auto.account')) {
-                            $msg = sprintf('Please contact %s to request access. Please provide the following details',
+                            $msg = sprintf('Please contact %s to request access.',
                                 $this->getConfig()->getInstitution()->getEmail());
                             $event->setResult(new \Tk\Auth\Result(\Tk\Auth\Result::FAILURE_CREDENTIAL_INVALID,
                                 $adapter->get('username'), $msg));

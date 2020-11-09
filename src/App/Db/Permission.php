@@ -48,6 +48,7 @@ class Permission extends \Uni\Db\Permission
                 break;
             default:          // TYPE_STAFF
                 $arr = array(
+                    'Manage Site Settings' => self::MANAGE_SITE,
                     'Manage Staff Records' => self::MANAGE_STAFF,
                     //'Course, Subject And Enrollment Settings' => self::MANAGE_SUBJECT,
                     //'Staff Member is a Course Coordinator' => self::IS_COORDINATOR,
