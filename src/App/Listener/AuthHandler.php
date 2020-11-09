@@ -76,6 +76,9 @@ class AuthHandler extends \Bs\Listener\AuthHandler
                             );
                             $user = $config->createUser();
                             $config->getUserMapper()->mapForm($userData, $user);
+                            // Test as we seems to be getting the email not the name in the name_first field
+                            $user->setName($ldapData[0]['displayname'][0]);
+
                             $error = $user->validate();
                             if (count($error)) {
                                 try {

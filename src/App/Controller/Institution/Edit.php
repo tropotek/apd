@@ -34,6 +34,7 @@ class Edit extends \Uni\Controller\Institution\Edit
         parent::initActionPanel();
         if ($this->getAuthUser()->isClient() || $this->getAuthUser()->isStaff()) {
             $this->getActionPanel()->remove('Courses');
+            $this->getActionPanel()->remove('Plugins');
         }
         $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Mail Log',
             \Uni\Uri::createHomeUrl(MailLog::createMailLogUrl('/manager.html', $this->getConfig()->getInstitution())), 'fa fa-envelope-o'));
