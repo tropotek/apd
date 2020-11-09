@@ -164,7 +164,12 @@ JS;
         $this->appendField(new Field\Input('animalName'))->setLabel('Animal Name/ID')->setTabGroup($tab);
         $this->appendField(new Field\Input('patientNumber'))->setTabGroup($tab);
         $this->appendField(new Field\Input('microchip'))->setTabGroup($tab);
-        $this->appendField(new Field\Input('species'))->setTabGroup($tab);
+
+        $list = array('Cat'=>'cat', 'Dog'=>'dog', 'Sheep'=>'sheep', 'Cattle'=>'cattle', 'Bird'=>'bird', 'Other'=>'other');
+        $this->appendField(Field\Select::createSelect('species', $list)->prependOption('-- Select --', ''))
+            ->setTabGroup($tab);
+
+        // TODO: Autocomplete field
         $this->appendField(new Field\Input('breed'))->setTabGroup($tab);
 
         $this->appendField(new Field\Input('specimenCount'))->setLabel('Animal Count')->setTabGroup($tab);
