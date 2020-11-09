@@ -71,7 +71,7 @@ class Permission extends \Uni\Db\Permission
     public static function getDefaultPermissionList($type = '')
     {
         $list = self::getPermissionList($type);
-        if ($type = User::TYPE_STAFF) {
+        if ($type = User::TYPE_STUDENT) {
             $list = array(
                 //'Staff Member is a Lecturer' => self::IS_LECTURER,
                 //'Manage Site Plugins' => self::MANAGE_PLUGINS,
