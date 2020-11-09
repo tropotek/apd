@@ -2013,12 +2013,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/theme-cube.git",
-                "reference": "b720742e5c5ffcc9649d72472d5f4f7a4d7e0b6b"
+                "reference": "30ca8c0c488b1e48a1a65738b7337085ee8e73e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/theme-cube/zipball/b720742e5c5ffcc9649d72472d5f4f7a4d7e0b6b",
-                "reference": "b720742e5c5ffcc9649d72472d5f4f7a4d7e0b6b",
+                "url": "https://api.github.com/repos/tropotek/theme-cube/zipball/30ca8c0c488b1e48a1a65738b7337085ee8e73e9",
+                "reference": "30ca8c0c488b1e48a1a65738b7337085ee8e73e9",
                 "shasum": ""
             },
             "type": "tek-theme",
@@ -2043,7 +2043,7 @@
                 "Tk",
                 "tropotek"
             ],
-            "time": "2020-11-08T23:43:50+00:00"
+            "time": "2020-11-08T23:52:34+00:00"
         },
         {
             "name": "ttek/tk-auth",
