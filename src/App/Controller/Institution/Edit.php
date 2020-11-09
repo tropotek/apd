@@ -34,21 +34,24 @@ class Edit extends \Uni\Controller\Institution\Edit
         parent::initActionPanel();
         if ($this->getAuthUser()->isClient() || $this->getAuthUser()->isStaff()) {
             $this->getActionPanel()->remove('Courses');
-            $this->getActionPanel()->remove('Plugins');
         }
-        $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Mail Log',
-            \Uni\Uri::createHomeUrl(MailLog::createMailLogUrl('/manager.html', $this->getConfig()->getInstitution())), 'fa fa-envelope-o'));
 
-        if (class_exists(\Tk\Ml\Plugin::class))
+        if (\Tk\Plugin\Factory::getInstance($this->getConfig()->getDb())->isActive('mailog')) {
+            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Mail Log',
+                \Uni\Uri::createHomeUrl(MailLog::createMailLogUrl('/manager.html', $this->getConfig()->getInstitution())), 'fa fa-envelope-o'));
+        }
+        if ($this->getAuthUser()->isStaff()) {
+            $this->getActionPanel()->remove('Plugins');
+
             $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Mail Templates',
                 \Uni\Uri::createHomeUrl('/mailTemplateManager.html'), 'fa fa-envelope'));
-
-        $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Storage Locations',
-            \Uni\Uri::createHomeUrl('/storageManager.html'), 'fa fa-archive'));
-        $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Available Services',
-            \Uni\Uri::createHomeUrl('/serviceManager.html'), 'fa fa-tags'));
-        $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Contacts',
-            \Uni\Uri::createHomeUrl('/contactManager.html'), 'fa fa-user-o'));
+            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Storage Locations',
+                \Uni\Uri::createHomeUrl('/storageManager.html'), 'fa fa-archive'));
+            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Available Services',
+                \Uni\Uri::createHomeUrl('/serviceManager.html'), 'fa fa-tags'));
+            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Contacts',
+                \Uni\Uri::createHomeUrl('/contactManager.html'), 'fa fa-user-o'));
+        }
 
     }
 

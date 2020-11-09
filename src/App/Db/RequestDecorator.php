@@ -30,61 +30,80 @@ class RequestDecorator
         /** @var Request $request */
         $request = $event->getStatus()->getModel();
         $status = $event->getStatus();
-        $messageList = array();
+        $case = $request->getPathCase();
 
-        // Create one message per recipient
-        if ($mailTemplate->getRecipientType() == 'client') { // Should only ever be one client
-            $message = CurlyMessage::create($mailTemplate->getTemplate());
-            $message->set('_mailTemplate', $mailTemplate);
-            $message->addTo($request->getClient()->getEmail());
-            $message->replace(Collection::prefixArrayKeys(array(
-                'type' => 'client',
-                'name' => $request->getClient()->getName(),
-                'email' => $request->getClient()->getEmail()
-            ), 'recipient::'));
-            $messageList[] = $message;
-        } else if ($mailTemplate->getRecipientType() == 'staff') {  // all staff involved in the pathCase
-            $staffList =  $status->findUsersByType($mailTemplate->getRecipientType());
-            if ($request->getPathCase()->getUser())
-                $staffList[$request->getPathCase()->getUserId()] = $request->getPathCase()->getUser();
-            /** @var User $user */
-            foreach ($staffList as $user) {
-                $message = CurlyMessage::create($mailTemplate->getTemplate());
-                $message->set('_mailTemplate', $mailTemplate);
-                $message->addTo($user->getEmail());
-                $message->replace(Collection::prefixArrayKeys(array(
-                    'type' => 'staff',
-                    'name' => $user->getName(),
-                    'email' => $user->getEmail()
-                ), 'recipient::'));
-                $messageList[] = $message;
-            }
-        }
+        $message = CurlyMessage::create($mailTemplate->getTemplate());
+        $message->set('_mailTemplate', $mailTemplate);
+        $message->setSubject('[#' . $request->getId() . '] Pathology Request - ' . ucfirst($status->getName()) . ': ' . $request->getPathCase()->getPathologyId());
+        $message->setFrom(Message::joinEmail($request->getPathCase()->getInstitution()->getEmail(),
+            $request->getPathCase()->getInstitution()->getName()));
 
-        foreach ($messageList as $message) {
-
-            $message->setSubject('[#' . $request->getId() . '] Pathology Request - ' . ucfirst($status->getName()) . ': ' . $request->getPathCase()->getPathologyId());
-            $message->setFrom(Message::joinEmail($request->getPathCase()->getInstitution()->getEmail(),
-                $request->getPathCase()->getInstitution()->getName()));
-
-            // Setup default message dynamic vars
-            $message->replace(Collection::prefixArrayKeys([
-                'id' => $status->getId(),
-                'name' => $status->getName(),
-                'message' => nl2br($status->getMessage()),
-                'event' => $status->getEvent(),
+        $message->replace(Collection::prefixArrayKeys([
+            'id' => $status->getId(),
+            'name' => $status->getName(),
+            'message' => nl2br($status->getMessage()),
+            'event' => $status->getEvent(),
 //                'fkey'  => $status->getFkey(),
 //                'fid' => $status->getFId()
-            ], 'status::'));
-            $message->replace(Collection::prefixArrayKeys(\App\Db\RequestMap::create()->unmapForm($request), 'request::'));
-            if ($request->getPathCase() && $request->getPathCase()->getInstitution())
-                $message->replace(Collection::prefixArrayKeys(\Uni\Db\InstitutionMap::create()->unmapForm($request->getPathCase()->getInstitution()), 'institution::'));
-            if ($request->getClient())
-                $message->replace(Collection::prefixArrayKeys(\App\Db\ContactMap::create()->unmapForm($request->getClient()), 'client::'));
-            if ($request->getPathCase())
-                $message->replace(Collection::prefixArrayKeys(\App\Db\PathCaseMap::create()->unmapForm($request->getPathCase()), 'pathCase::'));
+        ], 'status::'));
+        $message->replace(Collection::prefixArrayKeys(\App\Db\RequestMap::create()
+            ->unmapForm($request), 'request::'));
+        if ($request->getPathCase() && $request->getPathCase()->getInstitution())
+            $message->replace(Collection::prefixArrayKeys(\Uni\Db\InstitutionMap::create()
+                ->unmapForm($request->getPathCase()->getInstitution()), 'institution::'));
+        if ($request->getClient())
+            $message->replace(Collection::prefixArrayKeys(\App\Db\ContactMap::create()
+                ->unmapForm($request->getClient()), 'client::'));
+        if ($request->getPathCase())
+            $message->replace(Collection::prefixArrayKeys(\App\Db\PathCaseMap::create()
+                ->unmapForm($request->getPathCase()), 'pathCase::'));
 
-            $event->addMessage($message);
+        switch($mailTemplate->getRecipientType()) {
+            case MailTemplate::RECIPIENT_AUTHOR:
+                $message->addTo($case->getUser()->getEmail());
+                $message->replace(Collection::prefixArrayKeys(array(
+                    'type' => $mailTemplate->getRecipientType(),
+                    'name' => $case->getUser()->getName(),
+                    'email' => $case->getUser()->getEmail()
+                ), 'recipient::'));
+                break;
+            case MailTemplate::RECIPIENT_CLIENT:
+                $message->addTo($request->getClient()->getEmail());
+                $message->replace(Collection::prefixArrayKeys(array(
+                    'type' => $mailTemplate->getRecipientType(),
+                    'name' => $request->getClient()->getName(),
+                    'email' => $request->getClient()->getEmail()
+                ), 'recipient::'));
+                break;
+            case MailTemplate::RECIPIENT_PATHOLOGIST:
+                $message->addTo($case->getPathologist()->getEmail());
+                $message->replace(Collection::prefixArrayKeys(array(
+                    'type' => $mailTemplate->getRecipientType(),
+                    'name' => $case->getPathologist()->getName(),
+                    'email' => $case->getPathologist()->getEmail()
+                ), 'recipient::'));
+                break;
+            case MailTemplate::RECIPIENT_STUDENTS:
+                // TODO: send each student an individual email (if required)
+                foreach ($case->getStudentList() as $student) {
+                    $message->addTo($student->getEmail());
+                }
+                $message->replace(Collection::prefixArrayKeys(array(
+                    'type' => $mailTemplate->getRecipientType(),
+                    'name' => 'Student',
+                    'email' => ''
+                ), 'recipient::'));
+                break;
+            case MailTemplate::RECIPIENT_OWNER:
+                $message->addTo($case->getOwner()->getEmail());
+                $message->replace(Collection::prefixArrayKeys(array(
+                    'type' => $mailTemplate->getRecipientType(),
+                    'name' => $case->getOwner()->getName(),
+                    'email' => $case->getOwner()->getEmail()
+                ), 'recipient::'));
+                break;
         }
+        $event->addMessage($message);
+
     }
 }

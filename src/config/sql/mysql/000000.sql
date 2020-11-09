@@ -4,6 +4,12 @@
 -- Author: Michael Mifsud <info@tropotek.com>
 -- ---------------------------------
 
+UPDATE institution t SET
+    t.name = 'FVAS - Veterinary Anatomic Pathology',
+    t.phone = '(03) 9731 2274',
+    t.email = 'anat-vet@unimelb.edu.au'
+WHERE t.id = 1;
+
 
 -- ----------------------------
 --  contact table
@@ -381,6 +387,101 @@ CREATE TABLE IF NOT EXISTS
 -- FOR TEMPLATE TESTING (REMOVE FOR LIVE INSTALL)
 
 TRUNCATE mail_template;
+INSERT INTO mail_template (institution_id, mail_template_event_id, recipient_type, template, active, modified, created) VALUES (1, 4, 'pathologist', '<p>Hi {recipient::name},</p>
+<p>Pathology Case Examined:</p>
+<ul>
+<li>Pathology #: {pathCase::pathologyId}</li>
+<li>Institution ID: {pathCase::institutionId}</li>
+<li>Client ID: {pathCase::clientId}</li>
+<li>Type: {pathCase::type}</li>
+<li>Submission Type: {pathCase::submissionType}</li>
+<li>Status: {pathCase::status}</li>
+<li>Animal Name: {pathCase::animalName}</li>
+<li>Breed: {pathCase::breed}</li>
+</ul>
+<p>&nbsp;</p>
+<p>STATUS</p>
+<ul>
+<li>Name: {status::name}</li>
+<li>Event: {status::event}</li>
+<li>Message: {status::message}</li>
+</ul>
+<p>&nbsp;</p>
+<p>Thanks,</p>
+<p>{institution::name}</p>', 1, NOW(), NOW());
+INSERT INTO mail_template (institution_id, mail_template_event_id, recipient_type, template, active, modified, created) VALUES (1, 5, 'pathologist', '<p>Hi {recipient::name},</p>
+<p>Pathology Case Reported:</p>
+<ul>
+<li>Pathology #: {pathCase::pathologyId}</li>
+<li>Institution ID: {pathCase::institutionId}</li>
+<li>Client ID: {pathCase::clientId}</li>
+<li>Type: {pathCase::type}</li>
+<li>Submission Type: {pathCase::submissionType}</li>
+<li>Status: {pathCase::status}</li>
+<li>Animal Name: {pathCase::animalName}</li>
+<li>Breed: {pathCase::breed}</li>
+</ul>
+<p>&nbsp;</p>
+<p>STATUS</p>
+<ul>
+<li>Name: {status::name}</li>
+<li>Event: {status::event}</li>
+<li>Message: {status::message}</li>
+</ul>
+<p>&nbsp;</p>
+<p>Thanks,</p>
+<p>{institution::name}</p>', 1, NOW(), NOW());
+INSERT INTO mail_template (institution_id, mail_template_event_id, recipient_type, template, active, modified, created) VALUES (1, 6, 'pathologist', '<p>Hi {recipient::name},</p>
+<p>Pathology Case Completed:</p>
+<ul>
+<li>Pathology #: {pathCase::pathologyId}</li>
+<li>Institution ID: {pathCase::institutionId}</li>
+<li>Client ID: {pathCase::clientId}</li>
+<li>Type: {pathCase::type}</li>
+<li>Submission Type: {pathCase::submissionType}</li>
+<li>Status: {pathCase::status}</li>
+<li>Animal Name: {pathCase::animalName}</li>
+<li>Breed: {pathCase::breed}</li>
+</ul>
+<p>&nbsp;</p>
+<p>STATUS</p>
+<ul>
+<li>Name: {status::name}</li>
+<li>Event: {status::event}</li>
+<li>Message: {status::message}</li>
+</ul>
+<p>&nbsp;</p>
+<p>Thanks,</p>
+<p>{institution::name}</p>', 1, NOW(), NOW());
+INSERT INTO mail_template (institution_id, mail_template_event_id, recipient_type, template, active, modified, created) VALUES (1, 9, 'pathologist', '<p>Hi {recipient::name},</p>
+<p>Request Completed</p>
+<p>Pathology Case:</p>
+<ul>
+<li>Pathology Case ID: {request::pathCaseId}</li>
+<li>Cassette ID: {request::cassetteId}</li>
+<li>Service ID: {request::serviceId}</li>
+<li>Client ID: {request::clientId}</li>
+<li>Qty: {request::qty}</li>
+</ul>
+<p>&nbsp;</p>
+<p>STATUS</p>
+<ul>
+<li>Name: {status::name}</li>
+<li>Event: {status::event}</li>
+<li>Message: {status::message}</li>
+</ul>
+<p>&nbsp;</p>
+<p>Thanks,</p>
+<p>{institution::name}</p>', 1, NOW(), NOW());
+
+
+
+
+
+
+
+/*
+TRUNCATE mail_template;
 INSERT INTO mail_template (id, institution_id, mail_template_event_id, recipient_type, template, active, modified, created) VALUES (1, 1, 1, 'client', '<p>Hi {recipient::name},</p>
 <p>Pathology Case:</p>
 <ul>
@@ -555,7 +656,7 @@ INSERT INTO mail_template (id, institution_id, mail_template_event_id, recipient
 <p>&nbsp;</p>
 <p>Thanks,</p>
 <p>{institution::name}</p>', 1, NOW(), NOW());
-
+*/
 
 
 

@@ -35,7 +35,7 @@ class MailTemplate extends \Bs\FormIface
         $list = MailTemplateEventMap::create()->findFiltered(array()); //->toArray('id', 'name');
         $this->appendField(new Field\Select('mailTemplateEventId', $list))->prependOption('-- Select --', '');
 
-        $list = array('Client' => 'client', 'Staff' => 'staff');
+        $list = \App\Db\MailTemplate::getRecipientSelectList();
         $this->appendField(new Field\Select('recipientType', $list))->prependOption('-- Select --', '');
         $this->appendField(new Field\Checkbox('active'));
         $this->appendField(new Field\Textarea('template'))

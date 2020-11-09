@@ -17,6 +17,25 @@ class MailTemplate extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     use TimestampTrait;
     use MailTemplateEventTrait;
 
+
+    const RECIPIENT_AUTHOR              = 'author';
+    const RECIPIENT_CLIENT              = 'client';
+    const RECIPIENT_OWNER               = 'owner';
+    const RECIPIENT_PATHOLOGIST         = 'pathologist';
+    const RECIPIENT_STUDENTS            = 'students';
+
+
+    public static function getRecipientSelectList()
+    {
+        return [
+            'Client' => self::RECIPIENT_CLIENT,             // Changes based on if it is a case or request
+            'Animal Owner' => self::RECIPIENT_OWNER,
+            'Pathologist' => self::RECIPIENT_PATHOLOGIST,
+            'Students' => self::RECIPIENT_STUDENTS,
+            'Author' => self::RECIPIENT_AUTHOR              // Changes based on if it is a case or request
+        ];
+    }
+
     /**
      * @var int
      */
