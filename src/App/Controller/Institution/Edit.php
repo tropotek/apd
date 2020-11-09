@@ -39,8 +39,9 @@ class Edit extends \Uni\Controller\Institution\Edit
         $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Mail Log',
             \Uni\Uri::createHomeUrl(MailLog::createMailLogUrl('/manager.html', $this->getConfig()->getInstitution())), 'fa fa-envelope-o'));
 
-        $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Mail Templates',
-            \Uni\Uri::createHomeUrl('/mailTemplateManager.html'), 'fa fa-envelope'));
+        if (class_exists(\Tk\Ml\Plugin::class))
+            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Mail Templates',
+                \Uni\Uri::createHomeUrl('/mailTemplateManager.html'), 'fa fa-envelope'));
 
         $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Storage Locations',
             \Uni\Uri::createHomeUrl('/storageManager.html'), 'fa fa-archive'));
