@@ -4,59 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a101da2c9626e70c885349990e6fb530",
+    "content-hash": "28747a2e3a3f4da77f039b371b2a9d7f",
     "packages": [
-        {
-            "name": "fproject/php-jwt",
-            "version": "4.0.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/fproject/php-jwt.git",
-                "reference": "91047b202bbe7d966e8fce67ab16ebca8bdcb6b7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/fproject/php-jwt/zipball/91047b202bbe7d966e8fce67ab16ebca8bdcb6b7",
-                "reference": "91047b202bbe7d966e8fce67ab16ebca8bdcb6b7",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "4.8.36"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Firebase\\JWT\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Neuman Vong",
-                    "email": "neuman+pear@twilio.com",
-                    "role": "Developer"
-                },
-                {
-                    "name": "Anant Narayanan",
-                    "email": "anant@php.net",
-                    "role": "Developer"
-                },
-                {
-                    "name": "Bui Sy Nguyen",
-                    "email": "nguyenbs@gmail.com",
-                    "role": "Developer"
-                }
-            ],
-            "description": "A simple library to encode and decode JSON Web Tokens (JWT) in PHP. Support several key types including JWK.",
-            "homepage": "https://github.com/fproject/php-jwt",
-            "time": "2018-04-02T10:36:30+00:00"
-        },
         {
             "name": "guzzlehttp/psr7",
             "version": "1.x-dev",
@@ -127,42 +76,6 @@
                 "url"
             ],
             "time": "2020-10-22T07:42:05+00:00"
-        },
-        {
-            "name": "imsglobal/lti-1p3-tool",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/IMSGlobal/lti-1-3-php-library.git",
-                "reference": "3a192de99f3783d76caea462b0d04db28569c123"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/IMSGlobal/lti-1-3-php-library/zipball/3a192de99f3783d76caea462b0d04db28569c123",
-                "reference": "3a192de99f3783d76caea462b0d04db28569c123",
-                "shasum": ""
-            },
-            "require": {
-                "fproject/php-jwt": "^4.0",
-                "phpseclib/phpseclib": "^2.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "IMSGlobal\\LTI\\": "src/lti"
-                }
-            },
-            "authors": [
-                {
-                    "name": "Martin Lenord",
-                    "email": "ims.m@rtin.dev"
-                }
-            ],
-            "support": {
-                "source": "https://github.com/IMSGlobal/lti-1-3-php-library/tree/master",
-                "issues": "https://github.com/IMSGlobal/lti-1-3-php-library/issues"
-            },
-            "time": "2020-06-03T16:10:05+00:00"
         },
         {
             "name": "intervention/image",
@@ -704,111 +617,6 @@
                 }
             ],
             "time": "2020-10-09T14:55:58+00:00"
-        },
-        {
-            "name": "phpseclib/phpseclib",
-            "version": "2.0.x-dev",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "42b84143e7e8f9f622d447f0585ba76e68e479cf"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/42b84143e7e8f9f622d447f0585ba76e68e479cf",
-                "reference": "42b84143e7e8f9f622d447f0585ba76e68e479cf",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3"
-            },
-            "require-dev": {
-                "phing/phing": "~2.7",
-                "phpunit/phpunit": "^4.8.35|^5.7|^6.0",
-                "squizlabs/php_codesniffer": "~2.0"
-            },
-            "suggest": {
-                "ext-gmp": "Install the GMP (GNU Multiple Precision) extension in order to speed up arbitrary precision integer arithmetic operations.",
-                "ext-libsodium": "SSH2/SFTP can make use of some algorithms provided by the libsodium-php extension.",
-                "ext-mcrypt": "Install the Mcrypt extension in order to speed up a few other cryptographic operations.",
-                "ext-openssl": "Install the OpenSSL extension in order to speed up a wide variety of cryptographic operations."
-            },
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "phpseclib/bootstrap.php"
-                ],
-                "psr-4": {
-                    "phpseclib\\": "phpseclib/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jim Wigginton",
-                    "email": "terrafrost@php.net",
-                    "role": "Lead Developer"
-                },
-                {
-                    "name": "Patrick Monnerat",
-                    "email": "pm@datasphere.ch",
-                    "role": "Developer"
-                },
-                {
-                    "name": "Andreas Fischer",
-                    "email": "bantu@phpbb.com",
-                    "role": "Developer"
-                },
-                {
-                    "name": "Hans-Jürgen Petrich",
-                    "email": "petrich@tronic-media.com",
-                    "role": "Developer"
-                },
-                {
-                    "name": "Graham Campbell",
-                    "email": "graham@alt-three.com",
-                    "role": "Developer"
-                }
-            ],
-            "description": "PHP Secure Communications Library - Pure-PHP implementations of RSA, AES, SSH2, SFTP, X.509 etc.",
-            "homepage": "http://phpseclib.sourceforge.net",
-            "keywords": [
-                "BigInteger",
-                "aes",
-                "asn.1",
-                "asn1",
-                "blowfish",
-                "crypto",
-                "cryptography",
-                "encryption",
-                "rsa",
-                "security",
-                "sftp",
-                "signature",
-                "signing",
-                "ssh",
-                "twofish",
-                "x.509",
-                "x509"
-            ],
-            "funding": [
-                {
-                    "url": "https://github.com/terrafrost",
-                    "type": "github"
-                },
-                {
-                    "url": "https://www.patreon.com/phpseclib",
-                    "type": "patreon"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/phpseclib/phpseclib",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2020-11-03T01:54:25+00:00"
         },
         {
             "name": "psr/cache",
@@ -2200,65 +2008,17 @@
             "time": "2020-03-10T18:45:33+00:00"
         },
         {
-            "name": "ttek-plg/plg-lti",
-            "version": "3.2.x-dev",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/tropotek/plg-lti.git",
-                "reference": "a7fd2d2a044a40f236c521b5a74e0db8ad0aaeac"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/plg-lti/zipball/a7fd2d2a044a40f236c521b5a74e0db8ad0aaeac",
-                "reference": "a7fd2d2a044a40f236c521b5a74e0db8ad0aaeac",
-                "shasum": ""
-            },
-            "require": {
-                "imsglobal/lti-1p3-tool": "dev-master",
-                "php": "^7.3.0"
-            },
-            "type": "ttek-plugin",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "3.2.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Lti\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Michael Mifsud",
-                    "homepage": "http://www.tropotek.com/"
-                }
-            ],
-            "description": "LTI Plugin for the tk-uni libs",
-            "keywords": [
-                "EMS III",
-                "LTI",
-                "plugin",
-                "tropotek"
-            ],
-            "time": "2020-03-12T02:12:45+00:00"
-        },
-        {
             "name": "ttek/theme-cube",
             "version": "1.2.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/theme-cube.git",
-                "reference": "03134394cd9d5d8b70a802c2bdcf85531efbc0e0"
+                "reference": "b720742e5c5ffcc9649d72472d5f4f7a4d7e0b6b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/theme-cube/zipball/03134394cd9d5d8b70a802c2bdcf85531efbc0e0",
-                "reference": "03134394cd9d5d8b70a802c2bdcf85531efbc0e0",
+                "url": "https://api.github.com/repos/tropotek/theme-cube/zipball/b720742e5c5ffcc9649d72472d5f4f7a4d7e0b6b",
+                "reference": "b720742e5c5ffcc9649d72472d5f4f7a4d7e0b6b",
                 "shasum": ""
             },
             "type": "tek-theme",
@@ -2283,7 +2043,7 @@
                 "Tk",
                 "tropotek"
             ],
-            "time": "2020-09-30T23:03:45+00:00"
+            "time": "2020-11-08T23:43:50+00:00"
         },
         {
             "name": "ttek/tk-auth",
@@ -2337,12 +2097,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-base.git",
-                "reference": "e7e30fd352d5095c33bc82f6a005ce9a81311a33"
+                "reference": "8b64d90e81562186a116bf1df70a57296b333df7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/e7e30fd352d5095c33bc82f6a005ce9a81311a33",
-                "reference": "e7e30fd352d5095c33bc82f6a005ce9a81311a33",
+                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/8b64d90e81562186a116bf1df70a57296b333df7",
+                "reference": "8b64d90e81562186a116bf1df70a57296b333df7",
                 "shasum": ""
             },
             "require": {
@@ -2388,7 +2148,7 @@
                 "tkbase",
                 "tropotek"
             ],
-            "time": "2020-11-08T21:03:57+00:00"
+            "time": "2020-11-08T22:46:53+00:00"
         },
         {
             "name": "ttek/tk-database",
@@ -2495,12 +2255,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-form.git",
-                "reference": "488dab9e311f973323ae0eea34393a6ebb7f71e5"
+                "reference": "e0f236b6aee28aa2b743b44a6ef47a2cdc5bd144"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-form/zipball/488dab9e311f973323ae0eea34393a6ebb7f71e5",
-                "reference": "488dab9e311f973323ae0eea34393a6ebb7f71e5",
+                "url": "https://api.github.com/repos/tropotek/tk-form/zipball/e0f236b6aee28aa2b743b44a6ef47a2cdc5bd144",
+                "reference": "e0f236b6aee28aa2b743b44a6ef47a2cdc5bd144",
                 "shasum": ""
             },
             "require": {
@@ -2533,7 +2293,7 @@
                 "form",
                 "tropotek"
             ],
-            "time": "2020-11-03T02:11:24+00:00"
+            "time": "2020-11-08T22:46:23+00:00"
         },
         {
             "name": "ttek/tk-framework",
@@ -2890,12 +2650,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-uni.git",
-                "reference": "9901f145472833d92667bf775132aaab3ddf0da6"
+                "reference": "1cf478e66d6a8c71971c65ce1da88d3502076f60"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-uni/zipball/9901f145472833d92667bf775132aaab3ddf0da6",
-                "reference": "9901f145472833d92667bf775132aaab3ddf0da6",
+                "url": "https://api.github.com/repos/tropotek/tk-uni/zipball/1cf478e66d6a8c71971c65ce1da88d3502076f60",
+                "reference": "1cf478e66d6a8c71971c65ce1da88d3502076f60",
                 "shasum": ""
             },
             "require": {
@@ -2929,7 +2689,7 @@
                 "tropotek",
                 "uni"
             ],
-            "time": "2020-11-08T21:03:52+00:00"
+            "time": "2020-11-08T22:46:38+00:00"
         },
         {
             "name": "wikimedia/less.php",
