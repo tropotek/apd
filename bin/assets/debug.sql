@@ -12,6 +12,7 @@
 
 UPDATE `user` SET `password` = MD5(CONCAT('password', `hash`));
 
+-- UPDATE `user` SET `password` = MD5(CONCAT('password', `hash`)) WHERE id = 1;
 -- --------------------------------------
 -- Disable Domains for institutions
 UPDATE `institution` SET `domain` = '';
