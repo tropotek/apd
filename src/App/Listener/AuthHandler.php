@@ -34,9 +34,11 @@ class AuthHandler extends \Bs\Listener\AuthHandler
                 $ldapData = $adapter->ldapSearch($filter);
                 if ($ldapData) {
                     $email = '';
-                    if (!empty($ldapData[0]['mail'][0])) $email = trim($ldapData[0]['mail'][0]);   // Email format = firstname.lastname@unimelb
+                    if (!empty($ldapData[0]['mail'][0]))
+                        $email = trim($ldapData[0]['mail'][0]);   // Email format = firstname.lastname@unimelb
                     $uid = '';
-                    if (!empty($ldapData[0]['auedupersonid'][0])) $uid = trim($ldapData[0]['auedupersonid'][0]);
+                    if (!empty($ldapData[0]['auedupersonid'][0]))
+                        $uid = trim($ldapData[0]['auedupersonid'][0]);
                     $username = $adapter->get('username');
 
                     /* @var \Uni\Db\User $user */
@@ -70,14 +72,14 @@ class AuthHandler extends \Bs\Listener\AuthHandler
                                 'type' => $type,
                                 'active' => true,
                                 'email' => $email,
-                                'name' => $ldapData[0]['displayname'][0],
-                                'uid' => $ldapData[0]['auedupersonid'][0],
+                                'title' => $ldapData[0]['auedupersonsalutation'][0],
+                                'nameFirst' => $ldapData[0]['givenname'][0],
+                                'nameLast' => $ldapData[0]['sn'][0],
+                                'uid' => $uid,
                                 'ldapData' => $ldapData
                             );
                             $user = $config->createUser();
                             $config->getUserMapper()->mapForm($userData, $user);
-                            // Test as we seems to be getting the email not the name in the name_first field
-                            $user->setName($ldapData[0]['displayname'][0]);
 
                             $error = $user->validate();
                             if (count($error)) {
