@@ -41,8 +41,13 @@ class AuthHandler extends \Bs\Listener\AuthHandler
                         $uid = trim($ldapData[0]['auedupersonid'][0]);
                     $username = $adapter->get('username');
 
+                    $user = $config->getUserMapper()->findByUsername($username, $config->getInstitutionId());
+                    if (!$user && $email) {
+                        $user = $config->getUserMapper()->findByEmail($email, $config->getInstitutionId());
+                    }
+
                     /* @var \Uni\Db\User $user */
-//                    $user = $config->getUserMapper()->findByUsername($adapter->get('username'), $config->getInstitutionId());
+//                    $user = $config->getUserMapper()->findByUsername($username, $config->getInstitutionId());
 //                    if (!$user) {   // Error out if no user
 //                        $event->setResult(new \Tk\Auth\Result(\Tk\Auth\Result::FAILURE_CREDENTIAL_INVALID,
 //                                $adapter->get('username'), 'Invalid username. Please contact your administrator to setup an account.'));
