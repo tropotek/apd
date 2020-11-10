@@ -100,11 +100,15 @@ class AuthHandler extends \Bs\Listener\AuthHandler
                     if ($user && $user->isActive()) {
                         if (!$user->getUid() && !empty($ldapData[0]['auedupersonid'][0]))
                             $user->setUid($ldapData[0]['auedupersonid'][0]);
-                        if (!$user->getName() && !empty($ldapData[0]['displayname'][0]))
-                            $user->setName($ldapData[0]['displayname'][0]);
-                        // TODO: update this to if !$user->email later once all emails are changed over
-                        if ($email)
-                            $user->setName($email);
+                        if (!$user->getTitle() && !empty($ldapData[0]['auedupersonsalutation'][0]))
+                            $user->setTitle($ldapData[0]['auedupersonsalutation'][0]);
+                        if (!$user->getNameFirst() && !empty($ldapData[0]['givenname'][0]))
+                            $user->setNameFirst($ldapData[0]['givenname'][0]);
+                        if (!$user->getNameLast() && !empty($ldapData[0]['sn'][0]))
+                            $user->setNameLast($ldapData[0]['sn'][0]);
+                        if (!$user->getEmail())
+                            $user->setEmail($email);
+
                         $user->setNewPassword($adapter->get('password'));
                         $user->save();
                         $user->addPermission(\Uni\Db\Permission::getDefaultPermissionList($user->getType()));
