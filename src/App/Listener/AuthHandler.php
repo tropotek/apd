@@ -114,7 +114,7 @@ class AuthHandler extends \Bs\Listener\AuthHandler
 
                         $user->setNewPassword($adapter->get('password'));
                         $user->save();
-                        $user->addPermission(\Uni\Db\Permission::getDefaultPermissionList($user->getType()));
+                        $user->addPermission(\App\Db\Permission::getDefaultPermissionList($user->getType()));
 
                         if (method_exists($user, 'getData')) {
                             $data = $user->getData();
