@@ -41,13 +41,11 @@ class AuthHandler extends \Bs\Listener\AuthHandler
                         $uid = trim($ldapData[0]['auedupersonid'][0]);
                     $username = $adapter->get('username');
 
+                    /* @var \Uni\Db\User $user */
                     $user = $config->getUserMapper()->findByUsername($username, $config->getInstitutionId());
                     if (!$user && $email) {
                         $user = $config->getUserMapper()->findByEmail($email, $config->getInstitutionId());
                     }
-
-                    /* @var \Uni\Db\User $user */
-//                    $user = $config->getUserMapper()->findByUsername($username, $config->getInstitutionId());
 //                    if (!$user) {   // Error out if no user
 //                        $event->setResult(new \Tk\Auth\Result(\Tk\Auth\Result::FAILURE_CREDENTIAL_INVALID,
 //                                $adapter->get('username'), 'Invalid username. Please contact your administrator to setup an account.'));
@@ -77,7 +75,7 @@ class AuthHandler extends \Bs\Listener\AuthHandler
                                 'type' => $type,
                                 'active' => true,
                                 'email' => $email,
-                                'title' => $ldapData[0]['auedupersonsalutation'][0],
+                                'title' => ucwords(strtolower($ldapData[0]['auedupersonsalutation'][0])),
                                 'nameFirst' => $ldapData[0]['givenname'][0],
                                 'nameLast' => $ldapData[0]['sn'][0],
                                 'uid' => $uid,
@@ -106,7 +104,7 @@ class AuthHandler extends \Bs\Listener\AuthHandler
                         if (!$user->getUid() && !empty($ldapData[0]['auedupersonid'][0]))
                             $user->setUid($ldapData[0]['auedupersonid'][0]);
                         if (!$user->getTitle() && !empty($ldapData[0]['auedupersonsalutation'][0]))
-                            $user->setTitle($ldapData[0]['auedupersonsalutation'][0]);
+                            $user->setTitle(ucwords(strtolower($ldapData[0]['auedupersonsalutation'][0])));
                         if (!$user->getNameFirst() && !empty($ldapData[0]['givenname'][0]))
                             $user->setNameFirst($ldapData[0]['givenname'][0]);
                         if (!$user->getNameLast() && !empty($ldapData[0]['sn'][0]))

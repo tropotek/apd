@@ -50,13 +50,13 @@ class Permission extends \Uni\Db\Permission
                 $arr = array(
                     'Manage Site Settings' => self::MANAGE_SITE,
                     'Manage Staff Records' => self::MANAGE_STAFF,
+                    'Manage Site Plugins' => self::MANAGE_PLUGINS,
+                    'Can Masquerade' => self::CAN_MASQUERADE
                     //'Course, Subject And Enrollment Settings' => self::MANAGE_SUBJECT,
                     //'Staff Member is a Course Coordinator' => self::IS_COORDINATOR,
                     //'Staff Member is a Lecturer' => self::IS_LECTURER,
                     //'Staff Member is a Student Mentor' => self::IS_MENTOR,
 
-                    'Manage Site Plugins' => self::MANAGE_PLUGINS,
-                    'Can Masquerade' => self::CAN_MASQUERADE
                 );
         }
         return $arr;
@@ -71,13 +71,6 @@ class Permission extends \Uni\Db\Permission
     public static function getDefaultPermissionList($type = '')
     {
         $list = self::getPermissionList($type);
-        if ($type = User::TYPE_STUDENT) {
-            $list = array(
-                //'Staff Member is a Lecturer' => self::IS_LECTURER,
-                //'Manage Site Plugins' => self::MANAGE_PLUGINS,
-                //'Can Masquerade' => self::CAN_MASQUERADE
-            );
-        }
         return $list;
     }
 }
