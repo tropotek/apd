@@ -189,7 +189,10 @@ class CaseReportPdf extends Pdf
 
             $template->setVisible('pathologist');
         }
-        $template->appendText('date', \Tk\Date::create()->format(\Tk\Date::FORMAT_SHORT_DATE));
+        //$template->appendText('date', \Tk\Date::create()->format(\Tk\Date::FORMAT_SHORT_DATE));
+
+
+        // Add a page break
 
 
         $allFiles = $this->pathCase->getFiles();
@@ -234,9 +237,22 @@ class CaseReportPdf extends Pdf
  header: myHeader1;
  footer: myFooter1;
 }
-
+table.head-t {
+  padding: 0;
+}
+table.head-t td {
+  padding: 0 7px;
+  margin: 0;
+  border: none;
+  font-style: italic;
+  font-size: 0.9em;
+  color: #666;
+}
 body {
   font-size: 0.8em;
+}
+.content {
+  margin-left: 10px;
 }
 table td {
   vertical-align: top;
@@ -290,15 +306,16 @@ CSS;
 <body class="" style="">
 
   <htmlpageheader name="myHeader1">
-    <table width="100%">
+    <table width="100%" class="head-t">
       <tr>
         <td width="50%">Case Report</td>
         <td width="50%" style="text-align: right;" var="headerTitle"></td>
       </tr>
     </table>
   </htmlpageheader>
+  
   <htmlpagefooter name="myFooter1">
-    <table width="100%">
+    <table width="100%" class="head-t">
       <tr>
         <td width="50%">Date: {DATE j-m-Y}</td>
         <td width="50%" style="text-align: right;">{PAGENO}/{nbpg}</td>
@@ -374,39 +391,37 @@ CSS;
         <div var="content"></div>
       </div>
     
-    <div choice="pathologist" style="page-break-inside: avoid;" >
-      <p><b>Pathologist:</b></p>
-      <p style="margin-left: 20px;">
-        <span var="pathologistName"></span> <small var="pathologistCreds"></small><br/>
-        <span var="pathologistPosition"></span>
-      </p> 
-      <p style="text-align: right; margin-right: 20px;">Date: <span var="date"></span></p>
-    </div>
-      
-      <!-- Files and media -->      
-      <div class="media" choice="media">
-      
-        <div class="file-list" style="page-break-inside: avoid;" choice="file-list">
-          <h4>Files:</h4>
-          <ul var="list">
-            <li var="item" repeat="item"><a href="#" target="_blank" var="link"></a></li>
-          </ul>
-        </div>
-        
-        <div class="image-list" choice="image-list">
-          <h4>Images:</h4>
-          <figure class="image-block" style="page-break-inside: avoid;" var="image-block" repeat="image-block">
-            <img src="#" alt="" var="image" />
-            <figcaption var="image-caption"></figcaption>
-          </figure>
-        </div>
-        <p>&nbsp;</p>
+      <div choice="pathologist" style="page-break-inside: avoid;" >
+        <p><b>Pathologist:</b></p>
+        <p style="margin-left: 20px;">
+          <span var="pathologistName"></span> <small var="pathologistCreds"></small><br/>
+          <span var="pathologistPosition"></span>
+        </p> 
+        <p style="text-align: right; margin-right: 20px;">Date: <span var="date"></span></p>
       </div>
-      
-      
       
     </div>
     
+      
+      <pagebreak>
+          <!-- Files and media -->      
+          <div class="media" choice="media">
+            <div class="file-list" style="page-break-inside: avoid;" choice="file-list">
+              <h4>Files:</h4>
+              <ul var="list">
+                <li var="item" repeat="item"><a href="#" target="_blank" var="link"></a></li>
+              </ul>
+            </div>
+            <div class="image-list" choice="image-list">
+              <h4>Images:</h4>
+              <figure class="image-block" style="page-break-inside: avoid;" var="image-block" repeat="image-block">
+                <img src="#" alt="" var="image" />
+                <figcaption var="image-caption"></figcaption>
+              </figure>
+            </div>
+            <p>&nbsp;</p>
+          </div>
+      </pagebreak>
     
   </div>
 </body>

@@ -202,8 +202,6 @@ JS;
             ->setTabGroup($tab)->setLabel('Pathologist');
 
 
-
-        
         $contact = new \App\Db\Contact();
         $form = \App\Form\Contact::create()->setType(\App\Db\Contact::TYPE_STUDENT)->setModel($contact);
         $form->removeField('notes');
@@ -273,7 +271,7 @@ JS;
             ->setTabGroup($tab)->addCss('tk-multiinput')
             ->setAttr('multiple', 'multiple')
             //->setAttr('accept', '.png,.jpg,.jpeg,.gif')
-            ->setNotes('Upload any related files');
+            ->setNotes('Upload any related files. Multiple files can be selected.');
 
 
         if ($this->getPathCase()->getId()) {

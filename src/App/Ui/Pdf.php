@@ -100,9 +100,9 @@ class Pdf extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterfa
         $this->mpdf = new \Mpdf\Mpdf(array(
 			'format' => 'A4-P',
             'orientation' => 'P',
-            'margin_left' => 10,
-            'margin_right' => 10,
-            'margin_top' => 10,
+            'margin_left' => 5,
+            'margin_right' => 5,
+            'margin_top' => 15,
             'margin_bottom' => 10,
             'margin_header' => 5,
             'margin_footer' => 5,
