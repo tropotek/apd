@@ -22,10 +22,11 @@ if (!$routes) return;
 $routes->add('home', route::create('/index.html', 'App\Controller\Index::doDefault'));
 $routes->add('home-base', route::create('/', 'App\Controller\Index::doDefault'));
 
-$routes->add('login', route::create('/login.html', 'App\Controller\Login::doDefault'));
+$routes->add('login', route::create('/login.html', 'App\Controller\Login::doInsLogin'));
 $routes->add('institution-login', route::create('/inst/{instHash}/login.html', 'App\Controller\Login::doInsLogin'));
-$routes->add('recover', route::create('/recover.html', 'App\Controller\Recover::doDefault'));
+$routes->add('admin-login', Route::create('/xlogin.html', 'App\Controller\Login::doDefault'));
 
+$routes->add('recover', route::create('/recover.html', 'App\Controller\Recover::doDefault'));
 $routes->add('install', Route::create('/install.html', 'App\Controller\Install::doDefault'));
 
 // Admin Pages

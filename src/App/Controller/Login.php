@@ -39,10 +39,13 @@ class Login extends \Uni\Controller\Login
             $f->addCss('');
         }
 
-        $list = InstitutionMap::create()->findActive(Tool::create('', 2));
-        if ($list->count() > 1)
-            $this->form->appendField(new Event\Link('selectInstitution', \Tk\Uri::create('/')->setFragment('institutions'), ''))
-                ->removeCss('btn btn-sm btn-default btn-once')->addCss('tk-unstitutions-url');
+        // If this is an institution login page
+        if ($this->getConfig()->getRequest()->getTkUri()->basename() == 'login.html') {
+            $list = InstitutionMap::create()->findActive(Tool::create('', 2));
+            if ($list->count() > 1)
+                $this->form->appendField(new Event\Link('selectInstitution', \Tk\Uri::create('/')->setFragment('institutions'), ''))
+                    ->removeCss('btn btn-sm btn-default btn-once')->addCss('tk-unstitutions-url');
+        }
     }
 
     /**
@@ -55,7 +58,6 @@ class Login extends \Uni\Controller\Login
 
   <div var="form"></div>
   
-
 </div>
 HTML;
 
