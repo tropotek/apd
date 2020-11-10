@@ -205,17 +205,17 @@ class Storage extends \Tk\Db\Map\Model implements \Tk\ValidInterface
             $errors['name'] = 'Invalid value: name';
         }
 
-        if (!$this->mapZoom) {
-            $errors['mapZoom'] = 'Invalid value: mapZoom';
-        }
-
-        if (!$this->mapLng) {
-            $errors['mapLng'] = 'Invalid value: mapLng';
-        }
-
-        if (!$this->mapLat) {
-            $errors['mapLat'] = 'Invalid value: mapLat';
-        }
+//        if (!$this->mapZoom) {
+//            $errors['mapZoom'] = 'Invalid value: mapZoom';
+//        }
+//
+//        if (!$this->mapLng) {
+//            $errors['mapLng'] = 'Invalid value: mapLng';
+//        }
+//
+//        if (!$this->mapLat) {
+//            $errors['mapLat'] = 'Invalid value: mapLat';
+//        }
 
         return $errors;
     }
