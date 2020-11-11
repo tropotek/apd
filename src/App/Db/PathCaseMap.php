@@ -244,6 +244,20 @@ SQL;
             $w .= sprintf('a.animal_name LIKE %s OR ', $this->quote($kw));
             $w .= sprintf('a.patient_number LIKE %s OR ', $this->quote($kw));
             $w .= sprintf('a.microchip LIKE %s OR ', $this->quote($kw));
+
+            // TODO: Test, if slow maybe we need another search field or full text search fields???
+            $w .= sprintf('a.collected_samples LIKE %s OR ', $this->quote($kw));
+            $w .= sprintf('a.clinical_history LIKE %s OR ', $this->quote($kw));
+            $w .= sprintf('a.gross_pathology LIKE %s OR ', $this->quote($kw));
+            $w .= sprintf('a.gross_morphological_diagnosis LIKE %s OR ', $this->quote($kw));
+            $w .= sprintf('a.histopathology LIKE %s OR ', $this->quote($kw));
+            $w .= sprintf('a.ancillary_testing LIKE %s OR ', $this->quote($kw));
+            $w .= sprintf('a.morphological_diagnosis LIKE %s OR ', $this->quote($kw));
+            $w .= sprintf('a.cause_of_death LIKE %s OR ', $this->quote($kw));
+            $w .= sprintf('a.comments LIKE %s OR ', $this->quote($kw));
+            $w .= sprintf('a.addendum LIKE %s OR ', $this->quote($kw));
+            $w .= sprintf('a.notes LIKE %s OR ', $this->quote($kw));
+
             if (is_numeric($filter['keywords'])) {
                 $id = (int)$filter['keywords'];
                 $w .= sprintf('a.id = %d OR ', $id);
