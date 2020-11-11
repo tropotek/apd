@@ -166,7 +166,7 @@ JS;
         $this->appendField(new Field\Input('microchip'))->setTabGroup($tab);
 
         $list = array('Cat'=>'cat', 'Dog'=>'dog', 'Sheep'=>'sheep', 'Cattle'=>'cattle', 'Bird'=>'bird', 'Other'=>'other');
-        $this->appendField(Field\Select::createSelect('species', $list)->prependOption('-- Select --', ''))
+        $this->appendField(Field\Select::createSelect('species', \App\Db\PathCase::getSpeciesList($this->getPathCase()->getSpecies()))->prependOption('-- Select --', ''))
             ->setTabGroup($tab);
 
         // TODO: Autocomplete field
