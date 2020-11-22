@@ -59,6 +59,7 @@ class Config extends \Uni\Config
      *
      * @param $filename
      * @return bool
+     * @deprecated Moved to \Bs\Config
      */
     public static function validateFile($filename)
     {

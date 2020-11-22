@@ -235,7 +235,6 @@ CREATE TABLE IF NOT EXISTS request
     KEY client_id (client_id)
 ) ENGINE=InnoDB;
 
-
 -- ----------------------------
 --  file table
 --  Store all case files and media here
