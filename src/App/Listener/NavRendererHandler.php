@@ -33,7 +33,7 @@ class NavRendererHandler implements Subscriber
      * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
      * @throws \Exception
      */
-    public function onRequest( $event)
+    public function onRequest($event)
     {
         $config = $this->getConfig();
 
