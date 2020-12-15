@@ -31,16 +31,16 @@ class Contact extends \Bs\TableIface
     {
 
         $this->appendCell(new Cell\Checkbox('id'));
-        $this->appendCell(new Cell\Text('name'))->addCss('key')->setUrl($this->getEditUrl());
-        //$this->appendCell(new Cell\Text('userId'));
+        $this->appendCell(new Cell\Text('nameFirst'))->setLabel('Firstname')->setUrl($this->getEditUrl());
+        $this->appendCell(new Cell\Text('nameLast'))->setLabel('Surname')->setUrl($this->getEditUrl());
+
+        if (!$this->getConfig()->getRequest()->query->has('type') || $this->getConfig()->getRequest()->query->get('type') == \App\Db\Contact::TYPE_CLIENT) {
+            $this->appendCell(new Cell\Text('nameCompany'))->setLabel('Company')->addCss('key')->setUrl($this->getEditUrl());
+        }
         $this->appendCell(new Cell\Text('type'));
-        //$this->appendCell(new Cell\Text('uid'));
         $this->appendCell(new Cell\Text('email'));
-        $this->appendCell(new Cell\Text('billingEmail'));
         $this->appendCell(new Cell\Text('phone'));
         $this->appendCell(new Cell\Text('fax'));
-        //$this->appendCell(new Cell\Text('addressId'));
-        //$this->appendCell(new Cell\Text('billingAddressId'));
 
         $this->appendCell(new Cell\Date('modified'));
         $this->appendCell(new Cell\Date('created'));

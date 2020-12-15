@@ -29,9 +29,10 @@ class ContactMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Integer('userId', 'user_id'));
             $this->dbMap->addPropertyMap(new Db\Text('uid'));
             $this->dbMap->addPropertyMap(new Db\Text('type'));
-            $this->dbMap->addPropertyMap(new Db\Text('name'));
+            $this->dbMap->addPropertyMap(new Db\Text('nameCompany', 'name_company'));
+            $this->dbMap->addPropertyMap(new Db\Text('nameFirst', 'name_first'));
+            $this->dbMap->addPropertyMap(new Db\Text('nameLast', 'name_last'));
             $this->dbMap->addPropertyMap(new Db\Text('accountCode', 'account_code'));
-            $this->dbMap->addPropertyMap(new Db\Text('name'));
             $this->dbMap->addPropertyMap(new Db\Text('email'));
             $this->dbMap->addPropertyMap(new Db\Text('phone'));
             $this->dbMap->addPropertyMap(new Db\Text('fax'));
@@ -63,7 +64,9 @@ class ContactMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Text('uid'));
             $this->formMap->addPropertyMap(new Form\Text('type'));
             $this->formMap->addPropertyMap(new Form\Text('accountCode'));
-            $this->formMap->addPropertyMap(new Form\Text('name'));
+            $this->formMap->addPropertyMap(new Form\Text('nameCompany'));
+            $this->formMap->addPropertyMap(new Form\Text('nameFirst'));
+            $this->formMap->addPropertyMap(new Form\Text('nameLast'));
             $this->formMap->addPropertyMap(new Form\Text('email'));
             $this->formMap->addPropertyMap(new Form\Text('phone'));
             $this->formMap->addPropertyMap(new Form\Text('fax'));
@@ -102,7 +105,12 @@ class ContactMap extends Mapper
         if (!empty($filter['keywords'])) {
             $kw = '%' . $this->escapeString($filter['keywords']) . '%';
             $w = '';
-            //$w .= sprintf('a.name LIKE %s OR ', $this->quote($kw));
+            $w .= sprintf('a.name_company LIKE %s OR ', $this->quote($kw));
+            $w .= sprintf('a.name_first LIKE %s OR ', $this->quote($kw));
+            $w .= sprintf('a.name_last LIKE %s OR ', $this->quote($kw));
+            $w .= sprintf('a.phone LIKE %s OR ', $this->quote($kw));
+            $w .= sprintf('a.fax LIKE %s OR ', $this->quote($kw));
+            $w .= sprintf('a.email LIKE %s OR ', $this->quote($kw));
             if (is_numeric($filter['keywords'])) {
                 $id = (int)$filter['keywords'];
                 $w .= sprintf('a.id = %d OR ', $id);
@@ -130,8 +138,14 @@ class ContactMap extends Mapper
         if (!empty($filter['accountCode'])) {
             $filter->appendWhere('a.account_code = %s AND ', $this->quote($filter['accountCode']));
         }
-        if (!empty($filter['name'])) {
-            $filter->appendWhere('a.name = %s AND ', $this->quote($filter['name']));
+        if (!empty($filter['nameCompany'])) {
+            $filter->appendWhere('a.name_company = %s AND ', $this->quote($filter['nameCompany']));
+        }
+        if (!empty($filter['nameFirst'])) {
+            $filter->appendWhere('a.name_first = %s AND ', $this->quote($filter['nameFirst']));
+        }
+        if (!empty($filter['nameLast'])) {
+            $filter->appendWhere('a.name_last = %s AND ', $this->quote($filter['nameLast']));
         }
         if (!empty($filter['email'])) {
             $filter->appendWhere('a.email = %s AND ', $this->quote($filter['email']));
@@ -142,7 +156,6 @@ class ContactMap extends Mapper
         if (!empty($filter['fax'])) {
             $filter->appendWhere('a.fax = %s AND ', $this->quote($filter['fax']));
         }
-
         if (!empty($filter['city'])) {
             $filter->appendWhere('a.city = %s AND ', $this->quote($filter['city']));
         }

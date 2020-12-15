@@ -39,7 +39,7 @@ class EmailReport extends JsonForm
 
         $client = $this->getPathCase()->getClient();
         if ($client && $client->getEmail()) {
-            $list[$client->getName() . ' (' . $client->getEmail() . ')'] = $client->getEmail();
+            $list[$client->getNameFirst() . ' (' . $client->getEmail() . ')'] = $client->getEmail();
             $selected = $client->getEmail();
         }
 
@@ -49,7 +49,7 @@ class EmailReport extends JsonForm
 
         $owner = $this->getPathCase()->getOwner();
         if ($owner && $owner->getEmail())
-            $list[$owner->getName() . ' (' . $owner->getEmail() . ')'] = $owner->getEmail();
+            $list[$owner->getNameFirst() . ' (' . $owner->getEmail() . ')'] = $owner->getEmail();
 
         $path = $this->getPathCase()->getPathologist();
         if ($path && $path->getEmail())
@@ -57,7 +57,7 @@ class EmailReport extends JsonForm
 
         /** @var Contact $student */
         foreach ($this->getPathCase()->getStudentList() as $student) {
-            $list[$student->getName() . ' (' . $student->getEmail() . ')'] = $student->getEmail();
+            $list[$student->getNameFirst() . ' (' . $student->getEmail() . ')'] = $student->getEmail();
         }
 
         /*

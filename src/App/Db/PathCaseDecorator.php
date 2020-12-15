@@ -60,7 +60,7 @@ class PathCaseDecorator
                 $message->addTo($case->getClient()->getEmail());
                 $message->replace(Collection::prefixArrayKeys(array(
                     'type' => $mailTemplate->getRecipientType(),
-                    'name' => $case->getClient()->getName(),
+                    'name' => $case->getClient()->getNameFirst(),
                     'email' => $case->getClient()->getEmail()
                 ), 'recipient::'));
                 break;
@@ -87,7 +87,7 @@ class PathCaseDecorator
                 $message->addTo($case->getOwner()->getEmail());
                 $message->replace(Collection::prefixArrayKeys(array(
                     'type' => $mailTemplate->getRecipientType(),
-                    'name' => $case->getOwner()->getName(),
+                    'name' => $case->getOwner()->getNameFirst(),
                     'email' => $case->getOwner()->getEmail()
                 ), 'recipient::'));
                 break;

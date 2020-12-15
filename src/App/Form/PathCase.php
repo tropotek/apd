@@ -100,12 +100,25 @@ class PathCase extends \Bs\FormIface
             ->setTabGroup($tab);
 
         $contact = new \App\Db\Contact();
-        $form = \App\Form\Contact::create()->setType(\App\Db\Contact::TYPE_CLIENT)->setModel($contact);
+        $form = \App\Form\Contact::create('clientSelect')->setType(\App\Db\Contact::TYPE_CLIENT)->setModel($contact);
         $form->removeField('notes');
         $list = \App\Db\Contact::getSelectList(\App\Db\Contact::TYPE_CLIENT);
-        $this->appendField(Field\DialogSelect::createDialogSelect('clientId', $list, $form, 'Create Client')->prependOption('-- Select --', ''))
-            ->setTabGroup($tab)->setLabel('Submitting Client')->setNotes('This is the contact that will be invoiced.');
+        $this->appendField(Field\DialogSelect::createDialogSelect('clientId[]', $list, $form, 'Create Client'))
+            ->addCss('tk-multiselect1')
+            ->setTabGroup($tab)->setLabel('Submitting Client')
+            ->setNotes('This is the contact that will be invoiced.');
 
+        $js = <<<JS
+jQuery(function ($) {
+  	$('select.tk-multiselect1').select2({
+        placeholder: 'Select Contact',
+        allowClear: false,
+        maximumSelectionLength: 1,
+        minimumInputLength: 0
+    });
+});
+JS;
+        $this->getRenderer()->getTemplate()->appendJs($js);
 
         $this->appendField(new Field\Checkbox('billable'))->setTabGroup($tab)
             ->setNotes('Is this case billable?');
@@ -155,11 +168,15 @@ JS;
         $fieldset = 'Animal';
 
         $contact = new \App\Db\Contact();
-        $form = \App\Form\Contact::create()->setType(\App\Db\Contact::TYPE_OWNER)->setModel($contact);
+        $form = \App\Form\Contact::create('ownerSelect')->setType(\App\Db\Contact::TYPE_OWNER)->setModel($contact);
+        $form->removeField('accountCode');
+        $form->removeField('nameCompany');
         $form->removeField('notes');
         $list = \App\Db\Contact::getSelectList(\App\Db\Contact::TYPE_OWNER);
-        $this->appendField(Field\DialogSelect::createDialogSelect('ownerId', $list, $form, 'Create Owner')->prependOption('-- Select --', ''))
-            ->setTabGroup($tab)->setLabel('Owner Name')->setNotes('This is the Client Record of the animal owner.');
+        $this->appendField(Field\DialogSelect::createDialogSelect('ownerId[]', $list, $form, 'Create Owner'))
+            ->addCss('tk-multiselect1')
+            ->setTabGroup($tab)->setLabel('Owner Name')
+            ->setNotes('This is the Client Record of the animal owner.');
 
         $this->appendField(new Field\Input('animalName'))->setLabel('Animal Name/ID')->setTabGroup($tab);
         $this->appendField(new Field\Input('patientNumber'))->setTabGroup($tab);
@@ -203,10 +220,13 @@ JS;
 
 
         $contact = new \App\Db\Contact();
-        $form = \App\Form\Contact::create()->setType(\App\Db\Contact::TYPE_STUDENT)->setModel($contact);
+        $form = \App\Form\Contact::create('studentSelect')->setType(\App\Db\Contact::TYPE_STUDENT)->setModel($contact);
+        $form->removeField('nameCompany');
+        $form->removeField('accountCode');
+        $form->removeField('fax');
         $form->removeField('notes');
         $list = \App\Db\Contact::getSelectList(\App\Db\Contact::TYPE_STUDENT);
-        $this->appendField(Field\DialogSelect::createDialogSelect('students[]', $list, $form,'Create Student')->prependOption('-- Select --', ''))
+        $this->appendField(Field\DialogSelect::createDialogSelect('students[]', $list, $form,'Create Student'))
             ->addCss('tk-multiselect2')
             ->setTabGroup($tab)->setLabel('Students')->setNotes('Add any students')
             ->setValue($this->getPathCase()->getStudentList()->toArray('id'));
@@ -216,7 +236,8 @@ JS;
 jQuery(function ($) {
   	$('select.tk-multiselect2').select2({
         placeholder: 'Select a Student',
-        allowClear: false
+        allowClear: false,
+        minimumInputLength: 0
     });
 });
 JS;
@@ -346,7 +367,19 @@ JS;
     public function doSubmit($form, $event)
     {
         // Load the object with form data
-        \App\Db\PathCaseMap::create()->mapForm($form->getValues(), $this->getPathCase());
+        $vals = $form->getValues();
+
+        if (!empty($vals['clientId']) && is_array($vals['clientId']))
+            $vals['clientId'] = current($vals['clientId']);
+        else
+            $vals['clientId'] = 0;
+
+        if (!empty($vals['ownerId']) && is_array($vals['ownerId']))
+            $vals['ownerId'] = current($vals['ownerId']);
+        else
+            $vals['ownerId'] = 0;
+
+        \App\Db\PathCaseMap::create()->mapForm($vals, $this->getPathCase());
         // Do Custom Validations
         /** @var \Tk\Form\Field\File $fileField */
         $fileField = $form->getField('files');

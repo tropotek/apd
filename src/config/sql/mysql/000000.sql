@@ -326,7 +326,6 @@ CREATE TABLE IF NOT EXISTS `status` (
 -- --------------------------------------------------
 --
 --
---
 -- --------------------------------------------------
 CREATE TABLE IF NOT EXISTS `note` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -343,29 +342,16 @@ CREATE TABLE IF NOT EXISTS `note` (
 ) ENGINE=InnoDB;
 
 
-/*
--- TODO:
---   Teaching specimens (NOT critical but would be good to incorporate):
---       Teaching specimens collected – YES/NO. Specimen. Teaching tub. Transferred to tub – YES/NO
---   This allows us to track material collected during necropsy which will be used in other teaching classes
--- ----------------------------
---  specimen table
--- ----------------------------
-CREATE TABLE IF NOT EXISTS specimen
-(
-    id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    case_id INT(10) UNSIGNED NOT NULL DEFAULT 0,
 
-    name VARCHAR(64) NOT NULL DEFAULT '',
-    tub_id VARCHAR(64) NOT NULL DEFAULT '',
-    status VARCHAR(64) NOT NULL DEFAULT '',       -- pending/complete
 
-    del TINYINT(1) NOT NULL DEFAULT 0,
-    modified DATETIME NOT NULL,
-    created DATETIME NOT NULL,
-    KEY case (case_id)
-) ENGINE=InnoDB;
-*/
+
+
+
+
+
+
+
+
 
 /*
 -- ----------------------------
@@ -382,6 +368,16 @@ CREATE TABLE IF NOT EXISTS
     KEY institution (institution_id)
 ) ENGINE=InnoDB;
 */
+
+
+
+
+
+
+
+
+
+/*
 
 -- FOR TEMPLATE TESTING (REMOVE FOR LIVE INSTALL)
 
@@ -473,190 +469,7 @@ INSERT INTO mail_template (institution_id, mail_template_event_id, recipient_typ
 <p>Thanks,</p>
 <p>{institution::name}</p>', 1, NOW(), NOW());
 
-
-
-
-
-
-
-/*
-TRUNCATE mail_template;
-INSERT INTO mail_template (id, institution_id, mail_template_event_id, recipient_type, template, active, modified, created) VALUES (1, 1, 1, 'client', '<p>Hi {recipient::name},</p>
-<p>Pathology Case:</p>
-<ul>
-<li>Pathology #: {pathCase::pathologyId}</li>
-<li>Institution ID: {pathCase::institutionId}</li>
-<li>Client ID: {pathCase::clientId}</li>
-<li>Type: {pathCase::type}</li>
-<li>Submission Type: {pathCase::submissionType}</li>
-<li>Status: {pathCase::status}</li>
-<li>Animal Name: {pathCase::animalName}</li>
-<li>Breed: {pathCase::breed}</li>
-</ul>
-<p>&nbsp;</p>
-<p>STATUS</p>
-<ul>
-<li>Name: {status::name}</li>
-<li>Event: {status::event}</li>
-<li>Message: {status::message}</li>
-</ul>
-<p>&nbsp;</p>
-<p>Thanks,</p>
-<p>{institution::name}</p>', 1, NOW(), NOW());
-INSERT INTO mail_template (id, institution_id, mail_template_event_id, recipient_type, template, active, modified, created) VALUES (2, 1, 2, 'client', '<p>Hi {recipient::name},</p>
-<p>Case status is ON HOLD</p>
-<p>Pathology Case:</p>
-<ul>
-<li>Pathology #: {pathCase::pathologyId}</li>
-<li>Institution ID: {pathCase::institutionId}</li>
-<li>Client ID: {pathCase::clientId}</li>
-<li>Type: {pathCase::type}</li>
-<li>Submission Type: {pathCase::submissionType}</li>
-<li>Status: {pathCase::status}</li>
-<li>Animal Name: {pathCase::animalName}</li>
-<li>Breed: {pathCase::breed}</li>
-</ul>
-<p>&nbsp;</p>
-<p>STATUS</p>
-<ul>
-<li>Name: {status::name}</li>
-<li>Event: {status::event}</li>
-<li>Message: {status::message}</li>
-</ul>
-<p>&nbsp;</p>
-<p>Thanks,</p>
-<p>{institution::name}</p>', 1, NOW(), NOW());
-INSERT INTO mail_template (id, institution_id, mail_template_event_id, recipient_type, template, active, modified, created) VALUES (3, 1, 3, 'client', '<p>Hi {recipient::name},</p>
-<p>Case status is FROZEN STORAGE</p>
-<p>Pathology Case:</p>
-<ul>
-<li>Pathology #: {pathCase::pathologyId}</li>
-<li>Institution ID: {pathCase::institutionId}</li>
-<li>Client ID: {pathCase::clientId}</li>
-<li>Type: {pathCase::type}</li>
-<li>Submission Type: {pathCase::submissionType}</li>
-<li>Status: {pathCase::status}</li>
-<li>Animal Name: {pathCase::animalName}</li>
-<li>Breed: {pathCase::breed}</li>
-</ul>
-<p>&nbsp;</p>
-<p>STATUS</p>
-<ul>
-<li>Name: {status::name}</li>
-<li>Event: {status::event}</li>
-<li>Message: {status::message}</li>
-</ul>
-<p>&nbsp;</p>
-<p>Thanks,</p>
-<p>{institution::name}</p>', 1, NOW(), NOW());
-INSERT INTO mail_template (id, institution_id, mail_template_event_id, recipient_type, template, active, modified, created) VALUES (4, 1, 4, 'staff', '<p>Hi {recipient::name},</p>
-<p>Case status is APPROVED</p>
-<p>Pathology Case:</p>
-<ul>
-<li>Pathology #: {pathCase::pathologyId}</li>
-<li>Institution ID: {pathCase::institutionId}</li>
-<li>Client ID: {pathCase::clientId}</li>
-<li>Type: {pathCase::type}</li>
-<li>Submission Type: {pathCase::submissionType}</li>
-<li>Status: {pathCase::status}</li>
-<li>Animal Name: {pathCase::animalName}</li>
-<li>Breed: {pathCase::breed}</li>
-</ul>
-<p>&nbsp;</p>
-<p>STATUS</p>
-<ul>
-<li>Name: {status::name}</li>
-<li>Event: {status::event}</li>
-<li>Message: {status::message}</li>
-</ul>
-<p>&nbsp;</p>
-<p>Thanks,</p>
-<p>{institution::name}</p>', 1, NOW(), NOW());
-INSERT INTO mail_template (id, institution_id, mail_template_event_id, recipient_type, template, active, modified, created) VALUES (5, 1, 5, 'staff', '<p>Hi {recipient::name},</p>
-<p>Case status is REPORTED</p>
-<p>Pathology Case:</p>
-<ul>
-<li>Pathology #: {pathCase::pathologyId}</li>
-<li>Institution ID: {pathCase::institutionId}</li>
-<li>Client ID: {pathCase::clientId}</li>
-<li>Type: {pathCase::type}</li>
-<li>Submission Type: {pathCase::submissionType}</li>
-<li>Status: {pathCase::status}</li>
-<li>Animal Name: {pathCase::animalName}</li>
-<li>Breed: {pathCase::breed}</li>
-</ul>
-<p>&nbsp;</p>
-<p>STATUS</p>
-<ul>
-<li>Name: {status::name}</li>
-<li>Event: {status::event}</li>
-<li>Message: {status::message}</li>
-</ul>
-<p>&nbsp;</p>
-<p>Thanks,</p>
-<p>{institution::name}</p>', 1, NOW(), NOW());
-INSERT INTO mail_template (id, institution_id, mail_template_event_id, recipient_type, template, active, modified, created) VALUES (6, 1, 8, 'client', '<p>Hi {recipient::name},</p>
-<p>Request status is PENDING</p>
-<p>Pathology Case:</p>
-<ul>
-<li>Pathology Case ID: {request::pathCaseId}</li>
-<li>Cassette ID: {request::cassetteId}</li>
-<li>Service ID: {request::serviceId}</li>
-<li>Client ID: {request::clientId}</li>
-<li>Qty: {request::qty}</li>
-</ul>
-<p>&nbsp;</p>
-<p>STATUS</p>
-<ul>
-<li>Name: {status::name}</li>
-<li>Event: {status::event}</li>
-<li>Message: {status::message}</li>
-</ul>
-<p>&nbsp;</p>
-<p>Thanks,</p>
-<p>{institution::name}</p>', 1, NOW(), NOW());
-INSERT INTO mail_template (id, institution_id, mail_template_event_id, recipient_type, template, active, modified, created) VALUES (7, 1, 9, 'client', '<p>Hi {recipient::name},</p>
-<p>Request status is PROCESSING</p>
-<p>Pathology Case:</p>
-<ul>
-<li>Pathology Case ID: {request::pathCaseId}</li>
-<li>Cassette ID: {request::cassetteId}</li>
-<li>Service ID: {request::serviceId}</li>
-<li>Client ID: {request::clientId}</li>
-<li>Qty: {request::qty}</li>
-</ul>
-<p>&nbsp;</p>
-<p>STATUS</p>
-<ul>
-<li>Name: {status::name}</li>
-<li>Event: {status::event}</li>
-<li>Message: {status::message}</li>
-</ul>
-<p>&nbsp;</p>
-<p>Thanks,</p>
-<p>{institution::name}</p>', 1, NOW(), NOW());
-INSERT INTO mail_template (id, institution_id, mail_template_event_id, recipient_type, template, active, modified, created) VALUES (8, 1, 10, 'staff', '<p>Hi {recipient::name},</p>
-<p>Request status is COMPLETED</p>
-<p>Pathology Case:</p>
-<ul>
-<li>Pathology Case ID: {request::pathCaseId}</li>
-<li>Cassette ID: {request::cassetteId}</li>
-<li>Service ID: {request::serviceId}</li>
-<li>Client ID: {request::clientId}</li>
-<li>Qty: {request::qty}</li>
-</ul>
-<p>&nbsp;</p>
-<p>STATUS</p>
-<ul>
-<li>Name: {status::name}</li>
-<li>Event: {status::event}</li>
-<li>Message: {status::message}</li>
-</ul>
-<p>&nbsp;</p>
-<p>Thanks,</p>
-<p>{institution::name}</p>', 1, NOW(), NOW());
 */
-
 
 
 

@@ -96,11 +96,11 @@ class CaseReportPdf extends Pdf
         $template->appendText('name', ucwords($this->pathCase->getReportStatus()) . ' Report');
 
         if ($this->pathCase->getClient())
-            $template->appendText('clientName', $this->pathCase->getClient()->getName());
+            $template->appendText('clientName', $this->pathCase->getClient()->getNameFirst());
 
         $owner = $this->pathCase->getOwner();
         if ($owner) {
-            $template->appendText('ownerName', $owner->getName());
+            $template->appendText('ownerName', $owner->getNameFirst());
             $template->appendText('ownerPhone', $owner->getPhone());
             $template->appendText('ownerAddress', $owner->getStreet());
             $template->appendText('ownerFax', $owner->getFax());

@@ -125,7 +125,10 @@ class TestData extends \Bs\Console\TestData
                 //$client->setUserId();     // TODO
                 $contact->setUid($this->createStr(6));
                 $contact->setType($type);
-                $contact->setName($this->createName());
+                if ($type == Contact::TYPE_CLIENT)
+                    $contact->setNameCompany($this->createName());
+                $contact->setNameFirst($this->createName());
+                $contact->setNameLast($this->createName());
                 $contact->setEmail($this->createUniqueEmail());
 
                 $contact->setPhone($this->createStr(10, '1234567890'));

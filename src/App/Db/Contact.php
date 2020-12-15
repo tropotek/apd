@@ -57,7 +57,17 @@ class Contact extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     /**
      * @var string
      */
-    public $name = '';
+    public $nameCompany = '';
+
+    /**
+     * @var string
+     */
+    public $nameFirst = '';
+
+    /**
+     * @var string
+     */
+    public $nameLast = '';
 
     /**
      * @var string
@@ -202,21 +212,66 @@ class Contact extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     }
 
     /**
-     * @param string $name
+     * @return string
+     */
+    public function getNameCompany(): string
+    {
+        return $this->nameCompany;
+    }
+
+    /**
+     * @param string $nameCompany
      * @return Contact
      */
-    public function setName($name) : Contact
+    public function setNameCompany(string $nameCompany): Contact
     {
-        $this->name = $name;
+        $this->nameCompany = $nameCompany;
         return $this;
     }
+
 
     /**
      * @return string
      */
     public function getName() : string
     {
-        return $this->name;
+        return $this->getNameFirst() . ' ' . $this->getNameLast();
+    }
+
+    /**
+     * @param string $nameFirst
+     * @return Contact
+     */
+    public function setNameFirst($nameFirst) : Contact
+    {
+        $this->nameFirst = $nameFirst;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNameFirst() : string
+    {
+        return $this->nameFirst;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNameLast(): string
+    {
+        return $this->nameLast;
+    }
+
+    /**
+     * @param string $nameLast
+     * @return Contact
+     */
+    public function setNameLast(string $nameLast): Contact
+    {
+        $this->nameLast = $nameLast;
+        return $this;
     }
 
     /**
@@ -384,12 +439,24 @@ class Contact extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     /**
      * @return string
      */
-    public function getTitle()
+    public function getSelectTitle()
     {
-        return $this->getName() . ' (' . $this->getEmail() . ')';
+        $str = '';
+        if ($this->getNameCompany()) {
+            $str .= $this->getNameCompany();
+        }
+        if (trim($this->getName()) ) {
+            if ($str) $str .= ': ';
+            $str .= $this->getName();
+        }
+        if (trim($this->getEmail())) {
+            $str .= '(' . $this->getEmail() . ')';
+        }
+        return $str;
     }
 
     /**
+     * @param string $type
      * @return array
      * @throws \Exception
      */
@@ -401,10 +468,12 @@ class Contact extends \Tk\Db\Map\Model implements \Tk\ValidInterface
         if ($type) {
             $filter['type'] = $type;
         }
-        $list = ContactMap::create()->findFiltered($filter, \Tk\Db\Tool::create('name'));
+        $list = ContactMap::create()->findFiltered($filter,
+            \Tk\Db\Tool::create('CASE WHEN `name_company` = \'\' THEN `name_first` ELSE `name_company` END')
+        );
         $arr = array();
         foreach ($list as $item) {
-            $arr[$item->getTitle()] = $item->getId();
+            $arr[$item->getSelectTitle()] = $item->getId();
         }
         return $arr;
     }
@@ -424,13 +493,9 @@ class Contact extends \Tk\Db\Map\Model implements \Tk\ValidInterface
             $errors['type'] = 'Invalid value: type';
         }
 
-        if (!$this->name) {
-            $errors['name'] = 'Invalid value: name';
-        }
-
-        if (!$this->email || $this->email && !filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
-            $errors['email'] = 'Invalid value: email';
-        }
+//        if (!$this->email || $this->email && !filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
+//            $errors['email'] = 'Invalid value: email';
+//        }
 
 
         return $errors;

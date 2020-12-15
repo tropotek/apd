@@ -178,7 +178,7 @@ class Request extends \Bs\TableIface
         $this->appendCell(new Cell\Text('clientId'))->
             addOnPropertyValue(function (Cell\Text $cell, \App\Db\Request $obj, $value) {
                 if ($obj->getClient()) {
-                    $value = $obj->getClient()->getName();
+                    $value = $obj->getClient()->getNameFirst();
                 }
                 return $value;
             });
