@@ -144,6 +144,15 @@ jQuery(function ($) {
 JS;
         $this->getRenderer()->getTemplate()->appendJs($js);
 
+        $css = <<<CSS
+/* Fix for oversize form input elements */
+.select2-container--default .select2-selection--multiple .select2-selection__rendered li {
+    line-height: 1 !important;
+}
+CSS;
+        $this->getRenderer()->getTemplate()->appendCss($css);
+
+
         $list = \Tk\ObjectUtil::getClassConstants($this->getPathCase(), 'ACCOUNT_STATUS', true);
         $this->appendField(Field\Select::createSelect('accountStatus', $list)->prependOption('-- Select --', ''))
             ->setTabGroup($tab);
