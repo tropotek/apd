@@ -21,7 +21,7 @@ class MailTemplateHandler implements Subscriber
      * After a status change is triggered Look for any existing template to be sent
      * If found then create that template as a message
      *
-     * @param \Uni\Event\StatusEvent $event
+     * @param \Bs\Event\StatusEvent $event
      * @throws \Exception
      */
     public function onStatusChange(\Bs\Event\StatusEvent $event)
@@ -58,7 +58,7 @@ class MailTemplateHandler implements Subscriber
      * If messages exist in the queue, add recipients and insert the
      * mail template variables for formatting templates.
      *
-     * @param \Uni\Event\StatusEvent $event
+     * @param \Bs\Event\StatusEvent $event
      * @throws \Exception
      */
     public function onStatusSendMessages(\Bs\Event\StatusEvent $event)

@@ -110,12 +110,42 @@ class PathCase extends \Bs\FormIface
 
         $js = <<<JS
 jQuery(function ($) {
-  	$('select.tk-multiselect1').select2({
-        placeholder: 'Select Contact',
-        allowClear: false,
-        maximumSelectionLength: 1,
-        minimumInputLength: 0
+  
+  // Create an onHover info box for contacts that have been selected
+  $('.select2-selection__choice').each(function () {
+    
+    $(this).attr({
+      "data-container": "body",
+      "data-toggle": "popover",
+      "data-placement": "right",
+      "data-content": "This is a test<br> Hope it works!!!!"
     });
+    console.log(this);
+    
+  }).popover({ trigger: "hover" , html: true, animation:false})
+    .on("mouseenter", function () {
+      var _this = this;
+      $(this).popover("show");
+      $(".popover").on("mouseleave", function () {
+          $(_this).popover('hide');
+      });
+    })
+    .on("mouseleave", function () {
+      var _this = this;
+      setTimeout(function () {
+          if (!$(".popover:hover").length) {
+              $(_this).popover("hide");
+          }
+      }, 300);
+    });
+  
+  
+  $('select.tk-multiselect1').select2({
+    placeholder: 'Select Contact',
+    allowClear: false,
+    maximumSelectionLength: 1,
+    minimumInputLength: 0
+  });
 });
 JS;
         $this->getRenderer()->getTemplate()->appendJs($js);
@@ -144,13 +174,6 @@ jQuery(function ($) {
 JS;
         $this->getRenderer()->getTemplate()->appendJs($js);
 
-        $css = <<<CSS
-/* Fix for oversize form input elements */
-.select2-container--default .select2-selection--multiple .select2-selection__rendered li {
-    line-height: 1 !important;
-}
-CSS;
-        $this->getRenderer()->getTemplate()->appendCss($css);
 
 
         $list = \Tk\ObjectUtil::getClassConstants($this->getPathCase(), 'ACCOUNT_STATUS', true);
