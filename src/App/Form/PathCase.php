@@ -111,6 +111,7 @@ class PathCase extends \Bs\FormIface
         $js = <<<JS
 jQuery(function ($) {
   
+  /*
   // Create an onHover info box for contacts that have been selected
   $('.select2-selection__choice').each(function () {
     
@@ -138,7 +139,7 @@ jQuery(function ($) {
           }
       }, 300);
     });
-  
+  */
   
   $('select.tk-multiselect1').select2({
     placeholder: 'Select Contact',
