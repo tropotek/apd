@@ -16,6 +16,7 @@ alter table path_case
 alter table path_case modify breed varchar(128) default '' not null after species;
 
 
+
 CREATE TABLE IF NOT EXISTS `animal_type` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `institution_id` INT UNSIGNED NOT NULL DEFAULT 0,
@@ -48,6 +49,8 @@ insert into animal_type (institution_id, name, modified, created) values (1, 'Go
 insert into animal_type (institution_id, name, modified, created) values (1, 'Fish', NOW(), NOW());
 insert into animal_type (institution_id, name, modified, created) values (1, 'Alpacas', NOW(), NOW());
 
+
+alter table request change client_id test_id int unsigned default 0 not null;
 
 CREATE TABLE IF NOT EXISTS `test` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,

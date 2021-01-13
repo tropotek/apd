@@ -5,6 +5,7 @@ use App\Db\Traits\CassetteTrait;
 use App\Db\Traits\ClientTrait;
 use App\Db\Traits\PathCaseTrait;
 use App\Db\Traits\ServiceTrait;
+use App\Db\Traits\TestTrait;
 use Bs\Db\Status;
 use Bs\Db\Traits\StatusTrait;
 use Bs\Db\Traits\TimestampTrait;
@@ -23,6 +24,7 @@ class Request extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     use CassetteTrait;
     use ServiceTrait;
     use StatusTrait;
+    use TestTrait;
 
     const STATUS_PENDING            = 'pending';
     const STATUS_COMPLETED          = 'completed';

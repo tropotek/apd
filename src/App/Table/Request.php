@@ -4,6 +4,7 @@ namespace App\Table;
 
 use App\Db\ContactMap;
 use App\Db\ServiceMap;
+use App\Db\TestMap;
 use Tk\Db\Tool;
 use Tk\Form\Field;
 use Tk\Table\Cell;
@@ -175,10 +176,11 @@ class Request extends \Bs\TableIface
                 }
                 return $value;
             });
-        $this->appendCell(new Cell\Text('clientId'))->
+        $this->appendCell(new Cell\Text('testId'))->
             addOnPropertyValue(function (Cell\Text $cell, \App\Db\Request $obj, $value) {
-                if ($obj->getClient()) {
-                    $value = $obj->getClient()->getNameFirst();
+                $value = '';
+                if ($obj->getTest()) {
+                    $value = $obj->getTest()->getName();
                 }
                 return $value;
             });
@@ -198,8 +200,8 @@ class Request extends \Bs\TableIface
             $serviceList = ServiceMap::create()->findFiltered(['institutionId' => $this->getConfig()->getInstitutionId()]);
             $this->appendFilter(Field\Select::createSelect('serviceId', $serviceList)->prependOption('-- Service --'));
 
-            $serviceList = ServiceMap::create()->findFiltered(['institutionId' => $this->getConfig()->getInstitutionId(), 'type' => \App\Db\Contact::TYPE_CLIENT], Tool::create('name'));
-            $this->appendFilter(Field\Select::createSelect('clientId', $serviceList)->prependOption('-- Service --'));
+            $serviceList = TestMap::create()->findFiltered(['institutionId' => $this->getConfig()->getInstitutionId()], Tool::create('name'));
+            $this->appendFilter(Field\Select::createSelect('testId', $serviceList)->prependOption('-- Test --'));
 
             $list = \Tk\ObjectUtil::getClassConstants(\App\Db\Request::class, 'STATUS', true);
             $this->appendFilter(Field\Select::createSelect('status', $list)->prependOption('-- Status --'))

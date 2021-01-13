@@ -4,6 +4,7 @@ namespace App\Form;
 use App\Db\CassetteMap;
 use App\Db\ContactMap;
 use App\Db\ServiceMap;
+use App\Db\TestMap;
 use Tk\Form\Field;
 use Tk\Form\Event;
 use Tk\Form;
@@ -36,7 +37,7 @@ class Request extends \Bs\FormIface
     {
         $layout = $this->getForm()->getRenderer()->getLayout();
         //$layout->removeRow('serviceId', 'col');
-        $layout->removeRow('clientId', 'col');
+        $layout->removeRow('testId', 'col');
 
         //$this->appendField(new Field\Select('pathCaseId', array()))->prependOption('-- Select --', '');
         if (!$this->getDialog()) {
@@ -50,16 +51,15 @@ class Request extends \Bs\FormIface
                             $option->setName('[' . $cassette->getNumber() . '] ' . $cassette->getName());
                     }))->prependOption('-- Select --', '');
             } else {
-                // TODO: Add a text field with cassete name
                 $cassette = $this->getRequest()->getCassette();
-                $this->appendField(new Field\Html('cassette'))->setValue($cassette->getName());
+                $this->appendField(new Field\Html('cassette'))->addCss('form-control')->setValue($cassette->getNumber());
             }
         }
 
         $list = ServiceMap::create()->findFiltered(array('institutionId' => $this->getRequest()->getPathCase()->getInstitutionId()));
         $this->appendField(new Field\Select('serviceId', $list))->prependOption('-- Select --', '');
-        $list = ContactMap::create()->findFiltered(array('institutionId' => $this->getRequest()->getPathCase()->getInstitutionId()));
-        $this->appendField(new Field\Select('clientId', $list))->prependOption('-- Select --', '');
+        $list = TestMap::create()->findFiltered(array('institutionId' => $this->getRequest()->getPathCase()->getInstitutionId()));
+        $this->appendField(new Field\Select('testId', $list))->prependOption('-- Select --', '');
 
         if ($this->getRequest()->getId()) {
             $list = \App\Db\Request::getStatusList($this->getRequest()->getStatus());
