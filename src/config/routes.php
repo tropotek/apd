@@ -73,5 +73,12 @@ $routes->add('mail-template-edit', Route::create('/staff/mailTemplateEdit.html',
 $routes->add('request-manager', Route::create('/staff/requestManager.html', 'App\Controller\Request\Manager::doDefault'));
 $routes->add('request-edit', Route::create('/staff/requestEdit.html', 'App\Controller\Request\Edit::doDefault'));
 
+$routes->add('test-manager', Route::create('/staff/testManager.html', 'App\Controller\Test\Manager::doDefault'));
+$routes->add('test-edit', Route::create('/staff/testEdit.html', 'App\Controller\Test\Edit::doDefault'));
+
+$routes->add('animalType-manager', Route::create('/staff/animalTypeManager.html', 'App\Controller\AnimalType\Manager::doDefault'));
+$routes->add('animalType-edit', Route::create('/staff/animalTypeEdit.html', 'App\Controller\AnimalType\Edit::doDefault'));
+
+
 
 

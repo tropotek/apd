@@ -38,6 +38,7 @@ class PathCaseMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Text('name'));
             $this->dbMap->addPropertyMap(new Db\Text('type'));
             $this->dbMap->addPropertyMap(new Db\Text('submissionType', 'submission_type'));
+            $this->dbMap->addPropertyMap(new Db\Boolean('submissionReceived', 'submission_received'));
             $this->dbMap->addPropertyMap(new Db\Date('arrival'));
             $this->dbMap->addPropertyMap(new Db\Text('status'));
             $this->dbMap->addPropertyMap(new Db\Text('reportStatus', 'report_status'));
@@ -51,13 +52,14 @@ class PathCaseMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Boolean('issueAlert', 'issue_alert'));
             $this->dbMap->addPropertyMap(new Db\Integer('specimenCount', 'specimen_count'));
             $this->dbMap->addPropertyMap(new Db\Text('animalName', 'animal_name'));
+            $this->dbMap->addPropertyMap(new Db\Integer('animalTypeId', 'animal_type_id'));
             $this->dbMap->addPropertyMap(new Db\Text('species'));
+            $this->dbMap->addPropertyMap(new Db\Text('breed'));
             $this->dbMap->addPropertyMap(new Db\Text('sex'));
             $this->dbMap->addPropertyMap(new Db\Boolean('desexed'));
             $this->dbMap->addPropertyMap(new Db\Text('patientNumber', 'patient_number'));
             $this->dbMap->addPropertyMap(new Db\Text('microchip'));
             $this->dbMap->addPropertyMap(new Db\Text('origin'));
-            $this->dbMap->addPropertyMap(new Db\Text('breed'));
             $this->dbMap->addPropertyMap(new Db\Text('colour'));
             $this->dbMap->addPropertyMap(new Db\Text('weight'));
             $this->dbMap->addPropertyMap(new Db\Date('dob'));
@@ -106,6 +108,7 @@ class PathCaseMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Text('name'));
             $this->formMap->addPropertyMap(new Form\Text('type'));
             $this->formMap->addPropertyMap(new Form\Text('submissionType'));
+            $this->formMap->addPropertyMap(new Form\Boolean('submissionReceived'));
             $this->formMap->addPropertyMap(new Form\Date('arrival'));
             $this->formMap->addPropertyMap(new Form\Text('status'));
             $this->formMap->addPropertyMap(new Form\Text('reportStatus'));
@@ -119,13 +122,14 @@ class PathCaseMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Boolean('issueAlert'));
             $this->formMap->addPropertyMap(new Form\Integer('specimenCount'));
             $this->formMap->addPropertyMap(new Form\Text('animalName'));
+            $this->formMap->addPropertyMap(new Form\Integer('animalTypeId'));
             $this->formMap->addPropertyMap(new Form\Text('species'));
+            $this->formMap->addPropertyMap(new Form\Text('breed'));
             $this->formMap->addPropertyMap(new Form\Text('sex'));
             $this->formMap->addPropertyMap(new Form\Boolean('desexed'));
             $this->formMap->addPropertyMap(new Form\Text('patientNumber'));
             $this->formMap->addPropertyMap(new Form\Text('microchip'));
             $this->formMap->addPropertyMap(new Form\Text('origin'));
-            $this->formMap->addPropertyMap(new Form\Text('breed'));
             $this->formMap->addPropertyMap(new Form\Text('colour'));
             $this->formMap->addPropertyMap(new Form\Text('weight'));
             $this->formMap->addPropertyMap(new Form\Date('dob'));
@@ -289,6 +293,9 @@ SQL;
         if (!empty($filter['pathologyId'])) {
             $filter->appendWhere('a.pathology_id = %s AND ', $this->quote($filter['pathologyId']));
         }
+        if (!empty($filter['animalTypeId'])) {
+            $filter->appendWhere('a.animal_type_id = %s AND ', $this->quote($filter['animalTypeId']));
+        }
         if (!empty($filter['resident'])) {
             $filter->appendWhere('a.resident = %s AND ', $this->quote($filter['resident']));
         }
@@ -306,6 +313,9 @@ SQL;
         }
         if (!empty($filter['reportStatus'])) {
             $filter->appendWhere('a.report_status = %s AND ', $this->quote($filter['reportStatus']));
+        }
+        if (!empty($filter['submissionReceived'])) {
+            $filter->appendWhere('a.submission_received = %s AND ', (int)$filter['submissionReceived']);
         }
         if (!empty($filter['specimenCount'])) {
             $filter->appendWhere('a.specimen_count = %s AND ', (int)$filter['specimenCount']);

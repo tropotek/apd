@@ -304,9 +304,9 @@ class Cassette extends \Tk\Db\Map\Model implements \Tk\ValidInterface
             $errors['number'] = 'Invalid value: number';
         }
 
-        if (!$this->name) {
-            $errors['name'] = 'Invalid value: name';
-        }
+//        if (!$this->name) {
+//            $errors['name'] = 'Invalid value: name';
+//        }
 
 //        if (!$this->qty) {
 //            $errors['qty'] = 'Invalid value: qty';

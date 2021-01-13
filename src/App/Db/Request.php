@@ -22,11 +22,9 @@ class Request extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     use PathCaseTrait;
     use CassetteTrait;
     use ServiceTrait;
-    use ClientTrait;
     use StatusTrait;
 
     const STATUS_PENDING            = 'pending';
-    //const STATUS_PROCESSING         = 'processing';
     const STATUS_COMPLETED          = 'completed';
     const STATUS_CANCELLED          = 'cancelled';
 
@@ -51,10 +49,9 @@ class Request extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public $serviceId = 0;
 
     /**
-     * The client requesting the samples (NOT sure if this could be staff, client, etc)
      * @var int
      */
-    public $clientId = 0;
+    public $testId = 0;
 
     /**
      * @var string
@@ -217,17 +214,9 @@ class Request extends \Tk\Db\Map\Model implements \Tk\ValidInterface
             $errors['serviceId'] = 'Invalid value: serviceId';
         }
 
-        if (!$this->clientId) {
-            $errors['clientId'] = 'Invalid value: clientId';
-        }
-
         if ((int)$this->qty < 1) {
             $errors['qty'] = 'Invalid value: qty';
         }
-
-//        if (!$this->cost) {
-//            $errors['cost'] = 'Invalid value: cost';
-//        }
 
         return $errors;
     }

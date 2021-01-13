@@ -29,7 +29,7 @@ class RequestMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Integer('pathCaseId', 'path_case_id'));
             $this->dbMap->addPropertyMap(new Db\Integer('cassetteId', 'cassette_id'));
             $this->dbMap->addPropertyMap(new Db\Integer('serviceId', 'service_id'));
-            $this->dbMap->addPropertyMap(new Db\Integer('clientId', 'client_id'));
+            $this->dbMap->addPropertyMap(new Db\Integer('testId', 'test_id'));
             $this->dbMap->addPropertyMap(new Db\Text('status'));
             $this->dbMap->addPropertyMap(new Db\Integer('qty'));
             $this->dbMap->addPropertyMap(new Db\Money('cost'));
@@ -53,7 +53,7 @@ class RequestMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Integer('pathCaseId'));
             $this->formMap->addPropertyMap(new Form\Integer('cassetteId'));
             $this->formMap->addPropertyMap(new Form\Integer('serviceId'));
-            $this->formMap->addPropertyMap(new Form\Integer('clientId'));
+            $this->formMap->addPropertyMap(new Form\Integer('testId'));
             $this->formMap->addPropertyMap(new Form\Text('status'));
             $this->formMap->addPropertyMap(new Form\Integer('qty'));
             $this->formMap->addPropertyMap(new Form\Money('cost'));
@@ -120,8 +120,8 @@ class RequestMap extends Mapper
         if (!empty($filter['serviceId'])) {
             $filter->appendWhere('a.service_id = %s AND ', (int)$filter['serviceId']);
         }
-        if (!empty($filter['clientId'])) {
-            $filter->appendWhere('a.client_id = %s AND ', (int)$filter['clientId']);
+        if (!empty($filter['testId'])) {
+            $filter->appendWhere('a.test_id = %s AND ', (int)$filter['testId']);
         }
         if (!empty($filter['status'])) {
             $filter->appendWhere('a.status = %s AND ', $this->quote($filter['status']));

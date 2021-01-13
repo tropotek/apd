@@ -1,6 +1,7 @@
 <?php
 namespace App\Form;
 
+use App\Db\AnimalTypeMap;
 use App\Db\ContactMap;
 use App\Db\StorageMap;
 use App\Form\Field\Money;
@@ -59,12 +60,12 @@ class PathCase extends \Bs\FormIface
         $layout->removeRow('accountStatus', 'col');
         $layout->removeRow('cost', 'col');
 
-        //$layout->removeRow('afterHours', 'col');
+        $layout->removeRow('afterHours', 'col');
 
         $layout->removeRow('patientNumber', 'col');
         $layout->removeRow('microchip', 'col');
 
-        $layout->removeRow('breed', 'col');
+        $layout->removeRow('species', 'col');
         $layout->removeRow('specimenCount', 'col-2');
 
         $layout->removeRow('desexed', 'col');
@@ -184,6 +185,9 @@ JS;
         $this->appendField(new Money('cost'))->addCss('money')->setLabel('Billable Amount')->setTabGroup($tab)
             ->setNotes('');
 
+        $this->appendField(new Field\Checkbox('submissionReceived'))->setTabGroup($tab)
+            ->setNotes('Has the submission form been received?');
+
         $this->appendField(new Field\Checkbox('afterHours'))->setTabGroup($tab)
             ->setNotes('Was this case worked after normal open hours?');
 
@@ -215,12 +219,13 @@ JS;
         $this->appendField(new Field\Input('patientNumber'))->setTabGroup($tab);
         $this->appendField(new Field\Input('microchip'))->setTabGroup($tab);
 
-        $list = array('Cat'=>'cat', 'Dog'=>'dog', 'Sheep'=>'sheep', 'Cattle'=>'cattle', 'Bird'=>'bird', 'Other'=>'other');
-        $this->appendField(Field\Select::createSelect('species', \App\Db\PathCase::getSpeciesList($this->getPathCase()->getSpecies()))->prependOption('-- Select --', ''))
+        // \App\Db\PathCase::getSpeciesList($this->getPathCase()->getSpecies())
+        $list = AnimalTypeMap::create()->findFiltered(['institutionId' => $this->getConfig()->getInstitutionId(), 'parent_id' => 0]);
+        $this->appendField(Field\Select::createSelect('animalTypeId', $list)->prependOption('-- Select --', ''))
             ->setTabGroup($tab);
 
         // TODO: Autocomplete field
-        $this->appendField(new Field\Input('breed'))->setTabGroup($tab);
+        $this->appendField(new Field\Input('species'))->setLabel('Species/Breed')->setTabGroup($tab);
 
         $this->appendField(new Field\Input('specimenCount'))->setLabel('Animal Count')->setTabGroup($tab);
         $list = array('-- N/A --' => '', 'Male' => 'M', 'Female' => 'F');
@@ -303,13 +308,16 @@ JS;
             ->addCss('mce-min')->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
         $this->appendField(new Field\Textarea('grossPathology'))
             ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
-        $this->appendField(new Field\Textarea('grossMorphologicalDiagnosis'))
+
+        $this->appendField(new Field\Textarea('morphologicalDiagnosis'))
             ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
+        $this->appendField(new Field\Textarea('grossMorphologicalDiagnosis'))
+            ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab)
+        ->setNotes('This information will not be included in the final report');
+
         $this->appendField(new Field\Textarea('histopathology'))
             ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
         $this->appendField(new Field\Textarea('ancillaryTesting'))
-            ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
-        $this->appendField(new Field\Textarea('morphologicalDiagnosis'))
             ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
         $this->appendField(new Field\Textarea('causeOfDeath'))
             ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);

@@ -93,8 +93,9 @@ class Cassette extends \Bs\TableIface
             $this->appendCell($this->getActionCell())->setLabel('');
 
         }
-        $this->appendCell(new Cell\Text('number'))->setLabel('#');
-        $this->appendCell(new Cell\Text('name'))->addCss('key')->setUrl($this->getEditUrl());
+        $this->appendCell(new Cell\Text('number'))->setLabel('#')->setAttr('title', 'Label')->setUrl($this->getEditUrl());
+        //$this->appendCell(new Cell\Text('name'))->addCss('key')->setUrl($this->getEditUrl());
+        $this->appendCell(new Cell\Text('comments'))->addCss('key');
         //$this->appendCell(new Cell\Text('pathCaseId'));
         //$this->appendCell(new Cell\Text('storageId'));
         //$this->appendCell(new Cell\Text('price'));
@@ -112,7 +113,7 @@ class Cassette extends \Bs\TableIface
             $this->appendAction(\App\Table\Action\CreateRequest::create()->setRequestDialog($this->requestDialog));
             //$this->appendAction(\Tk\Table\Action\Link::createLink('New Cassette', \Bs\Uri::createHomeUrl('/cassetteEdit.html'), 'fa fa-plus'));
         }
-        $this->appendAction(\Tk\Table\Action\ColumnSelect::create()->setUnselected(array('modified', 'container')));
+        $this->appendAction(\Tk\Table\Action\ColumnSelect::create()->setUnselected(array('created')));
         if (!$this->isMinMode())
             $this->appendAction(\Tk\Table\Action\Delete::create());
         $this->appendAction(\Tk\Table\Action\Csv::create());

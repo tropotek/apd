@@ -1,6 +1,7 @@
 <?php
 namespace App\Table;
 
+use App\Db\AnimalTypeMap;
 use App\Db\ContactMap;
 use App\Db\PathCaseMap;
 use Tk\Form\Field;
@@ -57,12 +58,23 @@ class PathCase extends \Bs\TableIface
 
         $this->appendCell(new Cell\Boolean('billable'));
         $this->appendCell(new Cell\Text('cost'));
+        $this->appendCell(new Cell\Boolean('submissionReceived'));
         $this->appendCell(new Cell\Boolean('afterHours'));
         $this->appendCell(new Cell\Text('zootonic'));
         $this->appendCell(new Cell\Text('issue'));
         $this->appendCell(new Cell\Text('specimenCount'));
         $this->appendCell(new Cell\Text('animalName'));
+        $this->appendCell(new Cell\Text('animalTypeId'))
+            ->addOnPropertyValue(function (Cell\Text $cell, \App\Db\PathCase $obj, $value) {
+                $o = $obj->getAnimalType();
+                $value = '';
+                if ($o) {
+                    $value = $o->getName();
+                }
+                return $value;
+            });
         $this->appendCell(new Cell\Text('species'));
+        //$this->appendCell(new Cell\Text('breed'));
         $this->appendCell(new Cell\Text('sex'));
         $this->appendCell(new Cell\Boolean('desexed'));
         $this->appendCell(new Cell\Text('patientNumber'));
@@ -77,7 +89,6 @@ class PathCase extends \Bs\TableIface
                 return $value;
             });
         $this->appendCell(new Cell\Text('origin'));
-        $this->appendCell(new Cell\Text('breed'));
         $this->appendCell(new Cell\Text('colour'));
         $this->appendCell(new Cell\Text('weight'));
         $this->appendCell(new Cell\Date('dob'));
@@ -130,12 +141,15 @@ class PathCase extends \Bs\TableIface
         $this->appendFilter(Field\Select::createSelect('status', $list)->prependOption('-- Status --'));
 
         // Species Filter
+        $list = AnimalTypeMap::create()->findFiltered(['institutionId' => $this->getConfig()->getInstitutionId(), 'parent_id' => 0]);
+        $this->appendFilter(Field\Select::createSelect('animalTypeId', $list)->prependOption('-- Animal Type --', ''));
+
         $speciesList = PathCaseMap::create()->findSpeciesList();
         $this->appendFilter(Field\Select::createSelect('species', $speciesList)->prependOption('-- Species --'));
 
         // Breed Filter
-        $breedList = PathCaseMap::create()->findBreedList();
-        $this->appendFilter(Field\Select::createSelect('breed', $breedList)->prependOption('-- Breed --'));
+//        $breedList = PathCaseMap::create()->findBreedList();
+//        $this->appendFilter(Field\Select::createSelect('breed', $breedList)->prependOption('-- Breed --'));
         // TODO: create an auto update JS when the species is selected repopulate the breed select options.
 
         $list = array('Yes' => 1, 'No' => 0);

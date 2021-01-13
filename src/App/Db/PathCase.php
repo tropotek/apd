@@ -1,6 +1,7 @@
 <?php
 namespace App\Db;
 
+use App\Db\Traits\AnimalTypeTrait;
 use App\Db\Traits\ClientTrait;
 use App\Db\Traits\OwnerTrait;
 use App\Db\Traits\PathologistTrait;
@@ -29,39 +30,40 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     use StatusTrait;
     use UserTrait;
     use PathologistTrait;
+    use AnimalTypeTrait;
 
     // TODO: Check these status's against the actual workflow.
-    const STATUS_PENDING            = 'pending';            // Submitted ???
-    const STATUS_HOLD               = 'hold';               // Awaiting review???
-    const STATUS_FROZEN_STORAGE     = 'frozenStorage';      //
-    const STATUS_EXAMINED           = 'examined';           //
-    const STATUS_REPORTED           = 'reported';           //
-    const STATUS_COMPLETED          = 'completed';          //
-    const STATUS_CANCELLED          = 'cancelled';          // case cancelled
+    const STATUS_PENDING                = 'pending';            // Submitted ???
+    const STATUS_HOLD                   = 'hold';               // Awaiting review???
+    const STATUS_FROZEN_STORAGE         = 'frozenStorage';      //
+    const STATUS_EXAMINED               = 'examined';           //
+    const STATUS_REPORTED               = 'reported';           //
+    const STATUS_COMPLETED              = 'completed';          //
+    const STATUS_CANCELLED              = 'cancelled';          // case cancelled
 
-    const TYPE_BIOPSY               = 'biopsy';
-    const TYPE_NECROPSY             = 'necropsy';
+    const TYPE_BIOPSY                   = 'biopsy';
+    const TYPE_NECROPSY                 = 'necropsy';
 
     // TODO: Go ovber these types with stakeholder's b4 release
-    const SUBMISSION_INTERNAL_DIAG   = 'internalDiagnostic';
-    const SUBMISSION_EXTERNAL_DIAG   = 'externalDiagnostic';
-    const SUBMISSION_RESEARCH       = 'research';
-    const SUBMISSION_OTHER          = 'other';
+    const SUBMISSION_INTERNAL_DIAG      = 'internalDiagnostic';
+    const SUBMISSION_EXTERNAL_DIAG      = 'externalDiagnostic';
+    const SUBMISSION_RESEARCH           = 'research';
+    const SUBMISSION_OTHER              = 'other';
 
     // Report Status
-    const REPORT_STATUS_INTERIM     = 'interim';            //
-    const REPORT_STATUS_COMPLETED   = 'completed';          //
+    const REPORT_STATUS_INTERIM         = 'interim';            //
+    const REPORT_STATUS_COMPLETED       = 'completed';          //
 
     // Report Status
-    const ACCOUNT_STATUS_PENDING     = 'pending';           //
-    const ACCOUNT_STATUS_INVOICED    = 'invoiced';          //
-    const ACCOUNT_STATUS_PAID        = 'paid';              //
-    const ACCOUNT_STATUS_CANCELLED   = 'cancelled';         //
+    const ACCOUNT_STATUS_PENDING        = 'pending';           //
+    const ACCOUNT_STATUS_INVOICED       = 'invoiced';          //
+    const ACCOUNT_STATUS_UVET_INVOICED  = 'uvetInvoiced';      //
+    const ACCOUNT_STATUS_CANCELLED      = 'cancelled';         //
 
     // After Care Options
-    const AC_GENERAL                = 'general';
-    const AC_CREMATION              = 'cremation';
-    const AC_INCINERATION           = 'incineration';
+    const AC_GENERAL                    = 'general';
+    const AC_CREMATION                  = 'cremation';
+    const AC_INCINERATION               = 'incineration';
 
     /**
      * @var int
@@ -130,6 +132,13 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      * @var string
      */
     public $submissionType = '';
+
+    /**
+     * Has a submission form been received
+     * Flagged to true manually by user when the form is received.
+     * @var bool
+     */
+    public $submissionReceived = false;
 
     /**
      * Date the case arrived/seen (Generally the same as the created but editable)
@@ -215,9 +224,19 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public $animalName = '';
 
     /**
+     * @var int
+     */
+    public $animalTypeId = 0;
+
+    /**
      * @var string
      */
     public $species = '';
+
+    /**
+     * @var string
+     */
+    public $breed = '';
 
     /**
      * @var string
@@ -244,11 +263,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      * @var string
      */
     public $origin = '';
-
-    /**
-     * @var string
-     */
-    public $breed = '';
 
     /**
      * @var string
@@ -571,6 +585,24 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     }
 
     /**
+     * @return bool
+     */
+    public function isSubmissionReceived(): bool
+    {
+        return $this->submissionReceived;
+    }
+
+    /**
+     * @param bool $submissionReceived
+     * @return PathCase
+     */
+    public function setSubmissionReceived(bool $submissionReceived): PathCase
+    {
+        $this->submissionReceived = $submissionReceived;
+        return $this;
+    }
+
+    /**
      * @param null|string $format
      * @return \DateTime|string
      */
@@ -718,6 +750,24 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     }
 
     /**
+     * @param string $breed
+     * @return PathCase
+     */
+    public function setBreed($breed) : PathCase
+    {
+        $this->breed = $breed;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBreed() : string
+    {
+        return $this->breed;
+    }
+
+    /**
      * @param string $sex
      * @return PathCase
      */
@@ -815,24 +865,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public function getOrigin() : string
     {
         return $this->origin;
-    }
-
-    /**
-     * @param string $breed
-     * @return PathCase
-     */
-    public function setBreed($breed) : PathCase
-    {
-        $this->breed = $breed;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getBreed() : string
-    {
-        return $this->breed;
     }
 
     /**
@@ -1389,9 +1421,9 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 //            $errors['gender'] = 'Invalid value: gender';
 //        }
 
-        if (!$this->patientNumber) {
-            $errors['patientNumber'] = 'Invalid value: patientNumber';
-        }
+//        if (!$this->patientNumber) {
+//            $errors['patientNumber'] = 'Invalid value: patientNumber';
+//        }
 
 //        if (!$this->ownerName) {
 //            $errors['ownerName'] = 'Invalid value: ownerName';

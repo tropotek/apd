@@ -136,12 +136,6 @@ class CaseReportPdf extends Pdf
             $block->appendHtml('content', $this->pathCase->getGrossPathology());
             $block->appendRepeat();
         }
-        if ($this->pathCase->getGrossMorphologicalDiagnosis()) {
-            $block = $template->getRepeat('textBlock');
-            $block->appendText('title', 'Gross Morphological Diagnosis:');
-            $block->appendHtml('content', $this->pathCase->getGrossMorphologicalDiagnosis());
-            $block->appendRepeat();
-        }
         if ($this->pathCase->getHistopathology()) {
             $block = $template->getRepeat('textBlock');
             $block->appendText('title', 'Histopathology:');
@@ -160,6 +154,12 @@ class CaseReportPdf extends Pdf
             $block->appendHtml('content', $this->pathCase->getMorphologicalDiagnosis());
             $block->appendRepeat();
         }
+//        if ($this->pathCase->getGrossMorphologicalDiagnosis()) {
+//            $block = $template->getRepeat('textBlock');
+//            $block->appendText('title', 'Gross Morphological Diagnosis:');
+//            $block->appendHtml('content', $this->pathCase->getGrossMorphologicalDiagnosis());
+//            $block->appendRepeat();
+//        }
         if ($this->pathCase->getCauseOfDeath()) {
             $block = $template->getRepeat('textBlock');
             $block->appendText('title', 'Cause Of Death:');
@@ -403,9 +403,9 @@ CSS;
     </div>
     
       
-      <pagebreak>
+      <pagebreak choice="media">
           <!-- Files and media -->      
-          <div class="media" choice="media">
+          <div class="media">
             <div class="file-list" style="page-break-inside: avoid;" choice="file-list">
               <h4>Files:</h4>
               <ul var="list">

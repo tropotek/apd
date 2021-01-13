@@ -202,7 +202,8 @@ class Request extends \Bs\TableIface
             $this->appendFilter(Field\Select::createSelect('clientId', $serviceList)->prependOption('-- Service --'));
 
             $list = \Tk\ObjectUtil::getClassConstants(\App\Db\Request::class, 'STATUS', true);
-            $this->appendFilter(Field\Select::createSelect('status', $list)->prependOption('-- Status --'));
+            $this->appendFilter(Field\Select::createSelect('status', $list)->prependOption('-- Status --'))
+                ->setValue(\App\Db\Request::STATUS_PENDING);
 
 
             $list = $this->getConfig()->getUserMapper()->findFiltered(array(

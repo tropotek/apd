@@ -51,6 +51,10 @@ class Edit extends \Uni\Controller\Institution\Edit
                 \Uni\Uri::createHomeUrl('/serviceManager.html'), 'fa fa-tags'));
             $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Contacts',
                 \Uni\Uri::createHomeUrl('/contactManager.html'), 'fa fa-user-o'));
+            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Animal Types',
+                \Uni\Uri::createHomeUrl('/animalTypeManager.html'), 'fa fa-paw'));
+            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Test Types',
+                \Uni\Uri::createHomeUrl('/testManager.html'), 'fa fa-flask'));
         }
 
     }

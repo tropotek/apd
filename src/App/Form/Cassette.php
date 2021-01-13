@@ -31,12 +31,12 @@ class Cassette extends \Bs\FormIface
         $layout = $this->getForm()->getRenderer()->getLayout();
 
         //$layout->removeRow('container', 'col');
-        $layout->removeRow('qty', 'col');
-        $layout->removeRow('name', 'col-10');
+        //$layout->removeRow('qty', 'col');
+        $layout->removeRow('comments', 'col-10');
 
-        $this->appendField(new Field\Input('number'));      // TODO: Auto determine this number
+        $this->appendField(new Field\Input('number'))->setLabel('Label');      // TODO: Auto determine this number
 //        $this->appendField(new Field\Input('qty'));
-        $this->appendField(new Field\Input('name'));
+        //$this->appendField(new Field\Input('name'));
 
         //$this->appendField(new Field\Select('pathCaseId', array()))->prependOption('-- Select --', '');
         $list = StorageMap::create()->findFiltered(array('institutionId' => $this->getCassette()->getPathCase()->getInstitutionId()));
@@ -44,7 +44,7 @@ class Cassette extends \Bs\FormIface
         //$this->appendField(new Field\Input('container'));
 
         //$this->appendField(new Field\Input('price'));
-        $this->appendField(new Field\Textarea('comments'));
+        $this->appendField(new Field\Input('comments'));
         //$this->appendField(new Field\Textarea('notes'));
 
         $this->appendField(new Event\Submit('update', array($this, 'doSubmit')));
