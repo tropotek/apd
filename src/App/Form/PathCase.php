@@ -253,6 +253,8 @@ jQuery(function ($) {
     });
   	
   	
+  	
+  	
   	$('.select2-selection__choice').on('mouseenter', function () {
   	  console.log('Show contact details popup');
   	  var data = $(this).data()['data'];
@@ -262,6 +264,9 @@ jQuery(function ($) {
   	$('.select2-selection__choice').on('mouseout', function () {
   	  console.log('Hide contact details popup');
   	});
+  	
+  	
+  	
   	
   	
 });
