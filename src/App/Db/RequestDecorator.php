@@ -51,37 +51,45 @@ class RequestDecorator
         if ($request->getPathCase() && $request->getPathCase()->getInstitution())
             $message->replace(Collection::prefixArrayKeys(\Uni\Db\InstitutionMap::create()
                 ->unmapForm($request->getPathCase()->getInstitution()), 'institution::'));
-        if ($request->getClient())
+
+        if ($request->getTest())
             $message->replace(Collection::prefixArrayKeys(\App\Db\ContactMap::create()
-                ->unmapForm($request->getClient()), 'client::'));
+                ->unmapForm($request->getTest()), 'test::'));
+
         if ($request->getPathCase())
             $message->replace(Collection::prefixArrayKeys(\App\Db\PathCaseMap::create()
                 ->unmapForm($request->getPathCase()), 'pathCase::'));
 
         switch($mailTemplate->getRecipientType()) {
             case MailTemplate::RECIPIENT_AUTHOR:
-                $message->addTo($case->getUser()->getEmail());
-                $message->replace(Collection::prefixArrayKeys(array(
-                    'type' => $mailTemplate->getRecipientType(),
-                    'name' => $case->getUser()->getName(),
-                    'email' => $case->getUser()->getEmail()
-                ), 'recipient::'));
+                if ($case->getUser()) {
+                    $message->addTo($case->getUser()->getEmail());
+                    $message->replace(Collection::prefixArrayKeys(array(
+                        'type' => $mailTemplate->getRecipientType(),
+                        'name' => $case->getUser()->getName(),
+                        'email' => $case->getUser()->getEmail()
+                    ), 'recipient::'));
+                }
                 break;
             case MailTemplate::RECIPIENT_CLIENT:
-                $message->addTo($request->getClient()->getEmail());
-                $message->replace(Collection::prefixArrayKeys(array(
-                    'type' => $mailTemplate->getRecipientType(),
-                    'name' => $request->getClient()->getNameFirst(),
-                    'email' => $request->getClient()->getEmail()
-                ), 'recipient::'));
+                if ($case->getClient()) {
+                    $message->addTo($case->getClient()->getEmail());
+                    $message->replace(Collection::prefixArrayKeys(array(
+                        'type' => $mailTemplate->getRecipientType(),
+                        'name' => $case->getClient()->getNameFirst(),
+                        'email' => $case->getClient()->getEmail()
+                    ), 'recipient::'));
+                }
                 break;
             case MailTemplate::RECIPIENT_PATHOLOGIST:
-                $message->addTo($case->getPathologist()->getEmail());
-                $message->replace(Collection::prefixArrayKeys(array(
-                    'type' => $mailTemplate->getRecipientType(),
-                    'name' => $case->getPathologist()->getName(),
-                    'email' => $case->getPathologist()->getEmail()
-                ), 'recipient::'));
+                if ($case->getPathologist()) {
+                    $message->addTo($case->getPathologist()->getEmail());
+                    $message->replace(Collection::prefixArrayKeys(array(
+                        'type' => $mailTemplate->getRecipientType(),
+                        'name' => $case->getPathologist()->getName(),
+                        'email' => $case->getPathologist()->getEmail()
+                    ), 'recipient::'));
+                }
                 break;
             case MailTemplate::RECIPIENT_STUDENTS:
                 // TODO: send each student an individual email (if required)
@@ -95,12 +103,14 @@ class RequestDecorator
                 ), 'recipient::'));
                 break;
             case MailTemplate::RECIPIENT_OWNER:
-                $message->addTo($case->getOwner()->getEmail());
-                $message->replace(Collection::prefixArrayKeys(array(
-                    'type' => $mailTemplate->getRecipientType(),
-                    'name' => $case->getOwner()->getNameFirst(),
-                    'email' => $case->getOwner()->getEmail()
-                ), 'recipient::'));
+                if ($case->getOwner()) {
+                    $message->addTo($case->getOwner()->getEmail());
+                    $message->replace(Collection::prefixArrayKeys(array(
+                        'type' => $mailTemplate->getRecipientType(),
+                        'name' => $case->getOwner()->getNameFirst(),
+                        'email' => $case->getOwner()->getEmail()
+                    ), 'recipient::'));
+                }
                 break;
         }
         $event->addMessage($message);

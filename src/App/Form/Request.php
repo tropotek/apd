@@ -57,9 +57,9 @@ class Request extends \Bs\FormIface
         }
 
         $list = ServiceMap::create()->findFiltered(array('institutionId' => $this->getRequest()->getPathCase()->getInstitutionId()));
-        $this->appendField(new Field\Select('serviceId', $list))->prependOption('-- Select --', '');
+        $this->appendField(new Field\Select('serviceId', $list))->prependOption('-- None --', '');
         $list = TestMap::create()->findFiltered(array('institutionId' => $this->getRequest()->getPathCase()->getInstitutionId()));
-        $this->appendField(new Field\Select('testId', $list))->prependOption('-- Select --', '');
+        $this->appendField(new Field\Select('testId', $list))->prependOption('-- None --', '');
 
         if ($this->getRequest()->getId()) {
             $list = \App\Db\Request::getStatusList($this->getRequest()->getStatus());
@@ -113,7 +113,7 @@ class Request extends \Bs\FormIface
         }
 
         $isNew = (bool)$this->getRequest()->getId();
-        if (count($cassetteList)) {
+        if ($cassetteList && count($cassetteList)) {
             $cassetteList = $this->getConfig()->getRequest()->get('cassetteId');
             foreach ($cassetteList as $i => $v) {
                 $req = new \App\Db\Request();

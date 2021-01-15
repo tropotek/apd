@@ -1413,9 +1413,9 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
             $errors['status'] = 'Invalid value: status';
         }
 
-        if (!$this->species) {
-            $errors['species'] = 'Invalid value: species';
-        }
+//        if (!$this->species) {
+//            $errors['species'] = 'Invalid value: species';
+//        }
 
 //        if (!$this->sex) {
 //            $errors['gender'] = 'Invalid value: gender';

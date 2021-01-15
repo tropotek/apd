@@ -16,7 +16,7 @@ class Request extends JsonForm
         $request = new \App\Db\Request();
         $request->setPathCaseId($this->getRequest()->get('pathCaseId'));
         $form = \App\Form\Request::create()->setDialog($this)->setModel($request);
-
+        $this->addCss('create-request-dialog');
         parent::__construct($form, 'Create Request');
     }
 
@@ -46,9 +46,9 @@ jQuery(function ($) {
     var fields = dialog.find('input, select, textarea');
     var cassetteId = [];
     
+    // Reset form
     dialog.on('shown.bs.modal', function (e) {
       cassetteId = [];
-      //console.log(arguments);
       if ($(e.relatedTarget).data('cassetteId')) {
         var val = $(e.relatedTarget).data('cassetteId')+"";
         if (val.indexOf(',') > -1) {  // Check if this is an array value
@@ -65,21 +65,17 @@ jQuery(function ($) {
     });
     
     dialog.on('DialogForm:submit', function (e) {
-      var requestTable = $('div.tk-request-list .tk-table');
-      if (requestTable.length !== 1) return;
+      var table = $('div.tk-request-list .tk-table');
+      if (table.length !== 1) return;
       $.get(document.location, {}, function (html) {
         var doc = $(html);
-        requestTable.parent().empty().append(doc.find('div.tk-request-list .tk-table'));
-        
-        // TODO: The request table need to re-init the javascript events somehow????
-        //   The confirm delete no longer shows after a cassette is created...
-        
+        table.parent().empty().append(doc.find('div.tk-request-list .tk-table'));
       }, 'html');
       
     });
     
   }
-  $('.modal-body form').on('init', '.modal-dialog', init).each(init);
+  $('.create-request-dialog .modal-body form').on('init', 'body', init).each(init);
 });
 JS;
 

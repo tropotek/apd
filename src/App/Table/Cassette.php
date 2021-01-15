@@ -1,6 +1,7 @@
 <?php
 namespace App\Table;
 
+use App\Db\CassetteMap;
 use Dom\Renderer\Renderer;
 use Dom\Template;
 use Tk\Form\Field;
@@ -91,18 +92,11 @@ class Cassette extends \Bs\TableIface
                     $button->setAttr('data-cassette-id', $obj->getId());
                 });
             $this->appendCell($this->getActionCell())->setLabel('');
-
         }
+
         $this->appendCell(new Cell\Text('number'))->setLabel('#')->setAttr('title', 'Label')->setUrl($this->getEditUrl());
-        //$this->appendCell(new Cell\Text('name'))->addCss('key')->setUrl($this->getEditUrl());
         $this->appendCell(new Cell\Text('comments'))->addCss('key');
-        //$this->appendCell(new Cell\Text('pathCaseId'));
-        //$this->appendCell(new Cell\Text('storageId'));
-        //$this->appendCell(new Cell\Text('price'));
-        //$this->appendCell(new Cell\Date('modified'));
-        //$this->appendCell(new Cell\Text('container'));
-        //$this->appendCell(new Cell\Text('qty'));
-        $this->appendCell(new Cell\Date('created'));
+//        $this->appendCell(new Cell\Date('created'));
 
         // Filters
         if (!$this->isMinMode())
@@ -111,9 +105,12 @@ class Cassette extends \Bs\TableIface
         // Actions
         if ($this->isMinMode()) {
             $this->appendAction(\App\Table\Action\CreateRequest::create()->setRequestDialog($this->requestDialog));
+            $this->appendAction(\App\Table\Action\CreateCassette::create());
             //$this->appendAction(\Tk\Table\Action\Link::createLink('New Cassette', \Bs\Uri::createHomeUrl('/cassetteEdit.html'), 'fa fa-plus'));
         }
-        $this->appendAction(\Tk\Table\Action\ColumnSelect::create()->setUnselected(array('created')));
+
+//        $this->appendAction(\Tk\Table\Action\ColumnSelect::create()->setUnselected(array('created')));
+
         if (!$this->isMinMode())
             $this->appendAction(\Tk\Table\Action\Delete::create());
         $this->appendAction(\Tk\Table\Action\Csv::create());
@@ -121,8 +118,27 @@ class Cassette extends \Bs\TableIface
         // load table
         //$this->setList($this->findList());
 
+        if ($this->getRequest()->has('uc')) {
+            $this->doCassetteUpdate($this->getConfig()->getRequest());
+        }
+
+
         return $this;
     }
+
+    /**
+     * @param \Tk\Request $request
+     */
+    public function doCassetteUpdate($request)
+    {
+        $cassette = CassetteMap::create()->find($request->get('uc'));
+        if ($cassette) {
+            $cassette->setComments(strip_tags($request->get('value')));
+            $cassette->save();
+            \Tk\Log::debug('Cassette comment updated ['.$cassette->getId().']');
+        }
+    }
+
 
     /**
      * @param array $filter
@@ -135,7 +151,6 @@ class Cassette extends \Bs\TableIface
         if (!$tool) $tool = $this->getTool();
         $filter = array_merge($this->getFilterValues(), $filter);
         $list = \App\Db\CassetteMap::create()->findFiltered($filter, $tool);
-
         $this->requestDialog->execute();
         return $list;
     }
@@ -148,10 +163,57 @@ class Cassette extends \Bs\TableIface
      */
     public function show()
     {
-        if ($this->requestDialog) {
-            $this->getTemplate()->appendBodyTemplate($this->requestDialog->show());
-        }
+        $template = parent::show();
 
-        return parent::show();
+        $js = <<<JS
+jQuery(function($) {
+  
+  // Dynamic event handler to allow for when new cassettes are created
+  $(document).on('dblclick', '.tk-table .mComments', function (e) {
+      if ($(this).find('.tdVal').length) return;
+      e.stopPropagation();
+      $('.mComments').css({'cursor': 'pointer'}).attr('title', 'Double Click To Edit');
+      var value = $(this).html();
+      $(this).focus();
+      updateVal($(this), value);
+    });
+  
+  function updateVal(el, value) {
+    el.html('<input class="tdVal form-control" type="text" value="' + value + '" title="Double Click To Edit" />');
+    var tdval = el.find('.tdVal');
+    tdval.focus();
+    tdval.keypress(function (e) {
+      e.stopPropagation();
+      if (e.keyCode === 13) {
+        saveVal(el, tdval.val().trim());
+        return false;
+      }
+    });
+  }
+
+  function saveVal(el, val) {
+    el.css({'cursor': 'wait'});
+    var tdval =  el.parent().find('td.mId').find('input');
+    tdval.attr('disabled', 'disabled');
+    var id = tdval.val();
+    // Send update to DB
+    $.get(document.location, {'uc': id, 'value': val}, function (data) {
+      el.html(val);
+      el.removeAttr('disabled').css({'cursor': 'inherit'}); 
+    }, 'html');
+  }
+
+  $(document).mouseup(function () {
+    $('.tdVal').each(function () {
+      if (!$(this).parent().is(':hover'))
+        saveVal($(this).parent(), $(this).val().trim());
+    });
+  });
+  
+});
+JS;
+        $template->appendJs($js);
+
+        return $template;
     }
 }

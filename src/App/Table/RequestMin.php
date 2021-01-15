@@ -54,6 +54,9 @@ class RequestMin extends \Bs\TableIface
         $request = \App\Db\RequestMap::create()->find($requestId);
         if ($request) {
             $request->setStatus(\App\Db\Request::STATUS_COMPLETED);
+            //$request->setStatusMessage('');
+            $request->setStatusExecute(true);
+            $request->setStatusNotify(true);
             $request->save();
             \Tk\Uri::create()->remove('rComplete')->redirect();
         }
@@ -65,6 +68,9 @@ class RequestMin extends \Bs\TableIface
         $request = \App\Db\RequestMap::create()->find($requestId);
         if ($request) {
             $request->setStatus(\App\Db\Request::STATUS_CANCELLED);
+            //$request->setStatusMessage('');
+            $request->setStatusExecute(true);
+            $request->setStatusNotify(true);
             $request->save();
             \Tk\Uri::create()->remove('rCancel')->redirect();
         }
@@ -148,26 +154,27 @@ class RequestMin extends \Bs\TableIface
         //$this->appendCell(new Cell\Text('pathCaseId'));
         $this->appendCell(new Cell\Text('status'));
         $this->appendCell(new Cell\Text('qty'));
-        $this->appendCell(new Cell\Text('serviceId'))->
-            addOnPropertyValue(function (Cell\Text $cell, \App\Db\Request $obj, $value) {
+        $this->appendCell(new Cell\Text('serviceId'))->addCss('key')->setUrl($this->getEditUrl())
+            ->addOnPropertyValue(function (Cell\Text $cell, \App\Db\Request $obj, $value) {
                 if ($obj->getService()) {
                     $value = $obj->getService()->getName();
                 }
                 return $value;
             });
 
-        $this->appendCell(new Cell\Text('cassetteId'))->addCss('key')->setUrl($this->getEditUrl())->
-            addOnPropertyValue(function (Cell\Text $cell, \App\Db\Request $obj, $value) {
+        $this->appendCell(new Cell\Text('cassetteId'))->setUrl($this->getEditUrl())
+            ->addOnPropertyValue(function (Cell\Text $cell, \App\Db\Request $obj, $value) {
                 if ($obj->getCassette()) {
-                    $value = sprintf('[%s] %s', $obj->getCassette()->getNumber() , $obj->getCassette()->getName());
+                    $value = $obj->getCassette()->getNumber();
                 }
                 return $value;
             });
 
-        $this->appendCell(new Cell\Text('clientId'))->
-            addOnPropertyValue(function (Cell\Text $cell, \App\Db\Request $obj, $value) {
-                if ($obj->getClient()) {
-                    $value = $obj->getClient()->getNameFirst();
+        $this->appendCell(new Cell\Text('testId'))
+            ->addOnPropertyValue(function (Cell\Text $cell, \App\Db\Request $obj, $value) {
+                $value = '';
+                if ($obj->getTest()) {
+                    $value = $obj->getTest()->getName();
                 }
                 return $value;
             });

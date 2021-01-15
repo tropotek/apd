@@ -82,6 +82,9 @@ class CreateRequest extends \Tk\Table\Action\Button
         $this->setAttr('data-toggle', 'modal');
         $this->setAttr('data-target', '#'.$this->requestDialog->getId());
 
+        if ($this->getRequestDialog()) {
+            $this->getTemplate()->appendBodyTemplate($this->getRequestDialog()->show());
+        }
         $template = parent::show();
 
         $template->appendJs($this->getJs());

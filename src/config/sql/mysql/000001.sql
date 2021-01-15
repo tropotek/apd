@@ -66,4 +66,6 @@ CREATE TABLE IF NOT EXISTS `test` (
 
 insert into test (institution_id, name, modified, created) values (1, 'H&E', NOW(), NOW());
 
+-- Disable request complete emails until I figure out how we can maybe make a daily email or something
+UPDATE mail_template t SET t.active = 0 WHERE t.id = 4;
 

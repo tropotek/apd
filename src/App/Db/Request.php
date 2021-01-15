@@ -102,6 +102,7 @@ class Request extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     {
         $this->_TimestampTrait();
         $this->cost = Money::create(0);
+        $this->setTestId(1);
     }
 
     public function insert()

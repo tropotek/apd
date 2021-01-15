@@ -273,7 +273,7 @@ class Cassette extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      * @return int
      * @throws \Exception
      */
-    static public function getNextNumber($pathCaseId)
+    public static function getNextNumber($pathCaseId)
     {
         $num = 'A';
         if ($pathCaseId instanceof \Tk\Db\ModelInterface) $pathCaseId = $pathCaseId->getId();

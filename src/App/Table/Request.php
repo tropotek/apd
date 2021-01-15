@@ -152,7 +152,7 @@ class Request extends \Bs\TableIface
         $this->appendCell(new Cell\Text('cassetteId'))->addCss('key')->setUrl($this->getEditUrl())->
         addOnPropertyValue(function (Cell\Text $cell, \App\Db\Request $obj, $value) {
             if ($obj->getCassette()) {
-                $value = sprintf('[%s] %s', $obj->getCassette()->getNumber() , $obj->getCassette()->getName());
+                $value = $obj->getCassette()->getNumber();
             }
             return $value;
         });
