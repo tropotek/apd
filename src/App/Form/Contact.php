@@ -99,8 +99,8 @@ class Contact extends \Bs\FormIface
         \App\Db\ContactMap::create()->mapForm($form->getValues(), $this->getClient());
         if ($this->getType() && !$this->getClient()->getType())
             $this->getClient()->setType($this->getType());
-        // Do Custom Validations
 
+        // Do Custom Validations
         $form->addFieldErrors($this->getClient()->validate());
         if ($form->hasErrors()) {
             return;
@@ -108,6 +108,9 @@ class Contact extends \Bs\FormIface
 
         $isNew = (bool)$this->getClient()->getId();
         $this->getClient()->save();
+
+        // For the dialog form
+        $this->getClient()->name = $this->getClient()->getName();
 
         // Do Custom data saving
 

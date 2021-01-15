@@ -101,6 +101,7 @@ class PathCase extends \Bs\FormIface
             ->setTabGroup($tab);
 
         $contact = new \App\Db\Contact();
+        $contact->setType(\App\Db\Contact::TYPE_CLIENT);
         $form = \App\Form\Contact::create('clientSelect')->setType(\App\Db\Contact::TYPE_CLIENT)->setModel($contact);
         $form->removeField('notes');
         $list = \App\Db\Contact::getSelectList(\App\Db\Contact::TYPE_CLIENT);
@@ -111,36 +112,6 @@ class PathCase extends \Bs\FormIface
 
         $js = <<<JS
 jQuery(function ($) {
-  
-  /*
-  // Create an onHover info box for contacts that have been selected
-  $('.select2-selection__choice').each(function () {
-    
-    $(this).attr({
-      "data-container": "body",
-      "data-toggle": "popover",
-      "data-placement": "right",
-      "data-content": "This is a test<br> Hope it works!!!!"
-    });
-    console.log(this);
-    
-  }).popover({ trigger: "hover" , html: true, animation:false})
-    .on("mouseenter", function () {
-      var _this = this;
-      $(this).popover("show");
-      $(".popover").on("mouseleave", function () {
-          $(_this).popover('hide');
-      });
-    })
-    .on("mouseleave", function () {
-      var _this = this;
-      setTimeout(function () {
-          if (!$(".popover:hover").length) {
-              $(_this).popover("hide");
-          }
-      }, 300);
-    });
-  */
   
   $('select.tk-multiselect1').select2({
     placeholder: 'Select Contact',
@@ -156,7 +127,6 @@ JS;
             ->setNotes('Is this case billable?');
         $js = <<<JS
 jQuery(function ($) {
-  
   function updateBillable(el) {
     var d = 'disabled';
     if (el.prop('checked') === true) {
@@ -171,7 +141,6 @@ jQuery(function ($) {
     updateBillable($(this));
   });
   updateBillable($('#path_case-billable'));
-  
 });
 JS;
         $this->getRenderer()->getTemplate()->appendJs($js);
@@ -205,10 +174,13 @@ JS;
         $fieldset = 'Animal';
 
         $contact = new \App\Db\Contact();
+        $contact->setType(\App\Db\Contact::TYPE_OWNER);
         $form = \App\Form\Contact::create('ownerSelect')->setType(\App\Db\Contact::TYPE_OWNER)->setModel($contact);
         $form->removeField('accountCode');
         $form->removeField('nameCompany');
         $form->removeField('notes');
+
+
         $list = \App\Db\Contact::getSelectList(\App\Db\Contact::TYPE_OWNER);
         $this->appendField(Field\DialogSelect::createDialogSelect('ownerId[]', $list, $form, 'Create Owner'))
             ->addCss('tk-multiselect1')
@@ -258,15 +230,17 @@ JS;
 
 
         $contact = new \App\Db\Contact();
+        $contact->setType(\App\Db\Contact::TYPE_STUDENT);
         $form = \App\Form\Contact::create('studentSelect')->setType(\App\Db\Contact::TYPE_STUDENT)->setModel($contact);
         $form->removeField('nameCompany');
         $form->removeField('accountCode');
         $form->removeField('fax');
         $form->removeField('notes');
+
         $list = \App\Db\Contact::getSelectList(\App\Db\Contact::TYPE_STUDENT);
         $this->appendField(Field\DialogSelect::createDialogSelect('students[]', $list, $form,'Create Student'))
             ->addCss('tk-multiselect2')
-            ->setTabGroup($tab)->setLabel('Students')->setNotes('Add any students')
+            ->setTabGroup($tab)->setLabel('Students')->setNotes('Add students')
             ->setValue($this->getPathCase()->getStudentList()->toArray('id'));
 
         // Enable select2 multi select for student field
@@ -277,6 +251,19 @@ jQuery(function ($) {
         allowClear: false,
         minimumInputLength: 0
     });
+  	
+  	
+  	$('.select2-selection__choice').on('mouseenter', function () {
+  	  console.log('Show contact details popup');
+  	  var data = $(this).data()['data'];
+  	  console.log(data['id']);
+  	  console.log(data['text']);
+  	});
+  	$('.select2-selection__choice').on('mouseout', function () {
+  	  console.log('Hide contact details popup');
+  	});
+  	
+  	
 });
 JS;
         $this->getRenderer()->getTemplate()->appendJs($js);
@@ -377,6 +364,7 @@ JS;
         if ($this->getRequest()->has('action')) return;        // ignore column requests
         $this->getForm()->getField('clientId')->getDialog()->execute($request);
         $this->getForm()->getField('ownerId')->getDialog()->execute($request);
+        $this->getForm()->getField('students')->getDialog()->execute($request);
 
         $this->load(\App\Db\PathCaseMap::create()->unmapForm($this->getPathCase()));
         parent::execute($request);

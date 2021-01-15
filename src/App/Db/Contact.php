@@ -130,7 +130,7 @@ class Contact extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      */
     public function __construct()
     {
-        $this->setType(self::TYPE_CLIENT);
+        //$this->setType(self::TYPE_CLIENT);
         $this->_TimestampTrait();
         $this->setInstitutionId($this->getConfig()->getInstitutionId());
     }
