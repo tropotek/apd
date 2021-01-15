@@ -38,7 +38,6 @@ class Cassette extends \Bs\TableIface
     protected $requestDialog = null;
 
 
-
     /**
      * If true then this table is shown in the Case Edit page on the side bar and requires
      * the ability to add requests.
@@ -95,7 +94,12 @@ class Cassette extends \Bs\TableIface
         }
 
         $this->appendCell(new Cell\Text('number'))->setLabel('#')->setAttr('title', 'Label')->setUrl($this->getEditUrl());
-        $this->appendCell(new Cell\Text('comments'))->addCss('key');
+        $this->appendCell(new Cell\Text('comments'))->addCss('key')->addOnCellHtml(function ($cell, $obj, $value) {
+            /** @var Cell\Text $cell */
+            /** @var \App\Db\Note $obj */
+            //$value = \Tk\Str::stripEntities(strip_tags($value));
+            return nl2br($value);
+        });
 //        $this->appendCell(new Cell\Date('created'));
 
         // Filters
@@ -122,6 +126,7 @@ class Cassette extends \Bs\TableIface
             $this->doCassetteUpdate($this->getConfig()->getRequest());
         }
 
+        $this->removeCss('table-hover');
 
         return $this;
     }
@@ -133,7 +138,8 @@ class Cassette extends \Bs\TableIface
     {
         $cassette = CassetteMap::create()->find($request->get('uc'));
         if ($cassette) {
-            $cassette->setComments(strip_tags($request->get('value')));
+            $v = \Tk\Str::stripEntities(strip_tags($request->get('value')));
+            $cassette->setComments($v);
             $cassette->save();
             \Tk\Log::debug('Cassette comment updated ['.$cassette->getId().']');
         }
@@ -169,22 +175,24 @@ class Cassette extends \Bs\TableIface
 jQuery(function($) {
   
   // Dynamic event handler to allow for when new cassettes are created
-  $(document).on('dblclick', '.tk-table .mComments', function (e) {
+  //$(document).on('dblclick', '.tk-table .mComments', function (e) {
+  $(document).on('click', '.tk-table .mComments', function (e) {
       if ($(this).find('.tdVal').length) return;
       e.stopPropagation();
-      $('.mComments').css({'cursor': 'pointer'}).attr('title', 'Double Click To Edit');
-      var value = $(this).html();
+      $('.mComments').attr('title', 'Click To Edit');
+      var value = br2nl($(this).html());
       $(this).focus();
       updateVal($(this), value);
     });
   
   function updateVal(el, value) {
-    el.html('<input class="tdVal form-control" type="text" value="' + value + '" title="Double Click To Edit" />');
+    el.html('<textarea class="tdVal form-control" title="Click To Edit">' + value + '</textarea>');
+    //el.html('<input class="tdVal form-control" type="text" title="Double Click To Edit" value="' + value + '" />');
     var tdval = el.find('.tdVal');
     tdval.focus();
     tdval.keypress(function (e) {
       e.stopPropagation();
-      if (e.keyCode === 13) {
+      if (!e.shiftKey && e.keyCode === 13) {
         saveVal(el, tdval.val().trim());
         return false;
       }
@@ -192,13 +200,14 @@ jQuery(function($) {
   }
 
   function saveVal(el, val) {
+    val = br2nl(val);
     el.css({'cursor': 'wait'});
     var tdval =  el.parent().find('td.mId').find('input');
     tdval.attr('disabled', 'disabled');
     var id = tdval.val();
     // Send update to DB
     $.get(document.location, {'uc': id, 'value': val}, function (data) {
-      el.html(val);
+      el.html(nl2br(val));
       el.removeAttr('disabled').css({'cursor': 'inherit'}); 
     }, 'html');
   }
@@ -210,9 +219,57 @@ jQuery(function($) {
     });
   });
   
+    /**
+     * This function is same as PHP's nl2br() with default parameters.
+     *
+     * @param {string} str Input text
+     * @param {boolean} replaceMode Use replace instead of insert
+     * @param {boolean} isXhtml Use XHTML 
+     * @return {string} Filtered text
+     */
+    function nl2br (str, replaceMode, isXhtml) {
+    
+      var breakTag = (isXhtml) ? '<br />' : '<br>';
+      var replaceStr = (replaceMode) ? '$1'+ breakTag : '$1'+ breakTag +'$2';
+      return (str + '').replace(/([^>\\r\\n]?)(\\r\\n|\\n\\r|\\r|\\n)/g, replaceStr);
+    }
+    /**
+     * This function inverses text from PHP's nl2br() with default parameters.
+     *
+     * @param {string} str Input text
+     * @param {boolean} replaceMode Use replace instead of insert
+     * @return {string} Filtered text
+     */
+    function br2nl (str, replaceMode) {   
+        
+      var replaceStr = (replaceMode) ? "\\n" : '';
+      // Includes <br>, <BR>, <br />, </br>
+      return str.replace(/<\\s*\\/?br\\s*[\\/]?>/gi, replaceStr);
+    }
+
 });
 JS;
         $template->appendJs($js);
+        $css = <<<CSS
+.tk-table td.mComments {
+  position: relative;
+   cursor: pointer;
+}
+.mComments:after {
+   font: normal normal normal 14px/1 FontAwesome;
+   content: "\\f040";
+   display: inline-block;
+   position: absolute;
+   float: left;
+   right: 12px;
+   top: 17px;
+   padding-right: 3px;
+   vertical-align: middle;
+   font-weight:900;
+   cursor: pointer;
+}
+CSS;
+        $template->appendCss($css);
 
         return $template;
     }
