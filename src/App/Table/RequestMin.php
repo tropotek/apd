@@ -156,17 +156,27 @@ class RequestMin extends \Bs\TableIface
         $this->appendCell(new Cell\Text('qty'));
         $this->appendCell(new Cell\Text('serviceId'))->addCss('key')->setUrl($this->getEditUrl())
             ->addOnPropertyValue(function (Cell\Text $cell, \App\Db\Request $obj, $value) {
+                \Tk\Db\Map\Mapper::$HIDE_DELETED = false;
                 if ($obj->getService()) {
                     $value = $obj->getService()->getName();
+                    if ($obj->getService()->isDel()) {
+                        $value = '* ' . $value;
+                    }
                 }
+                \Tk\Db\Map\Mapper::$HIDE_DELETED = true;
                 return $value;
             });
 
         $this->appendCell(new Cell\Text('cassetteId'))->setUrl($this->getEditUrl())
             ->addOnPropertyValue(function (Cell\Text $cell, \App\Db\Request $obj, $value) {
+                \Tk\Db\Map\Mapper::$HIDE_DELETED = false;
                 if ($obj->getCassette()) {
                     $value = $obj->getCassette()->getNumber();
+                    if ($obj->getCassette()->isDel()) {
+                        $value = '* ' . $value;
+                    }
                 }
+                \Tk\Db\Map\Mapper::$HIDE_DELETED = true;
                 return $value;
             });
 

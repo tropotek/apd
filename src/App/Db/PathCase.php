@@ -1361,30 +1361,11 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
         return $this->notes;
     }
 
-    /**
-     * @param string $selected (todo: implement)
-     * @return string[]
-     */
-    public static function getSpeciesList($selected = '')
-    {
-        $arr = [
-        'Avian' => 'Avian',
-        'Bovine' => 'Bovine',
-        'Canine' => 'Canine',
-        'Camelid' => 'Camelid',
-        'Caprine' => 'Caprine',
-        'Equine' => 'Equine',
-        'Exotic' => 'Exotic',
-        'Feline' => 'Feline',
-        'Ovine' => 'Ovine',
-        'Porcine' => 'Porcine',
-        'Primate' => 'Primate',
-        'Rodent' => 'Rodent',
-        'Wildlife (native)' => 'Wildlife (native)',
-        'Other'=>'Other'
-        ];
-        return $arr;
-    }
+//    public function setStudents($list)
+//    {
+//        vd($list);
+//        return $this;
+//    }
 
     /**
      * @return array

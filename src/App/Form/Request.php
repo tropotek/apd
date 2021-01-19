@@ -51,7 +51,9 @@ class Request extends \Bs\FormIface
                             $option->setName('[' . $cassette->getNumber() . '] ' . $cassette->getName());
                     }))->prependOption('-- Select --', '');
             } else {
+                \Tk\Db\Map\Mapper::$HIDE_DELETED = false;
                 $cassette = $this->getRequest()->getCassette();
+                \Tk\Db\Map\Mapper::$HIDE_DELETED = true;
                 $this->appendField(new Field\Html('cassette'))->addCss('form-control')->setValue($cassette->getNumber());
             }
         }

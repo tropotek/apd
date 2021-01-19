@@ -160,10 +160,10 @@ class Edit extends AdminEditIface
                 'Request List',
                 \Uni\Uri::createHomeUrl('/requestManager.html')->set('pathCaseId', $this->pathCase->getId()),
                 'fa fa-medkit fa-add-action'));
-            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn(
-                'New Cassette',
-                \Uni\Uri::createHomeUrl('/cassetteEdit.html')->set('pathCaseId', $this->pathCase->getId()),
-                'fa fa-stack-overflow fa-add-action'));
+//            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn(
+//                'New Cassette',
+//                \Uni\Uri::createHomeUrl('/cassetteEdit.html')->set('pathCaseId', $this->pathCase->getId()),
+//                'fa fa-stack-overflow fa-add-action'));
 
             $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Report', \Uni\Uri::create()->set('pdf')->set(Crumbs::CRUMB_IGNORE), 'fa fa-file-pdf-o'))
                 ->setAttr('target', '_blank');
@@ -249,7 +249,9 @@ class Edit extends AdminEditIface
   <div class="col-4" var="panel2" choice="panel2">
     <div class="tk-panel" data-panel-title="Staff Notes" data-panel-icon="fa fa-sticky-note" var="notes-body" choice="notes-panel"></div>
     <div class="tk-panel tk-cassette-list" data-panel-title="Cassettes" data-panel-icon="fa fa-stack-overflow" var="side-panel-cassette" choice="side-panel-cassette"></div>
-    <div class="tk-panel tk-request-list" data-panel-title="Histology Requests" data-panel-icon="fa fa-medkit" var="side-panel-requests" choice="side-panel-requests"></div>
+    <div class="tk-panel tk-request-list" data-panel-title="Histology Requests" data-panel-icon="fa fa-medkit" var="side-panel-requests" choice="side-panel-requests">
+      <p><small>* = the service or cassette record has been deleted.</small></p>
+    </div>
     <div class="tk-panel" data-panel-title="Files" data-panel-icon="fa fa-floppy-o" var="side-panel-files" choice="side-panel-files"></div>
     <div class="tk-panel" data-panel-title="Status Log" data-panel-icon="fa fa-list" var="side-panel-status" choice="side-panel-status"></div>
   </div>

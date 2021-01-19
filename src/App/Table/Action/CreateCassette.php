@@ -62,28 +62,7 @@ class CreateCassette extends \Tk\Table\Action\Button
         }
         $template = parent::show();
 
-        //$template->appendJs($this->getJs());
         return $template;
-    }
-    /**
-     * @return string
-     */
-    protected function getJs()
-    {
-        $js = <<<JS
-jQuery(function($) {
-    
-    $('.tk-action-create-request').each(function () {
-      var btn = $(this);
-      btn.on('click', function (e) {
-        console.log('Button Pressed');
-      });
-      
-      
-    });
-});
-JS;
-        return $js;
     }
 
     /**

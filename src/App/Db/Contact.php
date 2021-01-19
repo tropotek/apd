@@ -418,6 +418,25 @@ class Contact extends \Tk\Db\Map\Model implements \Tk\ValidInterface
         return $this->postcode;
     }
 
+    /**
+     * @return string
+     */
+    public function getAddress()
+    {
+        $str = '';
+        if ($this->getStreet())
+            $str .= $this->getStreet() . ', ';
+        if ($this->getCity())
+            $str .= $this->getCity() . ', ';
+        if ($this->getPostcode())
+            $str .= $this->getPostcode() . ', ';
+        if ($this->getState())
+            $str .= $this->getState() . ', ';
+        if ($this->getCountry())
+            $str .= $this->getCountry() . ', ';
+        return $str;
+    }
+
 
     /**
      * @param string $notes

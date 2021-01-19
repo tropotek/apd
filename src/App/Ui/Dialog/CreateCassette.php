@@ -70,12 +70,16 @@ jQuery(function ($) {
       if (table.length !== 1) return;
       $.get(document.location, {}, function (html) {
         var doc = $(html);
-        table.parent().empty().append(doc.find('div.tk-cassette-list .tk-table'));
+        var el = doc.find('div.tk-cassette-list .tk-table form > div');
+        el.detach();
+        $('div.tk-cassette-list  .tk-table form').empty().append(el);
+        var f = table.find('form');
+        f.trigger('init');
       }, 'html');
     });
     
   }
-  $('.create-cassette-dialog .modal-body form').on('init', 'body', init).each(init);
+  $('.create-cassette-dialog .modal-body form').on('init', document, init).each(init);
 });
 JS;
 

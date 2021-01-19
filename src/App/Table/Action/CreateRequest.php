@@ -97,6 +97,7 @@ class CreateRequest extends \Tk\Table\Action\Button
     {
         $js = <<<JS
 jQuery(function($) {
+  var init = function () {
     function updateBtn(btn) {
       var cbName = btn.data('cb-name');
       if(btn.closest('.tk-table').find('.table-body input[name^="'+cbName+'"]:checked').length) {
@@ -128,6 +129,9 @@ jQuery(function($) {
       
       updateBtn(btn);
     });
+  }
+    
+  $('form').on('init', document, init).each(init);
 });
 JS;
         return $js;

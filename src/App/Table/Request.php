@@ -151,11 +151,17 @@ class Request extends \Bs\TableIface
 
         $this->appendCell(new Cell\Text('cassetteId'))->addCss('key')->setUrl($this->getEditUrl())->
         addOnPropertyValue(function (Cell\Text $cell, \App\Db\Request $obj, $value) {
+            \Tk\Db\Map\Mapper::$HIDE_DELETED = false;
             if ($obj->getCassette()) {
                 $value = $obj->getCassette()->getNumber();
+                    if ($obj->getCassette()->isDel()) {
+                        $value = '* ' . $value;
+                    }
             }
+            \Tk\Db\Map\Mapper::$HIDE_DELETED = true;
             return $value;
         });
+        $this->appendCell(new Cell\Text('status'));
         $this->appendCell(\Tk\Table\Cell\Text::create('pathologyId'))
             ->setOrderProperty('b.pathology_id')->setLabel('Pathology #')
             ->addOnPropertyValue(function (\Tk\Table\Cell\Iface $cell, \App\Db\Request $obj, $value) {
@@ -167,13 +173,17 @@ class Request extends \Bs\TableIface
             });
 
 
-        $this->appendCell(new Cell\Text('status'));
         $this->appendCell(new Cell\Text('qty'));
         $this->appendCell(new Cell\Text('serviceId'))->
             addOnPropertyValue(function (Cell\Text $cell, \App\Db\Request $obj, $value) {
+                \Tk\Db\Map\Mapper::$HIDE_DELETED = false;
                 if ($obj->getService()) {
                     $value = $obj->getService()->getName();
+                    if ($obj->getService()->isDel()) {
+                        $value = '* ' . $value;
+                    }
                 }
+                \Tk\Db\Map\Mapper::$HIDE_DELETED = true;
                 return $value;
             });
         $this->appendCell(new Cell\Text('testId'))->
