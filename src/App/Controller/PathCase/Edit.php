@@ -182,11 +182,30 @@ class Edit extends AdminEditIface
         $this->initActionPanel();
         $template = parent::show();
 
+        $editable = (int)$this->pathCase->isEditable($this->getAuthUser());
+        $js = <<<JS
+config.caseEditable = $editable;
+JS;
+        $template->appendJs($js, array('data-jsl-priority' => -1000));
+        $js = <<<JS
+jQuery(function ($) {
+  if (!config.caseEditable) {
+    //var actions = $('.tk-ui-action-panel');
+    var content = $('.path-case-edit');
+    content.find('input, select, textarea, button, .btn').attr('disabled', 'disabled').addClass('disabled');
+  }
+});
+JS;
+        $template->appendJs($js);
+
         if ($this->pathCase->isIssueAlert()) {
             \Tk\Alert::addWarning($this->pathCase->getIssue(), 'Animal Issue Alert!');
         }
         if ($this->pathCase->isZoonoticAlert()) {
             \Tk\Alert::addError($this->pathCase->getZoonotic(), 'Zoonotic Alert!');
+        }
+        if (!$this->pathCase->isEditable($this->getAuthUser())) {
+            \Tk\Alert::addWarning($this->pathCase->getZoonotic(), 'This case has been locked due to it`s completion.');
         }
 
         // Render the form
@@ -242,7 +261,7 @@ class Edit extends AdminEditIface
     public function __makeTemplate()
     {
         $xhtml = <<<HTML
-<div class="row">
+<div class="row path-case-edit">
   <div class="col-8" var="panel1">
     <div class="tk-panel" data-panel-title="Case Edit" data-panel-icon="fa fa-paw" var="panel"></div>
   </div>

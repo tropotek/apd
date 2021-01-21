@@ -4,7 +4,10 @@ namespace App\Listener;
 use App\Db\MailTemplateEvent;
 use App\Db\MailTemplateEventMap;
 use Tk\ConfigTrait;
+use Tk\Db\Map\Model;
+use Tk\Db\ModelInterface;
 use Tk\Event\Subscriber;
+use Tk\Mail\CurlyMessage;
 
 
 /**
@@ -17,27 +20,30 @@ class MailTemplateHandler implements Subscriber
 {
     use ConfigTrait;
 
+
     /**
-     * After a status change is triggered Look for any existing template to be sent
-     * If found then create that template as a message
+     * Trigger the create mail template function and return an
+     * array of messages|emails that are to be sent
      *
-     * @param \Bs\Event\StatusEvent $event
+     * @param string $eventName The MailTemplate event to create the messages from
+     * @param Model $model The Model object to use to populate the mail template
+     * @param string $subject
+     * @return array|CurlyMessage[]
      * @throws \Exception
      */
-    public function onStatusChange(\Bs\Event\StatusEvent $event)
+    public static function createMessageList($eventName, $model, $subject = '')
     {
-        // do not send messages if notify is false
-        if (!$event->getStatus()->isNotify()) return;
-
-        // Find the mail template event type from the status.event field
+        /** @var array|CurlyMessage[] $messageList */
+        $messageList = array();
+        // Check the mail template event exists from the status.event field
         /** @var MailTemplateEvent $mEvent */
-        $mEvent = MailTemplateEventMap::create()->findFiltered(array('event' => $event->getStatus()->getEvent()))->current();
-        if (!$mEvent) return;
+        $mEvent = MailTemplateEventMap::create()->findFiltered(array('event' => $eventName))->current();
+        if (!$mEvent) return $messageList;
 
         // Find all mail templates for this status update
         $mailTemplateList = \App\Db\MailTemplateMap::create()->findFiltered(array(
             'active' => true,
-            'institutionId' => $this->getConfig()->getInstitutionId(),
+            'institutionId' => $model->getConfig()->getInstitutionId(),
             'mailTemplateEventId' => $mEvent->getId()
         ));
 
@@ -45,32 +51,33 @@ class MailTemplateHandler implements Subscriber
         foreach ($mailTemplateList as $mailTemplate) {
             try {
                 if (!is_callable($mEvent->getCallback())) continue;
-                call_user_func_array($mEvent->getCallback(), array($event, $mailTemplate));
+                /** @var CurlyMessage $message */
+                $message = call_user_func_array($mEvent->getCallback(), array($model, $mailTemplate, $subject));
+                if ($message instanceof \Tk\Mail\CurlyMessage)
+                    $messageList[] = $message;
             } catch (\Exception $e) {
                 \Tk\Log::error($e->getMessage());
             }
         }
-        // Stop if no messages are being sent
-        if (!count($event->getMessageList())) $event->stopPropagation();
+        return $messageList;
     }
 
     /**
-     * If messages exist in the queue, add recipients and insert the
-     * mail template variables for formatting templates.
+     * Send a list of messages
      *
-     * @param \Bs\Event\StatusEvent $event
-     * @throws \Exception
+     * @param array|CurlyMessage[] $messageList
+     * @return int
      */
-    public function onStatusSendMessages(\Bs\Event\StatusEvent $event)
+    public static function sendMessageList($messageList)
     {
-        if (!$event->getStatus()->isNotify()) return;   // do not send messages
+        $fail = 0;
+        $sent = 0;
 
         /** @var \Tk\Mail\CurlyMessage $message */
-        foreach ($event->getMessageList() as $message) {
+        foreach ($messageList as $message) {
             /** @var \App\Db\MailTemplate $mailTemplate */
             $mailTemplate = $message->get('_mailTemplate');
             if (!$mailTemplate) continue;
-
             // Call the template callback as first step
             $mEvent = $mailTemplate->getMailTemplateEvent();
             if (!$mEvent) continue;
@@ -79,22 +86,15 @@ class MailTemplateHandler implements Subscriber
                 \Tk\Log::error('onSendStatusMessages: Recipient Not Found');
                 continue;
             }
-
             if (\App\Config::getInstance()->isDebug() && $message->has('recipient::type')) {
                 $message->setSubject($message->getSubject() . ' [' . ucwords($message->get('recipient::type')) . ']');
             }
-
-
             // Check the message content is not empty
             $tst = trim(preg_replace('/\W/', '', html_entity_decode(strip_tags($message->getParsed()))));
             if ($tst == '') {
                 \Tk\Log::warning($message->getSubject() . ' [EMPTY - NOT SENT]');
                 continue;
             }
-
-            // TODO: Add the signature var
-            //$message->setBody(sprintf('<div>%s {sig}</div>', $message->getBody()));
-
             // Fix all message relative paths
             $tpl = null;
             try {
@@ -122,13 +122,51 @@ class MailTemplateHandler implements Subscriber
             if (!\App\Config::getInstance()->getEmailGateway()->send($message)) {
                 \Tk\Log::warning('Email Not Sent: ' . implode(', ', $message->getTo()));
                 \Tk\Log::warning(implode("\n", \App\Config::getInstance()->getEmailGateway()->getErrors()));
+                $fail++;
             } else {
                 \Tk\Log::notice('Email To: ' . implode(', ', $message->getTo()));
                 \Tk\Log::notice('      Subject: ' . $message->getSubject() );
-                $event->set('sent', $event->get('sent', 0)+1);
+                //$event->set('sent', $event->get('sent', 0)+1);
+                $sent++;
             }
         }
 
+        return 0;
+    }
+
+
+
+    /**
+     * After a status change is triggered Look for any existing template to be sent
+     * If found then create that template as a message
+     *
+     * @param \Bs\Event\StatusEvent $event
+     * @throws \Exception
+     */
+    public function onStatusChange(\Bs\Event\StatusEvent $event)
+    {
+        // do not send messages if notify is false
+        if (!$event->getStatus()->isNotify()) return;
+
+        $messageList = self::createMessageList($event->getStatus()->getEvent(), $event->getStatus()->getModel());
+        $event->setMessageList($messageList);
+
+        // Stop if no messages are being sent
+        if (!count($event->getMessageList())) $event->stopPropagation();
+    }
+
+    /**
+     * If messages exist in the queue, add recipients and insert the
+     * mail template variables for formatting templates.
+     *
+     * @param \Bs\Event\StatusEvent $event
+     * @throws \Exception
+     */
+    public function onStatusSendMessages(\Bs\Event\StatusEvent $event)
+    {
+        if (!$event->getStatus()->isNotify()) return;   // do not send messages
+        $sent = self::sendMessageList($event->getMessageList());
+        $event->set('sent', $sent);
     }
 
     /**

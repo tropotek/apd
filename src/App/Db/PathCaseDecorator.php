@@ -11,28 +11,29 @@ use Tk\Mail\Message;
 use Bs\Db\Status;
 use Tk\ObjectUtil;
 use Uni\Db\User;
+use Uni\Uri;
 
 class PathCaseDecorator
 {
 
-
     /**
-     * @param StatusEvent $event
+     * @param PathCase $case
      * @param MailTemplate $mailTemplate
+     * @param null|string $subject
+     * @return CurlyMessage|null
      * @throws \Exception
      */
-    public static function onCreateMessages(StatusEvent $event, MailTemplate $mailTemplate)
+    public static function onCreateMessages(PathCase $case, MailTemplate $mailTemplate, $subject = null)
     {
-        /** @var PathCase $case */
-        $case = $event->getStatus()->getModel();
-        if (!$case instanceof PathCase) {
-            return;
-        }
-        $status = $event->getStatus();
+        $status = $case->getCurrentStatus();
+        $message = null;
 
         $message = CurlyMessage::create($mailTemplate->getTemplate());
         $message->set('_mailTemplate', $mailTemplate);
-        $message->setSubject('[#' . $case->getId() . '] ' . ObjectUtil::basename($case) . ' ' . ucfirst($status->getName()) . ': ' . $case->getPathologyId());
+        if (!$subject) {
+            $subject = '[#' . $case->getId() . '] ' . ObjectUtil::basename($case) . ' ' . ucfirst($status->getName()) . ': ' . $case->getPathologyId();
+        }
+        $message->setSubject($subject);
         $message->setFrom(Message::joinEmail($case->getInstitution()->getEmail(), $case->getInstitution()->getName()));
 
         $message->replace(Collection::prefixArrayKeys([
@@ -41,6 +42,9 @@ class PathCaseDecorator
             'message' => nl2br($status->getMessage()),
             'event' => $status->getEvent()
         ], 'status::'));
+        $message->set('pathCase::url', Uri::create('/staff/pathCaseEdit.html')
+            ->setScheme(Uri::SCHEME_HTTP_SSL)
+            ->set('pathCaseId', $case->getId())->toString());
         $message->replace(Collection::prefixArrayKeys(\App\Db\PathCaseMap::create()->unmapForm($case), 'pathCase::'));
         if ($case->getInstitution())
             $message->replace(Collection::prefixArrayKeys(\Uni\Db\InstitutionMap::create()->unmapForm($case->getInstitution()), 'institution::'));
@@ -100,8 +104,6 @@ class PathCaseDecorator
                 }
                 break;
         }
-
-        $event->addMessage($message);
-
+        return $message;
     }
 }

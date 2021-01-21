@@ -10,31 +10,29 @@ use Tk\Mail\CurlyMessage;
 use Tk\Mail\Message;
 use Bs\Db\Status;
 use Uni\Db\User;
+use Uni\Uri;
 
 class RequestDecorator
 {
 
     /**
-     * @param StatusEvent $event
+     * @param Request $request
      * @param MailTemplate $mailTemplate
+     * @param null $subject
+     * @return CurlyMessage|null
      * @throws \Exception
      */
-    public static function onCreateMessages(StatusEvent $event, MailTemplate $mailTemplate)
+    public static function onCreateMessages(Request $request, MailTemplate $mailTemplate, $subject = null)
     {
-        /** @var Request $case */
-        $request = $event->getStatus()->getModel();
-        if (!$request instanceof Request) {
-            return;
-        }
-
-        /** @var Request $request */
-        $request = $event->getStatus()->getModel();
-        $status = $event->getStatus();
+        $status = $request->getCurrentStatus();
         $case = $request->getPathCase();
 
         $message = CurlyMessage::create($mailTemplate->getTemplate());
         $message->set('_mailTemplate', $mailTemplate);
-        $message->setSubject('[#' . $request->getId() . '] Pathology Request - ' . ucfirst($status->getName()) . ': ' . $request->getPathCase()->getPathologyId());
+        if (!$subject) {
+            $subject = '[#' . $request->getId() . '] Pathology Request - ' . ucfirst($status->getName()) . ': ' . $request->getPathCase()->getPathologyId();
+        }
+        $message->setSubject($subject);
         $message->setFrom(Message::joinEmail($request->getPathCase()->getInstitution()->getEmail(),
             $request->getPathCase()->getInstitution()->getName()));
 
@@ -46,6 +44,12 @@ class RequestDecorator
 //                'fkey'  => $status->getFkey(),
 //                'fid' => $status->getFId()
         ], 'status::'));
+
+        if ($request->getPathCase())
+            $message->set('pathCase::url', Uri::create('/staff/pathCaseEdit.html')
+                ->setScheme(Uri::SCHEME_HTTP_SSL)->set('pathCaseId', $request->getPathCase()->getId())->toString());
+        $message->set('request::url', Uri::create('/staff/requestEdit.html')
+            ->setScheme(Uri::SCHEME_HTTP_SSL)->set('requestId', $request->getId())->toString());
         $message->replace(Collection::prefixArrayKeys(\App\Db\RequestMap::create()
             ->unmapForm($request), 'request::'));
         if ($request->getPathCase() && $request->getPathCase()->getInstitution())
@@ -113,7 +117,6 @@ class RequestDecorator
                 }
                 break;
         }
-        $event->addMessage($message);
-
+        return $message;
     }
 }

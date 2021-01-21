@@ -13,15 +13,32 @@ class Permission extends \Uni\Db\Permission
 {
 
     /**
-     * TODO: can we use different permissions to allow different actions
-     *      on a case??? What roles are available to the stakeholders
-     *      (pathologist, accounts, lab, .... ???)
      *
      * Pathologist:
+     *  - Will be used in future
      *
      * @target staff
      */
     const IS_PATHOLOGIST        = 'perm.is.pathologist';
+
+    /**
+     *
+     *
+     * Technician:
+     *  - Get disposal reminder emails
+     *
+     * @target staff
+     */
+    const IS_TECHNICIAN        = 'perm.is.technician';
+
+    /**
+     * If a staff member is a case admin they have permission
+     * to change the status of a case at any time
+     * Other staff cannot change the status once a case is completed
+     *
+     * @target staff
+     */
+    const CASE_ADMIN            = 'perm.manage.case';
 
 
 
@@ -50,13 +67,11 @@ class Permission extends \Uni\Db\Permission
                 $arr = array(
                     'Manage Site Settings' => self::MANAGE_SITE,
                     'Manage Staff Records' => self::MANAGE_STAFF,
-                    'Manage Site Plugins' => self::MANAGE_PLUGINS,
-                    'Can Masquerade' => self::CAN_MASQUERADE
-                    //'Course, Subject And Enrollment Settings' => self::MANAGE_SUBJECT,
-                    //'Staff Member is a Course Coordinator' => self::IS_COORDINATOR,
-                    //'Staff Member is a Lecturer' => self::IS_LECTURER,
-                    //'Staff Member is a Student Mentor' => self::IS_MENTOR,
-
+                    //'Manage Site Plugins' => self::MANAGE_PLUGINS,
+                    'Can Masquerade' => self::CAN_MASQUERADE,
+                    //'Is Pathologist' => self::IS_PATHOLOGIST,
+                    'Is Technician' => self::IS_TECHNICIAN,
+                    'Case Administration' => self::CASE_ADMIN
                 );
         }
         return $arr;
@@ -70,7 +85,11 @@ class Permission extends \Uni\Db\Permission
      */
     public static function getDefaultPermissionList($type = '')
     {
-        $list = self::getPermissionList($type);
-        return $list;
+        return array(); // All permissions must be set by a self::MANAGE_STAFF user
+//        $list = self::getPermissionList($type);
+//        unset($list['Case Administration']); // must be set by admin user
+//        unset($list['Is Pathologist']); // must be set by admin user
+//        unset($list['Is Technician']); // must be set by admin user
+//        return $list;
     }
 }

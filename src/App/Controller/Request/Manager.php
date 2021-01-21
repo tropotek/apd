@@ -32,7 +32,10 @@ class Manager extends AdminManagerIface
     public function doDefault(Request $request)
     {
         $this->setTable(\App\Table\Request::create());
-        $this->getTable()->setEditUrl(\Bs\Uri::createHomeUrl('/requestEdit.html')->set('pathCaseId', $request->query->get('pathCaseId')));
+        $url = \Bs\Uri::createHomeUrl('/requestEdit.html');
+        if ($request->query->get('pathCaseId'))
+            $url->set('pathCaseId', $request->query->get('pathCaseId'));
+        $this->getTable()->setEditUrl($url);
         $this->getTable()->init();
 
         $filter = array();

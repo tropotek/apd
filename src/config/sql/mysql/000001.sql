@@ -69,3 +69,69 @@ insert into test (institution_id, name, modified, created) values (1, 'H&E', NOW
 -- Disable request complete emails until I figure out how we can maybe make a daily email or something
 UPDATE mail_template t SET t.active = 0 WHERE t.id = 4;
 
+
+insert into mail_template_event (name, event, callback, description)  VALUES
+('Case - Disposal Reminder', 'status.app.pathCase.disposalReminder', 'App\\Db\\PathCaseDecorator::onCreateMessages', 'Triggered when a case disposal reminder email is triggered')
+;
+
+
+TRUNCATE mail_template;
+INSERT INTO mail_template (institution_id, mail_template_event_id, recipient_type, template, active, modified, created)
+VALUES (1, 1, 'pathologist', '<p>Hi {recipient::name},</p>
+<p>A new pathology case has been created:</p>
+<ul>
+<li>Pathology #: <a href="{pathCase::url}">{pathCase::pathologyId}</a></li>
+<li>Institution ID: {pathCase::institutionId}</li>
+<li>Client ID: {pathCase::clientId}</li>
+<li>Type: {pathCase::type}</li>
+<li>Submission Type: {pathCase::submissionType}</li>
+<li>Status: {pathCase::status}</li>
+<li>Animal Name: {pathCase::animalName}</li>
+<li>Breed: {pathCase::breed}</li>
+</ul>
+<p>&nbsp;</p>
+<p>STATUS</p>
+<ul>
+<li>Name: {status::name}</li>
+<li>Event: {status::event}</li>
+<li>Message: {status::message}</li>
+</ul>
+<p>&nbsp;</p>
+<p>Thanks,</p>
+<p>{institution::name}</p>', 1, NOW(), NOW());
+INSERT INTO mail_template (institution_id, mail_template_event_id, recipient_type, template, active, modified, created)
+VALUES (1, 11, 'pathologist', '<p>Hi {recipient::name},</p>
+<p>A new pathology case is due for disposal on {pathCase::disposal}</p>
+<ul>
+<li>Pathology #: <a href="{pathCase::url}">{pathCase::pathologyId}</a></li>
+<li>Institution ID: {pathCase::institutionId}</li>
+<li>Client ID: {pathCase::clientId}</li>
+<li>Type: {pathCase::type}</li>
+<li>Submission Type: {pathCase::submissionType}</li>
+<li>Status: {pathCase::status}</li>
+<li>Animal Name: {pathCase::animalName}</li>
+<li>Breed: {pathCase::breed}</li>
+<li>Method Of Disposal: {pathCase::acType}</li>
+<li>Disposal Date: {pathCase::disposal}</li>
+</ul>
+<p>&nbsp;</p>
+<p>STATUS</p>
+<ul>
+<li>Name: {status::name}</li>
+<li>Event: {status::event}</li>
+<li>Message: {status::message}</li>
+</ul>
+<p>&nbsp;</p>
+<p>Thanks,</p>
+<p>{institution::name}</p>', 1, NOW(), NOW());
+
+
+
+
+
+
+
+
+
+
+

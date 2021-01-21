@@ -384,11 +384,15 @@ SQL;
                 $filter->appendWhere('a.disposal IS NULL AND ');
             }
         }
+
+        // This query is used for finding reminder disposals (see Cron.php)
         if (!empty($filter['disposedAfter']) && $filter['disposedAfter'] !== '' && $filter['disposedAfter'] !== null) {
+            $now = $this->quote(\Tk\Date::create()->format(\Tk\Date::FORMAT_ISO_DATETIME));
             if (!$filter['disposedAfter'] instanceof \DateTime)
                 $filter['disposedAfter'] = \Tk\Date::createFormDate($filter['disposedAfter']);
-            $filter->appendWhere('a.disposal IS NOT NULL AND d.disposal <= %s AND ', $this->quote($filter['disposedAfter']->format(\Tk\Date::FORMAT_ISO_DATETIME)));
+            $filter->appendWhere('a.disposal IS NOT NULL AND a.disposal > %s AND a.disposal <= %s AND ', $now, $this->quote($filter['disposedAfter']->format(\Tk\Date::FORMAT_ISO_DATETIME)));
         }
+
         if (isset($filter['studentReport']) && $filter['studentReport'] !== '' && $filter['studentReport'] !== null) {
             $filter->appendWhere('a.student_report = %s AND ', (int)$filter['studentReport']);
         }

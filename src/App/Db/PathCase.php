@@ -13,6 +13,7 @@ use Bs\Db\Traits\UserTrait;
 use Tk\Db\Tool;
 use Tk\Money;
 use Uni\Db\Traits\InstitutionTrait;
+use Uni\Db\User;
 
 /**
  * @author Mick Mifsud
@@ -40,6 +41,9 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     const STATUS_REPORTED               = 'reported';           //
     const STATUS_COMPLETED              = 'completed';          //
     const STATUS_CANCELLED              = 'cancelled';          // case cancelled
+
+    // Used for the reminder mailTemplateEvent
+    const REMINDER_STATUS_DISPOSAL      = 'status.app.pathCase.disposalReminder';
 
     const TYPE_BIOPSY                   = 'biopsy';
     const TYPE_NECROPSY                 = 'necropsy';
@@ -1361,11 +1365,19 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
         return $this->notes;
     }
 
-//    public function setStudents($list)
-//    {
-//        vd($list);
-//        return $this;
-//    }
+    /**
+     * Is this case editable by this user
+     * IE: Only users flagged as CASE_ADMIN's can edit a case after it is completed
+     *
+     * @param User $user
+     */
+    public function isEditable(User $user)
+    {
+        if (!$user->hasPermission(Permission::CASE_ADMIN) && $this->hasStatus(self::STATUS_COMPLETED)) {
+            return false;
+        }
+        return true;
+    }
 
     /**
      * @return array
@@ -1393,22 +1405,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
         if (!$this->status) {
             $errors['status'] = 'Invalid value: status';
         }
-
-//        if (!$this->species) {
-//            $errors['species'] = 'Invalid value: species';
-//        }
-
-//        if (!$this->sex) {
-//            $errors['gender'] = 'Invalid value: gender';
-//        }
-
-//        if (!$this->patientNumber) {
-//            $errors['patientNumber'] = 'Invalid value: patientNumber';
-//        }
-
-//        if (!$this->ownerName) {
-//            $errors['ownerName'] = 'Invalid value: ownerName';
-//        }
 
         return $errors;
     }
@@ -1438,7 +1434,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
             case Request::STATUS_CANCELLED:
                 return true;
         }
-
         return false;
     }
 }
