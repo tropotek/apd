@@ -174,7 +174,7 @@ class Edit extends AdminEditIface
         }
     }
 
-    
+
     /**
      * @return \Dom\Template
      */
