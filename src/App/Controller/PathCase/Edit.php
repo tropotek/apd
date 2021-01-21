@@ -173,8 +173,7 @@ class Edit extends AdminEditIface
                 ->setAttr('data-toggle', 'modal')->setAttr('data-target', '#'.$this->emailReportDialog->getId());
         }
     }
-
-
+    
     /**
      * @return \Dom\Template
      */
