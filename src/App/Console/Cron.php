@@ -74,8 +74,9 @@ class Cron extends \Bs\Console\Iface
         $days = 3;      // The number of days before disposal to send reminders
         $spc = '  ';
         $this->write('Send Disposal Reminders for '.$institution->getName().': ');
+
         // TODO: REMOVE THIS ........!!!!!!!!!!!!!!!
-        $this->getConfig()->getDb()->exec('TRUNCATE `mail_sent`');
+        //$this->getConfig()->getDb()->exec('TRUNCATE `mail_sent`');
 
         $caseList = PathCaseMap::create()->findFiltered([
             'institutionId' => $institution->getId(),

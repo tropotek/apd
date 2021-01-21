@@ -142,6 +142,3 @@ CREATE TABLE IF NOT EXISTS `mail_sent` (
 
 
 
-
-
-

@@ -221,7 +221,6 @@ SQL;
     public function findFiltered($filter, $tool = null)
     {
         $r = $this->selectFromFilter($this->makeQuery(\Tk\Db\Filter::create($filter)), $tool);
-        vd($this->getDb()->getLastQuery());
         return $r;
     }
 
@@ -398,8 +397,6 @@ SQL;
         if (isset($filter['reminderSent']) && $filter['reminderSent'] !== '' && $filter['reminderSent'] !== null) {
             $filter->appendFrom(' LEFT JOIN %s c ON (b.id = c.path_case_id AND c.type = %s)',
                 $this->quoteTable('mail_sent'), $this->quote('reminder'));
-            //$filter->appendWhere('a.id = c.path_case_id AND c.type = %s AND ', $this->quote('reminder'));
-            // TODO: FROM
             if ($filter['reminderSent'] > 0) {
                 $filter->appendWhere('c.`date` IS NOT NULL');
             } else {
