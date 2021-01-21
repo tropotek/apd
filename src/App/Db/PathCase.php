@@ -44,6 +44,8 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 
     // Used for the reminder mailTemplateEvent
     const REMINDER_STATUS_DISPOSAL      = 'status.app.pathCase.disposalReminder';
+    // Used in the mail_sent table `type` field
+    const REMINDER_SENT_TYPE            = 'reminder';
 
     const TYPE_BIOPSY                   = 'biopsy';
     const TYPE_NECROPSY                 = 'necropsy';

@@ -74,17 +74,25 @@ class Cron extends \Bs\Console\Iface
         $days = 3;      // The number of days before disposal to send reminders
         $spc = '  ';
         $this->write('Send Disposal Reminders for '.$institution->getName().': ');
+        // TODO: REMOVE THIS ........!!!!!!!!!!!!!!!
+        $this->getConfig()->getDb()->exec('TRUNCATE `mail_sent`');
 
         $caseList = PathCaseMap::create()->findFiltered([
             'institutionId' => $institution->getId(),
             'isDisposed' => true,
-            'disposedAfter' => \Tk\Date::create()->add(new \DateInterval('P'.$days.'D'))
+            'disposedAfter' => \Tk\Date::create()->add(new \DateInterval('P'.$days.'D')),
+            'reminderSent' => false     // TODO:
         ]);
         $sent = 0;
         foreach ($caseList as $case) {
             $subject = 'Pathology Case ['. $case->getPathologyId() . '] Disposal Reminder for ' . $case->getDisposal(\Tk\Date::FORMAT_LONG_DATE);
             $messageList = MailTemplateHandler::createMessageList(PathCase::REMINDER_STATUS_DISPOSAL, $case, $subject);
             $sent += MailTemplateHandler::sendMessageList($messageList);
+
+            // Flag this case as disposal email reminder sent
+            PathCaseMap::create()->addMailSent($case->getId(), PathCase::REMINDER_SENT_TYPE);
+            //$date = PathCaseMap::create()->hasMailSent($case->getId(), PathCase::REMINDER_SENT_TYPE);
+
             $this->writeGreen($spc . 'Sending Reminder For Case: #' . $case->getPathologyId(), OutputInterface::VERBOSITY_VERBOSE);
         }
         if ($sent)

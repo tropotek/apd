@@ -128,6 +128,16 @@ VALUES (1, 11, 'pathologist', '<p>Hi {recipient::name},</p>
 
 
 
+-- --------------------------------------------------------
+-- table to track sent reminder emails to avoid duplicates
+-- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mail_sent` (
+     `path_case_id` int(10) unsigned NOT NULL,
+     `type` VARCHAR(128) NOT NULL DEFAULT '',
+     `date` DATETIME DEFAULT NULL,
+     PRIMARY KEY `path_case_id` (`path_case_id`, `type`)
+) ENGINE=InnoDB;
+
 
 
 

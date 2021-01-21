@@ -220,7 +220,9 @@ SQL;
      */
     public function findFiltered($filter, $tool = null)
     {
-        return $this->selectFromFilter($this->makeQuery(\Tk\Db\Filter::create($filter)), $tool);
+        $r = $this->selectFromFilter($this->makeQuery(\Tk\Db\Filter::create($filter)), $tool);
+        vd($this->getDb()->getLastQuery());
+        return $r;
     }
 
     /**
@@ -393,6 +395,19 @@ SQL;
             $filter->appendWhere('a.disposal IS NOT NULL AND a.disposal > %s AND a.disposal <= %s AND ', $now, $this->quote($filter['disposedAfter']->format(\Tk\Date::FORMAT_ISO_DATETIME)));
         }
 
+        if (isset($filter['reminderSent']) && $filter['reminderSent'] !== '' && $filter['reminderSent'] !== null) {
+            $filter->appendFrom(' LEFT JOIN %s c ON (b.id = c.path_case_id AND c.type = %s)',
+                $this->quoteTable('mail_sent'), $this->quote('reminder'));
+            //$filter->appendWhere('a.id = c.path_case_id AND c.type = %s AND ', $this->quote('reminder'));
+            // TODO: FROM
+            if ($filter['reminderSent'] > 0) {
+                $filter->appendWhere('c.`date` IS NOT NULL');
+            } else {
+                $filter->appendWhere('c.`date` IS NULL');
+            }
+        }
+
+
         if (isset($filter['studentReport']) && $filter['studentReport'] !== '' && $filter['studentReport'] !== null) {
             $filter->appendWhere('a.student_report = %s AND ', (int)$filter['studentReport']);
         }
@@ -472,6 +487,36 @@ SQL;
         $stm->bindParam(1, $pathCaseId);
         $stm->bindParam(2, $contactId);
         $stm->execute();
+    }
+
+
+    /**
+     * @param int $pathCaseId
+     * @param string $type
+     * @return \DateTime|null Return null if record not in the table
+     * @throws \Tk\Db\Exception
+     */
+    public function hasMailSent($pathCaseId, $type = 'reminder')
+    {
+        $stm = $this->getDb()->prepare('SELECT * FROM mail_sent WHERE path_case_id = ? AND type = ? LIMIT 1');
+        $stm->execute([$pathCaseId, $type]);
+        $date = $stm->fetchColumn(2);
+        if ($date !== false)
+            return \Tk\Date::create($date);
+        return null;
+    }
+
+    /**
+     * @param int $pathCaseId
+     * @param string $type
+     * @throws \Tk\Db\Exception
+     */
+    public function addMailSent($pathCaseId, $type = 'reminder')
+    {
+        if ($this->hasMailSent($pathCaseId, $type)) return;
+        $now = \Tk\Date::create()->format(\Tk\Date::FORMAT_ISO_DATETIME);
+        $stm = $this->getDb()->prepare('INSERT INTO mail_sent (path_case_id, type, `date`)  VALUES (?, ?, ?) ');
+        $stm->execute([$pathCaseId, $type, $now]);
     }
 
 }
