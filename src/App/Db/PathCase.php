@@ -567,7 +567,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     /**
      * @return string
      */
-    public function getType() : string
+    public function getType() : ?string
     {
         return $this->type;
     }

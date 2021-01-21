@@ -563,6 +563,8 @@ CSS;
         }
 
         $isNew = (bool)$this->getPathCase()->getId();
+        $this->getPathCase()->setStatusNotify(true);
+        $this->getPathCase()->setStatusMessage('New pathology case created.');
         $this->getPathCase()->save();
 
         // Save the student field
