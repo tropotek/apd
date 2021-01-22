@@ -509,7 +509,7 @@ CSS;
             exit();
         }
         \Tk\ResponseJson::createJson(['status' => 'err', 'msg' => 'Contact Not Found!'])->send();
-        exit();:win32_query_service_status()
+        exit();
     }
 
     /**
