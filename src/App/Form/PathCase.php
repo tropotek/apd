@@ -506,9 +506,10 @@ CSS;
             $contact->address = $contact->getAddress();
             $data['contact'] = $contact;
             \Tk\ResponseJson::createJson($data)->send();
+            exit();
         }
         \Tk\ResponseJson::createJson(['status' => 'err', 'msg' => 'Contact Not Found!'])->send();
-
+        exit();:win32_query_service_status()
     }
 
     /**
