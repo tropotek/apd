@@ -138,9 +138,14 @@ jQuery(function ($) {
     if (el.prop('checked') === true) {
       $('#path_case-accountStatus').removeAttr(d, d);
       $('#path_case-cost').removeAttr(d, d);
+      $('.tk-invoice-list').css('display', 'block');
+      if ($('#path_case-accountStatus').val() === '') {
+        $("#path_case-accountStatus").prop("selectedIndex", 1);
+      }
     } else {
       $('#path_case-accountStatus').attr(d, d);
       $('#path_case-cost').attr(d, d);
+      $('.tk-invoice-list').css('display', 'none');
     }
   }
   $('#path_case-billable').on('change', function () {
@@ -157,8 +162,8 @@ JS;
         $this->appendField(Field\Select::createSelect('accountStatus', $list)->prependOption('-- Select --', ''))
             ->setTabGroup($tab);
 
-        $this->appendField(new Money('cost'))->addCss('money')->setLabel('Billable Amount')->setTabGroup($tab)
-            ->setNotes('');
+//        $this->appendField(new Money('cost'))->addCss('money')->setLabel('Billable Amount')->setTabGroup($tab)
+//            ->setNotes('');
 
         $this->appendField(new Field\Checkbox('submissionReceived'))->setTabGroup($tab)
             ->setNotes('Has the submission form been received?');
@@ -549,6 +554,10 @@ CSS;
             $vals['ownerId'] = current($vals['ownerId']);
         else
             $vals['ownerId'] = 0;
+
+        if (!isset($vals['billable']) || !$vals['billable']) {
+            unset($vals['accountStatus']);
+        }
 
         \App\Db\PathCaseMap::create()->mapForm($vals, $this->getPathCase());
         // Do Custom Validations

@@ -85,19 +85,41 @@ class InvoiceItemMin extends \Bs\TableIface
 
         $js = <<<JS
 jQuery(function($) {
-  var init = function () {
-    
-      
-  };
-  $('.create-invoice-dialog .modal-body form').on('init', document, init).each(init);
+  $('.tk-invoice-list .tk-table').each(function () {
+    // Add a totals row at the footer of the table
+    $(this).on('invoice::updateTotal', function () {
+      var total = 0.0;
+      $(this).find('td.mTotal').each(function () {
+        total += parseFloat($(this).text().substring(1), 2);
+      });
+      $(this).find('tr.tk-invoice-total').remove();
+      var html = '<tr class="tk-invoice-total">' +
+       ' <td colspan="4" class="total-label">Total:</td>' +
+       ' <td class="total-val">$'+total.toFixed(2)+'</td>' +
+       '</tr>';
+      $(this).find('table').append(html);
+    }).trigger('invoice::updateTotal');
+  });
+  
 
 });
 JS;
-        //$template->appendJs($js);
+        $template->appendJs($js);
 
         $css = <<<CSS
+td.total-label {
+  text-align: right;
+  font-weight: 600 !important;
+  padding-right: 10px;
+}
+td.mTotal, td.mPrice, td.total-val {
+  text-align: right;
+}
+td.mQty {
+  text-align: center;
+}
 CSS;
-        //$template->appendCss($css);
+        $template->appendCss($css);
 
         return $template;
     }

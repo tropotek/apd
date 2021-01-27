@@ -273,9 +273,6 @@ JS;
             $template->setVisible('notes-panel');
         }
 
-
-
-
         return $template;
     }
 

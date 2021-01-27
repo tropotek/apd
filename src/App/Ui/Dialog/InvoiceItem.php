@@ -72,15 +72,19 @@ jQuery(function ($) {
         var doc = $(html);
         //table.parent().empty().append(doc.find('div.tk-invoice-list .tk-table'));
         var el = doc.find('div.tk-invoice-list .tk-table form > div');
-        el.detach();
+        el.detach(); 
+        table.find('form').empty().append(el).trigger('init');
+        // Update delete events
+        if ($.fn.bsConfirm === undefined) {
+          table.find('[data-confirm]').on('click', function () {
+            return confirm($('<p>' + $(this).data('confirm') + '</p>').text());
+          });
+        } else {
+          table.find('[data-confirm]').bsConfirm({});
+        }
         
-        vd(el);
-        //$('div.tk-invoice-list .tk-table form').empty().append(el);
-        //form.empty().append(el);
-        //form.trigger('init'); 
-        table.find('form').empty().append(el);
-        // f.trigger('init');
-        $('div.tk-invoice-list .tk-table form').trigger('init');
+        // refresh the totals row at the footer
+        table.trigger('invoice::updateTotal');
         
       }, 'html');
       
