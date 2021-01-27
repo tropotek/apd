@@ -79,6 +79,9 @@ $routes->add('test-edit', Route::create('/staff/testEdit.html', 'App\Controller\
 $routes->add('animalType-manager', Route::create('/staff/animalTypeManager.html', 'App\Controller\AnimalType\Manager::doDefault'));
 $routes->add('animalType-edit', Route::create('/staff/animalTypeEdit.html', 'App\Controller\AnimalType\Edit::doDefault'));
 
+$routes->add('invoiceItem-manager', Route::create('/staff/invoiceItemManager.html', 'App\Controller\InvoiceItem\Manager::doDefault'));
+$routes->add('invoiceItem-edit', Route::create('/staff/invoiceItemEdit.html', 'App\Controller\InvoiceItem\Edit::doDefault'));
+
 
 
 

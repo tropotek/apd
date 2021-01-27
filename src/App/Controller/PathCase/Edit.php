@@ -44,6 +44,11 @@ class Edit extends AdminEditIface
     protected $requestTable = null;
 
     /**
+     * @var null|\App\Table\InvoiceItemMin
+     */
+    protected $invoiceTable = null;
+
+    /**
      * @var null|EmailReport
      */
     protected $emailReportDialog = null;
@@ -124,8 +129,18 @@ class Edit extends AdminEditIface
         );
         $this->requestTable->setList($this->requestTable->findList($filter, \Tk\Db\Tool::create('created DESC')));
 
+        $this->invoiceTable = \App\Table\InvoiceItemMin::create();
+        $this->invoiceTable->setEditUrl(\Bs\Uri::createHomeUrl('/invoiceItemEdit.html'));
+        $this->invoiceTable->init();
+        $filter = array(
+            'pathCaseId' => $this->pathCase->getId()
+        );
+        $this->invoiceTable->setList($this->invoiceTable->findList($filter, \Tk\Db\Tool::create('created DESC')));
+
+
         $this->emailReportDialog = new EmailReport($this->pathCase);
         $this->emailReportDialog->execute();
+
 
         // Add view count to Content
         if ($request->has('pdf')) {
@@ -160,6 +175,11 @@ class Edit extends AdminEditIface
                 'Request List',
                 \Uni\Uri::createHomeUrl('/requestManager.html')->set('pathCaseId', $this->pathCase->getId()),
                 'fa fa-medkit fa-add-action'));
+            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn(
+                'Invoice Items',
+                \Uni\Uri::createHomeUrl('/invoiceItemManager.html')->set('pathCaseId', $this->pathCase->getId()),
+                'fa fa-money fa-add-action'));
+
 //            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn(
 //                'New Cassette',
 //                \Uni\Uri::createHomeUrl('/cassetteEdit.html')->set('pathCaseId', $this->pathCase->getId()),
@@ -229,6 +249,10 @@ JS;
             $template->appendTemplate('side-panel-requests', $this->requestTable->show());
             $template->setVisible('side-panel-requests');
         }
+        if ($this->invoiceTable) {
+            $template->appendTemplate('side-panel-invoice', $this->invoiceTable->show());
+            $template->setVisible('side-panel-invoice');
+        }
 
         if ($this->pathCase->getId()) {
             $template->setVisible('panel2');
@@ -273,6 +297,8 @@ JS;
     </div>
     <div class="tk-panel" data-panel-title="Files" data-panel-icon="fa fa-floppy-o" var="side-panel-files" choice="side-panel-files"></div>
     <div class="tk-panel" data-panel-title="Status Log" data-panel-icon="fa fa-list" var="side-panel-status" choice="side-panel-status"></div>
+
+    <div class="tk-panel tk-invoice-list" data-panel-title="Invoice Items" data-panel-icon="fa fa-money" var="side-panel-invoice" choice="side-panel-invoice"></div>
   </div>
 </div>
 HTML;
