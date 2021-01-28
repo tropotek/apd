@@ -33,12 +33,12 @@ class NoticeRecipient extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public $userId = 0;
 
     /**
-     * @var \DateTime
+     * @var \DateTime|null
      */
     public $viewed = null;
 
     /**
-     * @var \DateTime
+     * @var \DateTime|null
      */
     public $read = null;
 
@@ -58,7 +58,7 @@ class NoticeRecipient extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     }
 
     /**
-     * @param \DateTime $viewed
+     * @param \DateTime|null $viewed
      * @return NoticeRecipient
      */
     public function setViewed($viewed) : NoticeRecipient
@@ -70,7 +70,7 @@ class NoticeRecipient extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     /**
      * @return \DateTime
      */
-    public function getViewed() : \DateTime
+    public function getViewed() : ?\DateTime
     {
         return $this->viewed;
     }
@@ -84,7 +84,7 @@ class NoticeRecipient extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     }
 
     /**
-     * @param \DateTime $read
+     * @param \DateTime|null $read
      * @return NoticeRecipient
      */
     public function setRead($read) : NoticeRecipient
@@ -96,7 +96,7 @@ class NoticeRecipient extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     /**
      * @return \DateTime
      */
-    public function getRead() : \DateTime
+    public function getRead() : ?\DateTime
     {
         return $this->read;
     }

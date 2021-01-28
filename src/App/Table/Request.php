@@ -112,6 +112,8 @@ class Request extends \Bs\TableIface
      */
     public function init()
     {
+        $this->addCss('tk-request-table');
+
         if($this->isMinMode())
             $this->getRenderer()->enableFooter(false);
 

@@ -33,6 +33,7 @@ class PathCase extends \Bs\TableIface
      */
     public function init()
     {
+        $this->addCss('tk-pathCase-table');
 
         $this->appendCell(new Cell\Checkbox('id'));
         $this->appendCell(new Cell\Text('pathologyId'))->setLabel('Pathology #')->addCss('key')->setUrl($this->getEditUrl());

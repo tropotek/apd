@@ -3,6 +3,7 @@ namespace App\Ajax;
 
 use App\Config;
 use App\Db\NoticeMap;
+use Uni\Db\User;
 use Uni\Db\UserMap;
 use Exception;
 use Tk\ConfigTrait;
@@ -41,10 +42,9 @@ class Notice
      */
     public function doGetNoticeList(Request $request)
     {
-        $status = 200;  // change this on error
         // h = userHash
         $out = $this->getRecipientList($request->get('h'));
-        return ResponseJson::createJson($out, $status);
+        return ResponseJson::createJson($out);
     }
 
     /**
@@ -53,41 +53,32 @@ class Notice
      * @throws Exception
      */
     public function doMarkRead(Request $request)
-    {
-        $status = 200;  // change this on error
-
-        // h = userHash
-        // d = true/false
+    {        // h = userHash
+        // d = true/false  //mark read/unread
         // nid = noticeId
 
-        /** @var \App\Db\Notice $notice */
-        $notice = NoticeMap::create()->find($request->get('nid'));
         /** @var \Uni\Db\User $user */
         $user = UserMap::create()->findByHash($request->get('h'), Config::getInstance()->getInstitutionId());
-        $recipient = $notice->getNoticeRecipient($user);
-        if (!$recipient) return ResponseJson::createJson(array('error' => 'Invalid recipient Record!'), 500);
-
-        $unread = true;
-        if ($request->has('d')) {
-            $unread = false;
-        }
-
-        if ($notice && $user) {
-            if ($unread) {
-                if (!$recipient->getViewed())
-                    $recipient->setViewed(\Tk\Date::create());
-                $recipient->setRead(\Tk\Date::create());
-                //$notice->markRead($user);
+        if (!$user)  return ResponseJson::createJson(array('error' => 'Invalid Request'), 500);
+        $params = [];
+        if ($request->has('nid'))
+            $params['id'] = (int)$request->get('nid');
+        $list = $this->getCurrentNoticeList($user, $params);
+        foreach ($list as $notice) {
+            $recipient = $notice->getNoticeRecipient($user);
+            if (!$recipient) continue;
+            $b = ($request->get('d') == true);
+            if ($b) {
+                if (!$recipient->getRead())
+                    $recipient->setRead(\Tk\Date::create());
             } else {
-                // set the message to unread
                 $recipient->setRead(null);
             }
             $recipient->save();
         }
 
         $out = $this->getRecipientList($request->get('h'));
-
-        return ResponseJson::createJson($out, $status);
+        return ResponseJson::createJson($out);
     }
 
     /**
@@ -97,39 +88,34 @@ class Notice
      */
     public function doMarkViewed(Request $request)
     {
-        $status = 200;  // change this on error
+        // use for testing
+        // UPDATE notice_recipient t SET t.read = null WHERE 1;
 
         // h = userHash
-        // d = true/false
+        // d = true/false  //mark read/unread
         // nid = noticeId
-
-        /** @var \App\Db\Notice $notice */
-        $notice = NoticeMap::create()->find($request->get('nid'));
         /** @var \Uni\Db\User $user */
         $user = UserMap::create()->findByHash($request->get('h'), Config::getInstance()->getInstitutionId());
-        $recipient = $notice->getNoticeRecipient($user);
-        if (!$recipient) return ResponseJson::createJson(array('error' => 'Invalid recipient Record!'), 500);
-
-        $unread = true;
-        if ($request->has('d')) {
-            $unread = false;
-        }
-
-        if ($notice && $user) {
-            if ($unread) {
+        if (!$user)  return ResponseJson::createJson(array('error' => 'Invalid Request'), 500);
+        $params = [];
+        if ($request->has('nid'))
+            $params['id'] = (int)$request->get('nid');
+        $list = $this->getCurrentNoticeList($user, $params);
+        foreach ($list as $notice) {
+            $recipient = $notice->getNoticeRecipient($user);
+            if (!$recipient) continue;
+            $b = ($request->get('d') == true);
+            if ($b) {
                 if (!$recipient->getViewed())
                     $recipient->setViewed(\Tk\Date::create());
-                $recipient->setViewed(\Tk\Date::create());
             } else {
-                // set the message to unread
                 $recipient->setViewed(null);
             }
             $recipient->save();
         }
 
         $out = $this->getRecipientList($request->get('h'));
-
-        return ResponseJson::createJson($out, $status);
+        return ResponseJson::createJson($out);
     }
 
 
@@ -140,14 +126,14 @@ class Notice
      */
     protected function getRecipientList($userHash)
     {
+        // use for testing
+        // UPDATE notice_recipient t SET t.viewed = null WHERE 1;
+
         $out = array();
         /** @var \Uni\Db\User $user */
         $user = UserMap::create()->findByHash($userHash, $this->getConfig()->getInstitutionId());
         if ($user) {
-            $filter = array(
-                'recipientId' => $user->getId()
-            );
-            $list = NoticeMap::create()->findFiltered($filter, Tool::create('created DESC', 15));
+            $list = $this->getCurrentNoticeList($user);
             if (count($list)) {
                 $unread = 0;
                 $total = $list->count();
@@ -156,8 +142,10 @@ class Notice
                     $recipient = $notice->getNoticeRecipient($user);
                     if (!$recipient) continue;
                     $notice->icon = $notice->getIconCss();
-                    $notice->time =  str_replace(' ago', '', \Tk\Date::toRelativeString($recipient->getCreated()));
-
+                    $notice->time = str_replace(' ago', '', \Tk\Date::toRelativeString($recipient->getCreated()));
+                    $notice->isNew = (\Tk\Date::create()->sub(new \DateInterval('PT2H')) < $notice->getCreated());
+                    $notice->isRead = $recipient->isRead();
+                    $notice->isViewed = $recipient->isViewed();
 
                     $out['list'][] = $notice;
                     if (!$recipient->isViewed()) {
@@ -170,5 +158,24 @@ class Notice
         }
         return $out;
     }
+
+    /**
+     * @param User $user
+     * @param array $params
+     * @return \App\Db\Notice[]|\Tk\Db\Map\ArrayObject
+     * @throws Exception
+     */
+    protected function getCurrentNoticeList(User $user, $params = [])
+    {
+        $filter = array(
+            'recipientId' => $user->getId(),
+            //'viewed' => false,
+            'created' => \Tk\Date::create()->sub(new \DateInterval('P2D'))
+            //'created' => \Tk\Date::create()->sub(new \DateInterval('PT18H'))
+        );
+        $filter = array_merge($filter, $params);
+        return NoticeMap::create()->findFiltered($filter, Tool::create('created DESC', 15));
+    }
+
 
 }

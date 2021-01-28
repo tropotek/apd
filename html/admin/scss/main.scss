@@ -22,13 +22,23 @@
     > a > i {
       color: inherit;
     }
-    font-weight: normal;
+    font-weight: 600;
+    color: #e84e40;
 
-    &.new {
-      font-weight: 600;
+    //&.new {
+    //  font-weight: 600;
+    //  > a > i {
+    //    color: #e84e40;
+    //  }
+    //}
+
+    &.viewed {
       > a > i {
-        color: #e84e40;
+        color: inherit;
       }
+    }
+    &.read {
+      font-weight: normal;
     }
 
   }

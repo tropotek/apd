@@ -112,6 +112,13 @@ class NoticeMap extends Mapper
                     $filter->appendWhere('b.viewed IS NULL AND ');
                 }
             }
+            if (isset($filter['read'])) {
+                if ($filter['read'] === true) {
+                    $filter->appendWhere('b.read IS NOT NULL AND ');
+                } else {
+                    $filter->appendWhere('b.read IS NULL AND ');
+                }
+            }
         }
 
         if (!empty($filter['model']) && $filter['model'] instanceof Model) {

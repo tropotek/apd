@@ -27,14 +27,14 @@ class NoticeHandler implements Subscriber
     public function onModelInsert(\Bs\Event\DbEvent $event)
     {
         //
-        $strat = Notice::makeNoticeDecorator($event->getModel());
-        if (!$event->getModel() instanceof Notice && $strat) {
-            vd('Add notify on new model insert');
-            Notice::create($event->getModel());
-
-
-
-        }
+//        $strat = Notice::makeNoticeDecorator($event->getModel());
+//        if (!$event->getModel() instanceof Notice && $strat) {
+//            vd('Add notify on new model insert');
+//            Notice::create($event->getModel());
+//
+//
+//
+//        }
     }
 
     /**
@@ -49,8 +49,6 @@ class NoticeHandler implements Subscriber
         // TODO: Only add one notification on bulk status changes????
         $strat = Notice::makeNoticeDecorator($event->getStatus()->getModel());
         if ($strat) {
-            
-
             vd($event->getStatus()->getModel()->getCurrentStatus());
             vd('Add notify on status change');
 
