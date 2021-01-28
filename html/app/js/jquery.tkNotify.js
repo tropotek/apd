@@ -42,7 +42,7 @@
       markRead: 'doMarkRead',               // h => userHash, d = true/false
       markViewed: 'doMarkViewed',           // h => userHash, d = true/false
       getNoticeList: 'doGetNoticeList',     // h => userHash
-      refreshMins: 1,                       // Number of minutes to refresh (5-10 min recommended)
+      refreshMins: 5,                       // Number of minutes to refresh (5-10 min recommended)
       noticeTpl:
         '  <li class="tk-notify dropdown d-none d-md-block">\n' +
         '    <a class="btn dropdown-toggle dropdown-nocaret" data-toggle="dropdown"><i class="fa fa-bell"></i><span class="count" style="display:none;">0</span></a>\n' +
@@ -98,12 +98,10 @@
 
 
     plugin.refresh = function() {
-      var params = {h : config.userHash};
+      var params = {h : config.userHash, crumb_ignore: 'crumb_ignore', nolog: 'nolog'};
       var url = plugin.settings.ajax + plugin.settings.getNoticeList;
       $.get(url, params, function (data) {
         var tpl = $(plugin.settings.noticeTpl);
-//console.log(data);
-
         var countEl = tpl.find('.count');
         var totalEl = tpl.find('.item-header span');
         var footerEl = tpl.find('.item-footer');
@@ -144,7 +142,7 @@
         // Mark messages read/unread for red icon to show
 
         $element.empty().append(tpl.find(' > *'));
-        setTimeout(plugin.refresh, 1000*10*plugin.settings.refreshMins);
+        setTimeout(plugin.refresh, 1000*60*plugin.settings.refreshMins);
       }, 'json');
 
     };

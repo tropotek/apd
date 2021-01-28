@@ -49,6 +49,8 @@ class NoticeHandler implements Subscriber
         // TODO: Only add one notification on bulk status changes????
         $strat = Notice::makeNoticeDecorator($event->getStatus()->getModel());
         if ($strat) {
+            
+
             vd($event->getStatus()->getModel()->getCurrentStatus());
             vd('Add notify on status change');
 

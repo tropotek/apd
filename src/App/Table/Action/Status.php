@@ -121,14 +121,11 @@ class Status extends \Tk\Table\Action\Link
     public function execute()
     {
         $request = $this->getConfig()->getRequest();
-
         $btnId = $this->getTable()->makeInstanceKey($this->getName());
-
         if ($request->get($btnId) == $btnId) {
             $status = $request->get($btnId.'-status').'';
             $notify = $request->get($btnId.'-status_notify').'';
             $notes = $request->get($btnId.'-status_notes').'';
-
             if (!$status) {
                 \Tk\Alert::addWarning('Nothing updated please select a status first.');
                 $request->getTkUri()->redirect();
@@ -199,47 +196,48 @@ class Status extends \Tk\Table\Action\Link
 
         $js = <<<JS
 jQuery(function ($) {
-  function updateBtn(btn) {
-    var cbName = btn.data('cb-name');
-    if (btn.closest('.tk-table').find('.table-body input[name^="' + cbName + '"]:checked').length) {
-      btn.removeAttr('disabled');
-    } else {
-      btn.attr('disabled', 'disabled');
+  var init = function () {
+    var tForm = $(this);
+    
+    function updateBtn(btn) {
+      var cbName = btn.data('cb-name');
+      if (btn.closest('.tk-table').find('.table-body input[name^="' + cbName + '"]:checked').length) {
+        btn.removeAttr('disabled');
+      } else {
+        btn.attr('disabled', 'disabled');
+      }
     }
-  }
-
-  $('.tk-action-status').each(function () {
-    var btn = $(this);
-    var cbName = btn.data('cb-name');
-    var status = $(this).parent().find(btn.data('select'));
-    var form = $(status.get(0).form);
-
-    btn.closest('.tk-table').on('change', '.table-body input[name^="'+cbName+'"]', function () { updateBtn(btn); });
-    updateBtn(btn);
-    btn.on('mousedown', function (e) {
-      form.data('isStatusBtn', true);
-    });
-    
-    form.on('submit', function (e) {
-      // Check if this submitt was the actual status button
-      if (!form.data('isStatusBtn')) return true;
+  
+    tForm.find('.tk-action-status').each(function () {
+      var btn = $(this);
+      var cbName = btn.data('cb-name');
+      var status = $(this).parent().find(btn.data('select'));
+      var form = $(status.get(0).form);
+  
+      btn.closest('.tk-table').find('.table-body input[name^="'+cbName+'"]').on('change', function () { updateBtn(btn); });
+      updateBtn(btn);
+      btn.on('mousedown', function (e) {
+        form.data('isStatusBtn', true);
+      });
       
-      if (status.val() === '') {
-        alert('Please select a status!');
+      form.on('submit', function (e) {
+        // Check if this submit was the actual status button
+        if (!form.data('isStatusBtn')) return true;
         form.data('isStatusBtn', false);
-        return false;
-      }
-      var selected = $(this).closest('.tk-table').find('.table-body input[name^="' + cbName + '"]:checked');
-      if (selected.length <= 0) {
-        alert('Please select records!');
-        form.data('isStatusBtn', false);
-        return false;
-      }
-      form.data('isStatusBtn', false);
-      //return confirm('WARNING: Please confirm you want to change the status of selected records?\\nThis action cannot be undone, please check with your supervisor if you are unsure.');
+        if (status.val() === '') {
+          alert('Please select a status!');
+          return false;
+        }
+        var selected = $(this).closest('.tk-table').find('.table-body input[name^="' + cbName + '"]:checked');
+        if (selected.length <= 0) {
+          alert('Please select records!');
+          return false;
+        }
+        return true;
+      });
     });
-    
-  });
+  }
+  $('.tk-table form').on('init', document, init).each(init);
 
 });
 JS;

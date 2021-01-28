@@ -157,6 +157,8 @@ class Notice
                     if (!$recipient) continue;
                     $notice->icon = $notice->getIconCss();
                     $notice->time =  str_replace(' ago', '', \Tk\Date::toRelativeString($recipient->getCreated()));
+
+
                     $out['list'][] = $notice;
                     if (!$recipient->isViewed()) {
                         $unread++;

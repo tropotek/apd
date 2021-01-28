@@ -70,12 +70,13 @@ class Dashboard extends \Uni\Controller\AdminIface
     {
         $template = parent::show();
 
-        $template->appendTemplate('cases', $this->caseTable->show());
-        //$template->appendHtml('files', '<p><i>{TODO: Add an image/file gallery here...}</i></p>');
+        if ($this->caseTable)
+            $template->appendTemplate('cases', $this->caseTable->show());
 
-        if ($this->requestTable) {
+        if ($this->requestTable)
             $template->appendTemplate('requests', $this->requestTable->show());
-        }
+
+        //$template->appendHtml('files', '<p><i>{TODO: Add an image/file gallery here...}</i></p>');
 
         return $template;
     }

@@ -60,8 +60,8 @@ class Request extends \Bs\TableIface
         if ($request) {
             $request->setStatus(\App\Db\Request::STATUS_COMPLETED);
             $request->save();
-            \Tk\Uri::create()->remove('rComplete')->redirect();
         }
+        \Tk\Uri::create()->remove('rComplete')->redirect();
     }
 
     public function doCancel($requestId)
@@ -71,8 +71,8 @@ class Request extends \Bs\TableIface
         if ($request) {
             $request->setStatus(\App\Db\Request::STATUS_CANCELLED);
             $request->save();
-            \Tk\Uri::create()->remove('rCancel')->redirect();
         }
+        \Tk\Uri::create()->remove('rCancel')->redirect();
     }
 
     public function doDelete($requestId)
@@ -81,8 +81,8 @@ class Request extends \Bs\TableIface
         $request = \App\Db\RequestMap::create()->find($requestId);
         if ($request) {
             $request->delete();
-            \Tk\Uri::create()->remove('rDel')->redirect();
         }
+        \Tk\Uri::create()->remove('rDel')->redirect();
     }
 
 
@@ -129,6 +129,10 @@ class Request extends \Bs\TableIface
                     $button->setAttr('disabled')->addCss('disabled');
                 }
             });
+        $aCell->addButton(Cell\ActionButton::create('Select All Case Requests', Uri::create('#'), 'fa fa-check-square-o')->addCss('btn-light'))
+            ->setShowLabel(false)
+            ->addCss('btn-select-all');
+
 //        $aCell->addButton(Cell\ActionButton::create('Cancel', Uri::create(), 'fa fa-thumbs-down')->addCss('btn-warning'))
 //            ->setShowLabel(false)
 //            ->addOnShow(function ($cell, \App\Db\Request $obj, Cell\ActionButton $button) {
@@ -166,6 +170,7 @@ class Request extends \Bs\TableIface
             ->setOrderProperty('b.pathology_id')->setLabel('Pathology #')
             ->addOnPropertyValue(function (\Tk\Table\Cell\Iface $cell, \App\Db\Request $obj, $value) {
                 if ($obj->getPathCase()) {
+                    $cell->getRow()->setAttr('data-pathology-id', $obj->getPathCase()->getPathologyId());
                     $cell->setUrl(\Bs\Uri::createHomeUrl('/pathCaseEdit.html')->set('pathCaseId', $obj->getPathCaseId()));
                     $value = $obj->getPathCase()->getPathologyId();
                 }
@@ -271,5 +276,39 @@ class Request extends \Bs\TableIface
         $list = \App\Db\RequestMap::create()->findFiltered($filter, $tool);
         return $list;
     }
+
+    public function show()
+    {
+        $template = parent::show();
+
+        $js = <<<JS
+jQuery(function($) {
+  var init = function () {
+    var form = $(this);
+    $(this).find('.btn-select-all').each(function () {
+      $(this).on('click', function() {
+        var pathologyId = $(this).closest('tr').find('.mPathologyId').attr('title');
+        var selectedCheckbox = $(this).closest('tr').find('.tk-tcb-cell input');
+        //console.log(pathologyId);
+        form.find('tr .tk-tcb-cell input').prop('checked', false);
+        var rows = form.find('tr[data-pathology-id='+pathologyId+']');
+        rows.find('.tk-tcb-cell input').trigger('click');
+        // if (selectedCheckbox.is(':checked')) {
+        //   rows.find('.tk-tcb-cell input').prop('checked', false).trigger('change');
+        // } else {
+        //   rows.find('.tk-tcb-cell input').prop('checked', true).trigger('change');
+        // }
+        //console.log(rows);
+      });
+    });
+  }
+  $('form').on('init', document, init).each(init);
+});
+JS;
+        $template->appendJs($js);
+
+        return $template;
+    }
+
 
 }
