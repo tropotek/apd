@@ -100,6 +100,7 @@ class PathCase extends \Bs\TableIface
                 return $value;
             });
         $this->appendCell(new Cell\Boolean('euthanised'));
+        $this->appendCell(new Cell\Html('morphologicalDiagnosis'));
         $this->appendCell(new Cell\Text('euthanisedMethod'));
         $this->appendCell(new Cell\Text('acType'));
         $this->appendCell(new Cell\Date('acHold'));

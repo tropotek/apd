@@ -329,7 +329,7 @@ class TestData extends \Bs\Console\TestData
             $request->setServiceId($service->getId());
             /** @var Contact $contact */
             $contact = ContactMap::create()->findAll(Tool::create('RAND()'))->current();
-            $request->setClientId($contact->getId());
+            $request->setTestId(1);
 
             $request->setQty(rand(1, $cassette->getQty()));
             $request->setCost($service->getCost()->getAmount()*$request->getQty());

@@ -15,6 +15,10 @@ use Uni\Db\Traits\SubjectTrait;
 use Uni\Db\User;
 
 /**
+ * Allows users to attach notes to objects.
+ * A log of notes can be viewed over time in a table.
+ *
+ *
  * @author Mick Mifsud
  * @created 2019-05-21
  * @link http://tropotek.com.au/

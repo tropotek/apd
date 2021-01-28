@@ -12,3 +12,26 @@
 .tk-table .tk-filters .tk-form-fields .form-row {
   margin-top: 5px;
 }
+#header-navbar .navbar-nav > li > ul.dropdown-menu.notifications-list {
+    min-width: 333px;
+}
+
+.notifications-list {
+
+  .item {
+    > a > i {
+      color: inherit;
+    }
+    font-weight: normal;
+
+    &.new {
+      font-weight: 600;
+      > a > i {
+        color: #e84e40;
+      }
+    }
+
+  }
+
+}
+

@@ -388,21 +388,21 @@ jQuery(function ($) {
             //   html += '<p><a href="mailto:'+email+'" class="email">' + email + '</a></p>';
             //html += '<hr/>';
             html += '<div class="details"><b>Contact:</b><br/>';
-            
+            html += '<ul>';
             if (contact.email)
-              html += '<p><i class="fa fa-envelope-o"></i> <a href="mailto:'+contact.email+'">'+contact.email+'</a></p>';
+              html += '<li><i class="fa fa-envelope-o"></i> <a href="mailto:'+contact.email+'">'+contact.email+'</a></li>';
             if (contact.nameCompany)
-              html += '<p><i class="fa fa-building"></i>  <a href="tel:'+contact.nameCompany+'">'+contact.nameCompany+'</a></p>';
+              html += '<li><i class="fa fa-building"></i> <a href="tel:'+contact.nameCompany+'">'+contact.nameCompany+'</a></li>';
             if (contact.phone)
-              html += '<p><i class="fa fa-phone"></i> <a href="tel:'+contact.phone+'">'+contact.phone+'</a></p>';
+              html += '<li><i class="fa fa-phone"></i> <a href="tel:'+contact.phone+'">'+contact.phone+'</a></li>';
             if (contact.fax)
-              html += '<p><i class="fa fa-fax"></i> <a href="tel:'+contact.fax+'">'+contact.fax+'</a></p>';
+              html += '<li><i class="fa fa-fax"></i> <a href="tel:'+contact.fax+'">'+contact.fax+'</a></li>';
             if (contact.address)
-              html += '<p><i class="fa fa-building"></i>  <a href="tel:'+contact.address+'">'+contact.address+'</a></p>';
-            html += '</div>';
+              html += '<li><i class="fa fa-building"></i> <a href="tel:'+contact.address+'">'+contact.address+'</a></li>';
+            html += '</ul></div>';
             html += '';
             
-            if (contact.notes)
+            if (contact.notes && contact.notes !== '***')
               html += '<p>'+contact.notes+'</p>';
             
             html += '</div>';
@@ -453,8 +453,10 @@ JS;
   box-shadow: 2px 2px 2px #CCC;
   z-index: 9999;
   padding: 10px;
-  min-width: 400px;
+  min-width: 300px;
+  max-width: 450px;
   border-radius: 5px;
+  font-size: 0.9em;
 }
 .tk-contact .control a {
   color: #666;
@@ -473,6 +475,27 @@ JS;
  padding: 0;
  margin: 0 0 10px 0;
 }
+.tk-contact ul {
+  list-style: none;
+  padding: 0;
+  margin: 0.2em 0 0.2em 3em;
+}
+.tk-contact ul li {
+  list-style-position: outside;
+  text-indent: -0.6em;
+  margin-top: 0.4em;
+}
+.tk-contact ul li .fa {
+  margin-right: 0.2em;
+}
+
+/*
+.tk-contact ul li::before {
+    content: "\\f005";
+    font-family: "Font Awesome 5 Free";
+}
+*/
+
 .tk-contact .details .fa {
   color: #999;
 }

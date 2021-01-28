@@ -1,21 +1,22 @@
 <?php
 namespace App\Db;
 
-use Tk\Db\Pdo;
+use Tk\Db\Map\Model;
 use Tk\Db\Tool;
 use Tk\Db\Map\ArrayObject;
 use Tk\DataMap\Db;
 use Tk\DataMap\Form;
 use Bs\Db\Mapper;
 use Tk\Db\Filter;
+use Tk\Exception;
 
 /**
  * @author Mick Mifsud
- * @created 2020-08-17
+ * @created 2021-01-28
  * @link http://tropotek.com.au/
- * @license Copyright 2020 Tropotek
+ * @license Copyright 2021 Tropotek
  */
-class MailTemplateMap extends Mapper
+class NoticeRecipientMap extends Mapper
 {
 
     /**
@@ -26,14 +27,10 @@ class MailTemplateMap extends Mapper
         if (!$this->dbMap) { 
             $this->dbMap = new \Tk\DataMap\DataMap();
             $this->dbMap->addPropertyMap(new Db\Integer('id'), 'key');
-            $this->dbMap->addPropertyMap(new Db\Integer('institutionId', 'institution_id'));
-            $this->dbMap->addPropertyMap(new Db\Integer('mailTemplateEventId', 'mail_template_event_id'));
-            //$this->dbMap->addPropertyMap(new Db\Text('event'));     // deprecated
-            $this->dbMap->addPropertyMap(new Db\Text('recipientType', 'recipient_type'));
-            $this->dbMap->addPropertyMap(new Db\Text('template'));
-            $this->dbMap->addPropertyMap(new Db\Boolean('active'));
-            $this->dbMap->addPropertyMap(new Db\Date('modified'));
-            $this->dbMap->addPropertyMap(new Db\Date('created'));
+            $this->dbMap->addPropertyMap(new Db\Integer('noticeId', 'notice_id'));
+            $this->dbMap->addPropertyMap(new Db\Integer('userId', 'user_id'));
+            $this->dbMap->addPropertyMap(new Db\Date('viewed'));
+            $this->dbMap->addPropertyMap(new Db\Date('read'));
 
         }
         return $this->dbMap;
@@ -47,21 +44,35 @@ class MailTemplateMap extends Mapper
         if (!$this->formMap) {
             $this->formMap = new \Tk\DataMap\DataMap();
             $this->formMap->addPropertyMap(new Form\Integer('id'), 'key');
-            $this->formMap->addPropertyMap(new Form\Integer('institutionId'));
-            $this->formMap->addPropertyMap(new Form\Integer('mailTemplateEventId'));
-            //$this->formMap->addPropertyMap(new Form\Text('event'));     // deprecated
-            $this->formMap->addPropertyMap(new Form\Text('recipientType'));
-            $this->formMap->addPropertyMap(new Form\Text('template'));
-            $this->formMap->addPropertyMap(new Form\Boolean('active'));
+            $this->formMap->addPropertyMap(new Form\Integer('noticeId'));
+            $this->formMap->addPropertyMap(new Form\Integer('userId'));
+            $this->formMap->addPropertyMap(new Form\Date('viewed'));
+            $this->formMap->addPropertyMap(new Form\Date('read'));
 
         }
         return $this->formMap;
     }
 
     /**
+     * @param $noticeId
+     * @param $userId
+     * @return Model|NoticeRecipient
+     * @throws \Exception
+     */
+    public function findRecipient($noticeId, $userId)
+    {
+        $filter = $this->makeQuery(Filter::create(array(
+            'noticeId' => $noticeId,
+            'userId' => $userId
+        )));
+        $res = $this->selectFromFilter($filter);
+        return $res->current();
+    }
+
+    /**
      * @param array|Filter $filter
      * @param Tool $tool
-     * @return ArrayObject|MailTemplate[]
+     * @return ArrayObject|NoticeRecipient[]
      * @throws \Exception
      */
     public function findFiltered($filter, $tool = null)
@@ -93,21 +104,25 @@ class MailTemplateMap extends Mapper
             if ($w) $filter->appendWhere('(%s) AND ', $w);
         }
 
-        if (isset($filter['institutionId'])) {
-            $filter->appendWhere('a.institution_id = %s AND ', (int)$filter['institutionId']);
+        if (isset($filter['noticeId'])) {
+            $filter->appendWhere('a.notice_id = %s AND ', (int)$filter['noticeId']);
         }
-
-        if (!empty($filter['eventId'])) $filter['mailTemplateEventId'] = $filter['eventId'];
-        if (!empty($filter['mailTemplateEventId'])) {
-            $w = $this->makeMultiQuery($filter['mailTemplateEventId'], 'a.mail_template_event_id');
-            if ($w) $filter->appendWhere('(%s) AND ', $w);
+        if (isset($filter['userId'])) {
+            $filter->appendWhere('a.user_id = %s AND ', (int)$filter['userId']);
         }
-
-        if (!empty($filter['recipientType'])) {
-            $filter->appendWhere('a.recipient_type = %s AND ', $this->quote($filter['recipientType']));
+        if (isset($filter['viewed']) && $filter['viewed'] !== '' && $filter['viewed'] !== null) {
+            if ($filter['viewed']) {
+                $filter->appendWhere('a.viewed IS NOT NULL AND ');
+            } else {
+                $filter->appendWhere('a.viewed IS NULL AND ');
+            }
         }
-        if (!empty($filter['active'])) {
-            $filter->appendWhere('a.active = %s AND ', (int)$filter['active']);
+        if (isset($filter['read']) && $filter['read'] !== '' && $filter['read'] !== null) {
+            if ($filter['read']) {
+                $filter->appendWhere('a.read IS NOT NULL AND ');
+            } else {
+                $filter->appendWhere('a.read IS NULL AND ');
+            }
         }
 
         if (!empty($filter['exclude'])) {

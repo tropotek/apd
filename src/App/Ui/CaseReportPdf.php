@@ -237,6 +237,14 @@ class CaseReportPdf extends Pdf
  header: myHeader1;
  footer: myFooter1;
 }
+p {
+    padding: 0px 0px;
+    margin: 0.5em 0px 0em 0px;
+    line-height: 1.3em;
+}
+h1, h2, h3, h4, h5, h6 {
+  margin: 0.3em 0px 0em 0px;
+}
 table.head-t {
   padding: 0;
 }
@@ -391,13 +399,12 @@ CSS;
         <div var="content"></div>
       </div>
     
-      <div choice="pathologist" style="page-break-inside: avoid;" >
+      <div choice="pathologist" style="page-break-inside: avoid;margin-top: 20px;" >
         <p><b>Pathologist:</b></p>
         <p style="margin-left: 20px;">
           <span var="pathologistName"></span> <small var="pathologistCreds"></small><br/>
           <span var="pathologistPosition"></span>
         </p> 
-        <p style="text-align: right; margin-right: 20px;">Date: <span var="date"></span></p>
       </div>
       
     </div>

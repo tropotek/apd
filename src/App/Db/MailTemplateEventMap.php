@@ -17,17 +17,6 @@ use Tk\Db\Filter;
  */
 class MailTemplateEventMap extends Mapper
 {
-    /**
-     * Mapper constructor.
-     *
-     * @param Pdo|null $db
-     * @throws \Exception
-     */
-    public function __construct($db = null)
-    {
-        parent::__construct($db);
-        $this->setMarkDeleted('');
-    }
 
     /**
      * @return \Tk\DataMap\DataMap

@@ -96,7 +96,7 @@ class Dashboard extends \Uni\Controller\AdminIface
   </div>
   <div class="row">
     <div class="col-12">
-      <div class="tk-panel" data-panel-title="My Requests" data-panel-icon="fa fa-paw" var="requests"></div>
+      <div class="tk-panel" data-panel-title="My Requests" data-panel-icon="fa fa-medkit" var="requests"></div>
     </div>
   </div>
   

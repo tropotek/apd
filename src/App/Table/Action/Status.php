@@ -141,7 +141,7 @@ class Status extends \Tk\Table\Action\Link
 
             // TODO: One day make this action reversible
             $updated = 0;
-            /* @var \Uni\Db\Traits\StatusTrait|\Tk\Db\ModelInterface $obj */
+            /* @var \Bs\Db\Traits\StatusTrait|\Tk\Db\ModelInterface $obj */
             foreach($this->getTable()->getList() as $obj) {
                 if (!is_object($obj)) continue;
                 $keyValue = 0;
@@ -236,7 +236,7 @@ jQuery(function ($) {
         return false;
       }
       form.data('isStatusBtn', false);
-      return confirm('WARNING: Please confirm you want to change the status of selected records?\\nThis action cannot be undone, please check with your supervisor if you are unsure.');
+      //return confirm('WARNING: Please confirm you want to change the status of selected records?\\nThis action cannot be undone, please check with your supervisor if you are unsure.');
     });
     
   });
