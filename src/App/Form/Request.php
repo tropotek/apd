@@ -3,6 +3,7 @@ namespace App\Form;
 
 use App\Db\CassetteMap;
 use App\Db\ContactMap;
+use App\Db\Notice;
 use App\Db\ServiceMap;
 use App\Db\TestMap;
 use Tk\Form\Field;
@@ -70,14 +71,12 @@ class Request extends \Bs\FormIface
                 ->setNotes('Set the status. Use the checkbox to disable notification emails.');
         }
         $this->appendField(new Field\Input('qty'));
-        //$this->appendField(new Field\Input('price'));
+
         $comm = $this->appendField(new Field\Textarea('comments'));
         if ($this->dialog) {
             $comm->setAttr('rows', 2);
             $comm->setAttr('style', 'height: 4.4em;min-height: unset;');
         }
-
-        //$this->appendField(new Field\Textarea('notes'));
 
         $this->appendField(new Event\Submit('update', array($this, 'doSubmit')));
         $this->appendField(new Event\Submit('save', array($this, 'doSubmit')));
@@ -117,14 +116,20 @@ class Request extends \Bs\FormIface
         $isNew = (bool)$this->getRequest()->getId();
         if ($cassetteList && count($cassetteList)) {
             $cassetteList = $this->getConfig()->getRequest()->get('cassetteId');
+            $reqList = [];
             foreach ($cassetteList as $i => $v) {
                 $req = new \App\Db\Request();
                 \App\Db\RequestMap::create()->mapForm($form->getValues(), $req);
                 $req->setCassetteId($v);
                 $req->save();
+                $reqList[] = $req;
             }
+            if ($req)
+                Notice::create($req, $req->getPathCase()->getUserId(), ['requestList' => $reqList]);
         } else {
             $this->getRequest()->save();
+            if ($isNew)
+                Notice::create($this->getRequest(), $this->getRequest()->getPathCase()->getUserId());
         }
 
 

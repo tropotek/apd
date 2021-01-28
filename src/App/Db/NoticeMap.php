@@ -34,6 +34,8 @@ class NoticeMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Text('subject'));
             $this->dbMap->addPropertyMap(new Db\Text('body'));
             $this->dbMap->addPropertyMap(new Db\JsonArray('param', 'data'));
+            $this->dbMap->addPropertyMap(new Db\Date('modified'));
+            $this->dbMap->addPropertyMap(new Db\Date('created'));
 
         }
         return $this->dbMap;

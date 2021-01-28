@@ -2,6 +2,7 @@
 
 namespace App\Db;
 
+use Bs\Db\Mapper;
 use Exception;
 use Tk\DataMap\DataMap;
 use Tk\DataMap\Db;

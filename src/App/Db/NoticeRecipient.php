@@ -1,6 +1,10 @@
 <?php
 namespace App\Db;
 
+use App\Db\Traits\NoticeTrait;
+use Bs\Db\Traits\CreatedTrait;
+use Bs\Db\Traits\UserTrait;
+
 /**
  * @author Mick Mifsud
  * @created 2021-01-28
@@ -9,6 +13,9 @@ namespace App\Db;
  */
 class NoticeRecipient extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 {
+    use CreatedTrait;
+    use NoticeTrait;
+    use UserTrait;
 
     /**
      * @var int
@@ -46,44 +53,8 @@ class NoticeRecipient extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      */
     public function __construct()
     {
-        $this->created = new \DateTime();
+        $this->_CreatedTrait();
 
-    }
-    
-    /**
-     * @param int $noticeId
-     * @return NoticeRecipient
-     */
-    public function setNoticeId($noticeId) : NoticeRecipient
-    {
-        $this->noticeId = $noticeId;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getNoticeId() : int
-    {
-        return $this->noticeId;
-    }
-
-    /**
-     * @param int $userId
-     * @return NoticeRecipient
-     */
-    public function setUserId($userId) : NoticeRecipient
-    {
-        $this->userId = $userId;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getUserId() : int
-    {
-        return $this->userId;
     }
 
     /**
@@ -105,6 +76,14 @@ class NoticeRecipient extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     }
 
     /**
+     * @return bool
+     */
+    public function isViewed()
+    {
+        return ($this->viewed !== null);
+    }
+
+    /**
      * @param \DateTime $read
      * @return NoticeRecipient
      */
@@ -123,39 +102,11 @@ class NoticeRecipient extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     }
 
     /**
-     * @param \DateTime $created
-     * @return NoticeRecipient
+     * @return bool
      */
-    public function setCreated($created) : NoticeRecipient
+    public function isRead()
     {
-        $this->created = $created;
-        return $this;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getCreated() : \DateTime
-    {
-        return $this->created;
-    }
-
-    /**
-     * @return array
-     */
-    public function validate()
-    {
-        $errors = array();
-
-        if (!$this->noticeId) {
-            $errors['noticeId'] = 'Invalid value: noticeId';
-        }
-
-        if (!$this->userId) {
-            $errors['userId'] = 'Invalid value: userId';
-        }
-
-        return $errors;
+        return ($this->getRead() !== null);
     }
 
 }

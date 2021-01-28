@@ -78,37 +78,25 @@ class Notice extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public function __construct()
     {
         $this->_TimestampTrait();
-
     }
 
     /**
      * @param null|ModelInterface $model
      * @param null|UserIface $author
+     * @param array $params
      * @return Notice
      */
-    public static function create($model = null, $author = null)
+    public static function create($model, $author = null, $params = [])
     {
         $obj = new static();
         $obj->setForeignModel($model);
         if ($author)
             $obj->setUserId($author);
-        return $obj;
-    }
-
-    /**
-     * This method automatically execute the Decorator's onCreateNotice() method
-     *
-     * @param string $subject
-     * @param null|ModelInterface $model
-     * @param array|UserIface[] $recipients
-     * @param null|int|UserIface $author (optional) If 0 then it is assumed to be a system message not from a user
-     * @return Notice
-     */
-    public static function createNotice($subject, $model = null, $recipients = [], $author = null)
-    {
-        $obj = static::create($model, $author);
-        $obj->setSubject($subject);
-        $obj->addRecipient($recipients);
+        if ($params) {
+            foreach ($params as $k => $v) {
+                $obj->addParam($k, $v);
+            }
+        }
         $obj->getNoticeDecorator()->onCreateNotice($obj);
         return $obj;
     }
@@ -246,7 +234,7 @@ class Notice extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      * @param mixed $value
      * @return $this
      */
-    public function setParam($name, $value)
+    public function addParam($name, $value)
     {
         $this->param[$name] = $value;
         return $this;
@@ -261,6 +249,18 @@ class Notice extends \Tk\Db\Map\Model implements \Tk\ValidInterface
         if ($this->hasParam($name))
             return $this->param[$name];
         return null;
+    }
+
+    /**
+     *
+     * @param string $name
+     * @return $this
+     */
+    public function removeParam($name)
+    {
+        if ($this->hasParam($name))
+            unset($this->param[$name]);
+        return $this;
     }
 
 

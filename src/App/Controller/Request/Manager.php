@@ -3,6 +3,7 @@ namespace App\Controller\Request;
 
 use Bs\Controller\AdminManagerIface;
 use Dom\Template;
+use Tk\Db\Tool;
 use Tk\Request;
 
 /**
@@ -42,7 +43,7 @@ class Manager extends AdminManagerIface
         if ($request->query->get('pathCaseId')) {
             $filter['pathCaseId'] = $request->get('pathCaseId');
         }
-        $this->getTable()->setList($this->getTable()->findList($filter));
+        $this->getTable()->setList($this->getTable()->findList($filter, Tool::create('created DESC')));
     }
 
     /**

@@ -74,6 +74,11 @@ class PageTemplateHandler extends \Uni\Listener\PageTemplateHandler
                 if ($user->isStaff()) {
                     $template->setVisible('isStaff');
                 }
+                $hash = $user->getHash();
+                $js = <<<JS
+config.userHash = '$hash';
+JS;
+                $template->appendJs($js, array('data-jsl-priority' => -1000));
 
             }
 

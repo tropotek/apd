@@ -3,6 +3,7 @@ namespace App\Form;
 
 use App\Db\AnimalTypeMap;
 use App\Db\ContactMap;
+use App\Db\Notice;
 use App\Db\PathCaseMap;
 use App\Db\StorageMap;
 use App\Form\Field\Money;
@@ -595,10 +596,13 @@ CSS;
             return;
         }
 
-        $isNew = (bool)$this->getPathCase()->getId();
+        $isNew = ($this->getPathCase()->getId() == 0);
         $this->getPathCase()->setStatusNotify(true);
         $this->getPathCase()->setStatusMessage('New pathology case created.');
         $this->getPathCase()->save();
+        if ($isNew) {
+            Notice::create($this->getPathCase());
+        }
 
         // Save the student field
         if (!empty($vals['students']) && is_array($vals['students'])) {

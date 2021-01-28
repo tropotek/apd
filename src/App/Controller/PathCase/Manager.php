@@ -3,6 +3,7 @@ namespace App\Controller\PathCase;
 
 use Bs\Controller\AdminManagerIface;
 use Dom\Template;
+use Tk\Db\Tool;
 use Tk\Request;
 
 /**
@@ -36,7 +37,7 @@ class Manager extends AdminManagerIface
         $this->getTable()->init();
 
         $filter = array();
-        $this->getTable()->setList($this->getTable()->findList($filter));
+        $this->getTable()->setList($this->getTable()->findList($filter, Tool::create('created DESC')));
     }
 
     /**

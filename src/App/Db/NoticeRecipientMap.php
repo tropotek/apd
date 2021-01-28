@@ -31,6 +31,7 @@ class NoticeRecipientMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Integer('userId', 'user_id'));
             $this->dbMap->addPropertyMap(new Db\Date('viewed'));
             $this->dbMap->addPropertyMap(new Db\Date('read'));
+            $this->dbMap->addPropertyMap(new Db\Date('created'));
 
         }
         return $this->dbMap;

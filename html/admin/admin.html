@@ -35,50 +35,19 @@
           <li><a class="btn" id="make-small-nav"><i class="fa fa-bars"></i></a></li>
   
   
-          <li class="dropdown d-none d-md-block">
-            <a class="btn dropdown-toggle dropdown-nocaret" data-toggle="dropdown"><i class="fa fa-bell"></i><span class="count">8</span></a>
-            
-            
-            
+          <li class="tk-notify dropdown d-none d-md-block">
+            <a class="btn dropdown-toggle dropdown-nocaret" style="display:none;" data-toggle="dropdown"><i class="fa fa-bell"></i><span class="count" style="display:none;">0</span></a>
             <ul class="dropdown-menu notifications-list">
               <li class="pointer"><div class="pointer-inner"><div class="arrow"></div></div></li>
-              <li class="item-header">You have 6 new notifications</li>
+              <li class="item-header">You have 0 new notifications</li>
               <li class="item">
                 <a href="#">
                   <i class="fa fa-comment"></i>
-                  <span class="content">New comment on ‘Awesome P...</span>
+                  <span class="content">Default comment on system</span>
                   <span class="time"><i class="fa fa-clock-o"></i>13 min.</span>
                 </a>
               </li>
-              <li class="item new">
-                <a href="#">
-                  <i class="fa fa-plus"></i>
-                  <span class="content">New user registration</span>
-                  <span class="time"><i class="fa fa-clock-o"></i>13 min.</span>
-                </a>
-              </li>
-              <li class="item">
-                <a href="#">
-                  <i class="fa fa-envelope"></i>
-                  <span class="content">New Message from George</span>
-                  <span class="time"><i class="fa fa-clock-o"></i>13 min.</span>
-                </a>
-              </li>
-              <li class="item new">
-                <a href="#">
-                  <i class="fa fa-shopping-cart"></i>
-                  <span class="content">New purchase</span>
-                  <span class="time"><i class="fa fa-clock-o"></i>13 min.</span>
-                </a>
-              </li>
-              <li class="item">
-                <a href="#">
-                  <i class="fa fa-eye"></i>
-                  <span class="content">New order</span>
-                  <span class="time"><i class="fa fa-clock-o"></i>13 min.</span>
-                </a>
-              </li>
-              <!-- li class="item-footer"><a href="#">View all notifications</a></li -->
+              <li class="item-footer"><a href="#">View all notifications</a></li>
             </ul>
           </li>
           
@@ -171,7 +140,7 @@
                     <!-- nav-dropdown -->
                     <ul class="dropdown-menu dropdown-menu-right" var="nav-dropdown"></ul>
                   </span>
-                  <span class="status"><i class="fa fa-circle"></i> Online</span>
+                  <span class="status btn-sm btn-light default" title="Click to hear audio alerts" style="cursor: pointer;"><i class="fa fa-volume-down" style="color: #e84e40;"></i> <span>Audio Off</span></span>
                 </div>
               </div>
               <div class="navbar navbar-expand-lg navbar-light">
@@ -256,6 +225,7 @@
 
   <script src="/vendor/ttek/tk-base/assets/js/core.js"></script>
   <script src="/vendor/ttek/tk-base/assets/js/common.js"></script>
+  <script src="/html/app/js/jquery.tkNotify.js"></script>
   <script src="/html/app/js/app.js"></script>
 
 
