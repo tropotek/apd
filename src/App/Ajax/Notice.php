@@ -43,9 +43,7 @@ class Notice
     {
         $status = 200;  // change this on error
         // h = userHash
-        vd($request->all());
         $out = $this->getRecipientList($request->get('h'));
-
         return ResponseJson::createJson($out, $status);
     }
 

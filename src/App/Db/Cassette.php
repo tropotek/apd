@@ -96,6 +96,15 @@ class Cassette extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 
     }
 
+    public function delete()
+    {
+        $requestList = $this->getRequestList();
+        foreach ($requestList as $request) {
+            $request->delete();
+        }
+        return parent::delete();
+    }
+
     public function save()
     {
         $this->setNumber(strtoupper($this->getNumber()));
@@ -134,6 +143,16 @@ class Cassette extends \Tk\Db\Map\Model implements \Tk\ValidInterface
             $this->setQty($this->getQty() + $request->getQty());
         //}
         return $this;
+    }
+
+    /**
+     * @param Tool|null $tool
+     * @return Request[]|\Tk\Db\Map\ArrayObject
+     * @throws \Exception
+     */
+    public function getRequestList(Tool $tool = null)
+    {
+        return RequestMap::create()->findFiltered(['cassetteId' => $this->getVolatileId()], $tool);
     }
 
     /**

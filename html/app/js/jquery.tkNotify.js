@@ -102,7 +102,7 @@
       var url = plugin.settings.ajax + plugin.settings.getNoticeList;
       $.get(url, params, function (data) {
         var tpl = $(plugin.settings.noticeTpl);
-        console.log(data);
+//console.log(data);
 
         var countEl = tpl.find('.count');
         var totalEl = tpl.find('.item-header span');
@@ -134,6 +134,14 @@
           li.insertBefore(itemTpl);
         });
         itemTpl.remove();
+
+        // TODO: Add an event to mark notices viewed once the bell menu dropdown has been clicked
+
+        // TODO: Add a url to a page that makes sense for the message
+
+        // TODO: add a view all notice's page/manager???
+
+        // Mark messages read/unread for red icon to show
 
         $element.empty().append(tpl.find(' > *'));
         setTimeout(plugin.refresh, 1000*10*plugin.settings.refreshMins);

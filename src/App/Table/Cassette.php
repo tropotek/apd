@@ -116,7 +116,7 @@ class Cassette extends \Bs\TableIface
 //        $this->appendAction(\Tk\Table\Action\ColumnSelect::create()->setUnselected(array('created')));
 
         if (!$this->isMinMode())
-            $this->appendAction(\Tk\Table\Action\Delete::create());
+            $this->appendAction(\Tk\Table\Action\Delete::create()->setConfirmStr('Deleting a Cassette record will also delete any Requests created from that Cassette record! Continue?'));
         $this->appendAction(\Tk\Table\Action\Csv::create());
 
         // load table
