@@ -15,7 +15,7 @@ class PathCaseNoticeDecorator extends NoticeDecoratorInterface
         if ($case->getPathologist()) {
             $notice->setUserId($case->getUserId());
             if (!$notice->getSubject())
-                $notice->setSubject('New ' . $case->getType() . ' created.');
+                $notice->setSubject('New ' . $case->getType() . ' created: ' . $case->getPathologyId());
             $notice->setType('PathCase::create');
             $notice->addRecipient($case->getPathologist());
             $notice->save();

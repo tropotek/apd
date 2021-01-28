@@ -221,7 +221,7 @@
         if (data.unread == 0)
           countEl.css('display', 'none');
 
-        
+
         // TODO: Add a url to a page that makes sense for the message
         // TODO: add a view all notice's page/manager???
 
