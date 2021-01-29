@@ -413,10 +413,25 @@
       propPath: 'path',       // The property name for the value to be use as the filename
 
       tableTpl: '<table class="table table-striped tfi-table"></table>',
-      rowTpl: '<tr class="tfi-row" style="vertical-align: top;">' +
-        '<td class="text-right"><div class="onoffswitch"><input type="checkbox" name="active[]" value="test" class="onoffswitch-checkbox" checked="checked" /></div></td>' +
+      rowTpl: '<tr class="tfi-row" style="vertical-align: top;">\n' +
+        '<td class="text-right" title="Add File To Report PDF">' +
+        '  <label class="switch tfi-btn-active">' +
+        '    <input type="checkbox" name="fActive[]" value="fActive" />\n' +
+        '    <span class="slider round"></span>\n' +
+        '  </label>' +
+
+        // '  <div class="float-left"><div class="onoffswitch tfi-btn-active">' +
+        // '    <input type="checkbox" name="fActive[]" value="fActive" class="onoffswitch-checkbox"/>\n' +
+        // '    <label class="onoffswitch-label" for="myonoffswitch">\n' +
+        // '      <span class="onoffswitch-inner"></span>\n' +
+        // '      <span class="onoffswitch-switch"></span>\n' +
+        // '    </label>\n' +
+        // '  </div></div>' +
+        '</td>\n' +
         '<td class="text-right hide"><a href="#" title="Download" class="btn btn-xs btn-default tfi-btn-view" target="_blank"><i class="fa fa-download"></i></a></td>' +
-        '<td class="key"><i class="tfi-icon fa fa-file-o" title="Archive"></i>&nbsp; <a href="#" target="_blank" class="tfi-filename">someFileName.tgz</a></td>' +
+        '<td class="key">' +
+        '  <i class="tfi-icon fa fa-file-o fa-2x" title="Archive"></i>&nbsp; <a href="#" target="_blank" class="tfi-filename">someFileName.tgz</a>' +
+        '</td>' +
         '<td class="tfi-file-size"><a href="#" title="Delete" class="btn btn-xs btn-default tfi-btn-delete"><i class="fa fa-trash"></i></a> &nbsp; <span>673Kb</span></td>' +
         '</tr>',
 
@@ -563,6 +578,7 @@
       if (list !== undefined && Array.isArray(list)) {
         for (var i = 0; i < list.length; i++) {
           var obj = list[i];
+          //console.log(obj);
           var path = '';
           var id = null;
           if (typeof obj === 'object') {
@@ -575,64 +591,61 @@
           $.ajax({
             type: 'HEAD',
             url: path,
+            obj: obj,
             //data: {'nolog':'nolog', 'crumb_ignore': 'crumb_ignore'},
             data: {'crumb_ignore': 'crumb_ignore'},
-            id: id,
-            complete: function (xhr) {
-              var warn = '';
-              if (xhr.status !== 200) {
-                warn = ' - (Access Error)';
-              }
-              //this.xhr = xhr;
-              var row = $(plugin.settings.rowTpl);
-              this.url = this.url.split("?")[0];
-
-              row.data('filename', this.url);
-              var delParam = basepath(this.url);
-              if (this.id) {
-                delParam = parseInt(this.id);
-              }
-
-              row.find('.tfi-btn-delete').attr('href', setQueryParameter(document.location.href, 'del', delParam)).on('click',
-                function (e) {
-                  $(this).blur();
-                  if (!plugin.settings.serverConfirm || confirm(plugin.settings.serverConfirm)) {
-                    return plugin.settings.onDelete.apply($(this).closest('tr'), [plugin]);
-                  }
-                  return false;
-                });
-              row.find('.tfi-icon').removeClass('fa-file-o').addClass(getIcon(this.url));
-
-              if (isImage(this.url)) {
-                loadThumb(row, this.url);
-              }
-
-              var css = '';
-              if (warn !== '') css = 'disabled';
-              row.find('.tfi-filename').addClass('ui-lightbox').addClass(css).attr('href', this.url).text(basename(this.url) + warn);
-              row.find('.tfi-btn-view').addClass('ui-lightbox').addClass(css).attr('href', this.url);
-              if ($.fn.magnificPopup && isImage(this.url)) {
-                row.find('.tfi-filename, .tfi-icon').magnificPopup({type: 'image'})
-              }
-              row.find('.tfi-file-size span').text(formatBytes(xhr.getResponseHeader('Content-Length')));
-
-
-              // console.log(row.find('.tfi-btn-active'));
-              // row.find('.tfi-btn-active').on('click', function () {
-              //   var btn = $(this);
-              //   console.log(btn);
-              //   if (btn.find('i.fa-toggle-off').length) {
-              //     btn.find('i').removeClass('fa-toggle-off').addClass('fa-toggle-on');
-              //   } else {
-              //     btn.find('i').removeClass('fa-toggle-on').addClass('fa-toggle-off');
-              //   }
-              // });
-
-              table.append(row);
-
-              plugin.settings.onUrlLoad.apply($inputGroup.find('tfi-btn-input input[type=file]'), [plugin, this]);
+            id: id
+          }).always(function(p, c, xhr) {
+            var idx = i;
+            var warn = '';
+            if (xhr.status !== 200) {
+              warn = ' - (Access Error)';
             }
+            var row = $(plugin.settings.rowTpl);
+            this.url = this.url.split("?")[0];
+
+            row.data('filename', this.url);
+            var delParam = basepath(this.url);
+            if (this.id) {
+              delParam = parseInt(this.id);
+            }
+
+            row.find('.tfi-btn-delete').attr('href', setQueryParameter(document.location.href, 'del', delParam)).on('click',
+              function (e) {
+                $(this).blur();
+                if (!plugin.settings.serverConfirm || confirm(plugin.settings.serverConfirm)) {
+                  return plugin.settings.onDelete.apply($(this).closest('tr'), [plugin]);
+                }
+                return false;
+              });
+            row.find('.tfi-icon').removeClass('fa-file-o').addClass(getIcon(this.url));
+
+            if (isImage(this.url)) {
+              loadThumb(row, this.url);
+            }
+
+            var css = '';
+            if (warn !== '') css = 'disabled';
+            row.find('.tfi-filename').addClass('ui-lightbox').addClass(css).attr('href', this.url).text(basename(this.url) + warn);
+            row.find('.tfi-btn-view').addClass('ui-lightbox').addClass(css).attr('href', this.url);
+            if ($.fn.magnificPopup && isImage(this.url)) {
+              row.find('.tfi-filename, .tfi-icon').magnificPopup({type: 'image'})
+            }
+            row.find('.tfi-file-size span').text(formatBytes(xhr.getResponseHeader('Content-Length')));
+
+            row.find('.tfi-btn-active input').attr('id', table.closest('form').attr('id') + '-active-'+this.obj.id);
+            row.find('.tfi-btn-active label').attr('for', table.closest('form').attr('id') + '-active-'+this.obj.id);
+            
+            console.log(this.obj);
+            //console.log(table.find('tr').length);
+
+            row.find('.tfi-btn-active input').attr('value', table.find('tr').length);
+
+            table.append(row);
+
+            plugin.settings.onUrlLoad.apply($inputGroup.find('tfi-btn-input input[type=file]'), [plugin, this]);
           });
+
         }
       }
 

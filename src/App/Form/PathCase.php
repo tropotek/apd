@@ -568,7 +568,7 @@ CSS;
     {
         // Load the object with form data
         $vals = $form->getValues();
-
+vd($this->getRequest()->all());
         if (!empty($vals['clientId']) && is_array($vals['clientId']))
             $vals['clientId'] = current($vals['clientId']);
         else
@@ -619,7 +619,7 @@ CSS;
         $fileField = $form->getField('files');
         if ($fileField->hasFile()) {
             /** @var \Symfony\Component\HttpFoundation\File\UploadedFile $file */
-            foreach ($fileField->getUploadedFiles() as $file) {
+            foreach ($fileField->getUploadedFiles() as $i => $file) {
                 if (!\App\Config::getInstance()->validateFile($file->getClientOriginalName())) {
                     \Tk\Alert::addWarning('Illegal file type: ' . $file->getClientOriginalName());
                     continue;
@@ -643,6 +643,17 @@ CSS;
             }
         }
 
+        $activeList = $this->getRequest()->get('fActive', []);  // Get the active status
+        $labelList = $this->getRequest()->get('fLabel', []);    // Get the active status
+        $fileList = \App\Db\FileMap::create()->findFiltered(['model' => $this->getPathCase()]);
+        foreach ($fileList as $i => $file) {
+            if (in_array($i, $activeList)) {
+                $file->setActive(true);
+            }
+            if (isset($labelList[$i]))
+                $file->setLabel($labelList[$i]);
+            $file->save();
+        }
 
         \Tk\Alert::addSuccess('Record saved!');
         $event->setRedirect($this->getBackUrl());
