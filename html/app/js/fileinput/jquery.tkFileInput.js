@@ -635,7 +635,10 @@
 
             row.find('.tfi-btn-active input').attr('id', table.closest('form').attr('id') + '-active-'+this.obj.id);
             row.find('.tfi-btn-active label').attr('for', table.closest('form').attr('id') + '-active-'+this.obj.id);
-            
+
+            // This is Gonna get messy, I should just start again and build a \Tk\File upload manager....
+            // AHHHHHHHHHHHHHHHHH!!!!!!!!!!!!!!!!!!!!
+
             console.log(this.obj);
             //console.log(table.find('tr').length);
 
