@@ -1,0 +1,122 @@
+
+.tkFileInput {
+
+  .tfi-btn-input {
+    position: relative;
+    overflow: hidden;
+    //margin: 0;
+
+    input[type=file] {
+      position: absolute;
+      top: 0;
+      left: 0;
+      margin: 0;
+      padding: 0;
+      font-size: 20px;
+      cursor: pointer;
+      opacity: 0;
+      filter: alpha(opacity=0);
+    }
+    .tfi-label {
+      display: inline-block;
+      margin-left: 10px;
+    }
+  } 
+
+  .tfi-btn-thumb {
+    max-width: 350px;
+    img {
+      vertical-align: middle;
+      max-height: 15px;
+      display: inline-block;
+    }
+  }
+
+  .tfi-btn-active {
+    .fa-toggle-off {
+
+    }
+    .fa-toggle-on {
+
+    }
+  }
+
+  // tkImageInput styles
+  img {
+    //max-width: 100%;
+  }
+  .popover-content {
+    overflow: hidden;
+    width: 350px;
+    img {
+      max-width: 100%;
+    }
+  }
+  .popover {
+    max-width: none;
+    width: auto;
+    min-width: unset;
+  }
+
+}
+
+
+// tkMultiInput styles
+
+.tfi-table {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  .tfi-new a.tfi-filename {
+    //color: @gray-light;
+    color: #CCCCCC;
+    text-decoration: none;
+  }
+}
+.tfi-table td {
+  white-space: nowrap;
+  &.tfi-file-size {
+    font-style: italic;
+  }
+}
+
+
+
+
+.onoffswitch {
+  position: relative; width: 55px;
+  -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+}
+.onoffswitch-checkbox {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.onoffswitch-label {
+  display: block; overflow: hidden; cursor: pointer;
+  height: 20px; padding: 0; line-height: 20px;
+  border: 0px solid #FFFFFF; border-radius: 30px;
+  background-color: #9E9E9E;
+}
+.onoffswitch-label:before {
+  content: "";
+  display: block; width: 30px; margin: -5px;
+  background: #FFFFFF;
+  position: absolute; top: 0; bottom: 0;
+  right: 31px;
+  border-radius: 30px;
+  box-shadow: 0 6px 12px 0px #757575;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label {
+  background-color: #0072C4;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label, .onoffswitch-checkbox:checked + .onoffswitch-label:before {
+  border-color: #0072C4;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+  margin-left: 0;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label:before {
+  right: 0px;
+  background-color: #004576;
+  box-shadow: 3px 6px 18px 0px rgba(0, 0, 0, 0.2);
+}

@@ -49,5 +49,6 @@ create table notice_recipient (
 ) ENGINE=InnoDB;
 
 
-
-
+-- Add PDF attachment functionality to the files
+alter table file add label VARCHAR(128) default '' not null after mime;
+alter table file add active TINYINT(1) default 0 not null after label;

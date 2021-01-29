@@ -35,6 +35,8 @@ class FileMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Text('path'));
             $this->dbMap->addPropertyMap(new Db\Integer('bytes'));
             $this->dbMap->addPropertyMap(new Db\Text('mime'));
+            $this->dbMap->addPropertyMap(new Db\Text('label'));
+            $this->dbMap->addPropertyMap(new Db\Boolean('active'));
             $this->dbMap->addPropertyMap(new Db\Text('notes'));
             $this->dbMap->addPropertyMap(new Db\Text('hash'));
             $this->dbMap->addPropertyMap(new Db\Date('modified'));
@@ -57,6 +59,8 @@ class FileMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Text('path'));
             $this->formMap->addPropertyMap(new Form\Integer('bytes'));
             $this->formMap->addPropertyMap(new Form\Text('mime'));
+            $this->formMap->addPropertyMap(new Form\Text('label'));
+            $this->formMap->addPropertyMap(new Form\Boolean('active'));
             $this->formMap->addPropertyMap(new Form\Text('notes'));
         }
         return $this->formMap;
@@ -117,11 +121,21 @@ class FileMap extends Mapper
         if (!empty($filter['path'])) {
             $filter->appendWhere('a.path = %s AND ', $this->quote($filter['path']));
         }
+        if (!empty($filter['label'])) {
+            $filter->appendWhere('a.label = %s AND ', $this->quote($filter['label']));
+        }
         if (!empty($filter['mime'])) {
             $filter->appendWhere('a.mime = %s AND ', $this->quote($filter['mime']));
         }
         if (!empty($filter['hash'])) {
             $filter->appendWhere('a.hash = %s AND ', $this->quote($filter['hash']));
+        }
+        if (isset($filter['active']) && $filter['active'] !== '' && $filter['active'] !== null) {
+            if ($filter['active'] > 0) {
+                $filter->appendWhere('a.active = 1 AND ');
+            } else {
+                $filter->appendWhere('a.active = 0 AND ');
+            }
         }
 
         if (!empty($filter['model']) && $filter['model'] instanceof Model) {

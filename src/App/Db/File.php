@@ -66,6 +66,16 @@ class File extends Model implements ValidInterface
     /**
      * @var string
      */
+    public $label = '';
+
+    /**
+     * @var boolean
+     */
+    public $active = '';
+
+    /**
+     * @var string
+     */
     public $notes = '';
 
     /**
@@ -95,14 +105,15 @@ class File extends Model implements ValidInterface
 
     /**
      * @param ModelInterface $model
-     * @param null|string $file Relative/Full path to a valid file
+     * @param string $file Relative/Full path to a valid file
      * @param string $dataPath (optional) if none then \App\Config::getInstance()->getDataPath() is used
+     * @param null|int $userId
      * @return static
-     * @throws Exception
      */
     public static function create($model, $file = '', $dataPath = '', $userId = null)
     {
         $obj = new static();
+        $obj->setLabel(\Tk\File::removeExtension(basename($file)));
         $obj->setForeignModel($model);
         if ($userId === null) {
             if (method_exists($model, 'getUserId')) {
@@ -342,6 +353,46 @@ class File extends Model implements ValidInterface
     public function isImage()
     {
         return preg_match('/^image\//', $this->getMime());
+    }
+
+    /**
+     * @return string
+     */
+    public function getLabel(): string
+    {
+        return $this->label;
+    }
+
+    /**
+     * @param string $label
+     * @return File
+     */
+    public function setLabel(string $label): File
+    {
+        $this->label = $label;
+        return $this;
+    }
+
+    /**
+     * Use this as to tell if the files are to be attached to the PDF report
+     *
+     * @return bool
+     */
+    public function isActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * Use this as to tell if the files are to be attached to the PDF report
+     *
+     * @param bool $active
+     * @return File
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+        return $this;
     }
 
     /**

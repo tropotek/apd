@@ -3,7 +3,7 @@
 @import "variables";
 @import "../../theme-cube/scss/tk-cube";
 
-
+@import "../../app/js/fileinput/tkFileInput";
 
 .tk-status-table tbody tr td {
   vertical-align: top;
@@ -24,13 +24,6 @@
     }
     font-weight: 600;
     color: #e84e40;
-
-    //&.new {
-    //  font-weight: 600;
-    //  > a > i {
-    //    color: #e84e40;
-    //  }
-    //}
 
     &.viewed {
       > a > i {

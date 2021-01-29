@@ -1,0 +1,80 @@
+
+.tkFileInput {
+
+  .tfi-btn-input {
+    position: relative;
+    overflow: hidden;
+    margin: 0;
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;
+
+    input[type=file] {
+      position: absolute;
+      top: 0;
+      left: 0;
+      margin: 0;
+      padding: 0;
+      font-size: 20px;
+      cursor: pointer;
+      opacity: 0;
+      filter: alpha(opacity=0);
+    }
+    .tfi-label {
+      display: inline-block;
+      margin-left: 10px;
+    }
+  } 
+
+  .tfi-btn-thumb {
+    max-width: 350px;
+    img {
+      vertical-align: middle;
+      max-height: 15px;
+      display: inline-block;
+    }
+  }
+
+  .btn {
+    box-shadow: none;
+    text-shadow: none;
+  }
+
+
+  // tkImageInput styles
+  img {
+    //max-width: 100%;
+  }
+  .popover-content {
+    overflow: hidden;
+    width: 350px;
+    img {
+      max-width: 100%;
+    }
+  }
+  .popover {
+    max-width: none;
+    width: auto;
+    min-width: unset;
+  }
+
+}
+
+
+// tkMultiInput styles
+
+.tfi-table {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  .tfi-new a.tfi-filename {
+    //color: @gray-light;
+    color: #CCCCCC;
+    text-decoration: none;
+  }
+}
+.tfi-table td {
+  white-space: nowrap;
+  &.tfi-file-size {
+    font-style: italic;
+  }
+}
