@@ -33,6 +33,31 @@ jQuery(function($) {
       $('li.tk-notify').data('tkNotify').enableSound(true);
     }
   });
+
+  // Detect if the browser is able to play an audio file right now
+  async function canAutoPlay() {
+    try {
+      var audio = $('<audio src="' + config.siteUrl + '/html/app/js/noticeAlert.mp3' + '" style="display: none;" />');
+      console.log(audio);
+      $('body').append(audio);
+      audio.get(0).volume = 0;
+      await audio.get(0).play();
+      audio.remove();
+      return true;
+    } catch (e) { console.log(e.message); }
+    return false;
+  }
+
+  if (canAutoPlay()) {
+    var st = $('#user-left-box .user-box .status');
+    if (st.is('.default') && st.find('.fa').is('.fa-volume-down')) {
+      st.removeClass('default');
+      st.find('.fa').removeClass('fa-volume-down').addClass('fa-volume-up').css('color', '#8bc34a');
+      st.find('span').text('Audio On');
+      $('li.tk-notify').data('tkNotify').enableSound(true);
+    }
+  }
+
 });
 
 

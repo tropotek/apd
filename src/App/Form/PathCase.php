@@ -643,6 +643,7 @@ vd($this->getRequest()->all());
             }
         }
 
+        // TODO: create a new file field and move this there using AJAX calls
         $activeList = $this->getRequest()->get('fActive', []);  // Get the active status
         $labelList = $this->getRequest()->get('fLabel', []);    // Get the active status
         $fileList = \App\Db\FileMap::create()->findFiltered(['model' => $this->getPathCase()]);
@@ -654,6 +655,9 @@ vd($this->getRequest()->all());
                 $file->setLabel($labelList[$i]);
             $file->save();
         }
+
+
+
 
         \Tk\Alert::addSuccess('Record saved!');
         $event->setRedirect($this->getBackUrl());
