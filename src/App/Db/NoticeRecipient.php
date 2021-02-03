@@ -33,6 +33,11 @@ class NoticeRecipient extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public $userId = 0;
 
     /**
+     * @var bool
+     */
+    public $alert = false;
+
+    /**
      * @var \DateTime|null
      */
     public $viewed = null;
@@ -55,6 +60,24 @@ class NoticeRecipient extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     {
         $this->_CreatedTrait();
 
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAlert(): bool
+    {
+        return $this->alert;
+    }
+
+    /**
+     * @param bool $alert
+     * @return NoticeRecipient
+     */
+    public function setAlert(bool $alert): NoticeRecipient
+    {
+        $this->alert = $alert;
+        return $this;
     }
 
     /**

@@ -3,7 +3,7 @@
 @import "variables";
 @import "../../theme-cube/scss/tk-cube";
 
-@import "../../app/js/fileinput/tkFileInput";
+//@import "../../app/js/fileinput/tkFileInput";
 
 .tk-status-table tbody tr td {
   vertical-align: top;
@@ -26,13 +26,14 @@
     color: #e84e40;
 
     &.viewed {
+      font-weight: normal;
       > a > i {
         color: inherit;
       }
     }
-    &.read {
-      font-weight: normal;
-    }
+    //&.read {
+    //  font-weight: normal;
+    //}
 
   }
 

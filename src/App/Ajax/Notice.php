@@ -118,6 +118,43 @@ class Notice
         return ResponseJson::createJson($out);
     }
 
+    /**
+     * @param Request $request
+     * @return Response
+     * @throws Exception
+     */
+    public function doMarkAlert(Request $request)
+    {
+        // use for testing
+        // UPDATE notice_recipient t SET t.read = null WHERE 1;
+
+        // h = userHash
+        // d = true/false  //mark read/unread
+        // nid = noticeId
+        /** @var \Uni\Db\User $user */
+        $user = UserMap::create()->findByHash($request->get('h'), Config::getInstance()->getInstitutionId());
+        if (!$user)  return ResponseJson::createJson(array('error' => 'Invalid Request'), 500);
+        $params = [];
+        if ($request->has('nid'))
+            $params['id'] = (int)$request->get('nid');
+        $list = $this->getCurrentNoticeList($user, $params);
+        foreach ($list as $notice) {
+            $recipient = $notice->getNoticeRecipient($user);
+            if (!$recipient) continue;
+            $b = ($request->get('d') == true);
+            if ($b) {
+                if (!$recipient->isAlert())
+                    $recipient->setAlert(true);
+            } else {
+                $recipient->setAlert(false);
+            }
+            $recipient->save();
+        }
+
+        $out = $this->getRecipientList($request->get('h'));
+        return ResponseJson::createJson($out);
+    }
+
 
     /**
      * @param $userHash
@@ -135,7 +172,9 @@ class Notice
         if ($user) {
             $list = $this->getCurrentNoticeList($user);
             if (count($list)) {
-                $unread = 0;
+                $unRead = 0;
+                $unViewed = 0;
+                $unAlert = 0;
                 $total = $list->count();
                 $out['list'] = array();
                 foreach ($list as $notice) {
@@ -146,14 +185,23 @@ class Notice
                     $notice->isNew = (\Tk\Date::create()->sub(new \DateInterval('PT2H')) < $notice->getCreated());
                     $notice->isRead = $recipient->isRead();
                     $notice->isViewed = $recipient->isViewed();
-
+                    $notice->isAlert = $recipient->isAlert();
                     $out['list'][] = $notice;
+
+//                    if (!$recipient->isRead()) {
+//                        $unRead++;
+//                    }
                     if (!$recipient->isViewed()) {
-                        $unread++;
+                        $unViewed++;
+                    }
+                    if (!$recipient->isAlert()) {
+                        $unAlert++;
                     }
                 }
                 $out['total'] = $total;
-                $out['unread'] = $unread;
+                //$out['unRead'] = $unRead;
+                $out['unViewed'] = $unViewed;
+                $out['unAlert'] = $unAlert;
             }
         }
         return $out;

@@ -42,11 +42,15 @@ create table notice_recipient (
     id           int unsigned auto_increment primary key,
     notice_id    int unsigned default 0 not null,
     user_id      int unsigned default 0 not null,            -- Recipient user
-    viewed       datetime                   null,            -- Mark viewed when the user opens the menu dropdown
-    `read`       datetime                   null,            -- Mark read when the user clicks on the message and reads it
+    alert        TINYINT(1) NOT NULL DEFAULT 0,              -- Mark alert when the system has alerted the user to the new notification
+    viewed       datetime                   null,            -- Mark viewed when the user clicks on the notice
+    `read`       datetime                   null,            -- Mark viewed when the user clicks on the notice
     created      datetime               not null,
     constraint notice_recipient_key unique (notice_id, user_id)
 ) ENGINE=InnoDB;
+
+
+-- alter table notice_recipient add alert TINYINT(1) default 0 not null after user_id;
 
 
 -- Add PDF attachment functionality to the files

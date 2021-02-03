@@ -29,6 +29,7 @@ class NoticeRecipientMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Integer('id'), 'key');
             $this->dbMap->addPropertyMap(new Db\Integer('noticeId', 'notice_id'));
             $this->dbMap->addPropertyMap(new Db\Integer('userId', 'user_id'));
+            $this->dbMap->addPropertyMap(new Db\Boolean('alert'));
             $this->dbMap->addPropertyMap(new Db\Date('viewed'));
             $this->dbMap->addPropertyMap(new Db\Date('read'));
             $this->dbMap->addPropertyMap(new Db\Date('created'));
@@ -47,6 +48,7 @@ class NoticeRecipientMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Integer('id'), 'key');
             $this->formMap->addPropertyMap(new Form\Integer('noticeId'));
             $this->formMap->addPropertyMap(new Form\Integer('userId'));
+            $this->formMap->addPropertyMap(new Form\Boolean('alert'));
             $this->formMap->addPropertyMap(new Form\Date('viewed'));
             $this->formMap->addPropertyMap(new Form\Date('read'));
 
@@ -110,6 +112,9 @@ class NoticeRecipientMap extends Mapper
         }
         if (isset($filter['userId'])) {
             $filter->appendWhere('a.user_id = %s AND ', (int)$filter['userId']);
+        }
+        if (isset($filter['alert']) && $filter['alert'] !== '' && $filter['alert'] !== null) {
+            $filter->appendWhere('a.alert = %s AND ', (int)$filter['alert']);
         }
         if (isset($filter['viewed']) && $filter['viewed'] !== '' && $filter['viewed'] !== null) {
             if ($filter['viewed']) {
