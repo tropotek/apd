@@ -43,8 +43,8 @@
       markViewed: 'doMarkViewed',           // h => userHash, d = true/false
       markAlert: 'doMarkAlert',            // h => userHash, d = true/false
       getNoticeList: 'doGetNoticeList',     // h => userHash
-      refreshMins: 5,                       // Number of minutes to refresh (5-10 min recommended)
-      //refreshMins: 1,                       // Number of minutes to refresh (5-10 min recommended)
+      //refreshMins: 5,                       // Number of minutes to refresh (5-10 min recommended)
+      refreshMins: 2,                       // Number of minutes to refresh (5-10 min recommended)
       noticeTpl:
         '  <li class="tk-notify dropdown d-none d-md-block">\n' +
         '    <a class="btn dropdown-toggle dropdown-nocaret" data-toggle="dropdown"><i class="fa fa-bell"></i><span class="count" style="display:none;">0</span></a>\n' +
