@@ -102,7 +102,14 @@ class Request extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     {
         $this->_TimestampTrait();
         $this->cost = Money::create(0);
-        $this->setTestId(1);
+
+        // Auto add a service and test ID if there is only one available
+        $test = TestMap::create()->findFiltered(['institutionId' => $this->getConfig()->getInstitutionId()]);
+        if ($test->count() == 1)
+            $this->setTestId($test->current()->getId());
+        $service = ServiceMap::create()->findFiltered(['institutionId' => $this->getConfig()->getInstitutionId()]);
+        if ($service->count() == 1)
+            $this->setServiceId($service->current()->getId());
     }
 
     public function insert()
