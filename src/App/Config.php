@@ -2,6 +2,8 @@
 namespace App;
 
 
+use App\Db\Permission;
+
 /**
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
@@ -42,15 +44,14 @@ class Config extends \Uni\Config
         return $this->get('auth.handler');
     }
 
-
     /**
-     * @param string $type (optional) If set returns only the permissions for that user type otherwise returns all permissions
-     * @return array
+     * @return Permission|null
      */
-    public function getPermissionList($type = '')
+    public function getPermission()
     {
-         return \App\Db\Permission::getPermissionList($type);
+        return \App\Db\Permission::getInstance();
     }
+
 
 
 //    /**

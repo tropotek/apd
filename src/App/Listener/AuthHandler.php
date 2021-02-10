@@ -114,7 +114,8 @@ class AuthHandler extends \Bs\Listener\AuthHandler
 
                         $user->setNewPassword($adapter->get('password'));
                         $user->save();
-                        $user->addPermission(\App\Db\Permission::getDefaultPermissionList($user->getType()));
+                        $user->addPermission($this->getConfig()->getPermission()->getDefaultUserPermissions($user->getType()));
+//                        $user->addPermission(\App\Db\Permission::getDefaultPermissionList($user->getType()));
 
                         if (method_exists($user, 'getData')) {
                             $data = $user->getData();
@@ -163,7 +164,8 @@ class AuthHandler extends \Bs\Listener\AuthHandler
                 $user = $config->createUser();
                 $config->getUserMapper()->mapForm($userData, $user);
                 $user->save();
-                $user->addPermission(\Uni\Db\Permission::getDefaultPermissionList($user->getType()));
+                $user->addPermission($this->getConfig()->getPermission()->getDefaultUserPermissions($user->getType()));
+                //$user->addPermission(\Uni\Db\Permission::getDefaultPermissionList($user->getType()));
                 $adapter->set('user', $user);
             }
 

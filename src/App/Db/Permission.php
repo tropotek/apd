@@ -41,15 +41,11 @@ class Permission extends \Uni\Db\Permission
     const CASE_ADMIN            = 'perm.manage.case';
 
 
-
     /**
-     * Get all available permissions for a user type
-     * If type is null then all available permissions should be returns, excluding the type permissions
-     *
-     * @param string $type
-     * @return array
+     * @param string $type (optional) If set returns only the permissions for that user type otherwise returns all permissions
+     * @return array|string[]
      */
-    public static function getPermissionList($type = '')
+    public function getAvailablePermissionList($type = '')
     {
         $arr = array();
         switch ($type) {
@@ -78,18 +74,11 @@ class Permission extends \Uni\Db\Permission
     }
 
     /**
-     * Return the default permission set for creating new user types.
-     *
-     * @param string $type
-     * @return array
+     * @param string $type (optional) If set returns only the permissions for that user type otherwise returns all permissions
+     * @return array|string[]
      */
-    public static function getDefaultPermissionList($type = '')
+    public function getDefaultUserPermissions($type = '')
     {
         return array(); // All permissions must be set by a self::MANAGE_STAFF user
-//        $list = self::getPermissionList($type);
-//        unset($list['Case Administration']); // must be set by admin user
-//        unset($list['Is Pathologist']); // must be set by admin user
-//        unset($list['Is Technician']); // must be set by admin user
-//        return $list;
     }
 }
