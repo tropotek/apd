@@ -568,7 +568,6 @@ CSS;
     {
         // Load the object with form data
         $vals = $form->getValues();
-vd($this->getRequest()->all());
         if (!empty($vals['clientId']) && is_array($vals['clientId']))
             $vals['clientId'] = current($vals['clientId']);
         else

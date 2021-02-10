@@ -38,7 +38,6 @@ jQuery(function($) {
   async function canAutoPlay() {
     try {
       var audio = $('<audio src="' + config.siteUrl + '/html/app/js/noticeAlert.mp3' + '" style="display: none;" />');
-      console.log(audio);
       $('body').append(audio);
       audio.get(0).volume = 0;
       await audio.get(0).play();

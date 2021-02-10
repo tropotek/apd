@@ -58,7 +58,7 @@
         '          <span class="time"><i class="fa fa-clock-o"></i><span>13 min.</span></span>\n' +
         '        </a>\n' +
         '      </li>\n' +
-//        '      <li class="item-footer"><a href="#">View all notifications</a></li>\n' +
+        '      <li class="item-footer"><a href="#">Mark All Read</a></li>\n' +
         '    </ul>\n' +
         '    <audio class="alert-new" src="#"></audio>' +
         '  </li>',
@@ -93,7 +93,7 @@
         //d: 1,
         //nid: n.id,
       }, params);
-      $.get(url, params, function (data) {
+      $.get(url, p, function (data) {
         if (callback) callback.apply(this, [data]);
       }, 'json');
     };
@@ -112,7 +112,7 @@
         //d: 1,
         //nid: n.id,
       }, params);
-      $.get(url, params, function (data) {
+      $.get(url, p, function (data) {
         if (callback) callback.apply(this, [data]);
       }, 'json');
     };
@@ -185,22 +185,25 @@
           li.insertBefore(itemTpl);
           li.on('click', function () {
             var markViewed = false;
+            var isViewed = $(this).is('.viewed');
+
             if (n.type == 'Request::create') {
-              var rows = $('.tk-request-table tr[data-obj-id='+n.fid+']');
+              markViewed = true;
+              var rows = $('.tk-request-table tr[data-obj-id=' + n.fid + ']');
               if (rows.length) {
                 rows.get(0).scrollIntoView({behavior: "smooth", block: "center"});
                 rows.effect("highlight", {color: '#6c757d'}, 2500);
-                markViewed = true;
               }
             } else if (n.type == 'PathCase::create') {
-              var rows = $('.tk-pathCase-table tr[data-obj-id='+n.fid+']');
+              markViewed = true;
+              var rows = $('.tk-pathCase-table tr[data-obj-id=' + n.fid + ']');
               if (rows.length) {
                 rows.get(0).scrollIntoView({behavior: "smooth", block: "center"});
                 rows.effect("highlight", {color: '#6c757d'}, 2500);
-                markViewed = true;
               }
             }
-            if (markViewed) {
+
+            if (!isViewed && markViewed) {
               _markViewed({d: 1, nid: n.id});
               li.addClass('viewed');
             }
@@ -210,6 +213,20 @@
         itemTpl.remove();
 
         totalEl.text(data.total);
+
+
+        tpl.find('li.item-footer').on('click', function () {
+          var url = plugin.settings.ajax + plugin.settings.markViewed;
+          var p = $.extend({
+            h : config.userHash,
+            crumb_ignore: 'crumb_ignore',
+            nolog: 'nolog',
+            d: 1
+          }, params);
+          $.get(url, p, function (data) {
+            plugin.refresh();
+          }, 'json');
+        });
 
         // Update total unread counts
         _updateTotals(countEl);

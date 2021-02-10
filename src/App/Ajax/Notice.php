@@ -108,6 +108,8 @@ class Notice
             if ($b) {
                 if (!$recipient->getViewed())
                     $recipient->setViewed(\Tk\Date::create());
+                if (!$recipient->isAlert())
+                    $recipient->setAlert(true);
             } else {
                 $recipient->setViewed(null);
             }
