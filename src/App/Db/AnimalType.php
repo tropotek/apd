@@ -182,9 +182,9 @@ class AnimalType extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     {
         $errors = array();
 
-        if (!$this->parentId) {
-            $errors['parentId'] = 'Invalid value: parentId';
-        }
+//        if (!$this->parentId) {
+//            $errors['parentId'] = 'Invalid value: parentId';
+//        }
 
         if (!$this->name) {
             $errors['name'] = 'Invalid value: name';
