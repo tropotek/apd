@@ -50,9 +50,6 @@ create table notice_recipient (
 ) ENGINE=InnoDB;
 
 
--- alter table notice_recipient add alert TINYINT(1) default 0 not null after user_id;
-
-
 -- Add PDF attachment functionality to the files
-alter table file add label VARCHAR(128) default '' not null after mime;
-alter table file add active TINYINT(1) default 0 not null after label;
+alter table file add label VARCHAR(128) default '' not null after mime;      -- Label text for the PDF image
+alter table file add active TINYINT(1) default 0 not null after label;       -- Is attached to the PDF
