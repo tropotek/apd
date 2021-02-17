@@ -254,9 +254,7 @@ class Request extends \Bs\TableIface
         if (!$this->isMinMode()) {
             $this->appendAction(\Tk\Table\Action\Delete::create());
         }
-
         $this->appendAction(\Tk\Table\Action\Csv::create());
-
         $this->appendAction(\App\Table\Action\Status::create(\App\Db\Request::getStatusList()));
 
         // load table

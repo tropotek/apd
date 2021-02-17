@@ -175,7 +175,7 @@ class PathCase extends \Bs\TableIface
         );
         $this->appendAction(\Tk\Table\Action\Delete::create());
         $this->appendAction(\Tk\Table\Action\Csv::create());
-        $this->appendAction(\App\Table\Action\Status::create(\App\Db\Request::getStatusList()));
+        $this->appendAction(\App\Table\Action\Status::create(\App\Db\PathCase::getStatusList()));
 
         // load table
         //$this->setList($this->findList());
