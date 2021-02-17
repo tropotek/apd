@@ -197,9 +197,9 @@ class Storage extends \Tk\Db\Map\Model implements \Tk\ValidInterface
             $errors['institutionId'] = 'Invalid value: institutionId';
         }
 
-        if (!$this->uid) {
-            $errors['uid'] = 'Invalid value: uid';
-        }
+//        if (!$this->uid) {
+//            $errors['uid'] = 'Invalid value: uid';
+//        }
 
         if (!$this->name) {
             $errors['name'] = 'Invalid value: name';
