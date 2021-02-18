@@ -134,7 +134,6 @@ class Status extends \Tk\Table\Action\Link
                 return;
             }
 
-            // TODO: One day make this action reversible
             $updated = 0;
             /* @var \Bs\Db\Traits\StatusTrait|\Tk\Db\ModelInterface $obj */
             foreach($this->getTable()->getList() as $obj) {
@@ -150,10 +149,6 @@ class Status extends \Tk\Table\Action\Link
                     $obj->setStatusNotify($notify);
                     $obj->setStatusMessage($notes);
                     $obj->save();
-//                    $statusObj = \Bs\Db\Status::create($obj);
-//                    $statusObj->setNotify($notify);
-//                    $statusObj->setMessage($notes);
-//                    $statusObj->execute();
                     $updated++;
                 }
             }
