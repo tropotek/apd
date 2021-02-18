@@ -61,8 +61,6 @@ class Status extends \Tk\Table\Action\Link
         $this->setAttr('data-toggle', 'modal');
         $this->setAttr('data-target', '#'.$this->dialog->getId());
 
-
-
     }
 
     /**
@@ -124,8 +122,8 @@ class Status extends \Tk\Table\Action\Link
         $btnId = $this->getTable()->makeInstanceKey($this->getName());
         if ($request->get($btnId) == $btnId) {
             $status = $request->get($btnId.'-status').'';
-            $notify = $request->get($btnId.'-status_notify').'';
-            $notes = $request->get($btnId.'-status_notes').'';
+            $notify = $request->get('_'.$btnId.'-statusNotify').'';
+            $notes = $request->get('_'.$btnId.'-statusMessage').'';
             if (!$status) {
                 \Tk\Alert::addWarning('Nothing updated please select a status first.');
                 $request->getTkUri()->redirect();
@@ -179,7 +177,7 @@ class Status extends \Tk\Table\Action\Link
         $this->setAttr('data-select', '[name='.$btnId.'-status]');
         $this->setAttr('disabled');
 
-        $this->field = \Uni\Form\Field\StatusSelect::createSelect($btnId . '-status', $this->getStatusList())
+        $this->field = \Bs\Form\Field\StatusSelect::createSelect($btnId . '-status', $this->getStatusList())
             ->setNotes('Set the status. Use the checkbox to disable notification emails.')
             ->prependOption('-- Status --', '');
 
