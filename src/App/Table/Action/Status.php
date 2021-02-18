@@ -147,11 +147,13 @@ class Status extends \Tk\Table\Action\Link
                 if (in_array($keyValue, $selected)) {
                     \Tk\Log::notice('Bulk Record Status Change: [cs:'.$obj->getStatus(). '] [ns:'.$status . '] [pid:'.$obj->getId().']');
                     $obj->setStatus($status);
+                    $obj->setStatusNotify($notify);
+                    $obj->setStatusMessage($notes);
                     $obj->save();
-                    $statusObj = \Bs\Db\Status::create($obj);
-                    $statusObj->setNotify($notify);
-                    $statusObj->setMessage($notes);
-                    $statusObj->execute();
+//                    $statusObj = \Bs\Db\Status::create($obj);
+//                    $statusObj->setNotify($notify);
+//                    $statusObj->setMessage($notes);
+//                    $statusObj->execute();
                     $updated++;
                 }
             }
