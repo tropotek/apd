@@ -4,11 +4,12 @@
 -- Author: Michael Mifsud <info@tropotek.com>
 -- ---------------------------------
 
-UPDATE institution t SET
-    t.name = 'FVAS - Veterinary Anatomic Pathology',
-    t.phone = '(03) 9731 2274',
-    t.email = 'anat-vet@unimelb.edu.au'
-WHERE t.id = 1;
+-- Does not exist here, must be moved to the install page
+# UPDATE institution t SET
+#     t.name = 'FVAS - Veterinary Anatomic Pathology',
+#     t.phone = '(03) 9731 2274',
+#     t.email = 'anat-vet@unimelb.edu.au'
+# WHERE t.id = 1;
 
 
 -- ----------------------------

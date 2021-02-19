@@ -9,7 +9,7 @@ $config = \Uni\Config::getInstance();
 try {
     $data = \Tk\Db\Data::create();
     if (!$data->get('site.title')) {
-        $data->set('site.title', '');
+        $data->set('site.title', ' Anatomic Pathology Database');
         $data->set('site.short.title', 'APD');
     }
     if (!$data->get('site.email'))
