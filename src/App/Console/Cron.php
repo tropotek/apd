@@ -55,13 +55,7 @@ class Cron extends \Bs\Console\Iface
 
         }
 
-
-
-
         $this->write('', OutputInterface::VERBOSITY_VERBOSE);
-        //$this->write('Cron Script Complete.', OutputInterface::VERBOSITY_VERBOSE);
-
-
     }
 
     /**
