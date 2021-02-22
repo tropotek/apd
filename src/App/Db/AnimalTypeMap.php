@@ -29,6 +29,8 @@ class AnimalTypeMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Integer('parentId', 'parent_id'));
             $this->dbMap->addPropertyMap(new Db\Text('name'));
             $this->dbMap->addPropertyMap(new Db\Text('description'));
+            $this->dbMap->addPropertyMap(new Db\Date('modified'));
+            $this->dbMap->addPropertyMap(new Db\Date('created'));
 
         }
         return $this->dbMap;
@@ -74,6 +76,7 @@ class AnimalTypeMap extends Mapper
             $kw = '%' . $this->escapeString($filter['keywords']) . '%';
             $w = '';
             $w .= sprintf('a.name LIKE %s OR ', $this->quote($kw));
+            $w .= sprintf('a.description LIKE %s OR ', $this->quote($kw));
             if (is_numeric($filter['keywords'])) {
                 $id = (int)$filter['keywords'];
                 $w .= sprintf('a.id = %d OR ', $id);

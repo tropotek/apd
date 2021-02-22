@@ -84,7 +84,7 @@ class NoteMap extends Mapper
         if (!empty($filter['keywords'])) {
             $kw = '%' . $this->getDb()->escapeString($filter['keywords']) . '%';
             $w = '';
-            //$w .= sprintf('a.name LIKE %s OR ', $this->getDb()->quote($kw));
+            $w .= sprintf('a.message LIKE %s OR ', $this->getDb()->quote($kw));
             if (is_numeric($filter['keywords'])) {
                 $id = (int)$filter['keywords'];
                 $w .= sprintf('a.id = %d OR ', $id);

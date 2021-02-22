@@ -77,7 +77,8 @@ class ServiceMap extends Mapper
         if (!empty($filter['keywords'])) {
             $kw = '%' . $this->escapeString($filter['keywords']) . '%';
             $w = '';
-            //$w .= sprintf('a.name LIKE %s OR ', $this->quote($kw));
+            $w .= sprintf('a.name LIKE %s OR ', $this->quote($kw));
+            $w .= sprintf('a.comments LIKE %s OR ', $this->quote($kw));
             if (is_numeric($filter['keywords'])) {
                 $id = (int)$filter['keywords'];
                 $w .= sprintf('a.id = %d OR ', $id);
