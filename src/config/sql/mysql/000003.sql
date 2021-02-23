@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS `service_has_user` (
 INSERT INTO mail_template (institution_id, mail_template_event_id, recipient_type, template, active, modified, created)
 VALUES (1, 8, 'serviceTeam', '<p>Hi {recipient::name},</p>
 <p>A new pathology request has been submitted:</p>
+{request::requestCount}<li>Total Requests: {request::requestCount}</li>{/request::requestCount}
 <ul>
 <li>Pathology #: <a href="{pathCase::url}">{pathCase::pathologyId}</a></li>
 <li>Institution ID: {pathCase::institutionId}</li>

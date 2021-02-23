@@ -120,6 +120,7 @@ class Request extends \Bs\FormIface
         if ($cassetteList && count($cassetteList)) {
             $cassetteList = $this->getConfig()->getRequest()->get('cassetteId');
             $reqList = [];
+            $req = null;
             foreach ($cassetteList as $i => $v) {
                 /** @var \App\Db\Cassette $cassette */
                 $cassette = CassetteMap::create()->find($v);
@@ -132,8 +133,8 @@ class Request extends \Bs\FormIface
                     if ($form->hasErrors()) {
                         return;
                     }
-                    // Only enable status for first request
-                    if ($i == 0) {
+                    // Only enable status for last request object
+                    if ($i == (count($cassetteList)-1)) {
                         $this->setRequest($req);
                         $req->setStatusNotify(true);
                     }
@@ -143,6 +144,8 @@ class Request extends \Bs\FormIface
             }
             if ($req) {
                 Notice::create($req, $req->getPathCase()->getUserId(), ['requestList' => $reqList]);
+                // Add total to a value in the request for the message system
+                $req->requestCount = count($reqList);
             }
         } else {
             $this->getRequest()->setStatusNotify(true);

@@ -95,6 +95,12 @@ class RequestDecorator
                 $message->replace(Collection::prefixArrayKeys(\App\Db\PathCaseMap::create()
                     ->unmapForm($request->getPathCase()), 'pathCase::'));
 
+            if (property_exists($request, 'requestCount')) {
+                $message->set('request::requestCount' , $request->requestCount);
+            } else {
+                $message->set('request::requestCount' , '1');
+            }
+
             $messageList[] = $message;
         }
         return $messageList;
