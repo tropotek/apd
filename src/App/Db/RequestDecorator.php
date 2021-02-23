@@ -87,6 +87,7 @@ class RequestDecorator
             if ($request->getTest())
                 $message->replace(Collection::prefixArrayKeys(\App\Db\ContactMap::create()
                     ->unmapForm($request->getTest()), 'test::'));
+
             if ($request->getService())
                 $message->replace(Collection::prefixArrayKeys(\App\Db\ServiceMap::create()
                     ->unmapForm($request->getService()), 'service::'));
