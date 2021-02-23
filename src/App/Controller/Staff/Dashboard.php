@@ -58,8 +58,8 @@ class Dashboard extends \Uni\Controller\AdminIface
         $this->requestTable->setEditUrl(\Bs\Uri::createHomeUrl('/requestEdit.html'));
         $this->requestTable->init();
         $filter = array(
-            //'userId' => $this->getAuthUser()->getId(),
-            'pathologistId' => $this->getAuthUser()->getId()
+            'userId' => $this->getAuthUser()->getId(),
+            //'pathologistId' => $this->getAuthUser()->getId()
         );
         $this->requestTable->setList($this->requestTable->findList($filter, Tool::create('created DESC')));
 

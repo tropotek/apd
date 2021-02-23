@@ -34,23 +34,18 @@ class Request extends \Bs\TableIface
      */
     private $minMode = false;
 
-
     public function __construct($tableId = '')
     {
         parent::__construct($tableId);
-
         if ($this->getConfig()->getRequest()->has('rComplete')) {
             $this->doComplete($this->getConfig()->getRequest()->get('rComplete'));
         }
-
         if ($this->getConfig()->getRequest()->has('rCancel')) {
             $this->doCancel($this->getConfig()->getRequest()->get('rCancel'));
         }
-
         if ($this->getConfig()->getRequest()->has('rDel')) {
             $this->doDelete($this->getConfig()->getRequest()->get('rDel'));
         }
-
     }
 
     public function doComplete($requestId)
@@ -84,7 +79,6 @@ class Request extends \Bs\TableIface
         }
         \Tk\Uri::create()->remove('rDel')->redirect();
     }
-
 
     /**
      * @return bool
@@ -168,6 +162,16 @@ class Request extends \Bs\TableIface
             return $value;
         });
         $this->appendCell(new Cell\Text('status'));
+        $this->appendCell(\Tk\Table\Cell\Text::create('pathologist'))
+            ->setOrderProperty('b.pathologist_id')
+            ->addOnPropertyValue(function (\Tk\Table\Cell\Iface $cell, \App\Db\Request $obj, $value) {
+                if ($obj->getPathCase()) {
+                    //$cell->getRow()->setAttr('data-pathology-id', $obj->getPathCase()->getPathologyId());
+                    //$cell->setUrl(\Bs\Uri::createHomeUrl('/pathCaseEdit.html')->set('pathCaseId', $obj->getPathCaseId()));
+                    $value = $obj->getPathCase()->getPathologist()->getName();
+                }
+                return $value;
+            });
         $this->appendCell(\Tk\Table\Cell\Text::create('pathologyId'))
             ->setOrderProperty('b.pathology_id')->setLabel('Pathology #')
             ->addOnPropertyValue(function (\Tk\Table\Cell\Iface $cell, \App\Db\Request $obj, $value) {
@@ -243,9 +247,7 @@ class Request extends \Bs\TableIface
             $this->appendFilter(Field\Select::createSelect('ownerId', $list)->prependOption('-- Owner --'));
 
             $this->appendFilter(new Field\DateRange('date'));
-
         }
-
 
         // Actions
         //$this->appendAction(\Tk\Table\Action\Link::createLink('New Request', \Bs\Uri::createHomeUrl('/requestEdit.html'), 'fa fa-plus'));

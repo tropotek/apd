@@ -135,10 +135,13 @@ class Notice extends \Tk\Db\Map\Model implements \Tk\ValidInterface
         if (!is_array($user)) $user = array($user);
         foreach ($user as $u) {  // Create an unread notice for the user
             if (!$u) continue;
-            $r = new NoticeRecipient();
-            $r->setNoticeId($this->getVolatileId());
-            $r->setUserId($u->getId());
-            $r->save();
+            $check = NoticeRecipientMap::create()->findFiltered(['noticeId' => $this->getVolatileId(), 'userId' => $u->getId()])->current();
+            if (!$check) {
+                $r = new NoticeRecipient();
+                $r->setNoticeId($this->getVolatileId());
+                $r->setUserId($u->getId());
+                $r->save();
+            }
         }
         return $this;
     }

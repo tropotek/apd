@@ -37,7 +37,6 @@ class RequestMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Text('notes'));
             $this->dbMap->addPropertyMap(new Db\Date('modified'));
             $this->dbMap->addPropertyMap(new Db\Date('created'));
-
         }
         return $this->dbMap;
     }
@@ -59,7 +58,6 @@ class RequestMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Money('cost'));
             $this->formMap->addPropertyMap(new Form\Text('comments'));
             $this->formMap->addPropertyMap(new Form\Text('notes'));
-
         }
         return $this->formMap;
     }
@@ -72,7 +70,8 @@ class RequestMap extends Mapper
      */
     public function findFiltered($filter, $tool = null)
     {
-        return $this->selectFromFilter($this->makeQuery(\Tk\Db\Filter::create($filter)), $tool);
+        $r = $this->selectFromFilter($this->makeQuery(\Tk\Db\Filter::create($filter)), $tool);
+        return $r;
     }
 
     /**
@@ -102,20 +101,16 @@ class RequestMap extends Mapper
             if ($w) $filter->appendWhere('(%s) AND ', $w);
         }
 
+        if (!empty($filter['userId'])) {
+            $filter->appendFrom(', service_has_user d');
+            $filter->appendWhere('(a.service_id = d.service_id OR b.user_id = %s) AND ', (int)$filter['userId']);
+        }
+
         if (!empty($filter['pathCaseId'])) {
             $filter->appendWhere('a.path_case_id = %s AND ', (int)$filter['pathCaseId']);
         }
         if (!empty($filter['cassetteId'])) {
             $filter->appendWhere('a.cassette_id = %s AND ', (int)$filter['cassetteId']);
-        }
-        if (!empty($filter['pathologistId'])) {
-            $filter->appendWhere('b.pathologist_id = %s AND ', (int)$filter['pathologistId']);
-        }
-        if (!empty($filter['ownerId'])) {
-            $filter->appendWhere('b.owner_id = %s AND ', (int)$filter['ownerId']);
-        }
-        if (!empty($filter['userId'])) {
-            $filter->appendWhere('b.user_id = %s AND ', (int)$filter['userId']);
         }
         if (!empty($filter['serviceId'])) {
             $filter->appendWhere('a.service_id = %s AND ', (int)$filter['serviceId']);
