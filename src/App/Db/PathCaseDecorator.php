@@ -90,7 +90,7 @@ class PathCaseDecorator
 
         $recipientList = self::getRecipients($case, $mailTemplate);
         foreach ($recipientList as $recipient) {
-            $messageList[] = $message = CurlyMessage::create($mailTemplate->getTemplate());
+            $message = CurlyMessage::create($mailTemplate->getTemplate());
             $message->set('_mailTemplate', $mailTemplate);
             if (!$subject) {
                 $subject = '[#' . $case->getId() . '] ' . ObjectUtil::basename($case) . ' ' . ucfirst($status->getName()) . ': ' . $case->getPathologyId();
@@ -115,7 +115,7 @@ class PathCaseDecorator
                 $message->replace(Collection::prefixArrayKeys(\Uni\Db\InstitutionMap::create()->unmapForm($case->getInstitution()), 'institution::'));
             if ($case->getClient())
                 $message->replace(Collection::prefixArrayKeys(\App\Db\ContactMap::create()->unmapForm($case->getClient()), 'client::'));
-
+            $messageList[] = $message;
         }
         return $messageList;
     }

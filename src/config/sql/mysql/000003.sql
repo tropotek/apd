@@ -24,7 +24,7 @@ VALUES (1, 8, 'serviceTeam', '<p>Hi {recipient::name},</p>
 <li>Client ID: {pathCase::clientId}</li>
 <li>Type: {pathCase::type}</li>
 <li>Service Name: {service::name}</li>
-<li>Test Name: {test::name}</li>
+{test::block}<li>Test Name: {test::name}</li>{/test:block}
 <li>Submission Type: {pathCase::submissionType}</li>
 <li>Status: {pathCase::status}</li>
 <li>Animal Name: {pathCase::animalName}</li>

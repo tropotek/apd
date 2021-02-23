@@ -107,6 +107,7 @@ class Request extends \Tk\Db\Map\Model implements \Tk\ValidInterface
         $test = TestMap::create()->findFiltered(['institutionId' => $this->getConfig()->getInstitutionId()]);
         if ($test->count() == 1)
             $this->setTestId($test->current()->getId());
+
         $service = ServiceMap::create()->findFiltered(['institutionId' => $this->getConfig()->getInstitutionId()]);
         if ($service->count() == 1)
             $this->setServiceId($service->current()->getId());
@@ -224,9 +225,13 @@ class Request extends \Tk\Db\Map\Model implements \Tk\ValidInterface
             $errors['serviceId'] = 'Invalid value: serviceId';
         }
 
-        if ((int)$this->qty < 1) {
-            $errors['qty'] = 'Invalid value: qty';
-        }
+//        if (!$this->testId) {
+//            $errors['testId'] = 'Invalid value: testId';
+//        }
+
+//        if ((int)$this->qty < 1) {
+//            $errors['qty'] = 'Invalid value: qty';
+//        }
 
         return $errors;
     }

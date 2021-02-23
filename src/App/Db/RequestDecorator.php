@@ -18,9 +18,7 @@ class RequestDecorator
      */
     public static function getRecipients($request, MailTemplate $mailTemplate)
     {
-        $case = $request->getPathCase();
-        $users = PathCaseDecorator::getRecipients($case, $mailTemplate);
-
+        $users = PathCaseDecorator::getRecipients($request->getPathCase(), $mailTemplate);
         switch($mailTemplate->getRecipientType()) {
             case MailTemplate::RECIPIENT_SERVICE_TEAM:
                 $arr = $request->getService()->getUsers();
@@ -46,12 +44,11 @@ class RequestDecorator
     public static function onCreateMessages(Request $request, MailTemplate $mailTemplate, $subject = null)
     {
         $status = $request->getCurrentStatus();
-        $case = $request->getPathCase();
         $messageList = [];
 
-        $recipientList = self::getRecipients($case, $mailTemplate);
+        $recipientList = self::getRecipients($request, $mailTemplate);
         foreach ($recipientList as $recipient) {
-            $messageList[] = $message = CurlyMessage::create($mailTemplate->getTemplate());
+            $message = CurlyMessage::create($mailTemplate->getTemplate());
             $message->set('_mailTemplate', $mailTemplate);
             if (!$subject) {
                 $subject = '[#' . $request->getId() . '] Pathology Request - ' . ucfirst($status->getName()) . ': ' . $request->getPathCase()->getPathologyId();
@@ -84,9 +81,11 @@ class RequestDecorator
                 $message->replace(Collection::prefixArrayKeys(\Uni\Db\InstitutionMap::create()
                     ->unmapForm($request->getPathCase()->getInstitution()), 'institution::'));
 
-            if ($request->getTest())
-                $message->replace(Collection::prefixArrayKeys(\App\Db\ContactMap::create()
+            if ($request->getTest()) {
+                $message->replace(Collection::prefixArrayKeys(\App\Db\TestMap::create()
                     ->unmapForm($request->getTest()), 'test::'));
+                $message->set('test::block', true);
+            }
 
             if ($request->getService())
                 $message->replace(Collection::prefixArrayKeys(\App\Db\ServiceMap::create()
@@ -95,8 +94,9 @@ class RequestDecorator
             if ($request->getPathCase())
                 $message->replace(Collection::prefixArrayKeys(\App\Db\PathCaseMap::create()
                     ->unmapForm($request->getPathCase()), 'pathCase::'));
-        }
 
+            $messageList[] = $message;
+        }
         return $messageList;
     }
 }

@@ -28,6 +28,8 @@ class EmailReport extends JsonForm
      */
     public function __construct(PathCase $pathCase)
     {
+        $this->addCss('email-report-dialog');
+
         $this->pathCase = $pathCase;
         $this->setResetOnHide(false);
         $form = $this->getConfig()->createForm('email-pdf');
@@ -175,15 +177,16 @@ jQuery(function ($) {
   
   function init() {
     var form = $(this);
-    var dialog = form.closest('.modal');
+    var dialog = form.closest('.modal.email-report-dialog');
     
-    dialog.on('DialogForm:error', function (el, xhr, errMsg) {
+    dialog.on('DialogForm:error', function (e, xhr, errMsg, errHtml) {
+      console.log('\App\Ui\Dialog\EmailReport:');
       console.log(arguments);
       alert(errMsg);
     });
     
   }
-  $('.modal-body form').on('init', '.modal-dialog', init).each(init);
+  $('.modal-body form#email-pdf').on('init', '.modal-dialog', init).each(init);
 });
 JS;
 

@@ -103,9 +103,12 @@ class Request extends \Bs\FormIface
     {
         // Load the object with form data
         \App\Db\RequestMap::create()->mapForm($form->getValues(), $this->getRequest());
-        $cassetteList = $this->getConfig()->getRequest()->get('cassetteId', null);
-        if ($cassetteList && count($cassetteList)) {
+
+        $cassetteList = $this->getConfig()->getRequest()->get('cassetteId');
+        if (is_array($cassetteList) && count($cassetteList)) {
             $this->getRequest()->setCassetteId($cassetteList[0]);       // Fix cassetteId error
+        } else {
+            $cassetteList = [];
         }
 
         $form->addFieldErrors($this->getRequest()->validate());
@@ -118,20 +121,35 @@ class Request extends \Bs\FormIface
             $cassetteList = $this->getConfig()->getRequest()->get('cassetteId');
             $reqList = [];
             foreach ($cassetteList as $i => $v) {
-                $req = new \App\Db\Request();
-                \App\Db\RequestMap::create()->mapForm($form->getValues(), $req);
-                $req->setCassetteId($v);
-                $req->save();
-                $reqList[] = $req;
+                /** @var \App\Db\Cassette $cassette */
+                $cassette = CassetteMap::create()->find($v);
+                if ($cassette) {
+                    $req = new \App\Db\Request();
+                    \App\Db\RequestMap::create()->mapForm($form->getValues(), $req);
+                    $req->setCassetteId($v);
+                    $req->setPathCaseId($cassette->getPathCaseId());
+                    $form->addFieldErrors($req->validate());
+                    if ($form->hasErrors()) {
+                        return;
+                    }
+                    // Only enable status for first request
+                    if ($i == 0) {
+                        $this->setRequest($req);
+                        $req->setStatusNotify(true);
+                    }
+                    $req->save();
+                    $reqList[] = $req;
+                }
             }
-            if ($req)
+            if ($req) {
                 Notice::create($req, $req->getPathCase()->getUserId(), ['requestList' => $reqList]);
+            }
         } else {
+            $this->getRequest()->setStatusNotify(true);
             $this->getRequest()->save();
             if ($isNew)
                 Notice::create($this->getRequest(), $this->getRequest()->getPathCase()->getUserId());
         }
-
 
         \Tk\Alert::addSuccess('Record saved!');
         $event->setRedirect($this->getBackUrl());

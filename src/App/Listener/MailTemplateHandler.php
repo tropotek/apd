@@ -1,13 +1,10 @@
 <?php
 namespace App\Listener;
 
-use App\Db\MailTemplate;
 use App\Db\MailTemplateEvent;
 use App\Db\MailTemplateEventMap;
-use Tk\Collection;
 use Tk\ConfigTrait;
 use Tk\Db\Map\Model;
-use Tk\Db\ModelInterface;
 use Tk\Event\Subscriber;
 use Tk\Mail\CurlyMessage;
 
@@ -21,7 +18,6 @@ use Tk\Mail\CurlyMessage;
 class MailTemplateHandler implements Subscriber
 {
     use ConfigTrait;
-
 
     /**
      * Trigger the create mail template function and return an
@@ -52,13 +48,13 @@ class MailTemplateHandler implements Subscriber
         /** @var \App\Db\MailTemplate $mailTemplate */
         foreach ($mailTemplateList as $mailTemplate) {
             try {
-
-
                 if (!is_callable($mEvent->getCallback())) continue;
                 /** @var CurlyMessage $message */
-                $message = call_user_func_array($mEvent->getCallback(), array($model, $mailTemplate, $subject));
-                if ($message instanceof \Tk\Mail\CurlyMessage)
-                    $messageList[] = $message;
+                $list = call_user_func_array($mEvent->getCallback(), array($model, $mailTemplate, $subject));
+                if ($list instanceof \Tk\Mail\CurlyMessage)
+                    $messageList[] = $list;
+                else
+                    $messageList = array_merge($messageList, $list);
             } catch (\Exception $e) {
                 \Tk\Log::error($e->getMessage());
             }
@@ -76,7 +72,6 @@ class MailTemplateHandler implements Subscriber
     {
         $fail = 0;
         $sent = 0;
-
         /** @var \Tk\Mail\CurlyMessage $message */
         foreach ($messageList as $message) {
             /** @var \App\Db\MailTemplate $mailTemplate */
@@ -106,6 +101,7 @@ class MailTemplateHandler implements Subscriber
             } catch (\Exception $e) {
                 \Tk\Log::notice($e->__toString());
             }
+
             if ($tpl) {
                 $config = \App\Config::getInstance();
                 /** @var \Uni\Db\InstitutionIface $institution */
@@ -154,7 +150,6 @@ class MailTemplateHandler implements Subscriber
 
         $messageList = self::createMessageList($event->getStatus()->getEvent(), $event->getStatus()->getModel());
         $event->setMessageList($messageList);
-
         // Stop if no messages are being sent
         if (!count($event->getMessageList())) $event->stopPropagation();
     }
