@@ -55,7 +55,6 @@ class PathCaseDecorator
                 }
                 break;
             case MailTemplate::RECIPIENT_STUDENTS:
-                // TODO: send each student an individual email (if required)
                 foreach ($case->getStudentList() as $student) {
                     $users[] = [
                         'type' => $mailTemplate->getRecipientType(),
