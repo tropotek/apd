@@ -109,4 +109,77 @@ class ServiceMap extends Mapper
         return $filter;
     }
 
+
+
+
+
+    /**
+     * @param int $serviceId
+     * @return array
+     * @throws \Exception
+     */
+    public function findUsers($serviceId)
+    {
+        $stm = $this->getDb()->prepare('SELECT user_id FROM service_has_user WHERE service_id = ?');
+        $stm->execute(array($serviceId));
+        return $stm->fetchAll(\PDO::FETCH_COLUMN, 0);
+    }
+
+    /**
+     * @param int $serviceId
+     * @param int $userId
+     * @return boolean
+     * @throws \Exception
+     */
+    public function hasUser($serviceId, $userId)
+    {
+        $stm = $this->getDb()->prepare('SELECT * FROM service_has_user WHERE service_id = ? AND user_id = ?');
+        $stm->execute(array($serviceId, $userId));
+        return ($stm->rowCount() > 0);
+    }
+
+    /**
+     * @param int $serviceId
+     * @param int $userId
+     * @throws \Exception
+     */
+    public function addUser($serviceId, $userId)
+    {
+        if ($this->hasUser($serviceId, $userId)) return;
+        $stm = $this->getDb()->prepare('INSERT INTO service_has_user (service_id, user_id)  VALUES (?, ?)');
+        $stm->execute(array($serviceId, $userId));
+    }
+
+    /**
+     * depending on the combination of parameters:
+     *  o remove a user from a service
+     *  o remove all users from a service
+     *  o remove all services from a user
+     *
+     * @param int $serviceId
+     * @param int $userId
+     * @throws \Exception
+     */
+    public function removeUser($serviceId = null, $userId = null)
+    {
+        if ($serviceId && $userId) {
+            $stm = $this->getDb()->prepare('DELETE FROM service_has_user WHERE service_id = ? AND user_id = ?');
+            $stm->execute(array($serviceId, $userId));
+        } else if(!$serviceId && $userId) {
+            $stm = $this->getDb()->prepare('DELETE FROM service_has_user WHERE user_id = ?');
+            $stm->execute(array($userId));
+        } else if ($serviceId && !$userId) {
+            $stm = $this->getDb()->prepare('DELETE FROM service_has_user WHERE service_id = ?');
+            $stm->execute(array($serviceId));
+        }
+    }
+
+
+
+
+
+
+
+
+
 }

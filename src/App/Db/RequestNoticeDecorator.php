@@ -27,12 +27,13 @@ class RequestNoticeDecorator extends NoticeDecoratorInterface
             if (!$notice->getSubject())
                 $notice->setSubject($subject);
             $notice->setType('Request::create');
-            //$notice->setBody('');
             $notice->addRecipient($case->getPathologist());
+            // add service recipients
+            $arr = $request->getService()->getUsers()->toArray();
+            $notice->addRecipient($arr);
+
             $notice->save();
         }
-
-
 
     }
 

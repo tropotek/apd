@@ -1,8 +1,10 @@
 <?php
 namespace App\Listener;
 
+use App\Db\MailTemplate;
 use App\Db\MailTemplateEvent;
 use App\Db\MailTemplateEventMap;
+use Tk\Collection;
 use Tk\ConfigTrait;
 use Tk\Db\Map\Model;
 use Tk\Db\ModelInterface;
@@ -50,6 +52,8 @@ class MailTemplateHandler implements Subscriber
         /** @var \App\Db\MailTemplate $mailTemplate */
         foreach ($mailTemplateList as $mailTemplate) {
             try {
+
+
                 if (!is_callable($mEvent->getCallback())) continue;
                 /** @var CurlyMessage $message */
                 $message = call_user_func_array($mEvent->getCallback(), array($model, $mailTemplate, $subject));

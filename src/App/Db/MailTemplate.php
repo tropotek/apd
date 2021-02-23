@@ -23,6 +23,7 @@ class MailTemplate extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     const RECIPIENT_OWNER               = 'owner';
     const RECIPIENT_PATHOLOGIST         = 'pathologist';
     const RECIPIENT_STUDENTS            = 'students';
+    const RECIPIENT_SERVICE_TEAM        = 'serviceTeam';
 
 
     public static function getRecipientSelectList()
@@ -31,6 +32,7 @@ class MailTemplate extends \Tk\Db\Map\Model implements \Tk\ValidInterface
             'Client' => self::RECIPIENT_CLIENT,             // Changes based on if it is a case or request
             'Animal Owner' => self::RECIPIENT_OWNER,
             'Pathologist' => self::RECIPIENT_PATHOLOGIST,
+            'Service Team' => self::RECIPIENT_SERVICE_TEAM,
             'Students' => self::RECIPIENT_STUDENTS,
             'Author' => self::RECIPIENT_AUTHOR              // Changes based on if it is a case or request
         ];

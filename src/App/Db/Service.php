@@ -72,6 +72,17 @@ class Service extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     }
 
     /**
+     * @return \Bs\Db\User[]|\Bs\Db\UserIface[]|\Tk\Db\Map\ArrayObject
+     * @throws \Exception
+     */
+    public function getUsers()
+    {
+        $list = ServiceMap::create()->findUsers($this->getVolatileId());
+        vd($list);
+        return $this->getConfig()->getUserMapper()->findFiltered(['id' => $list]);
+    }
+
+    /**
      * @param string $name
      * @return Service
      */
