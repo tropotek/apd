@@ -83,6 +83,7 @@ class Edit extends AdminEditIface
             });
             $this->userTable->init();
             $this->userTable->removeAction('csv');
+            $this->userTable->removeAction('columns');
             $this->userTable->removeAction('delete');
             $this->userTable->appendAction(\Tk\Table\Action\Delete::create()->setLabel('Remove')
                 ->setConfirmStr('Are you sure you want to remove the user from this service.')
