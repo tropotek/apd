@@ -223,11 +223,7 @@ class CaseReportPdf extends Pdf
                     $t->appendRepeat();
                 }
             }
-
         }
-
-
-
 
 
         $css = <<<CSS
