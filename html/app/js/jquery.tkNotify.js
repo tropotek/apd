@@ -97,6 +97,7 @@
         if (callback) callback.apply(this, [data]);
       }, 'json');
     };
+
     /**
      *
      * @param params
@@ -105,6 +106,26 @@
      */
     var _markViewed = function(params, callback) {
       var url = plugin.settings.ajax + plugin.settings.markViewed;
+      var p = $.extend({
+        h : config.userHash,
+        crumb_ignore: 'crumb_ignore',
+        nolog: 'nolog'
+        //d: 1,
+        //nid: n.id,
+      }, params);
+      $.get(url, p, function (data) {
+        if (callback) callback.apply(this, [data]);
+      }, 'json');
+    };
+
+    /**
+     *
+     * @param params
+     * @param callback
+     * @private
+     */
+    var _markRead = function(params, callback) {
+      var url = plugin.settings.ajax + plugin.settings.markRead;
       var p = $.extend({
         h : config.userHash,
         crumb_ignore: 'crumb_ignore',
@@ -157,6 +178,7 @@
         var countEl = tpl.find('.count');
         var totalEl = tpl.find('.item-header span');
         var footerEl = tpl.find('.item-footer');
+        var readBtn = footerEl.find('a');
         var soundEl = tpl.find('audio.alert-new');
         var itemTpl = tpl.find('.item.tpl');
 
@@ -215,12 +237,11 @@
         totalEl.text(data.total);
 
 
-        tpl.find('li.item-footer').on('click', function () {
-          var url = plugin.settings.ajax + plugin.settings.markViewed;
+        tpl.find('li.item-footer a').on('click', function () {
+          //var url = plugin.settings.ajax + plugin.settings.markViewed;
+          var url = plugin.settings.ajax + plugin.settings.markRead;
           var p = $.extend({
             h : config.userHash,
-            crumb_ignore: 'crumb_ignore',
-            nolog: 'nolog',
             d: 1
           }, params);
           $.get(url, p, function (data) {

@@ -105,14 +105,14 @@ class NoticeMap extends Mapper
             $filter->appendFrom(', %s b', $this->quoteTable('notice_recipient'));
             $filter->appendWhere('a.id = b.notice_id AND ');
             $filter->appendWhere('b.user_id = %s AND ', (int)$filter['recipientId']);
-            if (isset($filter['viewed'])) {
+            if (isset($filter['viewed']) && $filter['viewed'] !== '' && $filter['viewed'] !== null) {
                 if ($filter['viewed'] === true) {
                     $filter->appendWhere('b.viewed IS NOT NULL AND ');
                 } else {
                     $filter->appendWhere('b.viewed IS NULL AND ');
                 }
             }
-            if (isset($filter['read'])) {
+            if (isset($filter['read']) && $filter['read'] !== '' && $filter['read'] !== null) {
                 if ($filter['read'] === true) {
                     $filter->appendWhere('b.read IS NOT NULL AND ');
                 } else {

@@ -140,8 +140,9 @@ class PathCase extends \Bs\TableIface
         $this->appendFilter(Field\Select::createSelect('type', $list)->prependOption('-- Case Type --'));
         $list = \Tk\ObjectUtil::getClassConstants(\App\Db\PathCase::class, 'TYPE', true);
         $this->appendFilter(Field\Select::createSelect('submissionType', $list)->prependOption('-- Submission Type --'));
+
         $list = \Tk\ObjectUtil::getClassConstants(\App\Db\PathCase::class, 'STATUS', true);
-        $this->appendFilter(Field\Select::createSelect('status', $list)->prependOption('-- Status --'));
+        $this->appendFilter(Field\CheckboxSelect::createSelect('status', $list)->prependOption('-- Status --'));
 
         // Species Filter
         $list = AnimalTypeMap::create()->findFiltered(['institutionId' => $this->getConfig()->getInstitutionId(), 'parent_id' => 0]);

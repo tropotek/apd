@@ -163,7 +163,7 @@ class Request extends \Bs\TableIface
         });
         $this->appendCell(new Cell\Html('comments'))
             ->addOnPropertyValue(function (\Tk\Table\Cell\Iface $cell, \App\Db\Request $obj, $value) {
-                $value = '<div style="max-width: 400px;overflow: auto;">' . $obj->getPathCase()->getComments() . '</div>';
+                $value = '<div style="max-width: 400px;overflow: auto;">' . $obj->getComments() . '</div>';
                 return $value;
             });
         $this->appendCell(new Cell\Text('status'));
@@ -230,8 +230,8 @@ class Request extends \Bs\TableIface
             $this->appendFilter(Field\Select::createSelect('testId', $serviceList)->prependOption('-- Test --'));
 
             $list = \Tk\ObjectUtil::getClassConstants(\App\Db\Request::class, 'STATUS', true);
-            $this->appendFilter(Field\Select::createSelect('status', $list)->prependOption('-- Status --'))
-                ->setValue(\App\Db\Request::STATUS_PENDING);
+            $this->appendFilter(Field\CheckboxSelect::createSelect('status', $list)->prependOption('-- Status --'))
+                ->setValue([\App\Db\Request::STATUS_PENDING]);
 
 
             $list = $this->getConfig()->getUserMapper()->findFiltered(array(
@@ -255,10 +255,10 @@ class Request extends \Bs\TableIface
         }
 
         // Actions
-        //$this->appendAction(\Tk\Table\Action\Link::createLink('New Request', \Bs\Uri::createHomeUrl('/requestEdit.html'), 'fa fa-plus'));
-        $this->appendAction(\Tk\Table\Action\ColumnSelect::create()->setUnselected(array('modified')));
-
         if (!$this->isMinMode()) {
+            //$this->appendAction(\Tk\Table\Action\Link::createLink('New Request', \Bs\Uri::createHomeUrl('/requestEdit.html'), 'fa fa-plus'));
+            $this->appendAction(\Tk\Table\Action\ColumnSelect::create()->setUnselected(array('modified')));
+
             $this->appendAction(\Tk\Table\Action\Delete::create());
         }
         $this->appendAction(\Tk\Table\Action\Csv::create());

@@ -75,7 +75,7 @@ class Index extends \Uni\Controller\Index
     /**
      * DomTemplate magic method
      *
-     * @return Template
+     * @return \Dom\Template
      */
     public function __makeTemplate()
     {

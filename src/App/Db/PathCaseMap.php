@@ -306,8 +306,12 @@ SQL;
         if (!empty($filter['submissionType'])) {
             $filter->appendWhere('a.submission_type = %s AND ', $this->quote($filter['submissionType']));
         }
+//        if (!empty($filter['status'])) {
+//            $filter->appendWhere('a.status = %s AND ', $this->quote($filter['status']));
+//        }
         if (!empty($filter['status'])) {
-            $filter->appendWhere('a.status = %s AND ', $this->quote($filter['status']));
+            $w = $this->makeMultiQuery($filter['status'], 'a.status');
+            if ($w) $filter->appendWhere('(%s) AND ', $w);
         }
         if (!empty($filter['afterHours'])) {
             $filter->appendWhere('a.after_hours = %s AND ', (int)$filter['afterHours']);

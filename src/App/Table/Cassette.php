@@ -97,7 +97,7 @@ class Cassette extends \Bs\TableIface
         $this->appendCell(new Cell\Text('comments'))->addCss('key')->addOnCellHtml(function ($cell, $obj, $value) {
             /** @var Cell\Text $cell */
             /** @var \App\Db\Note $obj */
-            //$value = \Tk\Str::stripEntities(strip_tags($value));
+            $value = \Tk\Str::stripEntities(strip_tags($value));
             return nl2br($value);
         });
 //        $this->appendCell(new Cell\Date('created'));
@@ -206,7 +206,12 @@ jQuery(function($) {
       tdval.attr('disabled', 'disabled');
       var id = tdval.val();
       // Send update to DB
-      $.get(document.location, {'uc': id, 'value': val}, function (data) {
+      $.get(document.location, {
+          'uc': id, 
+          'value': val,
+          crumb_ignore: 'crumb_ignore',
+          nolog: 'nolog'
+        }, function (data) {
         el.html(nl2br(val));
         el.removeAttr('disabled').css({'cursor': 'inherit'}); 
       }, 'html');

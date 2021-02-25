@@ -69,10 +69,15 @@ class Notice
             if (!$recipient) continue;
             $b = ($request->get('d') == true);
             if ($b) {
-                if (!$recipient->getRead())
+                if (!$recipient->getRead()) {
                     $recipient->setRead(\Tk\Date::create());
+                    $recipient->setViewed(\Tk\Date::create());
+                    $recipient->setAlert(true);
+                }
             } else {
                 $recipient->setRead(null);
+                $recipient->setViewed(null);
+                $recipient->setAlert(false);
             }
             $recipient->save();
         }
@@ -174,7 +179,7 @@ class Notice
         if ($user) {
             $list = $this->getCurrentNoticeList($user);
             if (count($list)) {
-                $unRead = 0;
+                //$unRead = 0;
                 $unViewed = 0;
                 $unAlert = 0;
                 $total = $list->count();
@@ -185,7 +190,7 @@ class Notice
                     $notice->icon = $notice->getIconCss();
                     $notice->time = str_replace(' ago', '', \Tk\Date::toRelativeString($recipient->getCreated()));
                     $notice->isNew = (\Tk\Date::create()->sub(new \DateInterval('PT2H')) < $notice->getCreated());
-                    $notice->isRead = $recipient->isRead();
+                    //$notice->isRead = $recipient->isRead();
                     $notice->isViewed = $recipient->isViewed();
                     $notice->isAlert = $recipient->isAlert();
                     $out['list'][] = $notice;
@@ -206,6 +211,7 @@ class Notice
                 $out['unAlert'] = $unAlert;
             }
         }
+        vd($out);
         return $out;
     }
 
@@ -219,7 +225,7 @@ class Notice
     {
         $filter = array(
             'recipientId' => $user->getId(),
-            //'viewed' => false,
+            'read' => false,
             'created' => \Tk\Date::create()->sub(new \DateInterval('P2D'))
             //'created' => \Tk\Date::create()->sub(new \DateInterval('PT18H'))
         );

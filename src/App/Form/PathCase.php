@@ -377,7 +377,11 @@ jQuery(function ($) {
           var x = e.pageX - off.left;
           var y = e.pageY - off.top;
             
-          $.get(document.location, {'gc': data['id']}, function (gcData) {
+          $.get(document.location, {
+              'gc': data['id'],
+              crumb_ignore: 'crumb_ignore',
+              nolog: 'nolog'
+            }, function (gcData) {
             var contact = gcData.contact;
             var html = '<div class="tk-contact"><div class="control">' +
               '<a href="javascript:;" class="tk-close"><i class="fa fa-times"></i></a>' +

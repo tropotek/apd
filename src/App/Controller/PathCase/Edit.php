@@ -69,6 +69,7 @@ class Edit extends AdminEditIface
     public function doDefault(Request $request)
     {
         $this->pathCase = new \App\Db\PathCase();
+        $this->pathCase->setPathologistId($this->getAuthUser()->getId());
         $this->pathCase->setPathologyId($this->pathCase->getVolatilePathologyId());
         if ($request->has('clientId'))
             $this->pathCase->setClientId((int)$request->get('clientId'));

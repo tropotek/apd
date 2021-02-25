@@ -120,8 +120,12 @@ class RequestMap extends Mapper
         if (!empty($filter['testId'])) {
             $filter->appendWhere('a.test_id = %s AND ', (int)$filter['testId']);
         }
+//        if (!empty($filter['status'])) {
+//            $filter->appendWhere('a.status = %s AND ', $this->quote($filter['status']));
+//        }
         if (!empty($filter['status'])) {
-            $filter->appendWhere('a.status = %s AND ', $this->quote($filter['status']));
+            $w = $this->makeMultiQuery($filter['status'], 'a.status');
+            if ($w) $filter->appendWhere('(%s) AND ', $w);
         }
         if (!empty($filter['qty'])) {
             $filter->appendWhere('a.qty = %s AND ', (int)$filter['qty']);

@@ -46,8 +46,10 @@ class Dashboard extends \Uni\Controller\AdminIface
         $this->caseTable->removeFilter('ownerId');
         $this->caseTable->removeFilter('type');
         $this->caseTable->removeFilter('submissionType');
-        $this->caseTable->removeFilter('status');
+        //$this->caseTable->removeFilter('status');
         //$this->caseTable->resetSession();
+        $this->caseTable->getFilterForm()->getField('status')
+            ->setValue([\App\Db\PathCase::STATUS_PENDING,\App\Db\PathCase::STATUS_EXAMINED,\App\Db\PathCase::STATUS_REPORTED]);
         $filter = array(
             'userId' => $this->getAuthUser()->getId()
         );
