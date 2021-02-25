@@ -439,6 +439,17 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     }
 
     /**
+     * @param Tool|null $tool
+     * @return File[]|\Tk\Db\Map\ArrayObject
+     * @throws \Exception
+     */
+    public function getPdfFiles(Tool $tool = null)
+    {
+        $list = FileMap::create()->findFiltered(array('model' => $this, 'active' => true), $tool);
+        return $list;
+    }
+
+    /**
      * Get the Case root file folder, all content related to the case must be stored in here
      *
      * @return string
