@@ -161,6 +161,11 @@ class Request extends \Bs\TableIface
             \Tk\Db\Map\Mapper::$HIDE_DELETED = true;
             return $value;
         });
+        $this->appendCell(new Cell\Html('comments'))
+            ->addOnPropertyValue(function (\Tk\Table\Cell\Iface $cell, \App\Db\Request $obj, $value) {
+                $value = '<div style="max-width: 400px;overflow: auto;">' . $obj->getPathCase()->getComments() . '</div>';
+                return $value;
+            });
         $this->appendCell(new Cell\Text('status'));
         $this->appendCell(\Tk\Table\Cell\Text::create('pathologist'))
             ->setOrderProperty('b.pathologist_id')
@@ -273,7 +278,7 @@ class Request extends \Bs\TableIface
      */
     public function findList($filter = array(), $tool = null)
     {
-        if (!$tool) $tool = $this->getTool();
+        if (!$tool) $tool = $this->getTool('b.pathology_id, c.number DESC');
         $filter = array_merge($this->getFilterValues(), $filter);
         $list = \App\Db\RequestMap::create()->findFiltered($filter, $tool);
         return $list;

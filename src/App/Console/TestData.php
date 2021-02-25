@@ -90,7 +90,7 @@ class TestData extends \Bs\Console\TestData
         /** @var \Uni\Db\Institution $institution */
         $institution = $config->getInstitutionMapper()->find(1);
 
-        $db->exec('DELETE FROM `user` WHERE `notes` = \'***\' ');
+        //$db->exec('DELETE FROM `user` WHERE `notes` = \'***\' ');
         for($i = 0; $i < 25; $i++) {
             $user = $config->createUser();
             $user->setInstitutionId($institution->getId());
@@ -118,7 +118,7 @@ class TestData extends \Bs\Console\TestData
         }
 
         //$db->exec('DELETE FROM `contact` WHERE `notes` = \'***\' ');
-        $db->exec('TRUNCATE `contact`');
+        //$db->exec('TRUNCATE `contact`');
         foreach (Contact::getTypeList() as $type) {
             for($i = 0; $i < 25; $i++) {
                 $contact = new Contact();
@@ -148,7 +148,7 @@ class TestData extends \Bs\Console\TestData
         }
 
         //$db->exec('DELETE FROM `storage` WHERE `notes` = \'***\' ');
-        $db->exec('TRUNCATE `storage`');
+        //$db->exec('TRUNCATE `storage`');
         for($i = 0; $i < 10; $i++) {
             $storage = new Storage();
             $storage->setUid($this->createStr(6));
@@ -159,7 +159,7 @@ class TestData extends \Bs\Console\TestData
             $storage->save();
         }
 
-        $db->exec('DELETE FROM `service` WHERE `notes` = \'***\' ');
+        //$db->exec('DELETE FROM `service` WHERE `notes` = \'***\' ');
         for($i = 0; $i < 10; $i++) {
             $service = new Service();
             $service->setName($this->createName());
@@ -170,7 +170,7 @@ class TestData extends \Bs\Console\TestData
 
 
         //$db->exec('DELETE FROM `path_case` WHERE `notes` = \'***\' ');
-        $db->exec('TRUNCATE  `path_case` ');
+        //$db->exec('TRUNCATE `path_case` ');
         for($i = 0; $i < 100; $i++) {
             $case = new PathCase();
             $arrival = \Tk\Date::create()->sub(new \DateInterval('P'.rand(0, 5000).'D'));
@@ -289,7 +289,7 @@ class TestData extends \Bs\Console\TestData
         }
 
         //$db->exec('DELETE FROM `cassette` WHERE `notes` = \'***\' ');
-        $db->exec('TRUNCATE `cassette`');
+       // $db->exec('TRUNCATE `cassette`');
         for($i = 0; $i < 450; $i++) {
             $cassette = new Cassette();
             /** @var PathCase $case */
@@ -314,7 +314,7 @@ class TestData extends \Bs\Console\TestData
         }
 
         //$db->exec('DELETE FROM `request` WHERE `notes` = \'***\' ');
-        $db->exec('TRUNCATE `request`');
+        //$db->exec('TRUNCATE `request`');
         for($i = 0; $i < 100; $i++) {
             $request = new Request();
             /** @var PathCase $case */

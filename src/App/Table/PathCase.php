@@ -57,6 +57,7 @@ class PathCase extends \Bs\TableIface
         $this->appendCell(new Cell\Text('submissionType'));
         $this->appendCell(new Cell\Text('status'));
 
+        $this->appendCell(new Cell\Text('accountStatus'));
         $this->appendCell(new Cell\Boolean('billable'));
         $this->appendCell(new Cell\Text('cost'));
         $this->appendCell(new Cell\Boolean('submissionReceived'));
@@ -154,13 +155,13 @@ class PathCase extends \Bs\TableIface
 //        $this->appendFilter(Field\Select::createSelect('breed', $breedList)->prependOption('-- Breed --'));
         // TODO: create an auto update JS when the species is selected repopulate the breed select options.
 
-        $list = array('Yes' => 1, 'No' => 0);
+        $list = array('Yes' => '1', 'No' => '0');
         $this->appendFilter(Field\Select::createSelect('isDisposed', $list)->prependOption('-- Is Disposed --', ''));
 
         $list = \Tk\ObjectUtil::getClassConstants(\App\Db\PathCase::class, 'AC_');
         $this->appendFilter(Field\Select::createSelect('acType', $list)->prependOption('-- Method Of Disposal --', ''));
 
-        $list = array('Yes' => 1, 'No' => 0);
+        $list = array('Yes' => '1', 'No' => '0');
         $this->appendFilter(Field\Select::createSelect('billable', $list)->prependOption('-- Is Billable --', ''));
 
         $this->appendFilter(new Field\DateRange('arrival'));
