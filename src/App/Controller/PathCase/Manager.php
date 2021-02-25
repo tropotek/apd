@@ -37,7 +37,7 @@ class Manager extends AdminManagerIface
         $this->getTable()->init();
 
         $filter = array();
-        $this->getTable()->setList($this->getTable()->findList($filter, Tool::create('created DESC')));
+        $this->getTable()->setList($this->getTable()->findList($filter, $this->getTable()->getTool('created DESC')));
     }
 
     /**

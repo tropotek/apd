@@ -43,7 +43,7 @@ class Manager extends AdminManagerIface
         if ($request->query->get('pathCaseId')) {
             $filter['pathCaseId'] = $request->get('pathCaseId');
         }
-        $this->getTable()->setList($this->getTable()->findList($filter, Tool::create('b.pathology_id, c.number')));
+        $this->getTable()->setList($this->getTable()->findList($filter, $this->getTable()->getTool('b.pathology_id, c.number')));
     }
 
     /**

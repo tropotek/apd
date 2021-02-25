@@ -51,7 +51,7 @@ class Dashboard extends \Uni\Controller\AdminIface
         $filter = array(
             'userId' => $this->getAuthUser()->getId()
         );
-        $this->caseTable->setList($this->caseTable->findList($filter, Tool::create('created DESC')));
+        $this->caseTable->setList($this->caseTable->findList($filter, $this->caseTable->getTool('created DESC')));
 
 
         $this->requestTable = \App\Table\Request::create();
@@ -61,7 +61,7 @@ class Dashboard extends \Uni\Controller\AdminIface
             'userId' => $this->getAuthUser()->getId(),
             //'pathologistId' => $this->getAuthUser()->getId()
         );
-        $this->requestTable->setList($this->requestTable->findList($filter, Tool::create('created DESC')));
+        $this->requestTable->setList($this->requestTable->findList($filter, $this->requestTable->getTool('created DESC')));
 
 
     }
