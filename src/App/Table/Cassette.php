@@ -67,6 +67,9 @@ class Cassette extends \Bs\TableIface
      */
     public function init()
     {
+        $this->removeCss('table-hover');
+        $this->addCss('cassette-table');
+
         if($this->isMinMode())
             $this->getRenderer()->enableFooter(false);
 
@@ -126,7 +129,6 @@ class Cassette extends \Bs\TableIface
             $this->doCassetteUpdate($this->getConfig()->getRequest());
         }
 
-        $this->removeCss('table-hover');
 
         return $this;
     }
@@ -144,7 +146,6 @@ class Cassette extends \Bs\TableIface
             \Tk\Log::debug('Cassette comment updated ['.$cassette->getId().']');
         }
     }
-
 
     /**
      * @param array $filter
@@ -174,12 +175,15 @@ class Cassette extends \Bs\TableIface
         $js = <<<JS
 jQuery(function($) {
   var init = function () {
+    var form = $(this);
+    
     // Dynamic event handler to allow for when new cassettes are created
-    //$(document).on('dblclick', '.tk-table .mComments', function (e) {
-    $(document).on('click', '.tk-table .mComments', function (e) {
+    ////$(document).on('dblclick', '.tk-table .mComments', function (e) {
+    //$(document).on('click', '.tk-table .mComments', function (e) {
+    form.on('click', '.mComments', function (e) {
       if ($(this).find('.tdVal').length) return;
       e.stopPropagation();
-      $('.mComments').attr('title', 'Click To Edit');
+      $(this).attr('title', 'Click To Edit');
       var value = br2nl($(this).html());
       $(this).focus();
       updateVal($(this), value);
@@ -187,7 +191,6 @@ jQuery(function($) {
     
     function updateVal(el, value) {
       el.html('<textarea class="tdVal form-control" title="Click To Edit">' + value + '</textarea>');
-      //el.html('<input class="tdVal form-control" type="text" title="Double Click To Edit" value="' + value + '" />');
       var tdval = el.find('.tdVal');
       tdval.focus();
       tdval.keypress(function (e) {
@@ -218,7 +221,7 @@ jQuery(function($) {
     }
 
     $(document).mouseup(function () {
-      $('.tdVal').each(function () {
+      form.find('.tdVal').each(function () {
         if (!$(this).parent().is(':hover'))
           saveVal($(this).parent(), $(this).val().trim());
       });
@@ -233,7 +236,6 @@ jQuery(function($) {
      * @return {string} Filtered text
      */
     function nl2br (str, replaceMode, isXhtml) {
-    
       var breakTag = (isXhtml) ? '<br />' : '<br>';
       var replaceStr = (replaceMode) ? '$1'+ breakTag : '$1'+ breakTag +'$2';
       return (str + '').replace(/([^>\\r\\n]?)(\\r\\n|\\n\\r|\\r|\\n)/g, replaceStr);
@@ -245,15 +247,15 @@ jQuery(function($) {
      * @param {boolean} replaceMode Use replace instead of insert
      * @return {string} Filtered text
      */
-    function br2nl (str, replaceMode) {   
-        
+    function br2nl (str, replaceMode) {
       var replaceStr = (replaceMode) ? "\\n" : '';
       // Includes <br>, <BR>, <br />, </br>
       return str.replace(/<\\s*\\/?br\\s*[\\/]?>/gi, replaceStr);
     }
       
   };
-  $('form').on('init', document, init).each(init);
+  $('form').on('init', $('.cassette-table'), init).each(init);
+  //$('.cassette-table form').on('init', document, init).each(init);
 
 });
 JS;

@@ -59,16 +59,19 @@ jQuery(function ($) {
   function init() {
     var form = $(this);
     var dialog = form.closest('.modal');
-    
     // Reset form
     dialog.on('shown.bs.modal', function (e) {
       form.find('[name="limit"]').val(1);
     });
     
     dialog.on('DialogForm:submit', function (e) {
+      console.log('submit');
       var table = $('div.tk-cassette-list .tk-table');
       if (table.length !== 1) return;
-      $.get(document.location, {}, function (html) {
+      $.get(document.location, {
+          // crumb_ignore: 'crumb_ignore',
+          // nolog: 'nolog'
+      }, function (html) {
         var doc = $(html);
         var el = doc.find('div.tk-cassette-list .tk-table form > div');
         el.detach();
@@ -79,7 +82,8 @@ jQuery(function ($) {
     });
     
   }
-  $('.create-cassette-dialog .modal-body form').on('init', document, init).each(init);
+  //$('.create-cassette-dialog .modal-body form').on('init', document, init).each(init);
+  $('form').on('init', $('.create-cassette-dialog .modal-body'), init).each(init);
 });
 JS;
 
