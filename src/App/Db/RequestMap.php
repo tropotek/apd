@@ -83,9 +83,9 @@ class RequestMap extends Mapper
         $filter->appendFrom('%s a', $this->quoteParameter($this->getTable()));
         $filter->appendFrom(', %s b', $this->quoteParameter('path_case'));
         $filter->appendFrom(', %s c', $this->quoteParameter('cassette'));
-        $filter->appendFrom(', %s d', $this->quoteParameter('user'));
+        $filter->appendFrom(', %s p', $this->quoteParameter('user'));
         $filter->appendSelect('b.*, a.*');
-        $filter->appendWhere('a.path_case_id = b.id AND a.cassette_id = c.id AND b.pathologist_id = d.id AND ');
+        $filter->appendWhere('a.path_case_id = b.id AND a.cassette_id = c.id AND b.pathologist_id = p.id AND ');
 
         if (!empty($filter['keywords'])) {
             $kw = '%' . $this->escapeString($filter['keywords']) . '%';

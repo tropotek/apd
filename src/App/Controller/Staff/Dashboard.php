@@ -47,7 +47,7 @@ class Dashboard extends \Uni\Controller\AdminIface
         $this->caseTable->removeFilter('type');
         $this->caseTable->removeFilter('submissionType');
         $this->caseTable->removeFilter('status');
-
+        //$this->caseTable->resetSession();
         $filter = array(
             'userId' => $this->getAuthUser()->getId()
         );

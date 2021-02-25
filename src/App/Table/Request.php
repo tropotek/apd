@@ -168,7 +168,7 @@ class Request extends \Bs\TableIface
             });
         $this->appendCell(new Cell\Text('status'));
         $this->appendCell(\Tk\Table\Cell\Text::create('pathologist'))
-            ->setOrderProperty('d.name_first')
+            ->setOrderProperty('p.name_first')
             ->addOnPropertyValue(function (\Tk\Table\Cell\Iface $cell, \App\Db\Request $obj, $value) {
                 if ($obj->getPathCase()) {
                     //$cell->getRow()->setAttr('data-pathology-id', $obj->getPathCase()->getPathologyId());
