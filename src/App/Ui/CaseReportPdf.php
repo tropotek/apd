@@ -192,7 +192,7 @@ class CaseReportPdf extends Pdf
         //$template->appendText('date', \Tk\Date::create()->format(\Tk\Date::FORMAT_SHORT_DATE));
 
 
-        // Add any PDF active 
+        // Add any PDF active
         $allFiles = $this->pathCase->getPdfFiles();
         if ($allFiles->count()) {
             $template->setVisible('media');
