@@ -192,41 +192,39 @@ class CaseReportPdf extends Pdf
         //$template->appendText('date', \Tk\Date::create()->format(\Tk\Date::FORMAT_SHORT_DATE));
 
 
-        // Add a page break
-
-
-        $allFiles = $this->pathCase->getFiles();
-        if ($allFiles->count()) {
-            $template->setVisible('media');
-            $images = array();
-            $files = array();
-            foreach ($allFiles as $file) {     // Sort files
-                if ($file->isImage()) $images[] = $file;
-                else $files[] = $file;
-            }
-            if (count($images)) {
-                $template->setVisible('image-list');
-                foreach ($images as $i => $file) {
-                    $filename = basename($file->getPath());
-                    $t = $template->getRepeat('image-block');
-                    $t->setAttr('image', 'src', $file->getUrl());
-                    $t->setAttr('image', 'alt', $filename);
-                    $t->appendHtml('image-caption', 'Fig ' . ($i+1) . '<br/>Name: '. $filename);
-                    $t->appendRepeat();
-                }
-            }
-            if (count($files)) {
-                $template->setVisible('file-list');
-                foreach ($files as $file) {
-                    $filename = basename($file->getPath());
-                    $t = $template->getRepeat('item');
-                    $t->setAttr('link', 'href', $file->getUrl());
-                    $t->appendText('link', $filename);
-                    $t->appendRepeat();
-                }
-            }
-
-        }
+        // TODO: Re-Add this once we have the new file upload field ready
+//        $allFiles = $this->pathCase->getFiles();
+//        if ($allFiles->count()) {
+//            $template->setVisible('media');
+//            $images = array();
+//            $files = array();
+//            foreach ($allFiles as $file) {     // Sort files
+//                if ($file->isImage()) $images[] = $file;
+//                else $files[] = $file;
+//            }
+//            if (count($images)) {
+//                $template->setVisible('image-list');
+//                foreach ($images as $i => $file) {
+//                    $filename = basename($file->getPath());
+//                    $t = $template->getRepeat('image-block');
+//                    $t->setAttr('image', 'src', $file->getUrl());
+//                    $t->setAttr('image', 'alt', $filename);
+//                    $t->appendHtml('image-caption', 'Fig ' . ($i+1) . '<br/>Name: '. $filename);
+//                    $t->appendRepeat();
+//                }
+//            }
+//            if (count($files)) {
+//                $template->setVisible('file-list');
+//                foreach ($files as $file) {
+//                    $filename = basename($file->getPath());
+//                    $t = $template->getRepeat('item');
+//                    $t->setAttr('link', 'href', $file->getUrl());
+//                    $t->appendText('link', $filename);
+//                    $t->appendRepeat();
+//                }
+//            }
+//
+//        }
 
 
 
