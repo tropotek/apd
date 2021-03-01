@@ -321,7 +321,6 @@ JS;
             //->setAttr('accept', '.png,.jpg,.jpeg,.gif')
             ->setNotes('Upload any related files. Multiple files can be selected.');
 
-
         if ($this->getPathCase()->getId()) {
             $v = json_encode($this->getPathCase()->getFiles()->toArray());
             $fileField->setAttr('data-value', $v);
