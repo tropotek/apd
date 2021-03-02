@@ -498,7 +498,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
         $str = '001-'.$y;
         $last = PathCaseMap::create()->findFiltered(array(
             'institutionId' => $this->getInstitutionId()
-        ), Tool::create('a.pathology_id DESC', 1))->current();
+        ), Tool::create(' b.path_year DESC, b.path_no DESC', 1))->current();
         if ($last) {
             $pidArr = explode('-', $last->getPathologyId());
             $i = 1;
@@ -506,6 +506,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
                 if (count($pidArr) >= 2 && (int)$pidArr[1] && $y == (int)$pidArr[1]) {
                     $str = sprintf('%03d-%s', (int)$pidArr[0] + $i, $y);
                 }
+                vd($str);
                 $found = PathCaseMap::create()->findFiltered(array(
                     'institutionId' => $this->getInstitutionId(),
                     'pathologyId' => $str

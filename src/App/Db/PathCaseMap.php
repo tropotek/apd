@@ -230,14 +230,16 @@ SQL;
      */
     public function makeQuery(Filter $filter)
     {
-        $filter->appendSelect(' a.*, b.age, b.age_m');
+        $filter->appendSelect(' a.*, b.age, b.age_m, b.path_year, b.path_no ');
 
         $filter->appendFrom('%s a', $this->quoteParameter($this->getTable()));
         $filter->appendFrom(',
             (
                 SELECT id,
-                   TIMESTAMPDIFF(YEAR, a1.dob, if (ISNULL(a1.dod), now(), a1.dod)) as \'age\',
-                   TIMESTAMPDIFF(MONTH, a1.dob, if (ISNULL(a1.dod), now(), a1.dod)) % 12 as \'age_m\'
+                    TIMESTAMPDIFF(YEAR, a1.dob, if (ISNULL(a1.dod), now(), a1.dod)) as \'age\',
+                    TIMESTAMPDIFF(MONTH, a1.dob, if (ISNULL(a1.dod), now(), a1.dod)) % 12 as \'age_m\',
+                    IF (SUBSTR(a1.pathology_id, -2) REGEXP \'^[0-9]{2}$\', SUBSTR(a1.pathology_id, -2), \'\') as \'path_year\',
+                    IF (SUBSTR(a1.pathology_id, 1, 3) REGEXP \'^[0-9]{3}$\', SUBSTR(a1.pathology_id, 1, 3), \'\') as \'path_no\'
                 FROM `path_case` a1
             ) b');
         $filter->appendWhere('a.id = b.id AND ');
