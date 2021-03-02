@@ -75,7 +75,8 @@ jQuery(function ($) {
     });
     
   }
-  $('.modal-body form').on('init', document, init).each(init);
+  //$('.modal-body form').on('init', document, init).each(init);
+  $('.create-request-dialog form').on('init', 'body', init).each(init);
 });
 JS;
 

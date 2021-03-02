@@ -91,7 +91,7 @@ jQuery(function ($) {
     });
     
   }
-  $('.create-invoice-dialog .modal-body form').on('init', document, init).each(init);
+  $('.create-invoice-dialog form').on('init', 'body', init).each(init);
   
 });
 JS;

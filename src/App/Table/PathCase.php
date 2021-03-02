@@ -49,7 +49,7 @@ class PathCase extends \Bs\TableIface
         {
             $user = $obj->getClient();
             if ($user) {
-                $value = $user->getNameFirst();
+                $value = $user->getName();
             }
             return $value;
         });
@@ -86,7 +86,7 @@ class PathCase extends \Bs\TableIface
                 $owner = $obj->getOwner();
                 $value = '';
                 if ($owner) {
-                    $value = $owner->getNameFirst();
+                    $value = $owner->getName();
                 }
                 return $value;
             });

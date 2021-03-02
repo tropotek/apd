@@ -186,7 +186,8 @@ jQuery(function ($) {
     });
     
   }
-  $('.modal-body form#email-pdf').on('init', '.modal-dialog', init).each(init);
+  //$('.modal-body form#email-pdf').on('init', '.modal-dialog', init).each(init);
+  $('.email-report-dialog form').on('init', 'body', init).each(init);
 });
 JS;
 

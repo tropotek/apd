@@ -65,7 +65,7 @@ jQuery(function ($) {
     });
     
     dialog.on('DialogForm:submit', function (e) {
-      console.log('submit');
+      console.log('CreateCassette: DialogForm:submit');
       var table = $('div.tk-cassette-list .tk-table');
       if (table.length !== 1) return;
       $.get(document.location, {
@@ -83,7 +83,7 @@ jQuery(function ($) {
     
   }
   //$('.create-cassette-dialog .modal-body form').on('init', document, init).each(init);
-  $('form').on('init', $('.create-cassette-dialog .modal-body'), init).each(init);
+  $('.create-cassette-dialog form').on('init', 'body', init).each(init);
 });
 JS;
 

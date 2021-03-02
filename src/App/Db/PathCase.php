@@ -1403,6 +1403,10 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
             $errors['institutionId'] = 'Invalid value: institutionId';
         }
 
+//        if (!$this->pathologistId) {
+//            $errors['pathologistId'] = 'Invalid value: pathologistId';
+//        }
+
         if (!$this->clientId) {
             $errors['clientId'] = 'Invalid value: clientId';
         }

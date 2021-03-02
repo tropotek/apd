@@ -6,15 +6,11 @@ use App\Db\ContactMap;
 use App\Db\Notice;
 use App\Db\PathCaseMap;
 use App\Db\StorageMap;
-use App\Form\Field\Money;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Tk\Db\Tool;
 use Tk\Form\Field;
 use Tk\Form\Event;
 use Tk\Form;
 use Tk\ObjectUtil;
-use Tk\Response;
-use Uni\Db\User;
 
 /**
  * Example:
@@ -114,6 +110,7 @@ class PathCase extends \Bs\FormIface
         $list = \App\Db\Contact::getSelectList(\App\Db\Contact::TYPE_CLIENT);
         $this->appendField(Field\DialogSelect::createDialogSelect('clientId[]', $list, $form, 'Create Client'))
             ->addCss('tk-multiselect tk-multiselect1')
+            ->setAttr('data-reset-on-hide', true)
             ->setTabGroup($tab)->setLabel('Submitting Client')
             ->setNotes('This is the contact that will be invoiced.');
 
@@ -125,7 +122,26 @@ jQuery(function ($) {
     allowClear: false,
     maximumSelectionLength: 1,
     minimumInputLength: 0
-  });
+  }).on('change', function () {
+    // Disable the add contact button if one is selected
+    var btn = $(this).closest('.input-group').find('button');
+    if ($(this).val().length) {
+      btn.attr('title', 'Clear selected to create new record.');
+      btn.attr('disabled', 'disabled');
+    } else {
+      btn.attr('title', $(btn.attr('data-target') + ' .modal-title').text());
+      btn.removeAttr('disabled', 'disabled');
+    }
+    
+    // Limit to one selection after a new contact created
+    if ($(this).val().length > 1) {
+      var a = $(this).val();
+      $(this).val([a[a.length-1]]);
+      $(this).trigger('change');
+    }
+    
+  }).trigger('change');
+  
 });
 JS;
         $this->getRenderer()->getTemplate()->appendJs($js);
