@@ -493,17 +493,25 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
         if ($this->getPathologyId()) {
             return $this->getPathologyId();
         }
-        /** @var PathCase $prev */
+
         $y = date('y');
         $str = '001-'.$y;
-        $prev = PathCaseMap::create()->findFiltered(array(
+        $last = PathCaseMap::create()->findFiltered(array(
             'institutionId' => $this->getInstitutionId()
-        ), Tool::create('id DESC', 1))->current();
-        if ($prev) {
-            $pidArr = explode('-', $prev->getPathologyId());
-            if (count($pidArr) >= 2 && (int)$pidArr[1] && $y == (int)$pidArr[1]) {
-                $str = sprintf('%03d-%s', (int)$pidArr[0] + 1, $y);
-            }
+        ), Tool::create('a.pathology_id DESC', 1))->current();
+        if ($last) {
+            $pidArr = explode('-', $last->getPathologyId());
+            $i = 1;
+            do {
+                if (count($pidArr) >= 2 && (int)$pidArr[1] && $y == (int)$pidArr[1]) {
+                    $str = sprintf('%03d-%s', (int)$pidArr[0] + $i, $y);
+                }
+                $found = PathCaseMap::create()->findFiltered(array(
+                    'institutionId' => $this->getInstitutionId(),
+                    'pathologyId' => $str
+                ), Tool::create('', 1))->current();
+                $i++;
+            } while ($found);
         }
         return $str;
     }
@@ -1406,7 +1414,17 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 //        if (!$this->pathologistId) {
 //            $errors['pathologistId'] = 'Invalid value: pathologistId';
 //        }
-
+        if (!$this->pathologyId) {
+            $errors['pathologyId'] = 'Invalid value: pathologyId';
+        } else {
+            $found = PathCaseMap::create()->findFiltered(array(
+                'institutionId' => $this->getInstitutionId(),
+                'pathologyId' => $this->pathologyId
+            ), Tool::create('', 1))->current();
+            if ($found && $found->getId() != $this->getId()) {
+                $errors['pathologyId'] = 'Case already exists with pathologyId: ' . $this->getPathologyId();
+            }
+        }
         if (!$this->clientId) {
             $errors['clientId'] = 'Invalid value: clientId';
         }
