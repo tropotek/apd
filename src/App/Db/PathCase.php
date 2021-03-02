@@ -426,7 +426,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
         return parent::insert();
     }
 
-
     /**
      * @param Tool|null $tool
      * @return File[]|\Tk\Db\Map\ArrayObject
@@ -481,7 +480,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
         return $this->pathologyId;
     }
 
-
     /**
      * @return string
      * @throws \Exception
@@ -490,9 +488,8 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     {
         if (!$this->getInstitutionId())
             throw new \Tk\Exception('No institutionId set.');
-        if ($this->getPathologyId()) {
+        if ($this->getPathologyId())
             return $this->getPathologyId();
-        }
 
         $y = date('y');
         $str = '001-'.$y;
@@ -506,7 +503,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
                 if (count($pidArr) >= 2 && (int)$pidArr[1] && $y == (int)$pidArr[1]) {
                     $str = sprintf('%03d-%s', (int)$pidArr[0] + $i, $y);
                 }
-                vd($str);
                 $found = PathCaseMap::create()->findFiltered(array(
                     'institutionId' => $this->getInstitutionId(),
                     'pathologyId' => $str
