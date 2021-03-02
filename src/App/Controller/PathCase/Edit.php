@@ -257,6 +257,8 @@ JS;
 
         if ($this->pathCase->getId()) {
             $template->setVisible('panel2');
+        } else {
+            $template->setAttr('panel1', 'class', 'col-12');
         }
 
         if ($this->emailReportDialog)
