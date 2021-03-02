@@ -37,8 +37,20 @@ class PathCase extends \Bs\TableIface
 
         $this->appendCell(new Cell\Checkbox('id'));
         $this->appendCell(new Cell\Text('pathologyId'))->setLabel('Pathology #')->addCss('key')->setUrl($this->getEditUrl());
-        $this->appendCell(new Cell\Text('userId'))->setLabel('Pathologist')->addOnPropertyValue(function (Cell\Text $cell, \App\Db\PathCase $obj, $value)
+
+        $this->appendCell(new Cell\Text('pathologistId'))->setLabel('Pathologist')->addOnPropertyValue(function (Cell\Text $cell, \App\Db\PathCase $obj, $value)
         {
+            $value = '';
+            $user = $obj->getPathologist();
+            if ($user) {
+                $value = $user->getName();
+            }
+            return $value;
+        });
+
+        $this->appendCell(new Cell\Text('userId'))->setLabel('Creator')->addOnPropertyValue(function (Cell\Text $cell, \App\Db\PathCase $obj, $value)
+        {
+            $value = '';
             $user = $obj->getUser();
             if ($user) {
                 $value = $user->getName();
@@ -47,6 +59,7 @@ class PathCase extends \Bs\TableIface
         });
         $this->appendCell(new Cell\Text('clientId'))->addOnPropertyValue(function (Cell\Text $cell, \App\Db\PathCase $obj, $value)
         {
+            $value = '';
             $user = $obj->getClient();
             if ($user) {
                 $value = $user->getName();
@@ -171,9 +184,9 @@ class PathCase extends \Bs\TableIface
         //$this->appendAction(\Tk\Table\Action\Link::createLink('New Path Case', \Bs\Uri::createHomeUrl('/pathCaseEdit.html'), 'fa fa-plus'));
         //$this->appendAction(\Tk\Table\Action\ColumnSelect::create()->setUnselected(array('modified')));
         $this->appendAction(\Tk\Table\Action\ColumnSelect::create()->setSelected(
-                array('id', 'pathologyId', 'userId', 'clientId', 'owner', 'age',
+                array('id', 'pathologyId', 'pathologistId', 'clientId', 'owner', 'age',
                     'patientNumber', 'type', 'submissionType', 'status', 'arrival')
-            )->setHidden(array('id'))
+            )->setHidden(array('userId'))
         );
         $this->appendAction(\Tk\Table\Action\Delete::create());
         $this->appendAction(\Tk\Table\Action\Csv::create());
