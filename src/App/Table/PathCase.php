@@ -138,6 +138,7 @@ class PathCase extends \Bs\TableIface
             'institutionId' => $this->getConfig()->getInstitutionId(),
             'type' => User::TYPE_STAFF
         ));
+        
         $this->appendFilter(Field\Select::createSelect('pathologistId', $list)->prependOption('-- Pathologist --'));
 
         $list = $this->getConfig()->getUserMapper()->findFiltered(array(
