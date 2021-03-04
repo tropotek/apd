@@ -81,7 +81,7 @@ class CaseReportPdf extends Pdf
 
         $template->appendText('headerTitle', 'ID: ' . $this->pathCase->getPathologyId());
 
-        $inst = sprintf('%s<br/>%s<br/>%s<br/>%s<br/>%s',
+        $inst = sprintf('<p>%s</p><blockquote>%s<br/>%s</blockquote><p>%s</p><p>%s</p>',
             $institution->getName(),
             $institution->getStreet(),
             $institution->getCity() . ' ' . $institution->getState() . ' ' . $institution->getPostcode(),
@@ -103,7 +103,7 @@ class CaseReportPdf extends Pdf
             $template->appendText('ownerPhone', $owner->getPhone());
             $addr = '&nbsp;';
             if ($owner->getStreet()) {
-                $addr = sprintf('<p>Address:</p><p>%s<br/>%s</p>',
+                $addr = sprintf('<p>Address:</p><blockquote>%s<br/>%s</blockquote>',
                     $owner->getStreet(),
                     $owner->getCity() . ' ' . $owner->getState() . ' ' . $owner->getPostcode()
                 );
@@ -291,6 +291,9 @@ img.logo {
   margin-top: 20px;
   padding: 10px;
   background-color: #EFEFEF;
+}
+blockquote {
+  padding-left: 25px;
 }
 CSS;
         $template->appendCss($css);
