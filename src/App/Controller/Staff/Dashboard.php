@@ -41,7 +41,12 @@ class Dashboard extends \Uni\Controller\AdminIface
         $this->caseTable = \App\Table\PathCase::create();
         $this->caseTable->setEditUrl(\Bs\Uri::createHomeUrl('/pathCaseEdit.html'));
         $this->caseTable->init();
-        $this->caseTable->removeFilter('userId');
+        $this->caseTable->findAction('columns')->setSelected(
+            array('id', 'pathologyId', 'clientId', 'owner', 'age',
+                'patientNumber', 'type', 'submissionType', 'status', 'arrival')
+        );
+        $this->caseTable->removeFilter('pathologistId');
+        //$this->caseTable->removeFilter('userId');
         $this->caseTable->removeFilter('clientId');
         $this->caseTable->removeFilter('ownerId');
         $this->caseTable->removeFilter('type');
@@ -51,7 +56,8 @@ class Dashboard extends \Uni\Controller\AdminIface
         $this->caseTable->getFilterForm()->getField('status')
             ->setValue([\App\Db\PathCase::STATUS_PENDING,\App\Db\PathCase::STATUS_EXAMINED,\App\Db\PathCase::STATUS_REPORTED]);
         $filter = array(
-            'userId' => $this->getAuthUser()->getId()
+            //'userId' => $this->getAuthUser()->getId(),
+            'pathologistId' => $this->getAuthUser()->getId()
         );
         $this->caseTable->setList($this->caseTable->findList($filter, $this->caseTable->getTool('created DESC')));
 

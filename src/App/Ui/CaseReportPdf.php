@@ -81,12 +81,11 @@ class CaseReportPdf extends Pdf
 
         $template->appendText('headerTitle', 'ID: ' . $this->pathCase->getPathologyId());
 
-        $inst = sprintf('%s<br/>%s<br/>%s<br/>%s<br/>%s<br/>%s',
+        $inst = sprintf('%s<br/>%s<br/>%s<br/>%s<br/>%s',
             $institution->getName(),
             $institution->getStreet(),
             $institution->getCity() . ' ' . $institution->getState() . ' ' . $institution->getPostcode(),
             'Phone: ' . $institution->getPhone(),
-            'Fax: ' . $institution->getData()->get(\App\Controller\Institution\Edit::INSTITUTION_FAX),
             'Email: ' . $institution->getEmail()
         );
         $template->appendHtml('institution', $inst);
@@ -96,15 +95,21 @@ class CaseReportPdf extends Pdf
         $template->appendText('name', ucwords($this->pathCase->getReportStatus()) . ' Report');
 
         if ($this->pathCase->getClient())
-            $template->appendText('clientName', $this->pathCase->getClient()->getNameFirst());
+            $template->appendText('clientName', $this->pathCase->getClient()->getName());
 
         $owner = $this->pathCase->getOwner();
         if ($owner) {
-            $template->appendText('ownerName', $owner->getNameFirst());
+            $template->appendText('ownerName', $owner->getName());
             $template->appendText('ownerPhone', $owner->getPhone());
-            $template->appendText('ownerAddress', $owner->getStreet());
-            $template->appendText('ownerFax', $owner->getFax());
-            $template->appendText('ownerCity', $owner->getCity());
+            $addr = '&nbsp;';
+            if ($owner->getStreet()) {
+                $addr = sprintf('<p>Address:</p><p>%s<br/>%s</p>',
+                    $owner->getStreet(),
+                    $owner->getCity() . ' ' . $owner->getState() . ' ' . $owner->getPostcode()
+                );
+            }
+            $template->appendHtml('ownerAddress', $addr);
+            //$template->appendText('ownerCity', $owner->getCity());
             $template->appendText('ownerEmail', $owner->getEmail());
         }
 
@@ -232,12 +237,12 @@ class CaseReportPdf extends Pdf
  footer: myFooter1;
 }
 p {
-    padding: 0px 0px;
-    margin: 0.5em 0px 0em 0px;
+    padding: 0 0;
+    margin: 0.5em 0 0 0;
     line-height: 1.3em;
 }
 h1, h2, h3, h4, h5, h6 {
-  margin: 0.3em 0px 0em 0px;
+  margin: 0.3em 0 0 0;
 }
 table.head-t {
   padding: 0;
@@ -258,6 +263,7 @@ body {
 }
 table td {
   vertical-align: top;
+  line-height: 1.3em;
 }
 table.border {
   border: 1px solid #CCC;
@@ -339,7 +345,7 @@ CSS;
           <td width="40%" style="padding-top: 20px;line-height: 1.6;">
             Submission Date: <span var="submissionDate"></span><br/>
             Pathology Number: <span var="pathologyId"></span><br/>
-            Submitter: <span var="clientName"></span>
+            Submitting Client: <span var="clientName"></span>
           </td>
         </tr>
       </table>
@@ -347,7 +353,7 @@ CSS;
       <br/>
       <table width="100%" style="" class="border details">
         <tr>
-          <td width="50%"><b>Client Details:</b></td>
+          <td width="50%"><b>Owner Details:</b></td>
           <td width="50%"></td>
         </tr>
         <tr>
@@ -356,10 +362,6 @@ CSS;
         </tr>
         <tr>
           <td><span var="ownerAddress"></span></td>
-          <td>Fax: <span var="ownerFax"></span></td>
-        </tr>
-        <tr>
-          <td><span var="ownerCity"></span></td>
           <td>Email: <span var="ownerEmail"></span></td>
         </tr>
       </table>
@@ -386,7 +388,7 @@ CSS;
       <br/>
       
       
-      <h3 style="text-align: center; margin: 0px;padding: 0;" var="name"></h3>
+      <h3 style="text-align: center; margin: 0;padding: 0;" var="name"></h3>
       
       <div class="textBlock" style="page-break-inside: avoid;" repeat="textBlock" var="textBlock">
         <h4 var="title"></h4>

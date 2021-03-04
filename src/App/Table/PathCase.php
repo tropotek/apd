@@ -36,36 +36,38 @@ class PathCase extends \Bs\TableIface
         $this->addCss('tk-pathCase-table');
 
         $this->appendCell(new Cell\Checkbox('id'));
-        $this->appendCell(new Cell\Text('pathologyId'))->setLabel('Pathology #')->addCss('key')->setUrl($this->getEditUrl());
+        //$this->resetSession();
+        $this->appendCell(new Cell\Text('pathologyId'))->setLabel('Pathology #')
+            ->addCss('key')->setUrl($this->getEditUrl());
 
-        $this->appendCell(new Cell\Text('pathologistId'))->setLabel('Pathologist')->addOnPropertyValue(function (Cell\Text $cell, \App\Db\PathCase $obj, $value)
-        {
-            $value = '';
-            $user = $obj->getPathologist();
-            if ($user) {
-                $value = $user->getName();
-            }
-            return $value;
-        });
+        $this->appendCell(new Cell\Text('pathologistId'))->setLabel('Pathologist')
+            ->addOnPropertyValue(function (Cell\Text $cell, \App\Db\PathCase $obj, $value) {
+                $value = '';
+                $user = $obj->getPathologist();
+                if ($user) {
+                    $value = $user->getName();
+                }
+                return $value;
+            });
 
-        $this->appendCell(new Cell\Text('userId'))->setLabel('Creator')->addOnPropertyValue(function (Cell\Text $cell, \App\Db\PathCase $obj, $value)
-        {
-            $value = '';
-            $user = $obj->getUser();
-            if ($user) {
-                $value = $user->getName();
-            }
-            return $value;
-        });
-        $this->appendCell(new Cell\Text('clientId'))->addOnPropertyValue(function (Cell\Text $cell, \App\Db\PathCase $obj, $value)
-        {
-            $value = '';
-            $user = $obj->getClient();
-            if ($user) {
-                $value = $user->getName();
-            }
-            return $value;
-        });
+        $this->appendCell(new Cell\Text('userId'))->setLabel('Creator')
+            ->addOnPropertyValue(function (Cell\Text $cell, \App\Db\PathCase $obj, $value) {
+                $value = '';
+                $user = $obj->getUser();
+                if ($user) {
+                    $value = $user->getName();
+                }
+                return $value;
+            });
+        $this->appendCell(new Cell\Text('clientId'))
+            ->addOnPropertyValue(function (Cell\Text $cell, \App\Db\PathCase $obj, $value) {
+                $value = '';
+                $user = $obj->getClient();
+                if ($user) {
+                    $value = $user->getName();
+                }
+                return $value;
+            });
         $this->appendCell(new Cell\Text('type'));
         $this->appendCell(new Cell\Text('submissionType'));
         $this->appendCell(new Cell\Text('status'));
@@ -136,7 +138,13 @@ class PathCase extends \Bs\TableIface
             'institutionId' => $this->getConfig()->getInstitutionId(),
             'type' => User::TYPE_STAFF
         ));
-        $this->appendFilter(Field\Select::createSelect('userId', $list)->prependOption('-- Staff --'));
+        $this->appendFilter(Field\Select::createSelect('pathologistId', $list)->prependOption('-- Pathologist --'));
+
+        $list = $this->getConfig()->getUserMapper()->findFiltered(array(
+            'institutionId' => $this->getConfig()->getInstitutionId(),
+            'type' => User::TYPE_STAFF
+        ));
+        $this->appendFilter(Field\Select::createSelect('userId', $list)->prependOption('-- Creator --'));
         
         $list = ContactMap::create()->findFiltered(array(
             'institutionId' => $this->getConfig()->getInstitutionId(),
@@ -186,7 +194,7 @@ class PathCase extends \Bs\TableIface
         $this->appendAction(\Tk\Table\Action\ColumnSelect::create()->setSelected(
                 array('id', 'pathologyId', 'pathologistId', 'clientId', 'owner', 'age',
                     'patientNumber', 'type', 'submissionType', 'status', 'arrival')
-            )->setHidden(array('userId'))
+            )
         );
         $this->appendAction(\Tk\Table\Action\Delete::create());
         $this->appendAction(\Tk\Table\Action\Csv::create());
