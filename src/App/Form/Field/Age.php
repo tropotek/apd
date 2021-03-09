@@ -113,6 +113,9 @@ jQuery(function($) {
       if (yearEl.val()) yearVal = parseInt(yearEl.val());
       var monthVal = 0;
       if (monthEl.val()) monthVal = parseInt(monthEl.val());
+      if (yearVal <= 0 || monthVal <= 0) {
+        return;
+      }
       var months = (yearVal * 12) + monthVal;
       var newDob = dod.clone();
       newDob.setMonth(newDob.getMonth() - months);
@@ -124,11 +127,15 @@ jQuery(function($) {
     function updateAge() {
       dob = dobEl.data("datetimepicker").getDate();
       dod = dodEl.data("datetimepicker").getDate();
+      if (dobEl.val() === '') {
+          yearEl.val('0');
+          monthEl.val('0');
+          return;
+      }
       if (dob.getTime() > dod.getTime()) {
         alert('DOD must be > DOB');
         return;
       }
-      
       var years = dod.getFullYear() - dob.getFullYear();
       var months = dod.getMonth() - dob.getMonth();
       // TODO: If years is less than 1 at this point we have an error (Should not happen)
@@ -138,7 +145,7 @@ jQuery(function($) {
       }
       yearEl.val(years);
       monthEl.val(months);
-      updateDates();
+      //updateDates();
     }
     
     el.find('input').on('change', function () {

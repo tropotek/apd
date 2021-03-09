@@ -306,25 +306,32 @@ JS;
 
         $this->appendField(Field\Select::createSelect('reportStatus', $list)->prependOption('-- Select --', ''))
             ->setTabGroup($tab);
+
         $this->appendField(new Field\Textarea('collectedSamples'))
             ->addCss('mce-min')->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
+
         $this->appendField(new Field\Textarea('grossPathology'))
+            ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
+
+        $this->appendField(new Field\Textarea('grossMorphologicalDiagnosis'))
+            ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab)
+            ->setNotes('This information will not be included in the final report');
+
+        $this->appendField(new Field\Textarea('histopathology'))
+            ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
+
+        $this->appendField(new Field\Textarea('ancillaryTesting'))
             ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
 
         $this->appendField(new Field\Textarea('morphologicalDiagnosis'))
             ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
-        $this->appendField(new Field\Textarea('grossMorphologicalDiagnosis'))
-            ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab)
-        ->setNotes('This information will not be included in the final report');
 
-        $this->appendField(new Field\Textarea('histopathology'))
-            ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
-        $this->appendField(new Field\Textarea('ancillaryTesting'))
-            ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
         $this->appendField(new Field\Textarea('causeOfDeath'))
             ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
+
         $this->appendField(new Field\Textarea('comments'))
             ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
+
         $this->appendField(new Field\Textarea('addendum'))
             ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
 

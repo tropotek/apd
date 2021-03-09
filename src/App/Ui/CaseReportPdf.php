@@ -141,6 +141,12 @@ class CaseReportPdf extends Pdf
             $block->appendHtml('content', $this->pathCase->getGrossPathology());
             $block->appendRepeat();
         }
+//        if ($this->pathCase->getGrossMorphologicalDiagnosis()) {
+//            $block = $template->getRepeat('textBlock');
+//            $block->appendText('title', 'Gross Morphological Diagnosis:');
+//            $block->appendHtml('content', $this->pathCase->getGrossMorphologicalDiagnosis());
+//            $block->appendRepeat();
+//        }
         if ($this->pathCase->getHistopathology()) {
             $block = $template->getRepeat('textBlock');
             $block->appendText('title', 'Histopathology:');
@@ -159,12 +165,6 @@ class CaseReportPdf extends Pdf
             $block->appendHtml('content', $this->pathCase->getMorphologicalDiagnosis());
             $block->appendRepeat();
         }
-//        if ($this->pathCase->getGrossMorphologicalDiagnosis()) {
-//            $block = $template->getRepeat('textBlock');
-//            $block->appendText('title', 'Gross Morphological Diagnosis:');
-//            $block->appendHtml('content', $this->pathCase->getGrossMorphologicalDiagnosis());
-//            $block->appendRepeat();
-//        }
         if ($this->pathCase->getCauseOfDeath()) {
             $block = $template->getRepeat('textBlock');
             $block->appendText('title', 'Cause Of Death:');
