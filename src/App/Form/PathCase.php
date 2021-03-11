@@ -351,7 +351,7 @@ jQuery(function ($) {
               el.addClass('saving');
               $.post(config.siteUrl + '/ajax/mceAutosave', {
                 crumb_ignore: 'crumb_ignore',
-                //nolog: 'nolog',
+                nolog: 'nolog',
                 obj: 'PathCase',
                 id: urlParams.get('pathCaseId'),
                 fieldName: el.attr('name'),
