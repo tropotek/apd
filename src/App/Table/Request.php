@@ -182,7 +182,8 @@ class Request extends \Bs\TableIface
         $this->appendCell(new Cell\Html('comments'))
             ->addOnPropertyValue(function (\Tk\Table\Cell\Iface $cell, \App\Db\Request $obj, $value) {
                 //$value = '<div style="max-width: 400px;overflow: auto;">' . $obj->getComments() . '</div>';
-                return $value;
+                $cell->setAttr('style', 'min-width: 200px;');
+                return htmlspecialchars($value);
             });
         $this->appendCell(new Cell\Text('status'));
         $this->appendCell(\Tk\Table\Cell\Text::create('pathologist'))
@@ -242,10 +243,10 @@ class Request extends \Bs\TableIface
             $this->appendFilter(new Field\Input('pathCaseId'))->setAttr('placeholder', 'Case ID');
 
             $serviceList = ServiceMap::create()->findFiltered(['institutionId' => $this->getConfig()->getInstitutionId()]);
-            $this->appendFilter(Field\Select::createSelect('serviceId', $serviceList)->prependOption('-- Service --'));
+            //$this->appendFilter(Field\Select::createSelect('serviceId', $serviceList)->prependOption('-- Service --'));
 
             $serviceList = TestMap::create()->findFiltered(['institutionId' => $this->getConfig()->getInstitutionId()], Tool::create('name'));
-            $this->appendFilter(Field\Select::createSelect('testId', $serviceList)->prependOption('-- Test --'));
+            //$this->appendFilter(Field\Select::createSelect('testId', $serviceList)->prependOption('-- Test --'));
 
             $list = \Tk\ObjectUtil::getClassConstants(\App\Db\Request::class, 'STATUS', true);
             $this->appendFilter(Field\CheckboxSelect::createSelect('status', $list)->prependOption('-- Status --'))
@@ -262,7 +263,37 @@ class Request extends \Bs\TableIface
                 'institutionId' => $this->getConfig()->getInstitutionId(),
                 'type' => \App\Db\Contact::TYPE_CLIENT
             ));
-            $this->appendFilter(Field\Select::createSelect('clientId', $list)->prependOption('-- Submitter/Client --'));
+            $this->appendFilter(Field\Select::createSelect('clientId', $list)->prependOption('-- Submitter/Client --'))
+                ->addOnShowOption(function (\Dom\Template $template, \Tk\Form\Field\Option $option, $var) {
+
+                    if (!trim($option->getName())) {
+                        vd($var);
+                        $contact = ContactMap::create()->find($option->getValue());
+                        if ($contact) {
+                            vd($option->getValue(), $option->getName());
+                            if (trim($contact->getNameCompany()))
+                                $option->setName($contact->getNameCompany());
+                            else if (trim($contact->getName()))
+                                $option->setName($contact->getName());
+                        }
+                    }
+
+//                    $options = $element->getOptions();
+//                    foreach ($options as $option) {
+//                        if (!trim($option->getName())) {
+//                            /** @var \App\Db\Contact $contact */
+//                            $contact = ContactMap::create()->find($option->getValue());
+//$option->setName('===================');
+//                            if ($contact) {
+//                                vd($option->getValue(), $option->getName());
+//                                if (!trim($contact->getNameCompany()))
+//                                    $option->setName($contact->getNameCompany());
+//                                else if (trim($contact->getName()))
+//                                    $option->setName($contact->getName());
+//                            }
+//                        }
+//                    }
+                });
             $list = ContactMap::create()->findFiltered(array(
                 'institutionId' => $this->getConfig()->getInstitutionId(),
                 'type' => \App\Db\Contact::TYPE_OWNER
@@ -352,7 +383,7 @@ jQuery(function($) {
     });
     
     function updateVal(el, value) {
-      el.html('<textarea class="tdVal form-control" title="Click To Edit">' + value + '</textarea>');
+      el.html('<textarea class="tdVal form-control" style="min-width: 350px;" title="Click To Edit">' + value + '</textarea>');
       var tdval = el.find('.tdVal');
       tdval.focus();
       tdval.keypress(function (e) {

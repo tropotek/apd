@@ -112,7 +112,7 @@ class PathCase extends \Bs\FormIface
             ->addCss('tk-multiselect tk-multiselect1')
             ->setAttr('data-reset-on-hide', true)
             ->setTabGroup($tab)->setLabel('Submitting Client')
-            ->setNotes('This is the contact that will be invoiced.');
+            ->setNotes('Start typing to find a client, if not found use the + icon to create a new client.<br/>The client to be invoiced.');
 
         $js = <<<JS
 jQuery(function ($) {
@@ -213,7 +213,7 @@ JS;
         $this->appendField(Field\DialogSelect::createDialogSelect('ownerId[]', $list, $form, 'Create Owner'))
             ->addCss('tk-multiselect tk-multiselect1')
             ->setTabGroup($tab)->setLabel('Owner Name')
-            ->setNotes('This is the Client Record of the animal owner.');
+            ->setNotes('Start typing to find an owner, if not found use the + icon to create a new owner.<br/>The Client Record of the animal owner.');
 
         $this->appendField(new Field\Input('animalName'))->setLabel('Animal Name/ID')->setTabGroup($tab);
         $this->appendField(new Field\Input('patientNumber'))->setTabGroup($tab);
@@ -268,7 +268,7 @@ JS;
         $list = \App\Db\Contact::getSelectList(\App\Db\Contact::TYPE_STUDENT);
         $this->appendField(Field\DialogSelect::createDialogSelect('students[]', $list, $form,'Create Student'))
             ->addCss('tk-multiselect tk-multiselect2')
-            ->setTabGroup($tab)->setLabel('Students')->setNotes('Add students')
+            ->setTabGroup($tab)->setLabel('Students')->setNotes('Start typing to find a student, if not found use the + icon to create a new student.')
             ->setValue($this->getPathCase()->getStudentList()->toArray('id'));
 
         // Enable select2 multi select for student field

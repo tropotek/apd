@@ -216,6 +216,8 @@ class Contact extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      */
     public function getNameCompany(): string
     {
+        if (!$this->nameCompany)
+            return $this->getName();
         return $this->nameCompany;
     }
 
