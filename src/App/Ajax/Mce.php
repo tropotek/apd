@@ -46,7 +46,7 @@ class Mce
         $fieldName = $request->get('fieldName');
         $value = $request->get('value');
 
-        vd($request->all());
+        //vd($request->all());
         if ($fieldName && $obj == 'PathCase') {
             if (!$this->getAuthUser() || !$this->getAuthUser()->isStaff())
                 return ResponseJson::createJson(['err' => 'No valid user found.'], Response::HTTP_INTERNAL_SERVER_ERROR);
