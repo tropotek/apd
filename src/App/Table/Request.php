@@ -265,9 +265,7 @@ class Request extends \Bs\TableIface
             ));
             $this->appendFilter(Field\Select::createSelect('clientId', $list)->prependOption('-- Submitter/Client --'))
                 ->addOnShowOption(function (\Dom\Template $template, \Tk\Form\Field\Option $option, $var) {
-
                     if (!trim($option->getName())) {
-                        vd($var);
                         $contact = ContactMap::create()->find($option->getValue());
                         if ($contact) {
                             vd($option->getValue(), $option->getName());
@@ -277,22 +275,6 @@ class Request extends \Bs\TableIface
                                 $option->setName($contact->getName());
                         }
                     }
-
-//                    $options = $element->getOptions();
-//                    foreach ($options as $option) {
-//                        if (!trim($option->getName())) {
-//                            /** @var \App\Db\Contact $contact */
-//                            $contact = ContactMap::create()->find($option->getValue());
-//$option->setName('===================');
-//                            if ($contact) {
-//                                vd($option->getValue(), $option->getName());
-//                                if (!trim($contact->getNameCompany()))
-//                                    $option->setName($contact->getNameCompany());
-//                                else if (trim($contact->getName()))
-//                                    $option->setName($contact->getName());
-//                            }
-//                        }
-//                    }
                 });
             $list = ContactMap::create()->findFiltered(array(
                 'institutionId' => $this->getConfig()->getInstitutionId(),
@@ -313,8 +295,6 @@ class Request extends \Bs\TableIface
         $this->appendAction(\Tk\Table\Action\Csv::create());
         $this->appendAction(\App\Table\Action\Status::create(\App\Db\Request::getStatusList()));
 
-        // load table
-        //$this->setList($this->findList());
 
         return $this;
     }

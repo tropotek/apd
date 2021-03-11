@@ -513,11 +513,41 @@ class Contact extends \Tk\Db\Map\Model implements \Tk\ValidInterface
         if (!$this->getType()) {
             $errors['type'] = 'Invalid value: type';
         }
+        if (!trim($this->getNameCompany()) && !trim($this->getNameFirst()) && !trim($this->getNameLast())) {
+            $errors['nameCompany'] = 'Please enter at least one name for this record.';
+            $errors['nameFirst'] = 'Please enter at least one name for this record.';
+        }
 
 //        if (!$this->email || $this->email && !filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
 //            $errors['email'] = 'Invalid value: email';
 //        }
 
+        // find existing contact with same type and same first and last name (case insensitive search)
+        if ($this->getNameFirst() || $this->getNameLast()) {
+            $found = ContactMap::create()->findFiltered([
+                'institutionId' => $this->getInstitutionId(),
+                'type' => $this->getType(),
+                'nameFirst' => $this->getNameFirst(),
+                'nameLast' => $this->getNameLast(),
+                'exclude' => $this->getVolatileId()
+            ]);
+            if ($found->count()) {
+                $errors['nameFirst'] = 'A record with this name already exists.';
+            }
+        }
+
+        // check for same comapny name??
+        if ($this->getNameCompany()) {
+            $found = ContactMap::create()->findFiltered([
+                'institutionId' => $this->getInstitutionId(),
+                'type' => $this->getType(),
+                'nameCompany' => $this->getNameCompany(),
+                'exclude' => $this->getVolatileId()
+            ]);
+            if ($found->count()) {
+                $errors['nameCompany'] = 'A record with this name already exists.';
+            }
+        }
 
         return $errors;
     }

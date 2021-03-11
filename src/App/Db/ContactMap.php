@@ -139,13 +139,13 @@ class ContactMap extends Mapper
             $filter->appendWhere('a.account_code = %s AND ', $this->quote($filter['accountCode']));
         }
         if (!empty($filter['nameCompany'])) {
-            $filter->appendWhere('a.name_company = %s AND ', $this->quote($filter['nameCompany']));
+            $filter->appendWhere('LOWER(a.name_company) LIKE LOWER(%s) AND ', $this->quote($filter['nameCompany']));
         }
         if (!empty($filter['nameFirst'])) {
-            $filter->appendWhere('a.name_first = %s AND ', $this->quote($filter['nameFirst']));
+            $filter->appendWhere('LOWER(a.name_first) LIKE LOWER(%s) AND ', $this->quote($filter['nameFirst']));
         }
         if (!empty($filter['nameLast'])) {
-            $filter->appendWhere('a.name_last = %s AND ', $this->quote($filter['nameLast']));
+            $filter->appendWhere('LOWER(a.name_last) LIKE LOWER(%s) AND ', $this->quote($filter['nameLast']));
         }
         if (!empty($filter['email'])) {
             $filter->appendWhere('a.email = %s AND ', $this->quote($filter['email']));
