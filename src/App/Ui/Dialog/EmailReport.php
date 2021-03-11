@@ -141,7 +141,11 @@ class EmailReport extends JsonForm
 
         // Attach PDF
         $pdf = \App\Ui\CaseReportPdf::createReport($this->pathCase);
-        $filename = $this->pathCase->getPathologyId() . '_' . $this->pathCase->getPatientNumber().'.pdf';
+        $int = '';
+        if ($this->pathCase->getReportStatus() == PathCase::REPORT_STATUS_INTERIM)
+            $int = '-' . PathCase::REPORT_STATUS_INTERIM;
+        $filename = 'AnatomicPathologyReport-' . $this->pathCase->getPathologyId() . '-' . $this->pathCase->getPatientNumber().$int.'.pdf';
+        //$filename = $this->pathCase->getPathologyId() . '_' . $this->pathCase->getPatientNumber().'.pdf';
         $pdfString = $pdf->getPdfAttachment($filename);
         $message->addStringAttachment($pdfString, $filename);
 

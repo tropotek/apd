@@ -206,6 +206,22 @@ class Request extends \Bs\TableIface
                 }
                 return $value;
             });
+        $this->appendCell(\Tk\Table\Cell\Text::create('type'))
+            ->setOrderProperty('b.type')->setLabel('Case Type')
+            ->addOnPropertyValue(function (\Tk\Table\Cell\Iface $cell, \App\Db\Request $obj, $value) {
+                if ($obj->getPathCase()) {
+                    $value = $obj->getPathCase()->getType();
+                }
+                return $value;
+            });
+        $this->appendCell(\Tk\Table\Cell\Boolean::create('billable'))
+            ->setOrderProperty('b.billable')
+            ->addOnPropertyValue(function (\Tk\Table\Cell\Iface $cell, \App\Db\Request $obj, $value) {
+                if ($obj->getPathCase()) {
+                    $value = $obj->getPathCase()->isBillable();
+                }
+                return $value;
+            });
 
 
         $this->appendCell(new Cell\Text('qty'));
@@ -268,7 +284,6 @@ class Request extends \Bs\TableIface
                     if (!trim($option->getName())) {
                         $contact = ContactMap::create()->find($option->getValue());
                         if ($contact) {
-                            vd($option->getValue(), $option->getName());
                             if (trim($contact->getNameCompany()))
                                 $option->setName($contact->getNameCompany());
                             else if (trim($contact->getName()))

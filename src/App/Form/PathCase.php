@@ -336,6 +336,52 @@ JS;
             ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
 
 
+        $js = <<<JS
+jQuery(function ($) {
+  
+  var init = function() {
+      var form = $(this);
+      
+      form.find('textarea.mce, textarea.mce-med, textarea.mce-min, textarea.mce-micro, textarea.mce-save')
+        .each(function () {
+          var el = $(this);
+          var ed = tinymce.get(el.attr('id'));
+          var urlParams = new URLSearchParams(window.location.search);
+          
+          ed.on('change', function () {
+            $.post(config.siteUrl + '/ajax/mceAutosave', {
+              crumb_ignore: 'crumb_ignore',
+              //nolog: 'nolog',
+              obj: 'PathCase',
+              id: urlParams.get('pathCaseId'),
+              fieldName: el.attr('name'),
+              value: ed.getContent()
+            }, function (data) {
+              console.log(data);
+            }); 
+            
+            
+            console.log(ed.getContent());
+            
+            
+          });
+          
+          // console.log(el.attr('id'));
+          // console.log(el.val());
+          // console.log(ed.getContent());
+          
+        });
+      
+  };
+  $('form').on('change', document, init).each(init);
+  	
+});
+JS;
+        $this->getRenderer()->getTemplate()->appendJs($js);
+
+
+
+
         $tab = 'Files';
         /** @var Field\File $fileField */
         $fileField = $this->appendField(Field\File::create('files[]', $this->getPathCase()->getDataPath()))

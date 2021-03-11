@@ -138,10 +138,8 @@ class Edit extends AdminEditIface
         );
         $this->invoiceTable->setList($this->invoiceTable->findList($filter, \Tk\Db\Tool::create('created DESC')));
 
-
         $this->emailReportDialog = new EmailReport($this->pathCase);
         $this->emailReportDialog->execute();
-
 
         // Add view count to Content
         if ($request->has('pdf')) {
@@ -157,7 +155,10 @@ class Edit extends AdminEditIface
     public function doPdf(\Tk\Request $request)
     {
         $pdf = \App\Ui\CaseReportPdf::createReport($this->pathCase);
-        $filename = $this->pathCase->getPathologyId() . '_' . $this->pathCase->getPatientNumber().'.pdf';
+        $int = '';
+        if ($this->pathCase->getReportStatus() == PathCase::REPORT_STATUS_INTERIM)
+            $int = '-' . PathCase::REPORT_STATUS_INTERIM;
+        $filename = 'AnatomicPathologyReport-' . $this->pathCase->getPathologyId() . '-' . $this->pathCase->getPatientNumber().$int.'.pdf';
         $pdf->output($filename);     // comment this to see html version
         return $pdf->show();
     }

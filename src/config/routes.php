@@ -89,4 +89,5 @@ $routes->add('invoiceItem-edit', Route::create('/staff/invoiceItemEdit.html', 'A
 //$routes->add('ajax-notice-mark-viewed', Route::create('/ajax/notice/markViewed', 'App\Ajax\Notice::doMarkViewed'));
 //$routes->add('ajax-notice-get-list', Route::create('/ajax/notice/getList', 'App\Ajax\Notice::doGetList'));
 $routes->add('ajax-notice-mark-read', Route::create('/ajax/notice/{action}', 'App\Ajax\Notice::doDefault'));
+$routes->add('ajax-case-update', Route::create('/ajax/mceAutosave', 'App\Ajax\Mce::doMceAutosave'));
 
