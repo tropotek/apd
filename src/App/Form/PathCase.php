@@ -347,16 +347,24 @@ jQuery(function ($) {
           var ed = tinymce.get(el.attr('id'));
           var urlParams = new URLSearchParams(window.location.search);
           ed.on('change', function () {
-            $.post(config.siteUrl + '/ajax/mceAutosave', {
-              crumb_ignore: 'crumb_ignore',
-              nolog: 'nolog',
-              obj: 'PathCase',
-              id: urlParams.get('pathCaseId'),
-              fieldName: el.attr('name'),
-              value: ed.getContent()
-            }, function (data) {
-              //console.log(data);
-            });
+            if (!el.hasClass('saving')) {
+              el.addClass('saving');
+              $.post(config.siteUrl + '/ajax/mceAutosave', {
+                crumb_ignore: 'crumb_ignore',
+                //nolog: 'nolog',
+                obj: 'PathCase',
+                id: urlParams.get('pathCaseId'),
+                fieldName: el.attr('name'),
+                value: ed.getContent()
+              }, function (data) {
+                //console.log(data);
+              }).fail(function() {
+                  console.error('error')
+              }).always(function() {
+                //setTimeout(function(){ el.removeClass('saving'); }, 3000);
+                el.removeClass('saving');
+              });
+            }
             //console.log(ed.getContent());
           });
           // console.log(el.attr('id'));
