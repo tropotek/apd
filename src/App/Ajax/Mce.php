@@ -45,6 +45,10 @@ class Mce
         $id = $request->get('id');
         $fieldName = $request->get('fieldName');
         $value = $request->get('value');
+        if ($id == 0) {
+            vd();
+            return ResponseJson::createJson(['ok' => 'Cannot save a new case field.']);
+        }
 
         //vd($request->all());
         if ($fieldName && $obj == 'PathCase') {
