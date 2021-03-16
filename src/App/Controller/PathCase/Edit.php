@@ -159,7 +159,8 @@ class Edit extends AdminEditIface
         if ($this->pathCase->getReportStatus() == PathCase::REPORT_STATUS_INTERIM)
             $int = '-' . PathCase::REPORT_STATUS_INTERIM;
         $filename = 'AnatomicPathologyReport-' . $this->pathCase->getPathologyId() . '-' . $this->pathCase->getPatientNumber().$int.'.pdf';
-        $pdf->output($filename);     // comment this to see html version
+        if (!$request->has('isHtml'))
+            $pdf->output($filename);     // comment this to see html version
         return $pdf->show();
     }
 
@@ -190,10 +191,13 @@ class Edit extends AdminEditIface
             $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Email Report', \Uni\Uri::create()->set('pdf')->set(Crumbs::CRUMB_IGNORE), 'fa fa-envelope-o'))
                 ->setAttr('data-toggle', 'modal')->setAttr('data-target', '#'.$this->emailReportDialog->getId());
 
-            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Report', \Uni\Uri::create()->set('pdf')->set(Crumbs::CRUMB_IGNORE), 'fa fa-file-pdf-o'))
+            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('HTML Report', \Uni\Uri::create()->set('pdf')->set('isHtml')->set(Crumbs::CRUMB_IGNORE), 'fa fa-code'))
                 ->setAttr('target', '_blank')->setAttr('title', 'Download/View Report');
-
+            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('PDF Report', \Uni\Uri::create()->set('pdf')->set(Crumbs::CRUMB_IGNORE), 'fa fa-file-pdf-o'))
+                ->setAttr('target', '_blank')->setAttr('title', 'Download/View Report');
         }
+
+
     }
     
     /**

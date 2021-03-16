@@ -176,7 +176,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      *
      * @var string
      */
-    public $accountStatus = 'pending';
+    public $accountStatus = '';
 
     /**
      * This should be a cost for the case billed to the clientId
@@ -528,6 +528,24 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public function setBillable(bool $billable): PathCase
     {
         $this->billable = $billable;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAccountStatus(): string
+    {
+        return $this->accountStatus;
+    }
+
+    /**
+     * @param string $accountStatus
+     * @return PathCase
+     */
+    public function setAccountStatus(string $accountStatus): PathCase
+    {
+        $this->accountStatus = $accountStatus;
         return $this;
     }
 
@@ -1424,6 +1442,9 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
         }
         if (!$this->clientId) {
             $errors['clientId'] = 'Invalid value: clientId';
+        }
+        if ($this->isBillable() && !$this->getAccountStatus()) {
+            $errors['accountStatus'] = 'Please enter a valid account status';
         }
 
         if (!$this->type) {

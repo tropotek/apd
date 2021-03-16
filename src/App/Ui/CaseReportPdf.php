@@ -125,7 +125,7 @@ class CaseReportPdf extends Pdf
 
         $spayed = '';
         if ($this->pathCase->isDesexed())
-            $spayed = ' Spayed';
+            $spayed = ' (Desexed)';
 
         $template->appendText('sex', $sex . $spayed);
 
@@ -298,6 +298,18 @@ blockquote {
 }
 CSS;
         $template->appendCss($css);
+
+        $js = <<<JS
+window.addEventListener('load', function() {
+    var list = document.getElementsByClassName("html-hide");
+    for(var i = list.length - 1; 0 <= i; i--)
+      if(list[i] && list[i].parentElement)
+        list[i].parentElement.removeChild(list[i]);
+})
+JS;
+        $template->appendJs($js);
+
+
         return $template;
     }
 
@@ -317,7 +329,7 @@ CSS;
 </head>
 <body class="" style="">
 
-  <htmlpageheader name="myHeader1">
+  <htmlpageheader class="html-hide" id="myHeader1" name="myHeader1">
     <table width="100%" class="head-t">
       <tr>
         <td width="50%">Case Report</td>
@@ -326,7 +338,7 @@ CSS;
     </table>
   </htmlpageheader>
   
-  <htmlpagefooter name="myFooter1">
+  <htmlpagefooter class="html-hide" id="myFooter1" name="myFooter1">
     <table width="100%" class="head-t">
       <tr>
         <td width="50%">Date: {DATE j-m-Y}</td>
@@ -394,7 +406,7 @@ CSS;
       
       <h3 style="text-align: center; margin: 0;padding: 0;" var="name"></h3>
       
-      <div class="textBlock" style="page-break-inside: avoid;" repeat="textBlock" var="textBlock">
+      <div class="textBlock" style="" repeat="textBlock" var="textBlock">
         <h4 var="title"></h4>
         <div var="content"></div>
       </div>
