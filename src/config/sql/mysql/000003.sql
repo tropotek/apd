@@ -4,6 +4,9 @@
 -- Author: Michael Mifsud <info@tropotek.com>
 -- ---------------------------------
 
+-- Clear account status for all cases.
+UPDATE path_case t SET t.account_status = '' WHERE t.billable = 0;
+
 
 -- --------------------------------------------------------
 -- Link users to service records for email notifications
