@@ -294,16 +294,26 @@ class Cassette extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      */
     public static function getNextNumber($pathCaseId)
     {
-        $num = 'A';
+        $char = 'A';
         if ($pathCaseId instanceof \Tk\Db\ModelInterface) $pathCaseId = $pathCaseId->getId();
         /** @var Cassette $cassette */
-        $cassette = CassetteMap::create()->findFiltered(array('pathCaseId' => $pathCaseId), Tool::create('number DESC'))->current();
+        $cassette = CassetteMap::create()->findFiltered(array('pathCaseId' => $pathCaseId),
+            Tool::create('SUBSTRING(a.number, 2) DESC, SUBSTRING(a.number, 1, 2) DESC'))->current();  // Order the rows A, B ... A1, B1... A2, B2... etc
         if ($cassette) {
-            $num = ord($cassette->getNumber()) + 1;     // Convert to Ascii int
-            $num = chr($num);                           // Convert back to char after increment
-            if ($num > 'Z') $num = 'A';         // TODO: max Z then start again, fix this in the future if more are used
+            preg_match('/([A-Z])([1-9]*)/', $cassette->getNumber(), $regs);
+            $char = $regs[1];
+            $inc = (int)$regs[2];
+            if ($char == 'Z') {
+                $char = 'A';
+                $inc++;
+            } else {
+                // Get next char
+                $i = ord($char) + 1;     // Convert to Ascii int
+                $char = chr($i);         // Convert back to char after increment
+                if (!$inc) $inc = '';
+            }
         }
-        return $num;
+        return $char.$inc;
     }
 
     /**
