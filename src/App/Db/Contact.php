@@ -211,14 +211,21 @@ class Contact extends \Tk\Db\Map\Model implements \Tk\ValidInterface
         return $this->accountCode;
     }
 
+    public function getDisplayName()
+    {
+        if ($this->getName()) {
+            return $this->getName();
+        }
+        if ($this->getNameCompany())
+            return $this->getNameCompany();
+    }
+
     /**
      * @return string
      */
     public function getNameCompany(): string
     {
-        if (!$this->nameCompany)
-            return $this->getName();
-        return $this->nameCompany;
+        return trim($this->nameCompany);
     }
 
     /**
@@ -237,7 +244,7 @@ class Contact extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      */
     public function getName() : string
     {
-        return $this->getNameFirst() . ' ' . $this->getNameLast();
+        return trim($this->getNameFirst() . ' ' . $this->getNameLast());
     }
 
     /**
@@ -255,7 +262,7 @@ class Contact extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      */
     public function getNameFirst() : string
     {
-        return $this->nameFirst;
+        return trim($this->nameFirst);
     }
 
     /**
@@ -263,7 +270,7 @@ class Contact extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      */
     public function getNameLast(): string
     {
-        return $this->nameLast;
+        return trim($this->nameLast);
     }
 
     /**
@@ -466,7 +473,7 @@ class Contact extends \Tk\Db\Map\Model implements \Tk\ValidInterface
         if ($this->getNameCompany()) {
             $str .= $this->getNameCompany();
         }
-        if (trim($this->getName()) ) {
+        if ($this->getName()) {
             if ($str) $str .= ': ';
             $str .= $this->getName();
         }
@@ -513,7 +520,7 @@ class Contact extends \Tk\Db\Map\Model implements \Tk\ValidInterface
         if (!$this->getType()) {
             $errors['type'] = 'Invalid value: type';
         }
-        if (!trim($this->getNameCompany()) && !trim($this->getNameFirst()) && !trim($this->getNameLast())) {
+        if (!$this->getNameCompany() && !$this->getNameFirst() && !$this->getNameLast()) {
             $errors['nameCompany'] = 'Please enter at least one name for this record.';
             $errors['nameFirst'] = 'Please enter at least one name for this record.';
         }

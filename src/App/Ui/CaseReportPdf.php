@@ -94,8 +94,20 @@ class CaseReportPdf extends Pdf
         $template->appendText('pathologyId', $this->pathCase->getPathologyId());
         $template->appendText('name', ucwords($this->pathCase->getReportStatus()) . ' Report');
 
-        if ($this->pathCase->getClient())
-            $template->appendText('clientName', $this->pathCase->getClient()->getName());
+        if ($this->pathCase->getClient()) {
+            if ($this->pathCase->getClient()->getNameCompany()) {
+                $template->appendText('clientName', $this->pathCase->getClient()->getNameCompany());
+                $template->setVisible('clientName');
+            }
+            if ($this->pathCase->getClient()->getName()) {
+                $template->appendText('clientContactName', $this->pathCase->getClient()->getName());
+                $template->setVisible('clientContactName');
+            }
+        }
+
+
+
+
 
         $owner = $this->pathCase->getOwner();
         if ($owner) {
@@ -359,9 +371,10 @@ JS;
           <td width="" style="padding-top: 20px;line-height: 1.4;"><span var="institution"></span></td>
           <td></td>
           <td width="40%" style="padding-top: 20px;line-height: 1.6;">
-            Submission Date: <span var="submissionDate"></span><br/>
-            Pathology Number: <span var="pathologyId"></span><br/>
-            Submitting Client: <span var="clientName"></span>
+            Submission Date: <span var="submissionDate"></span>
+            <br/>Pathology Number: <span var="pathologyId"></span>
+            <span choice="clientName"><br/>Submitting Client: <span var="clientName"></span></span>
+            <span choice="clientContactName"><br/>Submitting Contact: <span var="clientContactName"></span></span>
           </td>
         </tr>
       </table>

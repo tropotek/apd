@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "a67cdbf85690e54a7b92fe91c297b20d2607c0b2"
+                "reference": "359b1f4a6fc1f3b97f8ea8ffd5a576f4f5151cff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/a67cdbf85690e54a7b92fe91c297b20d2607c0b2",
-                "reference": "a67cdbf85690e54a7b92fe91c297b20d2607c0b2",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/359b1f4a6fc1f3b97f8ea8ffd5a576f4f5151cff",
+                "reference": "359b1f4a6fc1f3b97f8ea8ffd5a576f4f5151cff",
                 "shasum": ""
             },
             "require": {
@@ -75,7 +75,7 @@
                 "uri",
                 "url"
             ],
-            "time": "2021-03-15T11:15:53+00:00"
+            "time": "2021-03-21T17:21:22+00:00"
         },
         {
             "name": "intervention/image",

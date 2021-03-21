@@ -284,9 +284,9 @@ class Request extends \Bs\TableIface
                     if (!trim($option->getName())) {
                         $contact = ContactMap::create()->find($option->getValue());
                         if ($contact) {
-                            if (trim($contact->getNameCompany()))
+                            if ($contact->getNameCompany())
                                 $option->setName($contact->getNameCompany());
-                            else if (trim($contact->getName()))
+                            else if ($contact->getName())
                                 $option->setName($contact->getName());
                         }
                     }

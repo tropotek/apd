@@ -113,7 +113,7 @@ jQuery(function($) {
       if (yearEl.val()) yearVal = parseInt(yearEl.val());
       var monthVal = 0;
       if (monthEl.val()) monthVal = parseInt(monthEl.val());
-      if (yearVal <= 0 || monthVal <= 0) {
+      if (yearVal <= 0 && monthVal <= 0) {
         return;
       }
       var months = (yearVal * 12) + monthVal;
