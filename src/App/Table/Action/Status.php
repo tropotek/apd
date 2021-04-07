@@ -2,6 +2,7 @@
 namespace App\Table\Action;
 
 
+use Tk\Db\Tool;
 use \Uni\Form\Field\StatusSelect;
 use Dom\Template;
 use Exception;
@@ -129,21 +130,26 @@ class Status extends \Tk\Table\Action\Link
                 $request->getTkUri()->redirect();
             }
             $selected = $request->get($this->getCheckboxName());
-            if (!is_array($selected)) {
+            $list = $this->getTable()->getList();
+            if (!is_array($selected) && $request->has('pathCaseId')) {
+                $vars = $this->getTable()->getFilterValues();
+                $vars['pathCaseId'] = $request->get('pathCaseId');
+                $list = $this->getTable()->getList()->getMapper()->findFiltered($vars, Tool::create());
+            } else {
                 \Tk\Alert::addWarning('Please select records to update.');
                 return;
             }
 
             $updated = 0;
             /* @var \Bs\Db\Traits\StatusTrait|\Tk\Db\ModelInterface $obj */
-            foreach($this->getTable()->getList() as $obj) {
+            foreach($list as $obj) {
                 if (!is_object($obj)) continue;
                 $keyValue = 0;
                 if (property_exists($obj, $this->getCheckboxName())) {
                     $keyValue = $obj->{$this->getCheckboxName()};
                 }
                 // Update obj status
-                if (in_array($keyValue, $selected)) {
+                if ((!is_array($selected) && $request->has('pathCaseId')) || in_array($keyValue, $selected) ) {
                     \Tk\Log::notice('Bulk Record Status Change: [cs:'.$obj->getStatus(). '] [ns:'.$status . '] [pid:'.$obj->getId().']');
                     $obj->setStatus($status);
                     $obj->setStatusNotify($notify);
@@ -153,7 +159,7 @@ class Status extends \Tk\Table\Action\Link
                 }
             }
 
-            \Tk\Alert::addSuccess('Status change message');
+            \Tk\Alert::addSuccess('Status changed to ' . $status . ' for ' . $list->count() . ' records');
             $request->getTkUri()->redirect();
         }
 
@@ -224,10 +230,11 @@ jQuery(function ($) {
           return false;
         }
         var selected = $(this).closest('.tk-table').find('.table-body input[name^="' + cbName + '"]:checked');
-        if (selected.length <= 0) {
-          alert('Please select records!');
-          return false;
-        }
+        // NOTE: If noe are selected then all requests are changed
+        //if (selected.length <= 0) {
+          //alert('Please select records!');
+          //return false;
+        //}
         return true;
       });
     });

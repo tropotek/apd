@@ -109,7 +109,14 @@ class RequestMap extends Mapper
         }
 
         if (!empty($filter['pathCaseId'])) {
-            $filter->appendWhere('a.path_case_id = %s AND ', (int)$filter['pathCaseId']);
+            if (strpos($filter['pathCaseId'], '-') !== false) {
+                $filter->appendWhere('b.pathology_id = %s AND ', $this->quote($filter['pathCaseId']));
+            } else {
+                $filter->appendWhere('a.path_case_id = %s AND ', (int)$filter['pathCaseId']);
+            }
+        }
+        if (!empty($filter['pathologyId'])) {
+            $filter->appendWhere('b.pathology_id = %s AND ', $this->quote($filter['pathologyId']));
         }
         if (!empty($filter['cassetteId'])) {
             $filter->appendWhere('a.cassette_id = %s AND ', (int)$filter['cassetteId']);

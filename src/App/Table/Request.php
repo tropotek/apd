@@ -256,7 +256,7 @@ class Request extends \Bs\TableIface
         if (!$this->isMinMode()) {
             $this->appendFilter(new Field\Input('keywords'))->setAttr('placeholder', 'Search');
 
-            $this->appendFilter(new Field\Input('pathCaseId'))->setAttr('placeholder', 'Case ID');
+            $this->appendFilter(new Field\Input('pathologyId'))->setAttr('placeholder', 'Case ID');
 
             $serviceList = ServiceMap::create()->findFiltered(['institutionId' => $this->getConfig()->getInstitutionId()]);
             //$this->appendFilter(Field\Select::createSelect('serviceId', $serviceList)->prependOption('-- Service --'));
