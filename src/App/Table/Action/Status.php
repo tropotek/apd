@@ -138,6 +138,7 @@ class Status extends \Tk\Table\Action\Link
                     $list = $this->getTable()->getList()->getMapper()->findFiltered($vars, Tool::create());
                 } else {
                     \Tk\Alert::addWarning('Please select records to update.');
+                    $request->getTkUri()->redirect();
                     return;
                 }
             }
