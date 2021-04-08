@@ -131,13 +131,15 @@ class Status extends \Tk\Table\Action\Link
             }
             $selected = $request->get($this->getCheckboxName());
             $list = $this->getTable()->getList();
-            if (!is_array($selected) && $request->has('pathCaseId')) {
-                $vars = $this->getTable()->getFilterValues();
-                $vars['pathCaseId'] = $request->get('pathCaseId');
-                $list = $this->getTable()->getList()->getMapper()->findFiltered($vars, Tool::create());
-            } else {
-                \Tk\Alert::addWarning('Please select records to update.');
-                return;
+            if (!is_array($selected)) {
+                if ($request->has('pathCaseId')) {
+                    $vars = $this->getTable()->getFilterValues();
+                    $vars['pathCaseId'] = $request->get('pathCaseId');
+                    $list = $this->getTable()->getList()->getMapper()->findFiltered($vars, Tool::create());
+                } else {
+                    \Tk\Alert::addWarning('Please select records to update.');
+                    return;
+                }
             }
 
             $updated = 0;
@@ -159,7 +161,7 @@ class Status extends \Tk\Table\Action\Link
                 }
             }
 
-            \Tk\Alert::addSuccess('Status changed to ' . $status . ' for ' . $list->count() . ' records');
+            \Tk\Alert::addSuccess('Status changed to ' . $status . ' for ' . $updated . ' records');
             $request->getTkUri()->redirect();
         }
 
