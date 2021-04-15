@@ -381,19 +381,44 @@ JS;
 
 
         $tab = 'Files';
+        $maxFiles = 10;
         /** @var Field\File $fileField */
         $fileField = $this->appendField(Field\File::create('files[]', $this->getPathCase()->getDataPath()))
             ->setTabGroup($tab)->addCss('tk-multiinput')
             ->setAttr('multiple', 'multiple')
             //->setAttr('accept', '.png,.jpg,.jpeg,.gif')
-            ->setNotes('Upload any related files. Multiple files can be selected.');
+            ->setNotes('Upload any related files. A max. of '.$maxFiles.' files can be selected and uploaded per form submission.');
 
         if ($this->getPathCase()->getId()) {
-            $v = json_encode($this->getPathCase()->getFiles()->toArray());
+            $files = $this->getPathCase()->getFiles()->toArray();
+            usort($files, function ($a, $b) {
+                return $a->getLabel() <=> $b->getLabel();
+                //return strcmp($a->getLabel(), $b->getLabel());
+            });
+            $v = json_encode($files);
             $fileField->setAttr('data-value', $v);
             $fileField->setAttr('data-prop-path', 'path');
             $fileField->setAttr('data-prop-id', 'id');
+            $fileField->setAttr('data-max-files', $maxFiles);
         }
+
+        // Enable select2 multi select for student field
+        $js = <<<JS
+jQuery(function ($) {
+    $('.tk-multiinput').each(function () {
+      var input = $(this);
+      $(this.form).on('submit', function() {
+        var max = parseInt(input.data('maxFiles'));
+        if (parseInt(input.get(0).files.length) > max){
+           alert("You can only upload a maximum of "+max+" files per form submission");
+           return false;
+        }
+      });      
+    });
+      
+});
+JS;
+        $this->getRenderer()->getTemplate()->appendJs($js);
 
 //        $this->appendField(new Field\File('files'))
 //            ->addCss('')->setAttr('data-path', $mediaPath)->setTabGroup($tab);
