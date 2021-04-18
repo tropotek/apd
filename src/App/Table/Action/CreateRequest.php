@@ -100,7 +100,7 @@ jQuery(function($) {
   var init = function () {
     function updateBtn(btn) {
       var cbName = btn.data('cb-name');
-      if(btn.closest('.tk-table').find('.table-body input[name^="'+cbName+'"]:checked').length) {
+      if(btn.closest('form').find('input.tk-tcb[name^="'+cbName+'"]:checked').length) {
         btn.removeAttr('disabled');
       } else {
         btn.attr('disabled', 'disabled');
@@ -110,10 +110,9 @@ jQuery(function($) {
     $('.tk-action-create-request').each(function () {
       var btn = $(this);
       var cbName = btn.data('cb-name');
-      //var confirmStr = btn.data('cb-confirm');
-      
-      btn.on('click', function (e) {
-        var selected = $(this).closest('.tk-table').find('.table-body input[name^="'+cbName+'"]:checked');
+      var cbList = $(this).closest('form').find('input.tk-tcb[name^="'+cbName+'"]');
+      cbList.on('change', function () {
+        var selected = $(this).closest('form').find('input.tk-tcb[name^="'+cbName+'"]:checked');
         var selectedArr = [];
         if (selected.length > 0) {
           // Add selected cassettes to button
@@ -121,16 +120,19 @@ jQuery(function($) {
             selectedArr.push($(this).val());
           });
           btn.attr('data-cassette-id', selectedArr.join(','));
-        }
-        
+        } else {
+          btn.removeAttr('data-cassette-id');
+        }   
+      });
+      btn.on('click', function (e) {
+        var selected = $(this).closest('form').find('input.tk-tcb[name^="'+cbName+'"]:checked');
         return selected.length > 0;
       });
       btn.closest('.tk-table').on('change', '.table-body input[name^="'+cbName+'"]', function () { updateBtn(btn); });
-      
       updateBtn(btn);
     });
   }
-    
+  
   $('form').on('init', document, init).each(init);
 });
 JS;

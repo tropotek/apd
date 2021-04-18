@@ -49,8 +49,9 @@ jQuery(function ($) {
     // Reset form
     dialog.on('shown.bs.modal', function (e) {
       cassetteId = [];
-      if ($(e.relatedTarget).data('cassetteId')) {
-        var val = $(e.relatedTarget).data('cassetteId')+"";
+      var selected = $(e.relatedTarget).attr('data-cassette-id');
+      if (selected) {
+        var val = selected+"";
         if (val.indexOf(',') > -1) {  // Check if this is an array value
           cassetteId = val.split(',');
         } else {

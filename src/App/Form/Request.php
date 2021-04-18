@@ -119,6 +119,7 @@ class Request extends \Bs\FormIface
         $isNew = (bool)$this->getRequest()->getId();
         if ($cassetteList && count($cassetteList)) {
             $cassetteList = $this->getConfig()->getRequest()->get('cassetteId');
+            vd($cassetteList);
             $reqList = [];
             $req = null;
             foreach ($cassetteList as $i => $v) {
