@@ -73,7 +73,7 @@ class CaseReportPdf extends Pdf
 
         $institution = $this->pathCase->getInstitution();
         if ($institution->getLogoUrl()) {
-            $template->setAttr('logo', 'src', $institution->getLogoUrl()); //->setScheme(Uri::SCHEME_HTTP_SSL));
+            $template->setAttr('logo', 'src', $institution->getLogoUrl());
             $template->setVisible('logo');
         }
 
