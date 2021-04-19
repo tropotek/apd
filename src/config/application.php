@@ -47,5 +47,5 @@ $config['template.maintenance']     = $config['system.template.path']   . '/them
 
 
 $config['request.trusted.proxies'] = array('127.23.84.121', '103.12.109.146');
-$config['request.trusted.hosts'] = array('127.23.84.121', '103.12.109.146');
+$config['request.trusted.hosts'] = array('apd.vet.unimelb.edu.au', '127.23.84.121', '103.12.109.146');
 
