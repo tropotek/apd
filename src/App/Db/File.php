@@ -184,7 +184,9 @@ class File extends Model implements ValidInterface
      */
     public function getUrl()
     {
-        return Uri::create(Config::getInstance()->getDataUrl() . $this->getPath());
+        $url = Uri::create(Config::getInstance()->getDataUrl() . $this->getPath());
+        //$url->setScheme(\Uni\Uri::SCHEME_HTTP_SSL);
+        return $url;
     }
 
 

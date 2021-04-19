@@ -4,6 +4,7 @@ namespace App\Ui;
 use App\Db\PathCase;
 use Dom\Renderer\Renderer;
 use Dom\Template;
+use Uni\Uri;
 
 /**
  * @author Michael Mifsud <info@tropotek.com>
@@ -72,7 +73,7 @@ class CaseReportPdf extends Pdf
 
         $institution = $this->pathCase->getInstitution();
         if ($institution->getLogoUrl()) {
-            $template->setAttr('logo', 'src', $institution->getLogoUrl());
+            $template->setAttr('logo', 'src', $institution->getLogoUrl()); //->setScheme(Uri::SCHEME_HTTP_SSL));
             $template->setVisible('logo');
         }
 
@@ -104,10 +105,6 @@ class CaseReportPdf extends Pdf
                 $template->setVisible('clientContactName');
             }
         }
-
-
-
-
 
         $owner = $this->pathCase->getOwner();
         if ($owner) {
