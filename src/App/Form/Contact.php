@@ -37,7 +37,6 @@ class Contact extends \Bs\FormIface
 
         $layout = $this->getForm()->getRenderer()->getLayout();
 
-
         $layout->removeRow('fax', 'col');
         $layout->removeRow('postcode', 'col');
         $layout->removeRow('country', 'col');
@@ -62,16 +61,17 @@ class Contact extends \Bs\FormIface
             ->setNotes('The clients billing account code if available.');
         $this->appendField(new Field\Input('phone'))->setTabGroup($tab);
         $this->appendField(new Field\Input('fax'))->setTabGroup($tab);
-        $this->appendField(new Field\Textarea('notes'))->setTabGroup($tab);
 
-        $tab = 'Address';
-        $this->appendField(new Field\GmapAddress('address'))->setTabGroup($tab);
+
+        //$tab = 'Address';
+        $this->appendField(new Field\GmapAddress('address'))->setTabGroup($tab)->setNotes('Start typing the address and select from the dropdown or click the edit icon to enter the address manually');
         $this->appendField(new Field\Input('street'))->setTabGroup($tab);
         $this->appendField(new Field\Input('city'))->setTabGroup($tab);
         $this->appendField(new Field\Input('postcode'))->setTabGroup($tab);
         $this->appendField(new Field\Input('state'))->setTabGroup($tab);
         $this->appendField(new Field\Input('country'))->setTabGroup($tab);
 
+        $this->appendField(new Field\Textarea('notes'))->setTabGroup($tab);
 
         $this->appendField(new Event\Submit('update', array($this, 'doSubmit')));
         $this->appendField(new Event\Submit('save', array($this, 'doSubmit')));
@@ -85,7 +85,9 @@ class Contact extends \Bs\FormIface
      */
     public function execute($request = null)
     {
-        $this->load(\App\Db\ContactMap::create()->unmapForm($this->getClient()));
+        $arr = \App\Db\ContactMap::create()->unmapForm($this->getClient());
+        $arr['address'] = $this->getClient()->getAddress();
+        $this->load($arr);
         parent::execute($request);
     }
 

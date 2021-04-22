@@ -443,7 +443,7 @@ class Contact extends \Tk\Db\Map\Model implements \Tk\ValidInterface
             $str .= $this->getState() . ', ';
         if ($this->getCountry())
             $str .= $this->getCountry() . ', ';
-        return $str;
+        return rtrim($str, ', ');
     }
 
 

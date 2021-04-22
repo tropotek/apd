@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "851b5e491ab7aa540fb69c37015ea825",
+    "content-hash": "3d25dc79970728183cf50c0a6f3d2e51",
     "packages": [
         {
             "name": "guzzlehttp/psr7",
@@ -2217,12 +2217,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-base.git",
-                "reference": "4e3d5258ebf5dd011c43aab09969ba6432205339"
+                "reference": "869f2b62c53ef31b94c4d46656512b53768fba56"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/4e3d5258ebf5dd011c43aab09969ba6432205339",
-                "reference": "4e3d5258ebf5dd011c43aab09969ba6432205339",
+                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/869f2b62c53ef31b94c4d46656512b53768fba56",
+                "reference": "869f2b62c53ef31b94c4d46656512b53768fba56",
                 "shasum": ""
             },
             "require": {
@@ -2601,6 +2601,53 @@
                 "source": "https://github.com/tropotek/tk-mail/tree/3.0"
             },
             "time": "2019-04-09T00:00:00+00:00"
+        },
+        {
+            "name": "ttek/tk-map",
+            "version": "3.0.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tropotek/tk-map.git",
+                "reference": "aeb0c6ae28219da3e4dce8a162c68db46f6621f3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tropotek/tk-map/zipball/aeb0c6ae28219da3e4dce8a162c68db46f6621f3",
+                "reference": "aeb0c6ae28219da3e4dce8a162c68db46f6621f3",
+                "shasum": ""
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Tk\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Mifsud",
+                    "email": "info@tropotek.com.au",
+                    "homepage": "http://www.tropotek.com/"
+                }
+            ],
+            "description": "Mapping lib to handle map coordinates and display google type maps.",
+            "keywords": [
+                "map",
+                "tropotek"
+            ],
+            "support": {
+                "issues": "https://github.com/tropotek/tk-map/issues",
+                "source": "https://github.com/tropotek/tk-map/tree/3.0"
+            },
+            "time": "2017-09-27T00:00:00+00:00"
         },
         {
             "name": "ttek/tk-mvc",
