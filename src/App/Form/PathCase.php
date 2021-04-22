@@ -600,6 +600,11 @@ JS;
   margin: 5px 0px 5px 20px;
 }
 
+/* Fix Google place autocomplete z-index */
+.pac-container {
+    z-index: 10000 !important;
+}
+
 CSS;
         $this->getRenderer()->getTemplate()->appendCss($css);
 

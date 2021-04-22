@@ -64,7 +64,9 @@ class Contact extends \Bs\FormIface
 
 
         //$tab = 'Address';
-        $this->appendField(new Field\GmapAddress('address'))->setTabGroup($tab)->setNotes('Start typing the address and select from the dropdown or click the edit icon to enter the address manually');
+        $this->appendField(new Field\GmapAddress('address'))->setTabGroup($tab)
+            ->setAttr('data-manual-btn', 'true')
+            ->setNotes('Start typing the address and select from the dropdown or click the edit icon to enter the address manually');
         $this->appendField(new Field\Input('street'))->setTabGroup($tab);
         $this->appendField(new Field\Input('city'))->setTabGroup($tab);
         $this->appendField(new Field\Input('postcode'))->setTabGroup($tab);
