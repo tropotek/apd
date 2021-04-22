@@ -458,7 +458,7 @@ jQuery(function ($) {
           var data = $(this).data()['data'];
           var name = data['text'].split('(')[0];
           var email = '';
-          if (data['text'].split('(')[1].replace(')', '')) {
+          if (data['text'].indexOf('(') > -1 && data['text'].split('(')[1].replace(')', '')) {
             email = data['text'].split('(')[1].replace(')', '');
           }
           //console.log(data['text']); // TODO: get the name and email from here for instant data

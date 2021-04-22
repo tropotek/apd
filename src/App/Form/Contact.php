@@ -65,6 +65,7 @@ class Contact extends \Bs\FormIface
         $this->appendField(new Field\Textarea('notes'))->setTabGroup($tab);
 
         $tab = 'Address';
+        $this->appendField(new Field\GmapAddress('address'))->setTabGroup($tab);
         $this->appendField(new Field\Input('street'))->setTabGroup($tab);
         $this->appendField(new Field\Input('city'))->setTabGroup($tab);
         $this->appendField(new Field\Input('postcode'))->setTabGroup($tab);
