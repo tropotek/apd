@@ -4,6 +4,7 @@ namespace App\Table;
 use App\Db\AnimalTypeMap;
 use App\Db\ContactMap;
 use App\Db\PathCaseMap;
+use Tk\Db\Tool;
 use Tk\Form\Field;
 use Tk\Table\Cell;
 use Uni\Db\User;
@@ -137,26 +138,59 @@ class PathCase extends \Bs\TableIface
         $list = $this->getConfig()->getUserMapper()->findFiltered(array(
             'institutionId' => $this->getConfig()->getInstitutionId(),
             'type' => User::TYPE_STAFF
-        ));
+        ), Tool::create('name_first, name_last'));
         
         $this->appendFilter(Field\Select::createSelect('pathologistId', $list)->prependOption('-- Pathologist --'));
 
-        $list = $this->getConfig()->getUserMapper()->findFiltered(array(
-            'institutionId' => $this->getConfig()->getInstitutionId(),
-            'type' => User::TYPE_STAFF
-        ));
+//        $list = $this->getConfig()->getUserMapper()->findFiltered(array(
+//            'institutionId' => $this->getConfig()->getInstitutionId(),
+//            'type' => User::TYPE_STAFF
+//        ));
         $this->appendFilter(Field\Select::createSelect('userId', $list)->prependOption('-- Creator --'));
-        
+
+
         $list = ContactMap::create()->findFiltered(array(
             'institutionId' => $this->getConfig()->getInstitutionId(),
             'type' => \App\Db\Contact::TYPE_CLIENT
-        ));
-        $this->appendFilter(Field\Select::createSelect('clientId', $list)->prependOption('-- Submitter/Client --'));
+        ), Tool::create('name_company, name_first, name_last'));
+        $this->appendFilter(Field\Select::createSelect('clientId', $list))//; //->prependOption('-- Submitter/Client --'))
+            ->addCss('tk-multiselect1')->prependOption('-- Submitter/Client --')
+            ->addOnShowOption(function (\Dom\Template $template, \Tk\Form\Field\Option $option, $var) {
+                /** @var \App\Db\Contact $contact */
+                $contact = ContactMap::create()->find($option->getValue());
+                if ($contact)
+                    $option->setName($contact->getDisplayName());
+            });
+
         $list = ContactMap::create()->findFiltered(array(
             'institutionId' => $this->getConfig()->getInstitutionId(),
             'type' => \App\Db\Contact::TYPE_OWNER
-        ));
-        $this->appendFilter(Field\Select::createSelect('ownerId', $list)->prependOption('-- Owner --'));
+        ), Tool::create('name_first, name_last'));
+        $this->appendFilter(Field\Select::createSelect('ownerId', $list))
+            ->addCss('tk-multiselect2')->prependOption('-- Owner --')
+            ->addOnShowOption(function (\Dom\Template $template, \Tk\Form\Field\Option $option, $var) {
+                /** @var \App\Db\Contact $contact */
+                $contact = ContactMap::create()->find($option->getValue());
+                if ($contact)
+                    $option->setName($contact->getDisplayName());
+            });
+
+        $js = <<<JS
+jQuery(function ($) {
+  	$('select.tk-multiselect1').select2({
+        placeholder: '-- Submitter/Client --',
+        allowClear: false,
+        minimumInputLength: 0
+    });
+  	$('select.tk-multiselect2').select2({
+        placeholder: '-- Submitter/Client --',
+        allowClear: false,
+        minimumInputLength: 0
+    });
+});
+JS;
+        $this->getRenderer()->getTemplate()->appendJs($js);
+
 
         $list = \Tk\ObjectUtil::getClassConstants(\App\Db\PathCase::class, 'TYPE', true);
         $this->appendFilter(Field\Select::createSelect('type', $list)->prependOption('-- Case Type --'));
