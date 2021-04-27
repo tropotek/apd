@@ -183,7 +183,7 @@ jQuery(function ($) {
         minimumInputLength: 0
     });
   	$('select.tk-multiselect2').select2({
-        placeholder: '-- Submitter/Client --',
+        placeholder: '-- Owner --',
         allowClear: false,
         minimumInputLength: 0
     });
