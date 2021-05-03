@@ -126,7 +126,8 @@ class Edit extends AdminEditIface
         $this->requestTable->setMinMode(true);
         $this->requestTable->init();
         $filter = array(
-            'pathCaseId' => $this->pathCase->getId()
+            'pathCaseId' => $this->pathCase->getId(),
+            'status' => [\App\Db\Request::STATUS_PENDING, \App\Db\Request::STATUS_COMPLETED]
         );
         $this->requestTable->setList($this->requestTable->findList($filter, \Tk\Db\Tool::create('created DESC')));
 

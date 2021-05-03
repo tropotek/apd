@@ -265,7 +265,7 @@ class Request extends \Bs\TableIface
             //$this->appendFilter(Field\Select::createSelect('testId', $serviceList)->prependOption('-- Test --'));
 
             $list = \Tk\ObjectUtil::getClassConstants(\App\Db\Request::class, 'STATUS', true);
-            $this->appendFilter(Field\CheckboxSelect::createSelect('status', $list)->prependOption('-- Status --'))
+            $this->appendFilter(Field\CheckboxSelect::createSelect('status', $list))
                 ->setValue([\App\Db\Request::STATUS_PENDING]);
 
 
