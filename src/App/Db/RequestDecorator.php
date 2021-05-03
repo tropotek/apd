@@ -87,6 +87,10 @@ class RequestDecorator
                 $message->set('test::block', true);
             }
 
+            if ($request->getCassette())
+                $message->replace(Collection::prefixArrayKeys(\App\Db\CassetteMap::create()
+                    ->unmapForm($request->getCassette()), 'cassette::'));
+
             if ($request->getService())
                 $message->replace(Collection::prefixArrayKeys(\App\Db\ServiceMap::create()
                     ->unmapForm($request->getService()), 'service::'));

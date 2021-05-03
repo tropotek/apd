@@ -191,10 +191,9 @@ jQuery(function ($) {
 JS;
         $this->getRenderer()->getTemplate()->appendJs($js);
 
-
         $list = \Tk\ObjectUtil::getClassConstants(\App\Db\PathCase::class, 'TYPE', true);
         $this->appendFilter(Field\Select::createSelect('type', $list)->prependOption('-- Case Type --'));
-        $list = \Tk\ObjectUtil::getClassConstants(\App\Db\PathCase::class, 'TYPE', true);
+        $list = \Tk\ObjectUtil::getClassConstants(\App\Db\PathCase::class, 'SUBMISSION', true);
         $this->appendFilter(Field\Select::createSelect('submissionType', $list)->prependOption('-- Submission Type --'));
 
         $list = \Tk\ObjectUtil::getClassConstants(\App\Db\PathCase::class, 'STATUS', true);
