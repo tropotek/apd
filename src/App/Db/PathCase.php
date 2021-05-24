@@ -54,6 +54,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     const SUBMISSION_INTERNAL_DIAG      = 'internalDiagnostic';
     const SUBMISSION_EXTERNAL_DIAG      = 'externalDiagnostic';
     const SUBMISSION_RESEARCH           = 'research';
+    const SUBMISSION_TEACHING           = 'teaching';
     const SUBMISSION_OTHER              = 'other';
 
     // Report Status
@@ -213,6 +214,19 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      * @var bool
      */
     public $issueAlert = false;
+
+
+    /**
+     * Samples count for Biopsies only
+     * @var int
+     */
+    public $bioSamples = 1;
+
+    /**
+     * Notes for Biopsies only
+     * @var string
+     */
+    public $bioNotes = '';
 
 
     /**
@@ -732,6 +746,42 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public function setIssueAlert(bool $issueAlert): PathCase
     {
         $this->issueAlert = $issueAlert;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getBioSamples()
+    {
+        return $this->bioSamples;
+    }
+
+    /**
+     * @param int $bioSamples
+     * @return PathCase
+     */
+    public function setBioSamples($bioSamples): PathCase
+    {
+        $this->bioSamples = $bioSamples;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBioNotes(): string
+    {
+        return $this->bioNotes;
+    }
+
+    /**
+     * @param string $bioNotes
+     * @return PathCase
+     */
+    public function setBioNotes(string $bioNotes): PathCase
+    {
+        $this->bioNotes = $bioNotes;
         return $this;
     }
 

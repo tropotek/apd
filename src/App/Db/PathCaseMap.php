@@ -50,6 +50,8 @@ class PathCaseMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Boolean('zoonoticAlert', 'zoonotic_alert'));
             $this->dbMap->addPropertyMap(new Db\Text('issue'));
             $this->dbMap->addPropertyMap(new Db\Boolean('issueAlert', 'issue_alert'));
+            $this->dbMap->addPropertyMap(new Db\Integer('bioSamples', 'bio_samples'));
+            $this->dbMap->addPropertyMap(new Db\Text('bioNotes', 'bio_notes'));
             $this->dbMap->addPropertyMap(new Db\Integer('specimenCount', 'specimen_count'));
             $this->dbMap->addPropertyMap(new Db\Text('animalName', 'animal_name'));
             $this->dbMap->addPropertyMap(new Db\Integer('animalTypeId', 'animal_type_id'));
@@ -120,6 +122,8 @@ class PathCaseMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Boolean('zoonoticAlert'));
             $this->formMap->addPropertyMap(new Form\Text('issue'));
             $this->formMap->addPropertyMap(new Form\Boolean('issueAlert'));
+            $this->formMap->addPropertyMap(new Form\Integer('bioSamples'));
+            $this->formMap->addPropertyMap(new Form\Text('bioNotes'));
             $this->formMap->addPropertyMap(new Form\Integer('specimenCount'));
             $this->formMap->addPropertyMap(new Form\Text('animalName'));
             $this->formMap->addPropertyMap(new Form\Integer('animalTypeId'));

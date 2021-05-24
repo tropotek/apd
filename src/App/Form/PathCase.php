@@ -28,6 +28,14 @@ use Tk\ObjectUtil;
  */
 class PathCase extends \Bs\FormIface
 {
+    /**
+     * Readonly field exceptions
+     * @var string[]
+     */
+    protected $exceptions = ['addendum'];
+
+    protected $isReadonly = false;
+
 
     public function __construct($formId = '')
     {
@@ -51,6 +59,8 @@ class PathCase extends \Bs\FormIface
         // TODO: Allow WYSIWYG to view all files but only upload to html folder if possible (add this later)
         $mediaPath = $this->getPathCase()->getDataPath().'/media';
         $mce = 'mce-min';
+        $this->isReadonly = ($this->getPathCase()->getStatus() == \App\Db\PathCase::STATUS_COMPLETED);
+
 
         $layout = $this->getRenderer()->getLayout();
 
@@ -73,6 +83,9 @@ class PathCase extends \Bs\FormIface
 
         $layout->removeRow('desexed', 'col');
 
+        $layout->addRow('bioSamples', 'col2');
+        $layout->removeRow('bioNotes', 'col');
+
         $layout->removeRow('colour', 'col');
         //$layout->removeRow('origin', 'col');
 
@@ -90,6 +103,7 @@ class PathCase extends \Bs\FormIface
         
         $this->appendField(new Field\Input('pathologyId'))->setLabel('Pathology ID')->setTabGroup($tab)
                 ->addCss('tk-input-lock');
+
         $this->appendField(new Field\Input('arrival'))->setTabGroup($tab)->addCss('date')
             ->setAttr('placeholder', 'dd/mm/yyyy')->setNotes('The date the case was received.');
             
@@ -188,6 +202,10 @@ JS;
         $this->appendField(new Field\Checkbox('afterHours'))->setTabGroup($tab)
             ->setNotes('Was this case worked after normal open hours?');
 
+        if ($this->getPathCase()->getType() == \App\Db\PathCase::TYPE_BIOPSY || !$this->getPathCase()->getType()) {
+            $this->appendField(new Field\Input('bioSamples'))->setType('number')->setTabGroup($tab);
+            $this->appendField(new Field\Input('bioNotes'))->setTabGroup($tab);
+        }
 
         if ($this->getPathCase()->getId()) {
             $list = \App\Db\PathCase::getStatusList($this->getPathCase()->getStatus());
@@ -439,6 +457,16 @@ JS;
                 ->setLabel('Disposal Completion Date')->setTabGroup($tab);
         }
 
+
+
+        foreach ($this->getFieldList() as $field) {
+            if (in_array($field->getName(), $this->exceptions)) continue;
+            if ($this->isReadonly) {
+                $field->setReadonly(); //->setDisabled();
+            }
+        }
+
+
         $this->appendField(new Event\Submit('update', array($this, 'doSubmit')));
         $this->appendField(new Event\Submit('save', array($this, 'doSubmit')));
         $this->appendField(new Event\Link('cancel', $this->getBackUrl()));
@@ -680,6 +708,15 @@ CSS;
 
         if (!isset($vals['billable']) || !$vals['billable']) {
             unset($vals['accountStatus']);
+        }
+        // Stop any javascript accadently sending data back that gets updated.
+        if ($this->isReadonly) {
+            $newVals = [];
+            foreach ($vals as $k => $v) {
+                if (!in_array($k, $this->exceptions)) continue;
+                $newVals[$k] = $v;
+            }
+            $vals = $newVals;
         }
 
         \App\Db\PathCaseMap::create()->mapForm($vals, $this->getPathCase());
