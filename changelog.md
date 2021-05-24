@@ -1,6 +1,12 @@
 
 #CHANGELOG#
 
+Ver 3.0.96 [2021-05-25]:
+-------------------------------
+  - Set table status change object to send one email for multiple request updates
+  - Added redirect to requested URL after logging in
+
+
 Ver 3.0.94 [2021-05-04]:
 -------------------------------
 
