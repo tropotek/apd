@@ -2,6 +2,7 @@
 namespace App\Table\Action;
 
 
+use App\Db\Request;
 use Tk\Db\Tool;
 use \Uni\Form\Field\StatusSelect;
 use Dom\Template;
@@ -144,6 +145,8 @@ class Status extends \Tk\Table\Action\Link
             }
 
             $updated = 0;
+            $groupedPathIds = [];
+
             /* @var \Bs\Db\Traits\StatusTrait|\Tk\Db\ModelInterface $obj */
             foreach($list as $obj) {
                 if (!is_object($obj)) continue;
@@ -151,15 +154,36 @@ class Status extends \Tk\Table\Action\Link
                 if (property_exists($obj, $this->getCheckboxName())) {
                     $keyValue = $obj->{$this->getCheckboxName()};
                 }
+
                 // Update obj status
                 if ((!is_array($selected) && $request->has('pathCaseId')) || in_array($keyValue, $selected) ) {
                     \Tk\Log::notice('Bulk Record Status Change: [cs:'.$obj->getStatus(). '] [ns:'.$status . '] [pid:'.$obj->getId().']');
+
                     $obj->setStatus($status);
-                    $obj->setStatusNotify($notify);
                     $obj->setStatusMessage($notes);
-                    $obj->save();
+
+                    if ($obj instanceof Request) {
+                        if (!array_key_exists($obj->getPathCaseId(), $groupedPathIds)) {
+                            $obj->requestCount = 1;
+                            $groupedPathIds[$obj->getPathCaseId()] = $obj;
+                            $obj->setStatusNotify($notify);
+                        } else {
+                            $groupedPathIds[$obj->getPathCaseId()]->requestCount++;
+                            $obj->setStatusNotify(false);
+                            $obj->save();
+                        }
+                        //$obj->save();
+                    } else {
+                        $groupedPathIds[] = $obj;
+                        $obj->setStatusNotify($notify);
+                        //$obj->save();
+                    }
                     $updated++;
                 }
+            }
+
+            foreach ($groupedPathIds as $obj) {
+                $obj->save();
             }
 
             \Tk\Alert::addSuccess('Status changed to ' . $status . ' for ' . $updated . ' records');

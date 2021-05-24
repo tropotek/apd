@@ -308,7 +308,11 @@ class Request extends \Bs\TableIface
             $this->appendAction(\Tk\Table\Action\Delete::create());
         }
         $this->appendAction(\Tk\Table\Action\Csv::create());
-        $this->appendAction(\App\Table\Action\Status::create(\App\Db\Request::getStatusList()));
+        $this->appendAction(\App\Table\Action\Status::create(\App\Db\Request::getStatusList())
+            ->addOnExecute(function (\Tk\Table\Action\Iface $action) {
+
+            })
+        );
 
 
         return $this;
