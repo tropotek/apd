@@ -396,16 +396,16 @@
         },
         {
             "name": "mpdf/mpdf",
-            "version": "v8.0.10",
+            "version": "v8.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mpdf/mpdf.git",
-                "reference": "1333a962cd2f7ae1a127b7534b7734b58179186f"
+                "reference": "af17afbbfa0b6ce76defc8da5d02a73d54f94c64"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mpdf/mpdf/zipball/1333a962cd2f7ae1a127b7534b7734b58179186f",
-                "reference": "1333a962cd2f7ae1a127b7534b7734b58179186f",
+                "url": "https://api.github.com/repos/mpdf/mpdf/zipball/af17afbbfa0b6ce76defc8da5d02a73d54f94c64",
+                "reference": "af17afbbfa0b6ce76defc8da5d02a73d54f94c64",
                 "shasum": ""
             },
             "require": {
@@ -467,7 +467,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2021-01-08T14:59:28+00:00"
+            "time": "2021-05-12T14:18:06+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -580,16 +580,16 @@
         },
         {
             "name": "phpmailer/phpmailer",
-            "version": "v6.4.0",
+            "version": "v6.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPMailer/PHPMailer.git",
-                "reference": "050d430203105c27c30efd1dce7aa421ad882d01"
+                "reference": "9256f12d8fb0cd0500f93b19e18c356906cbed3d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/050d430203105c27c30efd1dce7aa421ad882d01",
-                "reference": "050d430203105c27c30efd1dce7aa421ad882d01",
+                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/9256f12d8fb0cd0500f93b19e18c356906cbed3d",
+                "reference": "9256f12d8fb0cd0500f93b19e18c356906cbed3d",
                 "shasum": ""
             },
             "require": {
@@ -644,7 +644,7 @@
             "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
             "support": {
                 "issues": "https://github.com/PHPMailer/PHPMailer/issues",
-                "source": "https://github.com/PHPMailer/PHPMailer/tree/v6.4.0"
+                "source": "https://github.com/PHPMailer/PHPMailer/tree/v6.4.1"
             },
             "funding": [
                 {
@@ -652,7 +652,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-03-31T20:06:42+00:00"
+            "time": "2021-04-29T12:25:04+00:00"
         },
         {
             "name": "psr/cache",
@@ -811,12 +811,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "a18c1e692e02b84abbafe4856c3cd7cc6903908c"
+                "reference": "d49695b909c3b7628b6289db5479a1c204601f11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/a18c1e692e02b84abbafe4856c3cd7cc6903908c",
-                "reference": "a18c1e692e02b84abbafe4856c3cd7cc6903908c",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/d49695b909c3b7628b6289db5479a1c204601f11",
+                "reference": "d49695b909c3b7628b6289db5479a1c204601f11",
                 "shasum": ""
             },
             "require": {
@@ -852,9 +852,9 @@
                 "psr-3"
             ],
             "support": {
-                "source": "https://github.com/php-fig/log/tree/master"
+                "source": "https://github.com/php-fig/log/tree/1.1.4"
             },
-            "time": "2021-03-02T15:02:34+00:00"
+            "time": "2021-05-03T11:20:27+00:00"
         },
         {
             "name": "ralouphie/getallheaders",
@@ -1313,7 +1313,7 @@
             "description": "Provides tools to ease debugging PHP code",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/debug/tree/4.4"
+                "source": "https://github.com/symfony/debug/tree/v4.4.22"
             },
             "funding": [
                 {
@@ -2025,12 +2025,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/plg-mailog.git",
-                "reference": "93a68eb68f35535058bd15e1af3d19f511d4313f"
+                "reference": "8cc1eb0269650ab709c5289e3528f488e6705956"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/plg-mailog/zipball/93a68eb68f35535058bd15e1af3d19f511d4313f",
-                "reference": "93a68eb68f35535058bd15e1af3d19f511d4313f",
+                "url": "https://api.github.com/repos/tropotek/plg-mailog/zipball/8cc1eb0269650ab709c5289e3528f488e6705956",
+                "reference": "8cc1eb0269650ab709c5289e3528f488e6705956",
                 "shasum": ""
             },
             "type": "ttek-plugin",
@@ -2217,12 +2217,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-base.git",
-                "reference": "3aa891b74353dc473264ce6ef634cb417674521d"
+                "reference": "64057e4c627890ecb235595f3396959c7cff70ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/3aa891b74353dc473264ce6ef634cb417674521d",
-                "reference": "3aa891b74353dc473264ce6ef634cb417674521d",
+                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/64057e4c627890ecb235595f3396959c7cff70ea",
+                "reference": "64057e4c627890ecb235595f3396959c7cff70ea",
                 "shasum": ""
             },
             "require": {
@@ -2280,12 +2280,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-database.git",
-                "reference": "d0e45261a62bc0f7aaabcf11e271085f890f8511"
+                "reference": "7e7d5adff91e4b24f639eaba1bc06ba1e287e5e1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-database/zipball/d0e45261a62bc0f7aaabcf11e271085f890f8511",
-                "reference": "d0e45261a62bc0f7aaabcf11e271085f890f8511",
+                "url": "https://api.github.com/repos/tropotek/tk-database/zipball/7e7d5adff91e4b24f639eaba1bc06ba1e287e5e1",
+                "reference": "7e7d5adff91e4b24f639eaba1bc06ba1e287e5e1",
                 "shasum": ""
             },
             "require": {
@@ -2387,12 +2387,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-form.git",
-                "reference": "65f2bb97e85e603b205e5212eff00f40b02a1bbd"
+                "reference": "9d06809545124e8e3ce45ba30b180fe3814efd02"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-form/zipball/65f2bb97e85e603b205e5212eff00f40b02a1bbd",
-                "reference": "65f2bb97e85e603b205e5212eff00f40b02a1bbd",
+                "url": "https://api.github.com/repos/tropotek/tk-form/zipball/9d06809545124e8e3ce45ba30b180fe3814efd02",
+                "reference": "9d06809545124e8e3ce45ba30b180fe3814efd02",
                 "shasum": ""
             },
             "require": {
@@ -2761,12 +2761,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-table.git",
-                "reference": "cb94d02cded896201e2cd7b02e124844077a37f3"
+                "reference": "419e16a57ef1b344b565c8c0e17b5b1f68abb8f8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-table/zipball/cb94d02cded896201e2cd7b02e124844077a37f3",
-                "reference": "cb94d02cded896201e2cd7b02e124844077a37f3",
+                "url": "https://api.github.com/repos/tropotek/tk-table/zipball/419e16a57ef1b344b565c8c0e17b5b1f68abb8f8",
+                "reference": "419e16a57ef1b344b565c8c0e17b5b1f68abb8f8",
                 "shasum": ""
             },
             "require": {
@@ -2862,12 +2862,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-uni.git",
-                "reference": "e99bd062ee9419a52d3f624a2890b2928529861c"
+                "reference": "c438aef9119c91f81a591a2422ee2a5404a751d2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-uni/zipball/e99bd062ee9419a52d3f624a2890b2928529861c",
-                "reference": "e99bd062ee9419a52d3f624a2890b2928529861c",
+                "url": "https://api.github.com/repos/tropotek/tk-uni/zipball/c438aef9119c91f81a591a2422ee2a5404a751d2",
+                "reference": "c438aef9119c91f81a591a2422ee2a5404a751d2",
                 "shasum": ""
             },
             "require": {
