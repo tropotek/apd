@@ -1,6 +1,10 @@
 
 #CHANGELOG#
 
+Ver 3.0.98 [2021-05-26]:
+-------------------------------
+
+
 Ver 3.0.96 [2021-05-25]:
 -------------------------------
   - Set table status change object to send one email for multiple request updates
