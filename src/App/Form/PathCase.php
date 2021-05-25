@@ -5,7 +5,9 @@ use App\Db\AnimalTypeMap;
 use App\Db\ContactMap;
 use App\Db\Notice;
 use App\Db\PathCaseMap;
+use App\Db\Permission;
 use App\Db\StorageMap;
+use Tk\Alert;
 use Tk\Db\Tool;
 use Tk\Form\Field;
 use Tk\Form\Event;
@@ -34,7 +36,11 @@ class PathCase extends \Bs\FormIface
      */
     protected $exceptions = ['addendum'];
 
-    protected $isReadonly = false;
+    /**
+     * When set to true only the $this->exceptions (above) fields are editable.
+     * @var bool
+     */
+    protected $readonly = false;
 
 
     public function __construct($formId = '')
@@ -59,8 +65,10 @@ class PathCase extends \Bs\FormIface
         // TODO: Allow WYSIWYG to view all files but only upload to html folder if possible (add this later)
         $mediaPath = $this->getPathCase()->getDataPath().'/media';
         $mce = 'mce-min';
-        $this->isReadonly = ($this->getPathCase()->getStatus() == \App\Db\PathCase::STATUS_COMPLETED);
-
+        $this->readonly = ($this->getPathCase()->getStatus() == \App\Db\PathCase::STATUS_COMPLETED);
+        if ($this->getAuthUser()->hasPermission(Permission::CASE_FULL_EDIT)) {
+            Alert::addInfo('This case has been marked COMPLETED! You have permission to modify completed cases.');
+        }
 
         $layout = $this->getRenderer()->getLayout();
 
@@ -461,7 +469,7 @@ JS;
 
         foreach ($this->getFieldList() as $field) {
             if (in_array($field->getName(), $this->exceptions)) continue;
-            if ($this->isReadonly) {
+            if ($this->isReadonly()) {
                 $field->setReadonly(); //->setDisabled();
             }
         }
@@ -710,7 +718,7 @@ CSS;
             unset($vals['accountStatus']);
         }
         // Stop any javascript accadently sending data back that gets updated.
-        if ($this->isReadonly) {
+        if ($this->isReadonly()) {
             $newVals = [];
             foreach ($vals as $k => $v) {
                 if (!in_array($k, $this->exceptions)) continue;
@@ -800,6 +808,13 @@ CSS;
         if ($form->getTriggeredEvent()->getName() == 'save') {
             $event->setRedirect(\Tk\Uri::create()->set('pathCaseId', $this->getPathCase()->getId()));
         }
+    }
+
+    public function isReadonly()
+    {
+        if ($this->getAuthUser()->hasPermission(Permission::CASE_FULL_EDIT))
+            return false;
+        return $this->readonly;
     }
 
     /**

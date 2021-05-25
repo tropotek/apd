@@ -40,6 +40,15 @@ class Permission extends \Uni\Db\Permission
      */
     const CASE_ADMIN            = 'perm.manage.case';
 
+    /**
+     * If a staff member has the full edit permission
+     * then when a case is completed they still have full edit control.
+     * Other users are blocked from editing a case when set to completed
+     *
+     * @target staff
+     */
+    const CASE_FULL_EDIT            = 'perm.case.full.edit';
+
 
     /**
      * @param string $type (optional) If set returns only the permissions for that user type otherwise returns all permissions
@@ -67,7 +76,8 @@ class Permission extends \Uni\Db\Permission
                     'Can Masquerade' => self::CAN_MASQUERADE,
                     //'Is Pathologist' => self::IS_PATHOLOGIST,
                     'Is Technician' => self::IS_TECHNICIAN,
-                    'Case Administration' => self::CASE_ADMIN
+                    'Case Administration' => self::CASE_ADMIN,
+                    'Case Always Edit' => self::CASE_FULL_EDIT
                 );
         }
         return $arr;
