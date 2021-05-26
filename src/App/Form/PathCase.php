@@ -66,9 +66,6 @@ class PathCase extends \Bs\FormIface
         $mediaPath = $this->getPathCase()->getDataPath().'/media';
         $mce = 'mce-min';
         $this->readonly = ($this->getPathCase()->getStatus() == \App\Db\PathCase::STATUS_COMPLETED);
-        if ($this->getAuthUser()->hasPermission(Permission::CASE_FULL_EDIT)) {
-            Alert::addInfo('This case has been marked COMPLETED! You have permission to modify completed cases.');
-        }
 
         $layout = $this->getRenderer()->getLayout();
 

@@ -3,10 +3,12 @@ namespace App\Controller\PathCase;
 
 use App\Config;
 use App\Db\PathCase;
+use App\Db\Permission;
 use App\Form\Note;
 use App\Ui\Dialog\EmailReport;
 use Bs\Controller\AdminEditIface;
 use Dom\Template;
+use Tk\Alert;
 use Tk\Crumbs;
 use Tk\Request;
 use Uni\Uri;
@@ -206,6 +208,10 @@ class Edit extends AdminEditIface
      */
     public function show()
     {
+        if ($this->getAuthUser()->hasPermission(Permission::CASE_FULL_EDIT)) {
+            Alert::addInfo('This case has been marked COMPLETED! You have permission to modify completed cases.');
+        }
+        
         $this->initActionPanel();
         $template = parent::show();
 
