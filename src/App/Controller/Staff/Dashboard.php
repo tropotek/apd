@@ -73,7 +73,6 @@ class Dashboard extends \Uni\Controller\AdminIface
         );
         $this->requestTable->setList($this->requestTable->findList($filter, $this->requestTable->getTool('created DESC')));
 
-
     }
 
     public function show()
