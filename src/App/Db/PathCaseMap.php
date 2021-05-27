@@ -291,12 +291,22 @@ SQL;
         if (!empty($filter['clientId'])) {
             $filter->appendWhere('a.client_id = %s AND ', (int)$filter['clientId']);
         }
-        if (!empty($filter['userId'])) {
-            $filter->appendWhere('a.user_id = %s AND ', (int)$filter['userId']);
+
+
+        if (!empty($filter['pathologistId']) && !empty($filter['userId']) && !empty($filter['user_pathologist_or'])) {
+            $filter->appendWhere('(a.user_id = %s OR ', (int)$filter['userId']);
+            $filter->appendWhere('a.pathologist_id = %s) AND ', (int)$filter['pathologistId']);
+        } else {
+            if (!empty($filter['userId'])) {
+                $filter->appendWhere('a.user_id = %s AND ', (int)$filter['userId']);
+            }
+            if (!empty($filter['pathologistId'])) {
+                $filter->appendWhere('a.pathologist_id = %s AND ', (int)$filter['pathologistId']);
+            }
         }
-        if (!empty($filter['pathologistId'])) {
-            $filter->appendWhere('a.pathologist_id = %s AND ', (int)$filter['pathologistId']);
-        }
+
+
+
         if (!empty($filter['pathologyId'])) {
             $filter->appendWhere('a.pathology_id = %s AND ', $this->quote($filter['pathologyId']));
         }
