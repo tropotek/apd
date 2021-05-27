@@ -54,7 +54,8 @@ class Dashboard extends \Uni\Controller\AdminIface
         //$this->caseTable->removeFilter('status');
         //$this->caseTable->resetSession();
         $this->caseTable->getFilterForm()->getField('status')
-            ->setValue([\App\Db\PathCase::STATUS_PENDING,\App\Db\PathCase::STATUS_EXAMINED,\App\Db\PathCase::STATUS_REPORTED]);
+            ->setValue([\App\Db\PathCase::STATUS_PENDING,\App\Db\PathCase::STATUS_EXAMINED,
+                \App\Db\PathCase::STATUS_REPORTED,\App\Db\PathCase::STATUS_FROZEN_STORAGE,\App\Db\PathCase::STATUS_HOLD]);
         $filter = array(
             //'userId' => $this->getAuthUser()->getId(),
             'pathologistId' => $this->getAuthUser()->getId()
@@ -66,8 +67,8 @@ class Dashboard extends \Uni\Controller\AdminIface
         $this->requestTable->setEditUrl(\Bs\Uri::createHomeUrl('/requestEdit.html'));
         $this->requestTable->init();
         $filter = array(
-            'userId' => $this->getAuthUser()->getId(),
-            //'pathologistId' => $this->getAuthUser()->getId()
+            //'userId' => $this->getAuthUser()->getId(),
+            'pathologistId' => $this->getAuthUser()->getId()
         );
         $this->requestTable->setList($this->requestTable->findList($filter, $this->requestTable->getTool('created DESC')));
 

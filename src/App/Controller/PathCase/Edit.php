@@ -211,7 +211,7 @@ class Edit extends AdminEditIface
         if ($this->getAuthUser()->hasPermission(Permission::CASE_FULL_EDIT)) {
             Alert::addInfo('This case has been marked COMPLETED! You have permission to modify completed cases.');
         }
-        
+
         $this->initActionPanel();
         $template = parent::show();
 

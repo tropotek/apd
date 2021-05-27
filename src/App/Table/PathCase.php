@@ -198,7 +198,7 @@ JS;
         $this->appendFilter(Field\Select::createSelect('submissionType', $list)->prependOption('-- Submission Type --'));
 
         $list = \Tk\ObjectUtil::getClassConstants(\App\Db\PathCase::class, 'STATUS', true);
-        $this->appendFilter(Field\CheckboxSelect::createSelect('status', $list)->prependOption('-- Status --'));
+        $this->appendFilter(Field\CheckboxSelect::createSelect('status', $list));
 
         // Species Filter
         $list = AnimalTypeMap::create()->findFiltered(['institutionId' => $this->getConfig()->getInstitutionId(), 'parent_id' => 0]);
