@@ -65,7 +65,8 @@ class PathCase extends \Bs\FormIface
         // TODO: Allow WYSIWYG to view all files but only upload to html folder if possible (add this later)
         $mediaPath = $this->getPathCase()->getDataPath().'/media';
         $mce = 'mce-min';
-        $this->readonly = ($this->getPathCase()->getStatus() == \App\Db\PathCase::STATUS_COMPLETED);
+        vd($this->getPathCase()->isBilled(), $this->getPathCase()->hasStatus(\App\Db\PathCase::STATUS_COMPLETED));
+        $this->readonly = ($this->getPathCase()->hasStatus(\App\Db\PathCase::STATUS_COMPLETED)) && $this->getPathCase()->isBilled();
 
         $layout = $this->getRenderer()->getLayout();
 

@@ -1467,6 +1467,17 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     }
 
     /**
+     * Return true if this case has been invoiced
+     *
+     * @return bool
+     */
+    public function isBilled()
+    {
+        if (!$this->isBillable()) return true;      // Do this so that non-billable cases are marked readonly
+        return ($this->getAccountStatus() == self::ACCOUNT_STATUS_INVOICED || $this->getAccountStatus() == self::ACCOUNT_STATUS_UVET_INVOICED);
+    }
+
+    /**
      * @return array
      */
     public function validate()

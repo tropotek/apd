@@ -208,7 +208,7 @@ class Edit extends AdminEditIface
      */
     public function show()
     {
-        if ($this->pathCase->hasStatus(PathCase::STATUS_COMPLETED) && $this->getAuthUser()->hasPermission(Permission::CASE_FULL_EDIT)) {
+        if ($this->pathCase->hasStatus(PathCase::STATUS_COMPLETED) && $this->pathCase->isBilled() && $this->getAuthUser()->hasPermission(Permission::CASE_FULL_EDIT)) {
             Alert::addInfo('This case has been marked COMPLETED! You have permission to modify completed cases.');
         }
 
