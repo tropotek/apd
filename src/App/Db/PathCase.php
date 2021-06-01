@@ -1453,13 +1453,14 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 
     /**
      * Is this case editable by this user
-     * IE: Only users flagged as CASE_ADMIN's can edit a case after it is completed
+     * IE: Only users flagged as CASE_FULL_EDIT's can edit a case after it is completed
      *
      * @param User $user
      */
     public function isEditable(User $user)
     {
-        if (!$user->hasPermission(Permission::CASE_ADMIN) && $this->hasStatus(self::STATUS_COMPLETED)) {
+        if (!$user->hasPermission(Permission::CASE_FULL_EDIT) && $this->hasStatus(self::STATUS_COMPLETED)) {
+        //if (!$user->hasPermission(Permission::CASE_ADMIN) && $this->hasStatus(self::STATUS_COMPLETED)) {
             return false;
         }
         return true;
