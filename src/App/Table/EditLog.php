@@ -35,6 +35,10 @@ class EditLog extends \Bs\TableIface
             ->setGroup('edit')->addOnShow(function (\Tk\Table\Cell\Iface $cell, \App\Db\EditLog $obj, \Tk\Table\Ui\ActionButton $button) {
                 $button->setUrl($button->getUrl()->set('editLogId', $obj->getId()));
             });
+        $this->getActionCell(true)->append(\Tk\Table\Ui\ActionButton::createBtn('PDF', $this->getEditUrl()->set('pdf'), 'fa fa-file-pdf-o')->setAttr('target', '_blank'))
+            ->setGroup('edit')->addOnShow(function (\Tk\Table\Cell\Iface $cell, \App\Db\EditLog $obj, \Tk\Table\Ui\ActionButton $button) {
+                $button->setUrl($button->getUrl()->set('editLogId', $obj->getId()));
+            });
         $this->appendCell($this->getActionCell());
 
         //$this->appendCell(new Cell\Checkbox('id'));
