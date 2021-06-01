@@ -12,6 +12,8 @@ use Bs\Controller\AdminEditIface;
 use Dom\Template;
 use Tk\Alert;
 use Tk\Crumbs;
+use Tk\Form;
+use Tk\Form\Event\Submit;
 use Tk\Request;
 use Uni\Uri;
 
@@ -117,6 +119,25 @@ class Edit extends AdminEditIface
         // Only allow save for new path case
         if (!$this->pathCase->getId()) {
             $this->getForm()->removeField('update');
+        }
+        if ($request->has('editLogId')) {
+            $this->getForm()->removeField('update');
+            $this->getForm()->removeField('save');
+            $this->getForm()->removeField('cancel');
+            $btn = $this->getForm()->appendField(new Submit('Revert', function (Form $form, Form\Event\Iface $event) {
+                /** @var EditLog $log */
+                $log = EditLogMap::create()->find($this->getConfig()->getRequest()->get('editLogId'));
+                if ($log) {
+                    vd('Revert the case to here');
+                    vd($log->getState());
+                    $log->getState()->save();
+                }
+                $event->setRedirect(\Bs\Uri::create()->remove('editLogId')->set('pathCaseId', $log->getFid()));
+            }), 'Cancel')->setAttr('title', 'Revert the path case to this revision.');
+            $btn->removeCss('btn-default');
+            $btn->addCss('btn-success');
+            $btn->setIcon('fa fa-undo');
+            $this->getForm()->appendField(new Form\Event\Link('cancel', \Bs\Uri::create()->remove('editLogId')->set('pathCaseId', $this->pathCase->getId())));
         }
         $this->getForm()->execute();
 
