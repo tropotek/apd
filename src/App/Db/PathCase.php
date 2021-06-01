@@ -3,6 +3,7 @@ namespace App\Db;
 
 use App\Db\Traits\AnimalTypeTrait;
 use App\Db\Traits\ClientTrait;
+use App\Db\Traits\EditLogTrait;
 use App\Db\Traits\OwnerTrait;
 use App\Db\Traits\PathologistTrait;
 use App\Db\Traits\StorageTrait;
@@ -32,6 +33,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     use UserTrait;
     use PathologistTrait;
     use AnimalTypeTrait;
+    use EditLogTrait;
 
     // TODO: Check these status's against the actual workflow.
     const STATUS_PENDING                = 'pending';            // Submitted ???
@@ -427,6 +429,24 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
         $this->arrival = new \DateTime();
         $this->cost = Money::create(0);
     }
+
+    /**
+     * @return string[]
+     */
+    public function __sleep()
+    {
+        $arr = ['id', 'institutionId', 'userId', 'clientId', 'ownerId', 'pathologistId', 'resident',
+            'name', 'pathologyId', 'type', 'submissionType', 'submissionReceived', 'arrival', 'status',
+            'reportStatus', 'billable', 'accountStatus', 'cost', 'afterHours', 'zoonotic', 'zoonoticAlert',
+            'issue', 'issueAlert', 'bioSamples', 'bioNotes', 'specimenCount', 'animalName', 'animalTypeId',
+            'species', 'breed', 'sex', 'desexed', 'patientNumber', 'microchip', 'origin', 'colour', 'weight',
+            'dob', 'dod', 'euthanised', 'euthanisedMethod', 'acType', 'acHold', 'storageId', 'studentReport',
+            'disposal', 'collectedSamples', 'clinicalHistory', 'grossPathology', 'grossMorphologicalDiagnosis',
+            'histopathology', 'ancillaryTesting', 'morphologicalDiagnosis', 'causeOfDeath', 'addendum',
+            'comments', 'notes', 'modified', 'created'];
+        return $arr;
+    }
+
 
     /**
      * @return int
