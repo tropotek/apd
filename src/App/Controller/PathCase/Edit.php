@@ -196,6 +196,9 @@ class Edit extends AdminEditIface
         if ($request->has('pdf')) {
             return $this->doPdf($request);
         }
+        if ($request->has('pdf-view')) {
+            return $this->doPdfView($request);
+        }
     }
 
     /**
@@ -210,6 +213,23 @@ class Edit extends AdminEditIface
         if ($this->pathCase->getReportStatus() == PathCase::REPORT_STATUS_INTERIM)
             $int = '-' . PathCase::REPORT_STATUS_INTERIM;
         $filename = 'AnatomicPathologyReport-' . $this->pathCase->getPathologyId() . '-' . $this->pathCase->getPatientNumber().$int.'.pdf';
+        if (!$request->has('isHtml'))
+            $pdf->output($filename);     // comment this to see html version
+        return $pdf->show();
+    }
+
+    /**
+     * @param \Tk\Request $request
+     * @return \Dom\Renderer\Renderer|\Dom\Template|null
+     * @throws \Exception
+     */
+    public function doPdfView(\Tk\Request $request)
+    {
+        $pdf = \App\Ui\CaseViewPdf::createReport($this->pathCase);
+        $int = '';
+        if ($this->pathCase->getReportStatus() == PathCase::REPORT_STATUS_INTERIM)
+            $int = '-' . PathCase::REPORT_STATUS_INTERIM;
+        $filename = 'AnatomicPathologyCase-' . $this->pathCase->getPathologyId() . '-' . $this->pathCase->getPatientNumber().$int.'.pdf';
         if (!$request->has('isHtml'))
             $pdf->output($filename);     // comment this to see html version
         return $pdf->show();
@@ -234,6 +254,13 @@ class Edit extends AdminEditIface
                 \Uni\Uri::createHomeUrl('/invoiceItemManager.html')->set('pathCaseId', $this->pathCase->getId()),
                 'fa fa-money fa-add-action'));
 
+
+            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('HTML View', \Uni\Uri::create()->set('pdf-view')->set('isHtml')->set(Crumbs::CRUMB_IGNORE), 'fa fa-eye'))
+                ->setAttr('target', '_blank')->setAttr('title', 'Download/View Case Details');
+            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('PDF View', \Uni\Uri::create()->set('pdf-view')->set(Crumbs::CRUMB_IGNORE), 'fa fa-file-pdf-o'))
+                ->setAttr('target', '_blank')->setAttr('title', 'Download/View Case Details');
+
+
 //            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn(
 //                'New Cassette',
 //                \Uni\Uri::createHomeUrl('/cassetteEdit.html')->set('pathCaseId', $this->pathCase->getId()),
@@ -246,6 +273,7 @@ class Edit extends AdminEditIface
                 ->setAttr('target', '_blank')->setAttr('title', 'Download/View Report');
             $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('PDF Report', \Uni\Uri::create()->set('pdf')->set(Crumbs::CRUMB_IGNORE), 'fa fa-file-pdf-o'))
                 ->setAttr('target', '_blank')->setAttr('title', 'Download/View Report');
+
         }
 
 

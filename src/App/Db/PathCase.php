@@ -680,7 +680,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      * @param null|string $format
      * @return \DateTime|string
      */
-    public function getArrival($format = null): \DateTime
+    public function getArrival($format = null)
     {
         if ($format && $this->arrival)
             return $this->arrival->format($format);
