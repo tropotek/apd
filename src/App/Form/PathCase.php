@@ -360,7 +360,7 @@ JS;
 
         $this->appendField(new Field\Textarea('secondOpinion'))
             ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab)
-            ->setNotes('If you edit this field, then your details will be used as the signatory on the report. Clear this text to revert the signatory user.');
+            ->setNotes('If you edit this field, then your details will be used as the pathologist on the report. Clear this text field to revert to the case`s selected pathologist.');
 
         $this->appendField(new Field\Textarea('addendum'))
             ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
