@@ -15,6 +15,7 @@ use Tk\Crumbs;
 use Tk\Form;
 use Tk\Form\Event\Submit;
 use Tk\Request;
+use Tk\Ui\ButtonDropdown;
 use Uni\Uri;
 
 /**
@@ -254,26 +255,21 @@ class Edit extends AdminEditIface
                 \Uni\Uri::createHomeUrl('/invoiceItemManager.html')->set('pathCaseId', $this->pathCase->getId()),
                 'fa fa-money fa-add-action'));
 
-
-            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('HTML View', \Uni\Uri::create()->set('pdf-view')->set('isHtml')->set(Crumbs::CRUMB_IGNORE), 'fa fa-eye'))
-                ->setAttr('target', '_blank')->setAttr('title', 'Download/View Case Details');
-            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('PDF View', \Uni\Uri::create()->set('pdf-view')->set(Crumbs::CRUMB_IGNORE), 'fa fa-file-pdf-o'))
-                ->setAttr('target', '_blank')->setAttr('title', 'Download/View Case Details');
-
-
-//            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn(
-//                'New Cassette',
-//                \Uni\Uri::createHomeUrl('/cassetteEdit.html')->set('pathCaseId', $this->pathCase->getId()),
-//                'fa fa-stack-overflow fa-add-action'));
+            $links = [
+                \Tk\Ui\Link::create('PDF View', \Uni\Uri::create()->set('pdf-view')->set(Crumbs::CRUMB_IGNORE), 'fa fa-file-pdf-o')->setAttr('target', '_blank')->setAttr('title', 'Download/View Case Details'),
+                \Tk\Ui\Link::create('HTML View', \Uni\Uri::create()->set('pdf-view')->set('isHtml')->set(Crumbs::CRUMB_IGNORE), 'fa fa-eye')->setAttr('target', '_blank')->setAttr('title', 'Download/View Case Details')
+            ];
+            $this->getActionPanel()->append(ButtonDropdown::createButtonDropdown('Case View', 'fa fa-eye', $links))->setAttr('title', 'Download/View Case Details');
 
             $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Email Report', \Uni\Uri::create()->set('pdf')->set(Crumbs::CRUMB_IGNORE), 'fa fa-envelope-o'))
                 ->setAttr('data-toggle', 'modal')->setAttr('data-target', '#'.$this->emailReportDialog->getId());
 
-            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('HTML Report', \Uni\Uri::create()->set('pdf')->set('isHtml')->set(Crumbs::CRUMB_IGNORE), 'fa fa-code'))
-                ->setAttr('target', '_blank')->setAttr('title', 'Download/View Report');
-            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('PDF Report', \Uni\Uri::create()->set('pdf')->set(Crumbs::CRUMB_IGNORE), 'fa fa-file-pdf-o'))
-                ->setAttr('target', '_blank')->setAttr('title', 'Download/View Report');
-
+            $links = [
+                \Tk\Ui\Link::create('PDF Report', \Uni\Uri::create()->set('pdf')->set(Crumbs::CRUMB_IGNORE), 'fa fa-file-pdf-o')->setAttr('target', '_blank')->setAttr('title', 'Download/View Report'),
+                \Tk\Ui\Link::create('HTML Report', \Uni\Uri::create()->set('pdf')->set('isHtml')->set(Crumbs::CRUMB_IGNORE), 'fa fa-code')->setAttr('target', '_blank')->setAttr('title', 'Download/View Report')
+            ];
+            $this->getActionPanel()->append(ButtonDropdown::createButtonDropdown('Report', 'fa fa-file-pdf-o', $links))->setAttr('title', 'Download/View Report');
+            
         }
 
 
