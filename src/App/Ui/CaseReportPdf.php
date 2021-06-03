@@ -187,6 +187,12 @@ class CaseReportPdf extends Pdf
             $block->appendHtml('content', $this->pathCase->getComments());
             $block->appendRepeat();
         }
+        if ($this->pathCase->getSecondOpinion()) {
+            $block = $template->getRepeat('textBlock');
+            $block->appendText('title', 'Second Opinion:');
+            $block->appendHtml('content', $this->pathCase->getSecondOpinion());
+            $block->appendRepeat();
+        }
         if ($this->pathCase->getAddendum()) {
             $block = $template->getRepeat('textBlock');
             $block->appendText('title', 'Addendum:');
@@ -195,6 +201,9 @@ class CaseReportPdf extends Pdf
         }
 
         $pathologist = $this->pathCase->getPathologist();
+        if ($this->pathCase->getSecondOpinion() && $this->pathCase->getSoUser()) {
+            $pathologist = $this->pathCase->getSoUser();
+        }
         if ($pathologist) {
             $template->appendText('pathologistName', $pathologist->getName());
             if ($pathologist->getCredentials())

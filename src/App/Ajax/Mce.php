@@ -46,7 +46,6 @@ class Mce
         $fieldName = $request->get('fieldName');
         $value = $request->get('value');
         if ($id == 0) {
-            vd();
             return ResponseJson::createJson(['ok' => 'Cannot save a new case field.']);
         }
 
@@ -57,6 +56,15 @@ class Mce
             $case = PathCaseMap::create()->find($id);
             if ($case) {
                 $method = 'set' . ucfirst($fieldName);
+                // Save the new os user to the case
+                if ($fieldName == 'secondOpinion') {
+                    if ($case->getSecondOpinion() != $value) {
+                        $case->setSoUserId($this->getConfig()->getAuthUser());
+                    }
+                    if (!trim($case->getSecondOpinion())) {
+                        $case->setSoUserId(0);
+                    }
+                }
                 if (method_exists($case, $method)) {
                     $case->$method($value);
                     $case->save();

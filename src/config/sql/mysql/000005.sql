@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS `edit_log` (
   `user_id` INTEGER NOT NULL DEFAULT 0,                       -- User who edited the object: If 0 then this is assumed to be a system update
   `fkey` VARCHAR(64) NOT NULL DEFAULT '',                     -- Foreign object key  EG: '\App\Db\Company', '\App\Db\Placement', etc
   `fid` INTEGER NOT NULL DEFAULT 0,                           -- foreign id  EG: '2'
-  `state` TEXT,                                               -- (optional) JSON data object. Save the sate of the object in JSON or PHP serialised format
+  `state` MEDIUMBLOB,                                         -- (optional) JSON data object. Save the sate of the object in JSON or PHP serialised format
   `message` TEXT,                                             -- The HTML Text to be shown in the message?
   `del` TINYINT(1) NOT NULL DEFAULT 0,
   `modified` DATETIME NOT NULL,
@@ -30,4 +30,19 @@ CREATE TABLE IF NOT EXISTS `edit_log` (
 #    `user_id` int(10) unsigned NOT NULL,
 #    PRIMARY KEY (`service_id`, `user_id`)
 # ) ENGINE=InnoDB;
+
+alter table path_case
+    add so_user_id int default 0 not null after pathologist_id;
+
+alter table path_case
+    add second_opinion text null after addendum;
+
+
+
+
+
+
+
+
+
 

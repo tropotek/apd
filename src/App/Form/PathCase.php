@@ -42,6 +42,8 @@ class PathCase extends \Bs\FormIface
      */
     protected $readonly = false;
 
+    protected $secondOpinionText = '';
+
 
     public function __construct($formId = '')
     {
@@ -356,6 +358,10 @@ JS;
         $this->appendField(new Field\Textarea('comments'))
             ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
 
+        $this->appendField(new Field\Textarea('secondOpinion'))
+            ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab)
+            ->setNotes('If you edit this field, then your details will be used as the signatory on the report. Clear this text to revert the signatory user.');
+
         $this->appendField(new Field\Textarea('addendum'))
             ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
 
@@ -375,7 +381,7 @@ jQuery(function ($) {
               el.addClass('saving');
               $.post(config.siteUrl + '/ajax/mceAutosave', {
                 crumb_ignore: 'crumb_ignore',
-                nolog: 'nolog',
+                //nolog: 'nolog',
                 obj: 'PathCase',
                 id: urlParams.get('pathCaseId'),
                 fieldName: el.attr('name'),
@@ -700,6 +706,8 @@ CSS;
      */
     public function doSubmit($form, $event)
     {
+        $this->secondOpinionText = $this->getPathCase()->getSecondOpinion();
+
         // Load the object with form data
         $vals = $form->getValues();
         if (!empty($vals['clientId']) && is_array($vals['clientId']))
@@ -715,7 +723,7 @@ CSS;
         if (!isset($vals['billable']) || !$vals['billable']) {
             unset($vals['accountStatus']);
         }
-        // Stop any javascript accadently sending data back that gets updated.
+        // Stop any javascript accidentally sending data back that gets updated.
         if ($this->isReadonly()) {
             $newVals = [];
             foreach ($vals as $k => $v) {
@@ -744,6 +752,14 @@ CSS;
         $this->getPathCase()->save();
         if ($isNew) {
             Notice::create($this->getPathCase());
+        }
+
+        // Update second Opinion user
+        if ($this->secondOpinionText != $this->getPathCase()->getSecondOpinion()) {
+            $this->getPathCase()->setSoUserId($this->getAuthUser());
+        }
+        if (!trim($this->getPathCase()->getSecondOpinion())) {
+            $this->getPathCase()->setSoUserId(0);
         }
 
         // Save the student field

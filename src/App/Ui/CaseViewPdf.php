@@ -202,6 +202,12 @@ class CaseViewPdf extends Pdf
             $block->appendHtml('content', $this->pathCase->getComments());
             $block->appendRepeat();
         }
+        if ($this->pathCase->getSecondOpinion()) {
+            $block = $template->getRepeat('textBlock');
+            $block->appendText('title', 'Second Opinion:');
+            $block->appendHtml('content', $this->pathCase->getSecondOpinion());
+            $block->appendRepeat();
+        }
         if ($this->pathCase->getAddendum()) {
             $block = $template->getRepeat('textBlock');
             $block->appendText('title', 'Addendum:');
@@ -209,16 +215,16 @@ class CaseViewPdf extends Pdf
             $block->appendRepeat();
         }
 
-        $pathologist = $this->pathCase->getPathologist();
-        if ($pathologist) {
-            $template->appendText('pathologistName', $pathologist->getName());
-            if ($pathologist->getCredentials())
-                $template->appendText('pathologistCreds', ' ('.$pathologist->getCredentials().')');
-            if ($pathologist->getPosition())
-                $template->appendText('pathologistPosition', $pathologist->getPosition());
-
-            $template->setVisible('pathologist');
-        }
+//        $pathologist = $this->pathCase->getPathologist();
+//        if ($pathologist) {
+//            $template->appendText('pathologistName', $pathologist->getName());
+//            if ($pathologist->getCredentials())
+//                $template->appendText('pathologistCreds', ' ('.$pathologist->getCredentials().')');
+//            if ($pathologist->getPosition())
+//                $template->appendText('pathologistPosition', $pathologist->getPosition());
+//
+//            $template->setVisible('pathologist');
+//        }
 
 
         $requestList = RequestMap::create()->findFiltered([

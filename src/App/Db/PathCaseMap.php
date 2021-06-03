@@ -33,6 +33,7 @@ class PathCaseMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Integer('clientId', 'client_id'));
             $this->dbMap->addPropertyMap(new Db\Integer('ownerId', 'owner_id'));
             $this->dbMap->addPropertyMap(new Db\Integer('pathologistId', 'pathologist_id'));
+            $this->dbMap->addPropertyMap(new Db\Integer('soUserId', 'so_user_id'));
             $this->dbMap->addPropertyMap(new Db\Text('resident'));
             $this->dbMap->addPropertyMap(new Db\Text('pathologyId', 'pathology_id'));
             $this->dbMap->addPropertyMap(new Db\Text('name'));
@@ -83,6 +84,7 @@ class PathCaseMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Text('morphologicalDiagnosis', 'morphological_diagnosis'));
             $this->dbMap->addPropertyMap(new Db\Text('causeOfDeath', 'cause_of_death'));
             $this->dbMap->addPropertyMap(new Db\Text('comments'));
+            $this->dbMap->addPropertyMap(new Db\Text('secondOpinion', 'second_opinion'));
             $this->dbMap->addPropertyMap(new Db\Text('addendum'));
             $this->dbMap->addPropertyMap(new Db\Text('notes'));
             $this->dbMap->addPropertyMap(new Db\Date('modified'));
@@ -105,6 +107,7 @@ class PathCaseMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Integer('clientId'));
             $this->formMap->addPropertyMap(new Form\Integer('ownerId'));
             $this->formMap->addPropertyMap(new Form\Integer('pathologistId'));
+            //$this->formMap->addPropertyMap(new Form\Integer('soUserId'));
             $this->formMap->addPropertyMap(new Form\Text('resident'));
             $this->formMap->addPropertyMap(new Form\Text('pathologyId'));
             $this->formMap->addPropertyMap(new Form\Text('name'));
@@ -155,6 +158,7 @@ class PathCaseMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Text('morphologicalDiagnosis'));
             $this->formMap->addPropertyMap(new Form\Text('causeOfDeath'));
             $this->formMap->addPropertyMap(new Form\Text('comments'));
+            $this->formMap->addPropertyMap(new Form\Text('secondOpinion'));
             $this->formMap->addPropertyMap(new Form\Text('addendum'));
             $this->formMap->addPropertyMap(new Form\Text('notes'));
 
@@ -267,6 +271,7 @@ SQL;
             $w .= sprintf('a.cause_of_death LIKE %s OR ', $this->quote($kw));
             $w .= sprintf('a.comments LIKE %s OR ', $this->quote($kw));
             $w .= sprintf('a.addendum LIKE %s OR ', $this->quote($kw));
+            $w .= sprintf('a.second_opinion LIKE %s OR ', $this->quote($kw));
             $w .= sprintf('a.notes LIKE %s OR ', $this->quote($kw));
 
             if (is_numeric($filter['keywords'])) {
@@ -290,6 +295,9 @@ SQL;
         }
         if (!empty($filter['clientId'])) {
             $filter->appendWhere('a.client_id = %s AND ', (int)$filter['clientId']);
+        }
+        if (!empty($filter['soUserId'])) {
+            $filter->appendWhere('a.so_user_id = %s AND ', (int)$filter['soUserId']);
         }
 
 

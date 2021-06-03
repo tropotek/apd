@@ -269,7 +269,7 @@ class Edit extends AdminEditIface
                 \Tk\Ui\Link::create('HTML Report', \Uni\Uri::create()->set('pdf')->set('isHtml')->set(Crumbs::CRUMB_IGNORE), 'fa fa-code')->setAttr('target', '_blank')->setAttr('title', 'Download/View Report')
             ];
             $this->getActionPanel()->append(ButtonDropdown::createButtonDropdown('Report', 'fa fa-file-pdf-o', $links))->setAttr('title', 'Download/View Report');
-            
+
         }
 
 
