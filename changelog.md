@@ -1,6 +1,12 @@
 
 #CHANGELOG#
 
+Ver 3.0.108 [2021-06-04]:
+-------------------------------
+  - added secondOpinion field and user to case
+  - Only make case readonly when case is COMPLETED and INVOICED
+
+
 Ver 3.0.106 [2021-06-02]:
 -------------------------------
 
