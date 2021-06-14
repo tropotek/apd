@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller\Staff;
 
+use App\Ui\CmsPanel;
 use Tk\Db\Tool;
 use Tk\Request;
 use Dom\Template;
@@ -18,6 +19,8 @@ class Dashboard extends \Uni\Controller\AdminIface
     protected $requestTable = null;
 
     protected $filesTable = null;
+
+    protected $cmsPanel = null;
 
     /**
      * Dashboard constructor.
@@ -38,6 +41,9 @@ class Dashboard extends \Uni\Controller\AdminIface
      */
     public function doDefault(Request $request)
     {
+        $this->cmsPanel = CmsPanel::create();
+        $this->cmsPanel->doDefault($request);
+
         $this->caseTable = \App\Table\PathCase::create();
         $this->caseTable->setEditUrl(\Bs\Uri::createHomeUrl('/pathCaseEdit.html'));
         $this->caseTable->init();
@@ -79,6 +85,10 @@ class Dashboard extends \Uni\Controller\AdminIface
     {
         $template = parent::show();
 
+        if ($this->cmsPanel) {
+            $template->prependTemplate('content', $this->cmsPanel->show());
+        }
+
         if ($this->caseTable)
             $template->appendTemplate('cases', $this->caseTable->show());
 
@@ -98,7 +108,8 @@ class Dashboard extends \Uni\Controller\AdminIface
     public function __makeTemplate()
     {
         $xhtml = <<<HTML
-<div class="">
+<div class="" var="content">
+  
   <div class="row">
     <div class="col-12">
       <div class="tk-panel" data-panel-title="My Case List" data-panel-icon="fa fa-paw" var="cases"></div>
