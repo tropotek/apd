@@ -24,9 +24,6 @@ class CmsPanel extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayIn
      */
     public function __construct()
     {
-//        $data = $this->getConfig()->getInstitution()->getData();
-//        $data->set(self::CONTENT_KEY, '<p>This is a test111</p>');
-
     }
 
     /**
@@ -135,8 +132,6 @@ jQuery(function ($) {
 });
 JS;
         $template->appendJs($js);
-
-
 
         return $template;
     }
