@@ -1,6 +1,11 @@
 
 #CHANGELOG#
 
+Ver 3.0.110 [2021-06-15]:
+-------------------------------
+  - Added cms to dashboareds
+
+
 Ver 3.0.108 [2021-06-04]:
 -------------------------------
   - added secondOpinion field and user to case
