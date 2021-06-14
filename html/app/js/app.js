@@ -3,7 +3,13 @@
 jQuery(function($) {
 
   //
-  project_core.initTinymce();
+  if (config.mceOpts !== undefined) {
+    console.log(config);
+    project_core.initTinymce(config.mceOpts);
+  } else {
+    project_core.initTinymce();
+  }
+
   project_core.initCodemirror();
 
   if ($.fn.tkNotify !== undefined) {

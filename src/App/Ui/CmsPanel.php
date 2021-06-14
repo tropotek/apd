@@ -80,9 +80,20 @@ class CmsPanel extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayIn
 
         if ($this->getContent()) {
             $template->appendHtml('news-content', $this->getContent());
+            $template->appendHtml('textarea', $this->getContent());
+            $template->setAttr('textarea', 'data-elfinder-path', $this->getConfig()->getInstitution()->getDataPath().'/cms-dash');
         }
 
         $js = <<<JS
+config.mceOpts = {
+  plugins: ['save lists advlist autolink link image media code'],
+  toolbar1: 'save | bold italic underline strikethrough | alignleft aligncenter alignright | bullist numlist ' +
+          '| link unlink image media | removeformat code',
+  toolbar2 : '',
+  save_onsavecallback: function () { 
+    $('div.cms-news a.tk-save').trigger('click');
+  }
+};
 jQuery(function ($) {
   
   $('.cms-news').each(function () {
@@ -90,13 +101,15 @@ jQuery(function ($) {
     var contentEl = panel.find('div.news-content');
     var editBtn = panel.find('a.tk-edit');
     var saveBtn = panel.find('a.tk-save');
-    var mceEl =  $('<textarea class="form-control"></textarea>');
+    var mceEl =  $('#news-content-form textarea');
     saveBtn.hide();
+    $('#news-content-form').hide();
     
     function cmsSave() {
       var html = tinymce.activeEditor.getContent();
       editBtn.show();
       saveBtn.hide();
+      $('#news-content-form').hide();
       $.get(document.location, {
           cmsSave: html,
           crumb_ignore: 'crumb_ignore',
@@ -109,31 +122,15 @@ jQuery(function ($) {
     editBtn.on('click', function () {
       editBtn.hide();
       saveBtn.show();
+      $('#news-content-form').show();
       var html = contentEl.html();
-      contentEl.empty().append(mceEl.html(html));
-      // Initialize
-      tinymce.init({
-        selector: '#news-content textarea',
-        themes: 'modern',
-        height: 300,
-        plugins: ['save lists advlist autolink link image media code'],
-        toolbar1: 'save | bold italic underline strikethrough | alignleft aligncenter alignright | bullist numlist ' +
-          '| link unlink image media | removeformat code',
-        toolbar2: '',
-        toolbar3: '',
-        //menubar: false,
-        save_onsavecallback: function () { 
-          cmsSave();
-        }
-      });
-      // TODO: show mce textarea with save option enabled (or add an event)
+      contentEl.empty().append(mceEl.find('textarea').html(html));
     });
     saveBtn.on('click', function () {
       cmsSave();
     });
     
   });
-  
   
 });
 JS;
@@ -160,6 +157,7 @@ JS;
         <a href="#" class="btn float-left tk-save"><i class="fa fa-save"></i></a>
       </div>
       <div id="news-content" class="news-content" var="news-content"></div>
+      <form id="news-content-form"><textarea class="form-control mce-min" data-elfinder-path="" var="textarea"></textarea></form>
     </div>
   </div>
 </div>
