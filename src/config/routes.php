@@ -50,7 +50,7 @@ $routes->add('staff-dashboard-base', Route::create('/staff/', 'App\Controller\St
 $routes->add('staff-subject-dashboard', Route::create('/staff/{subjectCode}/index.html', 'App\Controller\Staff\SubjectDashboard::doDefault'));
 $routes->add('staff-institution-edit', Route::create('/staff/settings.html', 'App\Controller\Institution\Edit::doDefault'));
 
-
+$routes->add('staff-roster', Route::create('/staff/roster.html', 'App\Controller\Staff\Roster::doDefault'));
 
 $routes->add('cassette-manager', Route::create('/staff/cassetteManager.html', 'App\Controller\Cassette\Manager::doDefault'));
 $routes->add('cassette-edit', Route::create('/staff/cassetteEdit.html', 'App\Controller\Cassette\Edit::doDefault'));

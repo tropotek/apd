@@ -41,8 +41,9 @@ class Dashboard extends \Uni\Controller\AdminIface
      */
     public function doDefault(Request $request)
     {
-        $this->cmsPanel = CmsPanel::create();
-        $this->cmsPanel->doDefault($request);
+        $this->cmsPanel = CmsPanel::create('Staff News', 'fa fa-newspaper-o', 'inst.cms.dashnews');
+//        $this->cmsPanel = CmsPanel::create();
+//        $this->cmsPanel->doDefault($request);
 
         $this->caseTable = \App\Table\PathCase::create();
         $this->caseTable->setEditUrl(\Bs\Uri::createHomeUrl('/pathCaseEdit.html'));

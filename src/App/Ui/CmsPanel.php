@@ -5,6 +5,7 @@ use Dom\Renderer\Renderer;
 use Dom\Template;
 use Tk\ConfigTrait;
 use Tk\Request;
+use Tk\Str;
 
 
 /**
@@ -16,22 +17,29 @@ class CmsPanel extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayIn
 {
     use ConfigTrait;
 
-    const CONTENT_KEY = 'inst.dash.content';
+    protected $title = 'News';
+
+    protected $icon = 'fa-newspaper-o';
+
+    protected $contentKey = 'inst.dash.content';
 
 
     /**
      * CmsPanel constructor.
      */
-    public function __construct()
+    public function __construct($title, $icon, $contentKey)
     {
+        $this->title = $title;
+        $this->icon = $icon;
+        $this->contentKey = $contentKey;
     }
 
     /**
      * @return static
      */
-    public static function create()
+    public static function create($title, $icon, $contentKey)
     {
-        $obj = new static();
+        $obj = new static($title, $icon, $contentKey);
         return $obj;
     }
 
@@ -41,6 +49,7 @@ class CmsPanel extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayIn
     public function doDefault(Request $request)
     {
         if ($request->has('cmsSave')) {
+            //vd($request->all());
             $this->setContent($request->get('cmsSave'));
         }
 
@@ -52,7 +61,7 @@ class CmsPanel extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayIn
     public function getContent()
     {
         $data = $this->getConfig()->getInstitution()->getData();
-        return $data->get(self::CONTENT_KEY, '');
+        return $data->get($this->contentKey, '');
     }
 
     /**
@@ -62,7 +71,7 @@ class CmsPanel extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayIn
     public function setContent($content)
     {
         $data = $this->getConfig()->getInstitution()->getData();
-        $data->set(self::CONTENT_KEY, $content);
+        $data->set($this->contentKey, $content);
         $data->save();
         return $this;
     }
@@ -75,10 +84,16 @@ class CmsPanel extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayIn
     {
         $template = $this->getTemplate();
 
+        $template->setAttr('textarea', 'data-content-key', $this->contentKey);
+        $template->setAttr('textarea', 'data-elfinder-path', $this->getConfig()->getInstitution()->getDataPath().'/cms-dash');
+        $template->setAttr('panel', 'data-panel-title', $this->title);
+        $template->setAttr('panel', 'data-panel-icon', $this->icon);
+        $cssClass = 'cms-' . Str::toCamelCase($this->title);
+        $template->addCss('panel', $cssClass);
+
         if ($this->getContent()) {
-            $template->appendHtml('news-content', $this->getContent());
+            $template->appendHtml('cms-content', $this->getContent());
             $template->appendHtml('textarea', $this->getContent());
-            $template->setAttr('textarea', 'data-elfinder-path', $this->getConfig()->getInstitution()->getDataPath().'/cms-dash');
         }
 
         $js = <<<JS
@@ -87,44 +102,45 @@ config.mceOpts = {
   toolbar1: 'save | bold italic underline strikethrough | alignleft aligncenter alignright | bullist numlist ' +
           '| link unlink image media | removeformat code',
   toolbar2 : '',
-  save_onsavecallback: function () { 
-    $('div.cms-news a.tk-save').trigger('click');
+  save_onsavecallback: function () {
+    $(this.formElement).closest('div.cms-panel').find('a.tk-save').trigger('click');
   }
 };
 jQuery(function ($) {
   
-  $('.cms-news').each(function () {
+  $('.cms-panel').each(function () {
     var panel = $(this);
-    var contentEl = panel.find('div.news-content');
+    var contentEl = panel.find('div.cms-content');
     var editBtn = panel.find('a.tk-edit');
     var saveBtn = panel.find('a.tk-save');
-    var mceEl =  $('#news-content-form textarea');
+    var form = panel.find('form.cms-content-form');
+    var el = form.find('textarea');   // textarea
     saveBtn.hide();
-    $('#news-content-form').hide();
+    form.hide();
     
-    function cmsSave() {
-      var html = tinymce.activeEditor.getContent();
+    function cmsSave(textarea, html) {
       editBtn.show();
       saveBtn.hide();
-      $('#news-content-form').hide();
+      form.hide();  // textarea
       $.get(document.location, {
           cmsSave: html,
           crumb_ignore: 'crumb_ignore',
-          nolog: 'nolog'
+          key: el.data('contentKey'),
+          //nolog: 'nolog'
       }, function (html) { }, 'html');
-      tinymce.remove('#news-content textarea');
-      contentEl.empty().html(html);
+      contentEl.empty().html(html).show();
     }
     
     editBtn.on('click', function () {
       editBtn.hide();
       saveBtn.show();
-      $('#news-content-form').show();
+      form.show();
       var html = contentEl.html();
-      contentEl.empty().append(mceEl.find('textarea').html(html));
+      contentEl.hide();
+      el.html(html);
     });
     saveBtn.on('click', function () {
-      cmsSave();
+      cmsSave(el, tinymce.activeEditor.getContent());
     });
     
   });
@@ -146,13 +162,13 @@ JS;
         $xhtml = <<<HTML
 <div class="row">
   <div class="col-12">
-    <div class="tk-panel cms-news" data-panel-title="News" data-panel-icon="fa fa-newspaper-o" var="news">
+    <div class="tk-panel cms-panel" data-panel-title="News" data-panel-icon="fa fa-newspaper-o" var="panel">
       <div class="tk-panel-title-right icon-box">
         <a href="#" class="btn float-left tk-edit"><i class="fa fa-edit"></i></a>
         <a href="#" class="btn float-left tk-save"><i class="fa fa-save"></i></a>
       </div>
-      <div id="news-content" class="news-content" var="news-content"></div>
-      <form id="news-content-form"><textarea class="form-control mce-min" data-elfinder-path="" var="textarea"></textarea></form>
+      <div class="cms-content" var="cms-content"></div>
+      <form class="cms-content-form"><textarea class="form-control mce-min cms-textarea" data-elfinder-path="" var="textarea"></textarea></form>
     </div>
   </div>
 </div>

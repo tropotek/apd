@@ -580,16 +580,16 @@
         },
         {
             "name": "phpmailer/phpmailer",
-            "version": "v6.4.1",
+            "version": "v6.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPMailer/PHPMailer.git",
-                "reference": "9256f12d8fb0cd0500f93b19e18c356906cbed3d"
+                "reference": "a5b5c43e50b7fba655f793ad27303cd74c57363c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/9256f12d8fb0cd0500f93b19e18c356906cbed3d",
-                "reference": "9256f12d8fb0cd0500f93b19e18c356906cbed3d",
+                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/a5b5c43e50b7fba655f793ad27303cd74c57363c",
+                "reference": "a5b5c43e50b7fba655f793ad27303cd74c57363c",
                 "shasum": ""
             },
             "require": {
@@ -644,7 +644,7 @@
             "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
             "support": {
                 "issues": "https://github.com/PHPMailer/PHPMailer/issues",
-                "source": "https://github.com/PHPMailer/PHPMailer/tree/v6.4.1"
+                "source": "https://github.com/PHPMailer/PHPMailer/tree/v6.5.0"
             },
             "funding": [
                 {
@@ -652,7 +652,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-04-29T12:25:04+00:00"
+            "time": "2021-06-16T14:33:43+00:00"
         },
         {
             "name": "psr/cache",
@@ -2167,12 +2167,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-auth.git",
-                "reference": "022c520c493171a018d4b40dff1b75696f595feb"
+                "reference": "d28ca28a3e4092d752a76fac992b1e39a5041b18"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-auth/zipball/022c520c493171a018d4b40dff1b75696f595feb",
-                "reference": "022c520c493171a018d4b40dff1b75696f595feb",
+                "url": "https://api.github.com/repos/tropotek/tk-auth/zipball/d28ca28a3e4092d752a76fac992b1e39a5041b18",
+                "reference": "d28ca28a3e4092d752a76fac992b1e39a5041b18",
                 "shasum": ""
             },
             "require": {
@@ -2209,6 +2209,12 @@
                 "issues": "https://github.com/tropotek/tk-auth/issues",
                 "source": "https://github.com/tropotek/tk-auth/tree/3.0"
             },
+            "funding": [
+                {
+                    "url": "https://www.paypal.me/tropotek",
+                    "type": "Paypal"
+                }
+            ],
             "time": "2019-04-09T00:00:00+00:00"
         },
         {
@@ -2217,12 +2223,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-base.git",
-                "reference": "319240057443864f2f3d804b638dedce6a37f586"
+                "reference": "40445df52c2c4b43d522108fef6c4d8fb350b614"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/319240057443864f2f3d804b638dedce6a37f586",
-                "reference": "319240057443864f2f3d804b638dedce6a37f586",
+                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/40445df52c2c4b43d522108fef6c4d8fb350b614",
+                "reference": "40445df52c2c4b43d522108fef6c4d8fb350b614",
                 "shasum": ""
             },
             "require": {
@@ -2272,6 +2278,12 @@
                 "issues": "https://github.com/tropotek/tk-base/issues",
                 "source": "https://github.com/tropotek/tk-base/tree/3.2"
             },
+            "funding": [
+                {
+                    "url": "https://www.paypal.me/tropotek",
+                    "type": "Paypal"
+                }
+            ],
             "time": "2019-04-09T00:00:00+00:00"
         },
         {
@@ -2280,12 +2292,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-database.git",
-                "reference": "8a94d630a2062eee33b44f3bfe1e11a75cacbec2"
+                "reference": "1dae64520bfaf1d29470e54cd3f31b2fd6100df3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-database/zipball/8a94d630a2062eee33b44f3bfe1e11a75cacbec2",
-                "reference": "8a94d630a2062eee33b44f3bfe1e11a75cacbec2",
+                "url": "https://api.github.com/repos/tropotek/tk-database/zipball/1dae64520bfaf1d29470e54cd3f31b2fd6100df3",
+                "reference": "1dae64520bfaf1d29470e54cd3f31b2fd6100df3",
                 "shasum": ""
             },
             "require": {
@@ -2324,6 +2336,12 @@
                 "issues": "https://github.com/tropotek/tk-database/issues",
                 "source": "https://github.com/tropotek/tk-database/tree/3.2"
             },
+            "funding": [
+                {
+                    "url": "https://www.paypal.me/tropotek",
+                    "type": "Paypal"
+                }
+            ],
             "time": "2019-04-09T00:00:00+00:00"
         },
         {
@@ -2332,12 +2350,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-domtemplate.git",
-                "reference": "f3d3c8bc40af2b3fbbaaee4a38c54b1bf643a794"
+                "reference": "ed68519bcb68eb308d156948107acf40140349ba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-domtemplate/zipball/f3d3c8bc40af2b3fbbaaee4a38c54b1bf643a794",
-                "reference": "f3d3c8bc40af2b3fbbaaee4a38c54b1bf643a794",
+                "url": "https://api.github.com/repos/tropotek/tk-domtemplate/zipball/ed68519bcb68eb308d156948107acf40140349ba",
+                "reference": "ed68519bcb68eb308d156948107acf40140349ba",
                 "shasum": ""
             },
             "require": {
@@ -2379,6 +2397,12 @@
                 "issues": "https://github.com/tropotek/tk-domtemplate/issues",
                 "source": "https://github.com/tropotek/tk-domtemplate/tree/3.0"
             },
+            "funding": [
+                {
+                    "url": "https://www.paypal.me/tropotek",
+                    "type": "Paypal"
+                }
+            ],
             "time": "2019-04-09T00:00:00+00:00"
         },
         {
@@ -2387,12 +2411,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-form.git",
-                "reference": "9d06809545124e8e3ce45ba30b180fe3814efd02"
+                "reference": "14e1d55aa3df139dd7f6f18f0d74cedbaff6b3ee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-form/zipball/9d06809545124e8e3ce45ba30b180fe3814efd02",
-                "reference": "9d06809545124e8e3ce45ba30b180fe3814efd02",
+                "url": "https://api.github.com/repos/tropotek/tk-form/zipball/14e1d55aa3df139dd7f6f18f0d74cedbaff6b3ee",
+                "reference": "14e1d55aa3df139dd7f6f18f0d74cedbaff6b3ee",
                 "shasum": ""
             },
             "require": {
@@ -2430,6 +2454,12 @@
                 "issues": "https://github.com/tropotek/tk-form/issues",
                 "source": "https://github.com/tropotek/tk-form/tree/3.0"
             },
+            "funding": [
+                {
+                    "url": "https://www.paypal.me/tropotek",
+                    "type": "Paypal"
+                }
+            ],
             "time": "2019-04-09T00:00:00+00:00"
         },
         {
@@ -2438,12 +2468,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-framework.git",
-                "reference": "78df48b3d1eb5a4343aa2683b40456783ab92d0f"
+                "reference": "4f2b821e60cfd553a8049134476e8d41dfe9fdc3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-framework/zipball/78df48b3d1eb5a4343aa2683b40456783ab92d0f",
-                "reference": "78df48b3d1eb5a4343aa2683b40456783ab92d0f",
+                "url": "https://api.github.com/repos/tropotek/tk-framework/zipball/4f2b821e60cfd553a8049134476e8d41dfe9fdc3",
+                "reference": "4f2b821e60cfd553a8049134476e8d41dfe9fdc3",
                 "shasum": ""
             },
             "require": {
@@ -2493,6 +2523,12 @@
                 "issues": "https://github.com/tropotek/tk-framework/issues",
                 "source": "https://github.com/tropotek/tk-framework/tree/3.0"
             },
+            "funding": [
+                {
+                    "url": "https://www.paypal.me/tropotek",
+                    "type": "Paypal"
+                }
+            ],
             "time": "2019-04-09T00:00:00+00:00"
         },
         {
@@ -2501,12 +2537,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-installers.git",
-                "reference": "a84cfedb38fb67f5932ed3c8859023b40a7c4e33"
+                "reference": "795354fbc1e2c87fcba4c67eae5e276799f10708"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-installers/zipball/a84cfedb38fb67f5932ed3c8859023b40a7c4e33",
-                "reference": "a84cfedb38fb67f5932ed3c8859023b40a7c4e33",
+                "url": "https://api.github.com/repos/tropotek/tk-installers/zipball/795354fbc1e2c87fcba4c67eae5e276799f10708",
+                "reference": "795354fbc1e2c87fcba4c67eae5e276799f10708",
                 "shasum": ""
             },
             "require": {
@@ -2549,6 +2585,12 @@
                 "issues": "https://github.com/tropotek/tk-installers/issues",
                 "source": "https://github.com/tropotek/tk-installers/tree/3.0"
             },
+            "funding": [
+                {
+                    "url": "https://www.paypal.me/tropotek",
+                    "type": "Paypal"
+                }
+            ],
             "time": "2019-04-09T00:00:00+00:00"
         },
         {
@@ -2557,12 +2599,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-mail.git",
-                "reference": "27cfcdfa33c1a29305adc61c2be1114015c9a776"
+                "reference": "680a6cb973f53d8c94fda16bc5dccb64f69ed3ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-mail/zipball/27cfcdfa33c1a29305adc61c2be1114015c9a776",
-                "reference": "27cfcdfa33c1a29305adc61c2be1114015c9a776",
+                "url": "https://api.github.com/repos/tropotek/tk-mail/zipball/680a6cb973f53d8c94fda16bc5dccb64f69ed3ff",
+                "reference": "680a6cb973f53d8c94fda16bc5dccb64f69ed3ff",
                 "shasum": ""
             },
             "require": {
@@ -2600,6 +2642,12 @@
                 "issues": "https://github.com/tropotek/tk-mail/issues",
                 "source": "https://github.com/tropotek/tk-mail/tree/3.0"
             },
+            "funding": [
+                {
+                    "url": "https://www.paypal.me/tropotek",
+                    "type": "Paypal"
+                }
+            ],
             "time": "2019-04-09T00:00:00+00:00"
         },
         {
@@ -2608,12 +2656,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-map.git",
-                "reference": "aeb0c6ae28219da3e4dce8a162c68db46f6621f3"
+                "reference": "38cd4250a2f5c461fe9984e8f140e91d86804e3c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-map/zipball/aeb0c6ae28219da3e4dce8a162c68db46f6621f3",
-                "reference": "aeb0c6ae28219da3e4dce8a162c68db46f6621f3",
+                "url": "https://api.github.com/repos/tropotek/tk-map/zipball/38cd4250a2f5c461fe9984e8f140e91d86804e3c",
+                "reference": "38cd4250a2f5c461fe9984e8f140e91d86804e3c",
                 "shasum": ""
             },
             "type": "library",
@@ -2647,6 +2695,12 @@
                 "issues": "https://github.com/tropotek/tk-map/issues",
                 "source": "https://github.com/tropotek/tk-map/tree/3.0"
             },
+            "funding": [
+                {
+                    "url": "https://www.paypal.me/tropotek",
+                    "type": "Paypal"
+                }
+            ],
             "time": "2017-09-27T00:00:00+00:00"
         },
         {
@@ -2655,12 +2709,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-mvc.git",
-                "reference": "aab62d4c589658cc01729c3e2b19edba2ccf1e17"
+                "reference": "afee8167a8bd0ede8fdf6bf4a62df38d02ae3c9a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-mvc/zipball/aab62d4c589658cc01729c3e2b19edba2ccf1e17",
-                "reference": "aab62d4c589658cc01729c3e2b19edba2ccf1e17",
+                "url": "https://api.github.com/repos/tropotek/tk-mvc/zipball/afee8167a8bd0ede8fdf6bf4a62df38d02ae3c9a",
+                "reference": "afee8167a8bd0ede8fdf6bf4a62df38d02ae3c9a",
                 "shasum": ""
             },
             "require": {
@@ -2703,6 +2757,12 @@
                 "issues": "https://github.com/tropotek/tk-mvc/issues",
                 "source": "https://github.com/tropotek/tk-mvc/tree/3.2"
             },
+            "funding": [
+                {
+                    "url": "https://www.paypal.me/tropotek",
+                    "type": "Paypal"
+                }
+            ],
             "time": "2019-04-09T00:00:00+00:00"
         },
         {
@@ -2711,12 +2771,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-plugin.git",
-                "reference": "70120c0ef14ae7a2825067da9e92aa8a8fa1b3e2"
+                "reference": "af44f0aa37719f631f6bdc6c8ece44ef49dd643b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-plugin/zipball/70120c0ef14ae7a2825067da9e92aa8a8fa1b3e2",
-                "reference": "70120c0ef14ae7a2825067da9e92aa8a8fa1b3e2",
+                "url": "https://api.github.com/repos/tropotek/tk-plugin/zipball/af44f0aa37719f631f6bdc6c8ece44ef49dd643b",
+                "reference": "af44f0aa37719f631f6bdc6c8ece44ef49dd643b",
                 "shasum": ""
             },
             "require": {
@@ -2753,6 +2813,12 @@
                 "issues": "https://github.com/tropotek/tk-plugin/issues",
                 "source": "https://github.com/tropotek/tk-plugin/tree/3.2"
             },
+            "funding": [
+                {
+                    "url": "https://www.paypal.me/tropotek",
+                    "type": "Paypal"
+                }
+            ],
             "time": "2019-04-09T00:00:00+00:00"
         },
         {
@@ -2761,12 +2827,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-table.git",
-                "reference": "419e16a57ef1b344b565c8c0e17b5b1f68abb8f8"
+                "reference": "4ab06d8af1269e72d358dcaef487619d315c73b5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-table/zipball/419e16a57ef1b344b565c8c0e17b5b1f68abb8f8",
-                "reference": "419e16a57ef1b344b565c8c0e17b5b1f68abb8f8",
+                "url": "https://api.github.com/repos/tropotek/tk-table/zipball/4ab06d8af1269e72d358dcaef487619d315c73b5",
+                "reference": "4ab06d8af1269e72d358dcaef487619d315c73b5",
                 "shasum": ""
             },
             "require": {
@@ -2803,6 +2869,12 @@
                 "issues": "https://github.com/tropotek/tk-table/issues",
                 "source": "https://github.com/tropotek/tk-table/tree/3.0"
             },
+            "funding": [
+                {
+                    "url": "https://www.paypal.me/tropotek",
+                    "type": "Paypal"
+                }
+            ],
             "time": "2020-11-12T00:00:00+00:00"
         },
         {
@@ -2811,12 +2883,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-ui.git",
-                "reference": "c9bc51fff22b55533eaea233179f8ce03ae9f166"
+                "reference": "635db81df8c5827e97799401a63e4f82619de406"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-ui/zipball/c9bc51fff22b55533eaea233179f8ce03ae9f166",
-                "reference": "c9bc51fff22b55533eaea233179f8ce03ae9f166",
+                "url": "https://api.github.com/repos/tropotek/tk-ui/zipball/635db81df8c5827e97799401a63e4f82619de406",
+                "reference": "635db81df8c5827e97799401a63e4f82619de406",
                 "shasum": ""
             },
             "require": {
@@ -2854,6 +2926,12 @@
                 "issues": "https://github.com/tropotek/tk-ui/issues",
                 "source": "https://github.com/tropotek/tk-ui/tree/3.0"
             },
+            "funding": [
+                {
+                    "url": "https://www.paypal.me/tropotek",
+                    "type": "Paypal"
+                }
+            ],
             "time": "2019-04-09T00:00:00+00:00"
         },
         {
@@ -2862,12 +2940,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-uni.git",
-                "reference": "f6276524dfd13b728c61fc727ca7e547f016017e"
+                "reference": "7e072d44337ca353740d1d7e2776b019cf698457"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-uni/zipball/f6276524dfd13b728c61fc727ca7e547f016017e",
-                "reference": "f6276524dfd13b728c61fc727ca7e547f016017e",
+                "url": "https://api.github.com/repos/tropotek/tk-uni/zipball/7e072d44337ca353740d1d7e2776b019cf698457",
+                "reference": "7e072d44337ca353740d1d7e2776b019cf698457",
                 "shasum": ""
             },
             "require": {
@@ -2905,6 +2983,12 @@
                 "issues": "https://github.com/tropotek/tk-uni/issues",
                 "source": "https://github.com/tropotek/tk-uni/tree/3.4"
             },
+            "funding": [
+                {
+                    "url": "https://www.paypal.me/tropotek",
+                    "type": "Paypal"
+                }
+            ],
             "time": "2020-02-18T00:00:00+00:00"
         },
         {

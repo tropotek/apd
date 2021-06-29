@@ -4,7 +4,7 @@ jQuery(function($) {
 
   //
   if (config.mceOpts !== undefined) {
-    console.log(config);
+    //console.log(config);
     project_core.initTinymce(config.mceOpts);
   } else {
     project_core.initTinymce();
