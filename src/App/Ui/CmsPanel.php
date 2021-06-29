@@ -127,7 +127,7 @@ jQuery(function ($) {
           cmsSave: html,
           crumb_ignore: 'crumb_ignore',
           key: el.data('contentKey'),
-          //nolog: 'nolog'
+          nolog: 'nolog'
       }, function (html) { }, 'html');
       contentEl.empty().html(html).show();
     }
