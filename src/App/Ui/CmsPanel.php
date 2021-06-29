@@ -17,10 +17,19 @@ class CmsPanel extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayIn
 {
     use ConfigTrait;
 
+    /**
+     * @var string
+     */
     protected $title = 'News';
 
+    /**
+     * @var string
+     */
     protected $icon = 'fa-newspaper-o';
 
+    /**
+     * @var string
+     */
     protected $contentKey = 'inst.dash.content';
 
 
