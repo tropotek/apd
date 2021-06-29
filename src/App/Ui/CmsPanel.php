@@ -97,6 +97,7 @@ class CmsPanel extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayIn
         }
 
         $js = <<<JS
+// TODO: we need a way to fix this so it only applies to the selected elements, may change the selector class??? 
 config.mceOpts = {
   plugins: ['save lists advlist autolink link image media code'],
   toolbar1: 'save | bold italic underline strikethrough | alignleft aligncenter alignright | bullist numlist ' +
