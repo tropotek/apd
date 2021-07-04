@@ -110,6 +110,7 @@ class PathCase extends \Bs\TableIface
         $this->appendCell(new Cell\Text('origin'));
         $this->appendCell(new Cell\Text('colour'));
         $this->appendCell(new Cell\Text('weight'));
+        $this->appendCell(new Cell\Text('size'));
         $this->appendCell(new Cell\Date('dob'));
         $this->appendCell(new Cell\Date('dod'));
         $this->appendCell(new Cell\Text('age'))
@@ -203,6 +204,14 @@ JS;
         // Species Filter
         $list = AnimalTypeMap::create()->findFiltered(['institutionId' => $this->getConfig()->getInstitutionId(), 'parent_id' => 0]);
         $this->appendFilter(Field\Select::createSelect('animalTypeId', $list)->prependOption('-- Animal Type --', ''));
+
+        $list = array(
+            'Extra-small < 1kg' => 'Extra-small < 1kg',
+            'Small < 10kg' => 'Small < 10kg',
+            'Medium < 50kg' => 'Medium < 50kg',
+            'Large < 200kg' => 'Large < 200kg',
+            'Extra-large > 200kg' => 'Extra-large > 200kg');
+        $this->appendFilter(Field\Select::createSelect('size', $list)->prependOption('-- Size --'));
 
         $speciesList = PathCaseMap::create()->findSpeciesList();
         $this->appendFilter(Field\Select::createSelect('species', $speciesList)->prependOption('-- Species --'));
