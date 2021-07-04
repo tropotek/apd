@@ -94,6 +94,7 @@ class PathCase extends \Bs\FormIface
         $layout->addRow('bioSamples', 'col2');
         $layout->removeRow('bioNotes', 'col');
 
+        $layout->removeRow('weight', 'col');
         $layout->removeRow('colour', 'col');
         //$layout->removeRow('origin', 'col');
 
@@ -259,6 +260,15 @@ JS;
             ->setTabGroup($tab);
         $this->appendField(new Field\Checkbox('desexed'))->setTabGroup($tab);
 
+        //$list = array('Extra-small < 1kg' => 'Extra-small < 1kg', 'Male' => 'M', 'Female' => 'F');
+        $list = array(
+            'Extra-small < 1kg' => 'Extra-small < 1kg',
+            'Small < 10kg' => 'Small < 10kg',
+            'Medium < 50kg' => 'Medium < 50kg',
+            'Large < 200kg' => 'Large < 200kg',
+            'Extra-large > 200kg' => 'Extra-large > 200kg');
+        $this->appendField(Field\Select::createSelect('size', $list))
+            ->setTabGroup($tab)->setValue('Small < 10kg');
         $this->appendField(new Field\Input('weight'))->setTabGroup($tab);
         $this->appendField(new Field\Input('colour'))->setTabGroup($tab);
         //$this->appendField(new Field\Input('origin'))->setTabGroup($tab);
