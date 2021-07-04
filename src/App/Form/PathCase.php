@@ -262,13 +262,14 @@ JS;
 
         //$list = array('Extra-small < 1kg' => 'Extra-small < 1kg', 'Male' => 'M', 'Female' => 'F');
         $list = array(
+            '-- N/A --' => '',
             'Extra-small < 1kg' => 'Extra-small < 1kg',
             'Small < 10kg' => 'Small < 10kg',
             'Medium < 50kg' => 'Medium < 50kg',
             'Large < 200kg' => 'Large < 200kg',
             'Extra-large > 200kg' => 'Extra-large > 200kg');
         $this->appendField(Field\Select::createSelect('size', $list))
-            ->setTabGroup($tab)->setValue('Small < 10kg');
+            ->setTabGroup($tab); //->setValue('Small < 10kg');
         $this->appendField(new Field\Input('weight'))->setTabGroup($tab);
         $this->appendField(new Field\Input('colour'))->setTabGroup($tab);
         //$this->appendField(new Field\Input('origin'))->setTabGroup($tab);

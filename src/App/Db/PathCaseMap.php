@@ -65,6 +65,7 @@ class PathCaseMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Text('origin'));
             $this->dbMap->addPropertyMap(new Db\Text('colour'));
             $this->dbMap->addPropertyMap(new Db\Text('weight'));
+            $this->dbMap->addPropertyMap(new Db\Text('size'));
             $this->dbMap->addPropertyMap(new Db\Date('dob'));
             $this->dbMap->addPropertyMap(new Db\Date('dod'));
             $this->dbMap->addPropertyMap(new Db\Boolean('euthanised'));
@@ -139,6 +140,7 @@ class PathCaseMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Text('origin'));
             $this->formMap->addPropertyMap(new Form\Text('colour'));
             $this->formMap->addPropertyMap(new Form\Text('weight'));
+            $this->formMap->addPropertyMap(new Form\Text('size'));
             $this->formMap->addPropertyMap(new Form\Date('dob'));
             $this->formMap->addPropertyMap(new Form\Date('dod'));
             $this->formMap->addPropertyMap(new Form\Boolean('euthanised'));
@@ -393,6 +395,9 @@ SQL;
         }
         if (!empty($filter['weight'])) {
             $filter->appendWhere('a.weight = %s AND ', $this->quote($filter['weight']));
+        }
+        if (!empty($filter['size'])) {
+            $filter->appendWhere('a.size = %s AND ', $this->quote($filter['size']));
         }
         if (!empty($filter['euthanised'])) {
             $filter->appendWhere('a.euthanised = %s AND ', (int)$filter['euthanised']);

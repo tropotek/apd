@@ -306,6 +306,11 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public $weight = '';
 
     /**
+     * @var string
+     */
+    public $size = '';
+
+    /**
      * Date of birth
      * @var \DateTime
      */
@@ -1067,6 +1072,24 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public function getWeight() : string
     {
         return $this->weight;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSize()
+    {
+        return $this->size;
+    }
+
+    /**
+     * @param string $size
+     * @return PathCase
+     */
+    public function setSize($size): PathCase
+    {
+        $this->size = $size;
+        return $this;
     }
 
     /**
