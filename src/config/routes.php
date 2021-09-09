@@ -52,6 +52,8 @@ $routes->add('staff-institution-edit', Route::create('/staff/settings.html', 'Ap
 
 $routes->add('staff-roster', Route::create('/staff/roster.html', 'App\Controller\Staff\Roster::doDefault'));
 
+$routes->add('staff-protocols', Route::create('/staff/protocols.html', 'App\Controller\Staff\Protocols::doDefault'));
+
 $routes->add('cassette-manager', Route::create('/staff/cassetteManager.html', 'App\Controller\Cassette\Manager::doDefault'));
 $routes->add('cassette-edit', Route::create('/staff/cassetteEdit.html', 'App\Controller\Cassette\Edit::doDefault'));
 

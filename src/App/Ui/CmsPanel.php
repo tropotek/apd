@@ -1,6 +1,7 @@
 <?php
 namespace App\Ui;
 
+use App\Db\Permission;
 use Dom\Renderer\Renderer;
 use Dom\Template;
 use Tk\ConfigTrait;
@@ -100,6 +101,10 @@ class CmsPanel extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayIn
         $cssClass = 'cms-' . Str::toCamelCase($this->title);
         $template->addCss('panel', $cssClass);
 
+        if ($this->getAuthUser()->hasPermission(Permission::MANAGE_SITE)) {
+            $template->setVisible('edit');
+        }
+
         if ($this->getContent()) {
             $template->appendHtml('cms-content', $this->getContent());
             $template->appendHtml('textarea', $this->getContent());
@@ -173,7 +178,7 @@ JS;
 <div class="row">
   <div class="col-12">
     <div class="tk-panel cms-panel" data-panel-title="News" data-panel-icon="fa fa-newspaper-o" var="panel">
-      <div class="tk-panel-title-right icon-box">
+      <div class="tk-panel-title-right icon-box" choice="edit">
         <a href="#" class="btn float-left tk-edit"><i class="fa fa-edit"></i></a>
         <a href="#" class="btn float-left tk-save"><i class="fa fa-save"></i></a>
       </div>
