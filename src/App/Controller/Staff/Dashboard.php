@@ -2,7 +2,6 @@
 namespace App\Controller\Staff;
 
 use App\Ui\CmsPanel;
-use Tk\Db\Tool;
 use Tk\Request;
 use Dom\Template;
 
@@ -64,12 +63,12 @@ class Dashboard extends \Uni\Controller\AdminIface
             ->setValue([\App\Db\PathCase::STATUS_PENDING,\App\Db\PathCase::STATUS_EXAMINED,
                 \App\Db\PathCase::STATUS_REPORTED,\App\Db\PathCase::STATUS_FROZEN_STORAGE,\App\Db\PathCase::STATUS_HOLD]);
         $filter = array(
-            'userId' => $this->getAuthUser()->getId(),
             'pathologistId' => $this->getAuthUser()->getId(),
-            'user_pathologist_or' => true   // Set to find created cases and assigned cases
+            //'userId' => $this->getAuthUser()->getId(),
+            // TODO: We may need another table for Assigned cases.
+            //'user_pathologist_or' => true   // Set to find created cases and assigned cases
         );
         $this->caseTable->setList($this->caseTable->findList($filter, $this->caseTable->getTool('created DESC')));
-
 
         $this->requestTable = \App\Table\Request::create();
         $this->requestTable->setEditUrl(\Bs\Uri::createHomeUrl('/requestEdit.html'));
