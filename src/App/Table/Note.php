@@ -51,7 +51,9 @@ class Note extends \Uni\TableIface
 
 
         //$this->appendCell(new Cell\Checkbox('id'));
-        $this->appendCell($actionsCell);
+        if ($actionsCell->hasButtons())
+            $this->appendCell($actionsCell);
+        
         $this->appendCell(new Cell\Text('message'))->addCss('key')->addOnCellHtml(function ($cell, $obj, $value) {
             /** @var Cell\Text $cell */
             /** @var \App\Db\Note $obj */

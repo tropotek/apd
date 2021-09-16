@@ -120,9 +120,9 @@ class Note extends Model implements ValidInterface
      */
     public function canDelete($user)
     {
-        if ($user->getId() == $this->userId) {
-            return true;
-        }
+//        if ($user->getId() == $this->userId) {
+//            return true;
+//        }
         if ($user->isAdmin() || $user->isClient()) {
             return true;
         }
