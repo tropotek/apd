@@ -25,6 +25,7 @@ class Note extends \Uni\TableIface
 }');
 
         $actionsCell = new \Tk\Table\Cell\Actions();
+        $actionsCell->setLabel('');
         $actionsCell->addButton(\Tk\Table\Cell\ActionButton::create('Remove', \Tk\Uri::create(), 'fa fa-trash', 'btn-danger tk-remove'))
             ->addOnShow(function ($cell, $obj, $button) {
                 /* @var $obj \App\Db\Note */

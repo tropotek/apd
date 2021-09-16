@@ -183,7 +183,7 @@ JS;
         <a href="#" class="btn float-left tk-save"><i class="fa fa-save"></i></a>
       </div>
       <div class="cms-content" var="cms-content"></div>
-      <form class="cms-content-form"><textarea class="form-control mce-min cms-textarea" data-elfinder-path="" var="textarea"></textarea></form>
+      <form class="cms-content-form"><textarea class="form-control mce cms-textarea" data-elfinder-path="" var="textarea"></textarea></form>
     </div>
   </div>
 </div>
