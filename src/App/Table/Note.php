@@ -20,6 +20,9 @@ class Note extends \Uni\TableIface
     public function init()
     {
         $this->getRenderer()->enableFooter(false);
+        $this->getRenderer()->getTemplate()->appendCss('.tk-table td {
+    white-space: normal;
+}');
 
         $actionsCell = new \Tk\Table\Cell\Actions();
         $actionsCell->addButton(\Tk\Table\Cell\ActionButton::create('Remove', \Tk\Uri::create(), 'fa fa-trash', 'btn-danger tk-remove'))
@@ -53,7 +56,7 @@ class Note extends \Uni\TableIface
         //$this->appendCell(new Cell\Checkbox('id'));
         if ($actionsCell->hasButtons())
             $this->appendCell($actionsCell);
-        
+
         $this->appendCell(new Cell\Text('message'))->addCss('key')->addOnCellHtml(function ($cell, $obj, $value) {
             /** @var Cell\Text $cell */
             /** @var \App\Db\Note $obj */
