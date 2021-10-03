@@ -21,7 +21,7 @@ class Protocols extends \Uni\Controller\AdminIface
      */
     public function __construct()
     {
-        $this->setPageTitle('Sampling Protocols');
+        $this->setPageTitle('Tissue Sample Requests');
         //$this->getCrumbs()->setVisible(false);
         //$this->getActionPanel()->setVisible(false);
         //$this->getConfig()->unsetSubject();
@@ -34,7 +34,7 @@ class Protocols extends \Uni\Controller\AdminIface
      */
     public function doDefault(Request $request)
     {
-        $this->cmsPanel = CmsPanel::create('Sampling Protocols', 'fa fa-flask', 'inst.cms.protocols');
+        $this->cmsPanel = CmsPanel::create('Tissue Sample Requests', 'fa fa-flask', 'inst.cms.protocols');
         $this->cmsPanel->doDefault($request);
 
     }
