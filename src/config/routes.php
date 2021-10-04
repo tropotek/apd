@@ -52,6 +52,7 @@ $routes->add('staff-institution-edit', Route::create('/staff/settings.html', 'Ap
 
 $routes->add('staff-roster', Route::create('/staff/roster.html', 'App\Controller\Staff\Roster::doDefault'));
 $routes->add('staff-protocols', Route::create('/staff/protocols.html', 'App\Controller\Staff\Protocols::doDefault'));
+$routes->add('staff-sampling', Route::create('/staff/sampling.html', 'App\Controller\Staff\Sampling::doDefault'));
 $routes->add('staff-specimens', Route::create('/staff/specimens.html', 'App\Controller\Staff\Specimens::doDefault'));
 
 $routes->add('cassette-manager', Route::create('/staff/cassetteManager.html', 'App\Controller\Cassette\Manager::doDefault'));

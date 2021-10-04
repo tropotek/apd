@@ -11,7 +11,7 @@ use Dom\Template;
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
  */
-class Protocols extends \Uni\Controller\AdminIface
+class Sampling extends \Uni\Controller\AdminIface
 {
     protected $cmsPanel = null;
 
@@ -21,7 +21,7 @@ class Protocols extends \Uni\Controller\AdminIface
      */
     public function __construct()
     {
-        $this->setPageTitle('Sampling Protocols');
+        $this->setPageTitle('Tissue Sample Requests');
         //$this->getCrumbs()->setVisible(false);
         //$this->getActionPanel()->setVisible(false);
         //$this->getConfig()->unsetSubject();
@@ -34,7 +34,7 @@ class Protocols extends \Uni\Controller\AdminIface
      */
     public function doDefault(Request $request)
     {
-        $this->cmsPanel = CmsPanel::create('Sampling Protocols', 'fa fa-flask', 'inst.cms.protocols');
+        $this->cmsPanel = CmsPanel::create('Tissue Sample Requests', 'fa fa-heartbeat', 'inst.cms.sampling');
         $this->cmsPanel->doDefault($request);
 
     }
