@@ -586,7 +586,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
             return $this->getPathologyId();
 
         $y = date('y');
-        $str = '001-'.$y;
+        $str = '1-'.$y;
         $last = PathCaseMap::create()->findFiltered(array(
             'institutionId' => $this->getInstitutionId()
         ), Tool::create(' b.path_year DESC, b.path_no DESC', 1))->current();
@@ -595,7 +595,8 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
             $i = 1;
             do {
                 if (count($pidArr) >= 2 && (int)$pidArr[1] && $y == (int)$pidArr[1]) {
-                    $str = sprintf('%03d-%s', (int)$pidArr[0] + $i, $y);
+                    //$str = sprintf('%03d-%s', (int)$pidArr[0] + $i, $y);
+                    $str = sprintf('%d-%s', (int)$pidArr[0] + $i, $y);
                 }
                 $found = PathCaseMap::create()->findFiltered(array(
                     'institutionId' => $this->getInstitutionId(),
