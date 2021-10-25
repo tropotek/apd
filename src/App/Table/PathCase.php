@@ -39,7 +39,7 @@ class PathCase extends \Bs\TableIface
         $this->appendCell(new Cell\Checkbox('id'));
         //$this->resetSession();
         $this->appendCell(new Cell\Text('pathologyId'))->setLabel('Pathology #')
-            ->addCss('key')->setUrl($this->getEditUrl());
+            ->addCss('key')->setOrderProperty('s.pathIdx')->setUrl($this->getEditUrl());
 
         $this->appendCell(new Cell\Text('pathologistId'))->setLabel('Pathologist')
             ->addOnPropertyValue(function (Cell\Text $cell, \App\Db\PathCase $obj, $value) {

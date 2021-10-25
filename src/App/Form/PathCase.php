@@ -360,8 +360,8 @@ JS;
         $this->appendField(new Field\Textarea('ancillaryTesting'))
             ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
 
-        $this->appendField(new Field\Textarea('morphologicalDiagnosis'))
-            ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
+            $this->appendField(new Field\Textarea('morphologicalDiagnosis'))
+                ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
 
         $this->appendField(new Field\Textarea('causeOfDeath'))
             ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);

@@ -240,7 +240,7 @@ SQL;
      */
     public function makeQuery(Filter $filter)
     {
-        $filter->appendSelect(' a.*, b.age, b.age_m, b.path_year, b.path_no ');
+        $filter->appendSelect(' a.*, b.age, b.age_m, b.path_year, b.path_no, s.pathIdx ');
 
         $filter->appendFrom('%s a', $this->quoteParameter($this->getTable()));
         $filter->appendFrom(',
@@ -253,6 +253,12 @@ SQL;
                 FROM `path_case` a1
             ) b');
         $filter->appendWhere('a.id = b.id AND ');
+        $filter->appendFrom(',
+     (
+       SELECT id, CONCAT(SUBSTRING_INDEX(pathology_id, \'-\', -1), LPAD(SUBSTRING_INDEX(pathology_id, \'-\', 1), 4, \'0\')) as \'pathIdx\'
+FROM path_case
+     ) s');
+        $filter->appendWhere('a.id = s.id AND ');
 
         if (!empty($filter['keywords'])) {
             $kw = '%' . $this->escapeString($filter['keywords']) . '%';
