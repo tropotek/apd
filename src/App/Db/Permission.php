@@ -25,7 +25,7 @@ class Permission extends \Uni\Db\Permission
      *
      *
      * Technician:
-     *  - Get disposal reminder emails
+     *  - Gets disposal reminder emails
      *
      * @target staff
      */
@@ -74,7 +74,7 @@ class Permission extends \Uni\Db\Permission
                     'Manage Staff Records' => self::MANAGE_STAFF,
                     //'Manage Site Plugins' => self::MANAGE_PLUGINS,
                     'Can Masquerade' => self::CAN_MASQUERADE,
-                    //'Is Pathologist' => self::IS_PATHOLOGIST,
+                    'Is Pathologist' => self::IS_PATHOLOGIST,
                     'Is Technician' => self::IS_TECHNICIAN,
                     'Case Administration' => self::CASE_ADMIN,
                     'Case Always Edit' => self::CASE_FULL_EDIT
@@ -84,6 +84,8 @@ class Permission extends \Uni\Db\Permission
     }
 
     /**
+     * Return the default user permission when creating a user
+     *
      * @param string $type (optional) If set returns only the permissions for that user type otherwise returns all permissions
      * @return array|string[]
      */
