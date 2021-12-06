@@ -286,7 +286,7 @@ JS;
 
 
         $list  = $this->getConfig()->getUserMapper()->findFiltered(
-            array('institutionId'=> $this->getPathCase()->getInstitutionId(), 'type' => 'staff'),
+            array('institutionId'=> $this->getPathCase()->getInstitutionId(), 'permission' => Permission::IS_PATHOLOGIST, 'active' => true),
             Tool::create('nameFirst')
         );
         $this->appendField(Field\Select::createSelect('pathologistId', $list)
