@@ -124,7 +124,8 @@ class CaseReportPdf extends Pdf
 
         $template->appendText('animalName', $this->pathCase->getAnimalName());
         $template->appendText('patientNumber', $this->pathCase->getPatientNumber());
-        $template->appendText('animalType', $this->pathCase->getAnimalType()->getName());
+        if ($this->pathCase->getAnimalType())
+            $template->appendText('animalType', $this->pathCase->getAnimalType()->getName());
         $template->appendText('species', $this->pathCase->getSpecies());
         $template->appendText('breed', $this->pathCase->getBreed());
         $template->appendText('age', sprintf('%sy %sm', $this->pathCase->getAge(), $this->pathCase->getAgeMonths()));

@@ -109,7 +109,8 @@ class CaseViewPdf extends Pdf
         $template->appendText('animalName', $this->pathCase->getAnimalName());
         $template->appendText('patientNumber', $this->pathCase->getPatientNumber());
         $template->appendText('microchip', $this->pathCase->getMicrochip());
-        $template->appendText('animalType', $this->pathCase->getAnimalType()->getName());
+        if ($this->pathCase->getAnimalType())
+            $template->appendText('animalType', $this->pathCase->getAnimalType()->getName());
 
         $template->appendText('species', $this->pathCase->getSpecies());
         $template->appendText('specimenCount', $this->pathCase->getSpecimenCount());

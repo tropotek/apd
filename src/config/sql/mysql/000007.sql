@@ -13,11 +13,12 @@ INSERT INTO user_permission (user_id, name)
 )
 ;
 
-UPDATE user SET del = 0 WHERE id = 9;
-
-TRUNCATE service_has_user;
-INSERT INTO service_has_user VALUES (40, 38);
-INSERT INTO service_has_user VALUES (40, 34);
+# only useful for fixing incorrect data, not required for system functionality
+# UPDATE user SET del = 0 WHERE id = 9;
+#
+# TRUNCATE service_has_user;
+# INSERT INTO service_has_user VALUES (40, 38);
+# INSERT INTO service_has_user VALUES (40, 34);
 
 
 
