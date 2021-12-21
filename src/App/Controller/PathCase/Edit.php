@@ -182,13 +182,14 @@ class Edit extends AdminEditIface
         );
         $this->invoiceTable->setList($this->invoiceTable->findList($filter, \Tk\Db\Tool::create('created DESC')));
 
-        $this->editLogTable = \App\Table\EditLog::create();
-        $this->editLogTable->setEditUrl(\Bs\Uri::createHomeUrl('/pathCaseEdit.html')->set('pathCaseId',$this->pathCase->getId()));
-        $this->editLogTable->init();
-        $filter = array(
-            'model' => $this->pathCase
-        );
-        $this->editLogTable->setList($this->editLogTable->findList($filter, \Tk\Db\Tool::create('created DESC', 10)));
+        // TODO re-implement this once we have a mobile friendly pager
+//        $this->editLogTable = \App\Table\EditLog::create();
+//        $this->editLogTable->setEditUrl(\Bs\Uri::createHomeUrl('/pathCaseEdit.html')->set('pathCaseId',$this->pathCase->getId()));
+//        $this->editLogTable->init();
+//        $filter = array(
+//            'model' => $this->pathCase
+//        );
+//        $this->editLogTable->setList($this->editLogTable->findList($filter, \Tk\Db\Tool::create('created DESC', 10)));
 
         $this->emailReportDialog = new EmailReport($this->pathCase);
         $this->emailReportDialog->execute();
