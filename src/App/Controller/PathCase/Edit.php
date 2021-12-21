@@ -188,7 +188,7 @@ class Edit extends AdminEditIface
         $filter = array(
             'model' => $this->pathCase
         );
-        $this->editLogTable->setList($this->editLogTable->findList($filter, \Tk\Db\Tool::create('created DESC')));
+        $this->editLogTable->setList($this->editLogTable->findList($filter, \Tk\Db\Tool::create('created DESC', 10)));
 
         $this->emailReportDialog = new EmailReport($this->pathCase);
         $this->emailReportDialog->execute();

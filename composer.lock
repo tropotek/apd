@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "53b1962090d84f02980bdfd4cd5c5fe35b54e2a6"
+                "reference": "085fb093e038ab0c4f11da732e89cdd47d7586b0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/53b1962090d84f02980bdfd4cd5c5fe35b54e2a6",
-                "reference": "53b1962090d84f02980bdfd4cd5c5fe35b54e2a6",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/085fb093e038ab0c4f11da732e89cdd47d7586b0",
+                "reference": "085fb093e038ab0c4f11da732e89cdd47d7586b0",
                 "shasum": ""
             },
             "require": {
@@ -120,20 +120,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-12-06T18:35:34+00:00"
+            "time": "2021-12-13T16:16:06+00:00"
         },
         {
             "name": "intervention/image",
-            "version": "2.7.0",
+            "version": "2.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Intervention/image.git",
-                "reference": "9a8cc99d30415ec0b3f7649e1647d03a55698545"
+                "reference": "744ebba495319501b873a4e48787759c72e3fb8c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Intervention/image/zipball/9a8cc99d30415ec0b3f7649e1647d03a55698545",
-                "reference": "9a8cc99d30415ec0b3f7649e1647d03a55698545",
+                "url": "https://api.github.com/repos/Intervention/image/zipball/744ebba495319501b873a4e48787759c72e3fb8c",
+                "reference": "744ebba495319501b873a4e48787759c72e3fb8c",
                 "shasum": ""
             },
             "require": {
@@ -192,7 +192,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Intervention/image/issues",
-                "source": "https://github.com/Intervention/image/tree/2.7.0"
+                "source": "https://github.com/Intervention/image/tree/2.7.1"
             },
             "funding": [
                 {
@@ -204,7 +204,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-10-03T14:17:12+00:00"
+            "time": "2021-12-16T16:49:26+00:00"
         },
         {
             "name": "lasserafn/php-initial-avatar-generator",
@@ -1414,12 +1414,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/contracts.git",
-                "reference": "95c7658806de1eefc3af6b5e2aadbe6f38a53cc8"
+                "reference": "64998319270ef972c008f64959359a4d0992cfcc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/contracts/zipball/95c7658806de1eefc3af6b5e2aadbe6f38a53cc8",
-                "reference": "95c7658806de1eefc3af6b5e2aadbe6f38a53cc8",
+                "url": "https://api.github.com/repos/symfony/contracts/zipball/64998319270ef972c008f64959359a4d0992cfcc",
+                "reference": "64998319270ef972c008f64959359a4d0992cfcc",
                 "shasum": ""
             },
             "require": {
@@ -1500,7 +1500,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-12-11T16:33:30+00:00"
+            "time": "2021-12-15T13:33:45+00:00"
         },
         {
             "name": "symfony/debug",
@@ -2287,12 +2287,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/theme-cube.git",
-                "reference": "4987a523d14c7695f73778d8584fab4d345af8a7"
+                "reference": "c69b39f9c2f995c7651c986f1b22447bf5a5ced4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/theme-cube/zipball/4987a523d14c7695f73778d8584fab4d345af8a7",
-                "reference": "4987a523d14c7695f73778d8584fab4d345af8a7",
+                "url": "https://api.github.com/repos/tropotek/theme-cube/zipball/c69b39f9c2f995c7651c986f1b22447bf5a5ced4",
+                "reference": "c69b39f9c2f995c7651c986f1b22447bf5a5ced4",
                 "shasum": ""
             },
             "type": "tek-theme",
@@ -2385,12 +2385,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-base.git",
-                "reference": "d370ff410828e8f9823c8811b79babe6517b8277"
+                "reference": "96ae678df2c7ec0f30f6e86fb9feb4373fb6a0e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/d370ff410828e8f9823c8811b79babe6517b8277",
-                "reference": "d370ff410828e8f9823c8811b79babe6517b8277",
+                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/96ae678df2c7ec0f30f6e86fb9feb4373fb6a0e5",
+                "reference": "96ae678df2c7ec0f30f6e86fb9feb4373fb6a0e5",
                 "shasum": ""
             },
             "require": {
@@ -2573,12 +2573,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-form.git",
-                "reference": "33d86978d5be88567c74f30825c482d416d98886"
+                "reference": "bcbd9216ad3fb84ab6d6359fa30ceba8f0d632e6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-form/zipball/33d86978d5be88567c74f30825c482d416d98886",
-                "reference": "33d86978d5be88567c74f30825c482d416d98886",
+                "url": "https://api.github.com/repos/tropotek/tk-form/zipball/bcbd9216ad3fb84ab6d6359fa30ceba8f0d632e6",
+                "reference": "bcbd9216ad3fb84ab6d6359fa30ceba8f0d632e6",
                 "shasum": ""
             },
             "require": {
@@ -2630,12 +2630,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-framework.git",
-                "reference": "0bd8adea2adc9a6c4f5d4b7b94195a6f93a72280"
+                "reference": "0652756f3a020033cdc4129e6e998f6639c64aed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-framework/zipball/0bd8adea2adc9a6c4f5d4b7b94195a6f93a72280",
-                "reference": "0bd8adea2adc9a6c4f5d4b7b94195a6f93a72280",
+                "url": "https://api.github.com/repos/tropotek/tk-framework/zipball/0652756f3a020033cdc4129e6e998f6639c64aed",
+                "reference": "0652756f3a020033cdc4129e6e998f6639c64aed",
                 "shasum": ""
             },
             "require": {
@@ -3045,12 +3045,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-ui.git",
-                "reference": "fde5ca6ca6e56f0d9299ff39fa5cc1d82157c175"
+                "reference": "c65d9d469fb7e86dfc0b8697e761c9f730506005"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-ui/zipball/fde5ca6ca6e56f0d9299ff39fa5cc1d82157c175",
-                "reference": "fde5ca6ca6e56f0d9299ff39fa5cc1d82157c175",
+                "url": "https://api.github.com/repos/tropotek/tk-ui/zipball/c65d9d469fb7e86dfc0b8697e761c9f730506005",
+                "reference": "c65d9d469fb7e86dfc0b8697e761c9f730506005",
                 "shasum": ""
             },
             "require": {
@@ -3102,12 +3102,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-uni.git",
-                "reference": "7683eefea1d80d020146c9b4778cd193dd0e8a96"
+                "reference": "e850509cb5e36ccf9393b83c49a9078173e243bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-uni/zipball/7683eefea1d80d020146c9b4778cd193dd0e8a96",
-                "reference": "7683eefea1d80d020146c9b4778cd193dd0e8a96",
+                "url": "https://api.github.com/repos/tropotek/tk-uni/zipball/e850509cb5e36ccf9393b83c49a9078173e243bb",
+                "reference": "e850509cb5e36ccf9393b83c49a9078173e243bb",
                 "shasum": ""
             },
             "require": {
@@ -3151,7 +3151,7 @@
                     "type": "Paypal"
                 }
             ],
-            "time": "2021-11-26T00:00:00+00:00"
+            "time": "2021-12-15T00:00:00+00:00"
         },
         {
             "name": "wikimedia/less.php",
