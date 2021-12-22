@@ -759,7 +759,8 @@ CSS;
 
         $isNew = ($this->getPathCase()->getId() == 0);
         $this->getPathCase()->setStatusNotify(true);
-        $this->getPathCase()->setStatusMessage('New pathology case created.');
+        if ($isNew)
+            $this->getPathCase()->setStatusMessage('New pathology case created.');
         $this->getPathCase()->save();
         if ($isNew) {
             Notice::create($this->getPathCase());
