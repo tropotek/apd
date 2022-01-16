@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "085fb093e038ab0c4f11da732e89cdd47d7586b0"
+                "reference": "c5b547b9904106507e48c645b76ff74f18eea84e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/085fb093e038ab0c4f11da732e89cdd47d7586b0",
-                "reference": "085fb093e038ab0c4f11da732e89cdd47d7586b0",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/c5b547b9904106507e48c645b76ff74f18eea84e",
+                "reference": "c5b547b9904106507e48c645b76ff74f18eea84e",
                 "shasum": ""
             },
             "require": {
@@ -42,7 +42,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.1-dev"
+                    "dev-master": "2.2-dev"
                 }
             },
             "autoload": {
@@ -120,7 +120,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-12-13T16:16:06+00:00"
+            "time": "2022-01-02T11:26:46+00:00"
         },
         {
             "name": "intervention/image",
@@ -1414,12 +1414,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/contracts.git",
-                "reference": "64998319270ef972c008f64959359a4d0992cfcc"
+                "reference": "d760c3aa41e6dbbf2060e597ea22da1cbbdd5331"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/contracts/zipball/64998319270ef972c008f64959359a4d0992cfcc",
-                "reference": "64998319270ef972c008f64959359a4d0992cfcc",
+                "url": "https://api.github.com/repos/symfony/contracts/zipball/d760c3aa41e6dbbf2060e597ea22da1cbbdd5331",
+                "reference": "d760c3aa41e6dbbf2060e597ea22da1cbbdd5331",
                 "shasum": ""
             },
             "require": {
@@ -1500,7 +1500,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-12-15T13:33:45+00:00"
+            "time": "2022-01-02T09:41:36+00:00"
         },
         {
             "name": "symfony/debug",
@@ -1508,12 +1508,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
-                "reference": "346e1507eeb3f566dcc7a116fefaa407ee84691b"
+                "reference": "5de6c6e7f52b364840e53851c126be4d71e60470"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/debug/zipball/346e1507eeb3f566dcc7a116fefaa407ee84691b",
-                "reference": "346e1507eeb3f566dcc7a116fefaa407ee84691b",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/5de6c6e7f52b364840e53851c126be4d71e60470",
+                "reference": "5de6c6e7f52b364840e53851c126be4d71e60470",
                 "shasum": ""
             },
             "require": {
@@ -1569,7 +1569,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-11-29T08:40:48+00:00"
+            "time": "2022-01-02T09:41:36+00:00"
         },
         {
             "name": "symfony/event-dispatcher",
@@ -1790,7 +1790,7 @@
         },
         {
             "name": "symfony/polyfill-ctype",
-            "version": "dev-main",
+            "version": "v1.24.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-ctype.git",
@@ -1811,7 +1811,6 @@
             "suggest": {
                 "ext-ctype": "For best performance"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1853,7 +1852,7 @@
                 "portable"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-ctype/tree/main"
+                "source": "https://github.com/symfony/polyfill-ctype/tree/v1.24.0"
             },
             "funding": [
                 {
@@ -1873,7 +1872,7 @@
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "dev-main",
+            "version": "v1.24.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
@@ -1894,7 +1893,6 @@
             "suggest": {
                 "ext-mbstring": "For best performance"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1937,7 +1935,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-mbstring/tree/main"
+                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.24.0"
             },
             "funding": [
                 {
