@@ -13,6 +13,7 @@ class Edit extends \Uni\Controller\Institution\Edit
 {
     const INSTITUTION_FAX = 'inst.fax';
     const INSTITUTION_REPORT_TEMPLATE = 'inst.report.mail.tpl';
+    const INSTITUTION_AUTOCOMPLETE_REPORT_STATUS = 'inst.pathCase.autocomplete.reportStatus';
 
     public function initForm(\Tk\Request $request)
     {
@@ -22,6 +23,10 @@ class Edit extends \Uni\Controller\Institution\Edit
 
         $this->getForm()->appendField(new Field\Input(self::INSTITUTION_FAX), 'phone')
             ->setLabel('Fax')->setTabGroup('Details');
+
+        $this->getForm()->appendField(new Field\Checkbox(self::INSTITUTION_AUTOCOMPLETE_REPORT_STATUS), self::INSTITUTION_FAX)
+            ->setTabGroup('Details')->setLabel('Auto-complete Report Status')->setCheckboxLabel('Automatically set the pathCase.reportStatus to completed once the case status is completed');
+
         $this->getForm()->appendField(new Field\Textarea(self::INSTITUTION_REPORT_TEMPLATE))->setTabGroup('Details')
             ->addCss('mce-min')->setLabel('Report Email Template')->setAttr('data-elfinder-path', $this->getInstitution()->getDataPath().'/media');
     }

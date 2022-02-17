@@ -326,11 +326,13 @@ JS;
 
 
         $this->appendField(Field\CheckboxInput::create('zoonotic'))->setTabGroup($tab)->setLabel('Zoonotic/Other Risks')
-            ->setNotes('Tick the checkbox to alert users of these risks when viewing this case.');
+            ->setNotes('Tick the checkbox to alert users of these risks when viewing this case.')
+            ->setAttr('placeholder', 'None');
 
         $this->appendField(Field\CheckboxInput::create('issue'))->setTabGroup($tab)
             ->setLabel('Case Issues')
-            ->setNotes('Tick the checkbox to alert users of any issues to be aware of when viewing this case.');
+            ->setNotes('Tick the checkbox to alert users of any issues to be aware of when viewing this case.')
+            ->setAttr('placeholder', 'None');
 
         $this->appendField(new Field\Textarea('clinicalHistory'))
             ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
@@ -761,7 +763,23 @@ CSS;
         $this->getPathCase()->setStatusNotify(true);
         if ($isNew)
             $this->getPathCase()->setStatusMessage('New pathology case created.');
+
+
+
+        // This should automatically set the reportStatus to completed once the case is completed, as this option is sometimes fogotten
+        $autocomplete = (bool)$this->getConfig()->getInstitution()->getData()->get(\App\Controller\Institution\Edit::INSTITUTION_AUTOCOMPLETE_REPORT_STATUS);
+        if (
+            $autocomplete &&
+            $this->getPathCase()->getStatus() == \App\Db\PathCase::STATUS_COMPLETED &&
+            $this->getPathCase()->getCurrentStatus()->getName() != \App\Db\PathCase::STATUS_COMPLETED &&
+            $this->getPathCase()->getReportStatus() != \App\Db\PathCase::REPORT_STATUS_COMPLETED
+        )
+        {
+            $this->getPathCase()->setReportStatus(\App\Db\PathCase::REPORT_STATUS_COMPLETED);
+        }
+
         $this->getPathCase()->save();
+
         if ($isNew) {
             Notice::create($this->getPathCase());
         }
