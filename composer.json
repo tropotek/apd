@@ -53,5 +53,10 @@
     "mpdf/mpdf": "~8.0.0"
   },
   "require-dev": {
+  },
+  "config": {
+    "allow-plugins": {
+      "ttek/tk-installers": true
+    }
   }
 }
