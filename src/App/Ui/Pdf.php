@@ -140,7 +140,12 @@ class Pdf extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterfa
     {
         if (!$filename)
             $filename = \Tk\Uri::create()->basename() . '.pdf';
+
+        header('Cache-Control: no-cache, no-store, must-revalidate'); // HTTP 1.1
+        header('Pragma: no-cache'); // HTTP 1.0
+        header('Expires: 0'); // Proxies
         $this->mpdf->Output($filename, \Mpdf\Output\Destination::INLINE);
+        exit;
     }
 
     /**
