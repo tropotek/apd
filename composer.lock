@@ -2230,22 +2230,21 @@
         },
         {
             "name": "uom-plg/plg-ldap",
-            "version": "dev-master",
+            "version": "3.2.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fvas-elearning/plg-ldap.git",
-                "reference": "043d4063501396f31e84e8c617b685a0fb638c65"
+                "reference": "12d254561f16541201137cd10c633dde4df7e18e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fvas-elearning/plg-ldap/zipball/043d4063501396f31e84e8c617b685a0fb638c65",
-                "reference": "043d4063501396f31e84e8c617b685a0fb638c65",
+                "url": "https://api.github.com/repos/fvas-elearning/plg-ldap/zipball/12d254561f16541201137cd10c633dde4df7e18e",
+                "reference": "12d254561f16541201137cd10c633dde4df7e18e",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.3.0"
             },
-            "default-branch": true,
             "type": "uom-plugin",
             "extra": {
                 "branch-alias": {
@@ -2275,7 +2274,7 @@
                 "tropotek"
             ],
             "support": {
-                "source": "https://github.com/fvas-elearning/plg-ldap/tree/master"
+                "source": "https://github.com/fvas-elearning/plg-ldap/tree/3.2"
             },
             "time": "2019-04-09T00:00:00+00:00"
         },
@@ -2847,22 +2846,21 @@
         },
         {
             "name": "uom/tk-plugin",
-            "version": "dev-master",
+            "version": "3.2.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fvas-elearning/tk-plugin.git",
-                "reference": "7c5c9d1bbce8ec672b364fd620b18dfd20f42aec"
+                "reference": "0d00cb521b56f539aa11a6f778aca0347b00b9d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fvas-elearning/tk-plugin/zipball/7c5c9d1bbce8ec672b364fd620b18dfd20f42aec",
-                "reference": "7c5c9d1bbce8ec672b364fd620b18dfd20f42aec",
+                "url": "https://api.github.com/repos/fvas-elearning/tk-plugin/zipball/0d00cb521b56f539aa11a6f778aca0347b00b9d5",
+                "reference": "0d00cb521b56f539aa11a6f778aca0347b00b9d5",
                 "shasum": ""
             },
             "require": {
                 "uom/tk-framework": "~3.0.0"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -2890,7 +2888,7 @@
                 "tropotek"
             ],
             "support": {
-                "source": "https://github.com/fvas-elearning/tk-plugin/tree/master"
+                "source": "https://github.com/fvas-elearning/tk-plugin/tree/3.2"
             },
             "time": "2019-04-09T00:00:00+00:00"
         },
