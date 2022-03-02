@@ -2182,18 +2182,19 @@
         },
         {
             "name": "uom-plg/mailog",
-            "version": "1.0.x-dev",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fvas-elearning/plg-mailog.git",
-                "reference": "d7726f8dee4fe7c015b8f8de3d1887a8b3ce6672"
+                "reference": "6a911c665384e0fe106d058fb98cd306d5d49a56"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fvas-elearning/plg-mailog/zipball/d7726f8dee4fe7c015b8f8de3d1887a8b3ce6672",
-                "reference": "d7726f8dee4fe7c015b8f8de3d1887a8b3ce6672",
+                "url": "https://api.github.com/repos/fvas-elearning/plg-mailog/zipball/6a911c665384e0fe106d058fb98cd306d5d49a56",
+                "reference": "6a911c665384e0fe106d058fb98cd306d5d49a56",
                 "shasum": ""
             },
+            "default-branch": true,
             "type": "uom-plugin",
             "extra": {
                 "branch-alias": {
@@ -2224,27 +2225,28 @@
                 "tropotek"
             ],
             "support": {
-                "source": "https://github.com/fvas-elearning/plg-mailog/tree/1.0"
+                "source": "https://github.com/fvas-elearning/plg-mailog/tree/master"
             },
             "time": "2017-09-27T00:00:00+00:00"
         },
         {
             "name": "uom-plg/plg-ldap",
-            "version": "3.2.x-dev",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fvas-elearning/plg-ldap.git",
-                "reference": "12d254561f16541201137cd10c633dde4df7e18e"
+                "reference": "043d4063501396f31e84e8c617b685a0fb638c65"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fvas-elearning/plg-ldap/zipball/12d254561f16541201137cd10c633dde4df7e18e",
-                "reference": "12d254561f16541201137cd10c633dde4df7e18e",
+                "url": "https://api.github.com/repos/fvas-elearning/plg-ldap/zipball/043d4063501396f31e84e8c617b685a0fb638c65",
+                "reference": "043d4063501396f31e84e8c617b685a0fb638c65",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.3.0"
             },
+            "default-branch": true,
             "type": "uom-plugin",
             "extra": {
                 "branch-alias": {
@@ -2274,24 +2276,25 @@
                 "tropotek"
             ],
             "support": {
-                "source": "https://github.com/fvas-elearning/plg-ldap/tree/3.2"
+                "source": "https://github.com/fvas-elearning/plg-ldap/tree/master"
             },
             "time": "2019-04-09T00:00:00+00:00"
         },
         {
             "name": "uom/theme-cube",
-            "version": "1.2.x-dev",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fvas-elearning/theme-cube.git",
-                "reference": "84e239153a5b44e431ac26a03a86e02a91773ddc"
+                "reference": "e120dc5b7c66dc91b79768c01769b2b647ed4656"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fvas-elearning/theme-cube/zipball/84e239153a5b44e431ac26a03a86e02a91773ddc",
-                "reference": "84e239153a5b44e431ac26a03a86e02a91773ddc",
+                "url": "https://api.github.com/repos/fvas-elearning/theme-cube/zipball/e120dc5b7c66dc91b79768c01769b2b647ed4656",
+                "reference": "e120dc5b7c66dc91b79768c01769b2b647ed4656",
                 "shasum": ""
             },
+            "default-branch": true,
             "type": "uom-theme",
             "extra": {
                 "branch-alias": {
@@ -2314,27 +2317,28 @@
                 "tropotek"
             ],
             "support": {
-                "source": "https://github.com/fvas-elearning/theme-cube/tree/1.2"
+                "source": "https://github.com/fvas-elearning/theme-cube/tree/master"
             },
             "time": "2018-09-11T00:00:00+00:00"
         },
         {
             "name": "uom/tk-auth",
-            "version": "3.0.x-dev",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fvas-elearning/tk-auth.git",
-                "reference": "970751560bd87d03821434f852d4de82860bef17"
+                "reference": "a38e649a882c5c195751a37966e9d1afa954b8c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fvas-elearning/tk-auth/zipball/970751560bd87d03821434f852d4de82860bef17",
-                "reference": "970751560bd87d03821434f852d4de82860bef17",
+                "url": "https://api.github.com/repos/fvas-elearning/tk-auth/zipball/a38e649a882c5c195751a37966e9d1afa954b8c1",
+                "reference": "a38e649a882c5c195751a37966e9d1afa954b8c1",
                 "shasum": ""
             },
             "require": {
                 "uom/tk-framework": "~3.0.0"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -2362,22 +2366,22 @@
                 "tropotek"
             ],
             "support": {
-                "source": "https://github.com/fvas-elearning/tk-auth/tree/3.0"
+                "source": "https://github.com/fvas-elearning/tk-auth/tree/master"
             },
             "time": "2019-04-09T00:00:00+00:00"
         },
         {
             "name": "uom/tk-base",
-            "version": "3.2.x-dev",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fvas-elearning/tk-base.git",
-                "reference": "0f51b58ebf7811fa5ff0cfb7d5fdc2fc8a537d11"
+                "reference": "21b36790bfb0da77cbfaedf26f12d562d5e3abd1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fvas-elearning/tk-base/zipball/0f51b58ebf7811fa5ff0cfb7d5fdc2fc8a537d11",
-                "reference": "0f51b58ebf7811fa5ff0cfb7d5fdc2fc8a537d11",
+                "url": "https://api.github.com/repos/fvas-elearning/tk-base/zipball/21b36790bfb0da77cbfaedf26f12d562d5e3abd1",
+                "reference": "21b36790bfb0da77cbfaedf26f12d562d5e3abd1",
                 "shasum": ""
             },
             "require": {
@@ -2395,6 +2399,7 @@
                 "uom/tk-table": "~3.0.0",
                 "uom/tk-ui": "~3.0.0"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -2413,7 +2418,6 @@
             "authors": [
                 {
                     "name": "Michael Mifsud",
-                    "email": "info@tropotek.com.au",
                     "homepage": "http://www.tropotek.com/"
                 }
             ],
@@ -2424,28 +2428,29 @@
                 "tropotek"
             ],
             "support": {
-                "source": "https://github.com/fvas-elearning/tk-base/tree/3.2"
+                "source": "https://github.com/fvas-elearning/tk-base/tree/master"
             },
             "time": "2021-11-26T00:00:00+00:00"
         },
         {
             "name": "uom/tk-database",
-            "version": "3.2.x-dev",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fvas-elearning/tk-database.git",
-                "reference": "b3611cad9923af0cadc0fcd620fd463c33e572a2"
+                "reference": "1c977a48d8d6b66c3a0b9cade825befa7b8e4f20"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fvas-elearning/tk-database/zipball/b3611cad9923af0cadc0fcd620fd463c33e572a2",
-                "reference": "b3611cad9923af0cadc0fcd620fd463c33e572a2",
+                "url": "https://api.github.com/repos/fvas-elearning/tk-database/zipball/1c977a48d8d6b66c3a0b9cade825befa7b8e4f20",
+                "reference": "1c977a48d8d6b66c3a0b9cade825befa7b8e4f20",
                 "shasum": ""
             },
             "require": {
                 "ext-pdo": "*",
                 "uom/tk-framework": "~3.0.0"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -2474,22 +2479,22 @@
                 "tropotek"
             ],
             "support": {
-                "source": "https://github.com/fvas-elearning/tk-database/tree/3.2"
+                "source": "https://github.com/fvas-elearning/tk-database/tree/master"
             },
             "time": "2019-04-09T00:00:00+00:00"
         },
         {
             "name": "uom/tk-domtemplate",
-            "version": "3.0.x-dev",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fvas-elearning/tk-domtemplate.git",
-                "reference": "89b72d3047319063e7dd1379e6024cec42e61252"
+                "reference": "866e8888656fa00e48f3564f5702221c68ba6763"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fvas-elearning/tk-domtemplate/zipball/89b72d3047319063e7dd1379e6024cec42e61252",
-                "reference": "89b72d3047319063e7dd1379e6024cec42e61252",
+                "url": "https://api.github.com/repos/fvas-elearning/tk-domtemplate/zipball/866e8888656fa00e48f3564f5702221c68ba6763",
+                "reference": "866e8888656fa00e48f3564f5702221c68ba6763",
                 "shasum": ""
             },
             "require": {
@@ -2499,6 +2504,7 @@
                 "scssphp/scssphp": "1.0.*",
                 "wikimedia/less.php": "1.7.*"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -2527,28 +2533,29 @@
                 "tropotek"
             ],
             "support": {
-                "source": "https://github.com/fvas-elearning/tk-domtemplate/tree/3.0"
+                "source": "https://github.com/fvas-elearning/tk-domtemplate/tree/master"
             },
             "time": "2019-04-09T00:00:00+00:00"
         },
         {
             "name": "uom/tk-form",
-            "version": "3.0.x-dev",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fvas-elearning/tk-form.git",
-                "reference": "6b4b3f886aef3f59e0e90fd59b3023463d56329e"
+                "reference": "42493e167692e4f13dc1d0956c2993b3ceee7cc9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fvas-elearning/tk-form/zipball/6b4b3f886aef3f59e0e90fd59b3023463d56329e",
-                "reference": "6b4b3f886aef3f59e0e90fd59b3023463d56329e",
+                "url": "https://api.github.com/repos/fvas-elearning/tk-form/zipball/42493e167692e4f13dc1d0956c2993b3ceee7cc9",
+                "reference": "42493e167692e4f13dc1d0956c2993b3ceee7cc9",
                 "shasum": ""
             },
             "require": {
                 "uom/tk-framework": "~3.0.0",
                 "uom/tk-ui": "~3.0.0"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -2576,22 +2583,22 @@
                 "tropotek"
             ],
             "support": {
-                "source": "https://github.com/fvas-elearning/tk-form/tree/3.0"
+                "source": "https://github.com/fvas-elearning/tk-form/tree/master"
             },
             "time": "2019-04-09T00:00:00+00:00"
         },
         {
             "name": "uom/tk-framework",
-            "version": "3.0.x-dev",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fvas-elearning/tk-framework.git",
-                "reference": "f3abba82d2b08e70ddc76eb620938964ec368c40"
+                "reference": "4d310b887afb80334a97459069dc74fe2fab3752"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fvas-elearning/tk-framework/zipball/f3abba82d2b08e70ddc76eb620938964ec368c40",
-                "reference": "f3abba82d2b08e70ddc76eb620938964ec368c40",
+                "url": "https://api.github.com/repos/fvas-elearning/tk-framework/zipball/4d310b887afb80334a97459069dc74fe2fab3752",
+                "reference": "4d310b887afb80334a97459069dc74fe2fab3752",
                 "shasum": ""
             },
             "require": {
@@ -2602,6 +2609,7 @@
                 "symfony/http-foundation": "4.2.*",
                 "uom/tk-installers": "~3.0.0"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -2638,7 +2646,7 @@
                 "tropotek"
             ],
             "support": {
-                "source": "https://github.com/fvas-elearning/tk-framework/tree/3.0"
+                "source": "https://github.com/fvas-elearning/tk-framework/tree/master"
             },
             "time": "2019-04-09T00:00:00+00:00"
         },
@@ -2698,22 +2706,23 @@
         },
         {
             "name": "uom/tk-mail",
-            "version": "3.0.x-dev",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fvas-elearning/tk-mail.git",
-                "reference": "14135647da2c51d5b1529d7dc7b96eaa5567e915"
+                "reference": "56bc960fab8e5cf05fd49ee62f2307d332f8028e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fvas-elearning/tk-mail/zipball/14135647da2c51d5b1529d7dc7b96eaa5567e915",
-                "reference": "14135647da2c51d5b1529d7dc7b96eaa5567e915",
+                "url": "https://api.github.com/repos/fvas-elearning/tk-mail/zipball/56bc960fab8e5cf05fd49ee62f2307d332f8028e",
+                "reference": "56bc960fab8e5cf05fd49ee62f2307d332f8028e",
                 "shasum": ""
             },
             "require": {
                 "phpmailer/phpmailer": "~6.0",
                 "uom/tk-framework": "~3.0.0"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -2741,7 +2750,7 @@
                 "tropotek"
             ],
             "support": {
-                "source": "https://github.com/fvas-elearning/tk-mail/tree/3.0"
+                "source": "https://github.com/fvas-elearning/tk-mail/tree/master"
             },
             "time": "2019-04-09T00:00:00+00:00"
         },
@@ -2751,12 +2760,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/fvas-elearning/tk-map.git",
-                "reference": "733172b17697a7b2d16891b4b06c83d49f4be7f8"
+                "reference": "20eb367f18d789069015face1fe83fe751fe8043"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fvas-elearning/tk-map/zipball/733172b17697a7b2d16891b4b06c83d49f4be7f8",
-                "reference": "733172b17697a7b2d16891b4b06c83d49f4be7f8",
+                "url": "https://api.github.com/repos/fvas-elearning/tk-map/zipball/20eb367f18d789069015face1fe83fe751fe8043",
+                "reference": "20eb367f18d789069015face1fe83fe751fe8043",
                 "shasum": ""
             },
             "type": "library",
@@ -2792,16 +2801,16 @@
         },
         {
             "name": "uom/tk-mvc",
-            "version": "3.2.x-dev",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fvas-elearning/tk-mvc.git",
-                "reference": "a03c4e266abc8fee15200db218305db55ec19423"
+                "reference": "7695098289a37e7402a2ec7b864413daa82366ab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fvas-elearning/tk-mvc/zipball/a03c4e266abc8fee15200db218305db55ec19423",
-                "reference": "a03c4e266abc8fee15200db218305db55ec19423",
+                "url": "https://api.github.com/repos/fvas-elearning/tk-mvc/zipball/7695098289a37e7402a2ec7b864413daa82366ab",
+                "reference": "7695098289a37e7402a2ec7b864413daa82366ab",
                 "shasum": ""
             },
             "require": {
@@ -2812,6 +2821,7 @@
                 "symfony/translation": "4.2.*",
                 "uom/tk-framework": "~3.0.0"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -2840,27 +2850,28 @@
                 "tropotek"
             ],
             "support": {
-                "source": "https://github.com/fvas-elearning/tk-mvc/tree/3.2"
+                "source": "https://github.com/fvas-elearning/tk-mvc/tree/master"
             },
             "time": "2019-04-09T00:00:00+00:00"
         },
         {
             "name": "uom/tk-plugin",
-            "version": "3.2.x-dev",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fvas-elearning/tk-plugin.git",
-                "reference": "0d00cb521b56f539aa11a6f778aca0347b00b9d5"
+                "reference": "7c5c9d1bbce8ec672b364fd620b18dfd20f42aec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fvas-elearning/tk-plugin/zipball/0d00cb521b56f539aa11a6f778aca0347b00b9d5",
-                "reference": "0d00cb521b56f539aa11a6f778aca0347b00b9d5",
+                "url": "https://api.github.com/repos/fvas-elearning/tk-plugin/zipball/7c5c9d1bbce8ec672b364fd620b18dfd20f42aec",
+                "reference": "7c5c9d1bbce8ec672b364fd620b18dfd20f42aec",
                 "shasum": ""
             },
             "require": {
                 "uom/tk-framework": "~3.0.0"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -2888,27 +2899,28 @@
                 "tropotek"
             ],
             "support": {
-                "source": "https://github.com/fvas-elearning/tk-plugin/tree/3.2"
+                "source": "https://github.com/fvas-elearning/tk-plugin/tree/master"
             },
             "time": "2019-04-09T00:00:00+00:00"
         },
         {
             "name": "uom/tk-table",
-            "version": "3.0.x-dev",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fvas-elearning/tk-table.git",
-                "reference": "89b624081dc57ac30770f5ce81ea7a8cdb2965d8"
+                "reference": "c00e51252d3dc2729e9c8a892a13239075751165"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fvas-elearning/tk-table/zipball/89b624081dc57ac30770f5ce81ea7a8cdb2965d8",
-                "reference": "89b624081dc57ac30770f5ce81ea7a8cdb2965d8",
+                "url": "https://api.github.com/repos/fvas-elearning/tk-table/zipball/c00e51252d3dc2729e9c8a892a13239075751165",
+                "reference": "c00e51252d3dc2729e9c8a892a13239075751165",
                 "shasum": ""
             },
             "require": {
                 "uom/tk-framework": "~3.0.0"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -2936,27 +2948,28 @@
                 "tropotek"
             ],
             "support": {
-                "source": "https://github.com/fvas-elearning/tk-table/tree/3.0"
+                "source": "https://github.com/fvas-elearning/tk-table/tree/master"
             },
             "time": "2020-11-12T00:00:00+00:00"
         },
         {
             "name": "uom/tk-ui",
-            "version": "3.0.x-dev",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fvas-elearning/tk-ui.git",
-                "reference": "9ec2a5dd11d0d15da91d142695a83ef624b973b4"
+                "reference": "2a66af7cf5f9fefdda809eba8f519a2e80c8d815"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fvas-elearning/tk-ui/zipball/9ec2a5dd11d0d15da91d142695a83ef624b973b4",
-                "reference": "9ec2a5dd11d0d15da91d142695a83ef624b973b4",
+                "url": "https://api.github.com/repos/fvas-elearning/tk-ui/zipball/2a66af7cf5f9fefdda809eba8f519a2e80c8d815",
+                "reference": "2a66af7cf5f9fefdda809eba8f519a2e80c8d815",
                 "shasum": ""
             },
             "require": {
                 "uom/tk-framework": "~3.0.0"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -2985,27 +2998,28 @@
                 "ui"
             ],
             "support": {
-                "source": "https://github.com/fvas-elearning/tk-ui/tree/3.0"
+                "source": "https://github.com/fvas-elearning/tk-ui/tree/master"
             },
             "time": "2019-04-09T00:00:00+00:00"
         },
         {
             "name": "uom/tk-uni",
-            "version": "3.4.x-dev",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fvas-elearning/tk-uni.git",
-                "reference": "2de30896f559b5184258571edf2c0063f24a45e4"
+                "reference": "9e1a76f3b016d307a7e3064166793f3a77fb5ad7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fvas-elearning/tk-uni/zipball/2de30896f559b5184258571edf2c0063f24a45e4",
-                "reference": "2de30896f559b5184258571edf2c0063f24a45e4",
+                "url": "https://api.github.com/repos/fvas-elearning/tk-uni/zipball/9e1a76f3b016d307a7e3064166793f3a77fb5ad7",
+                "reference": "9e1a76f3b016d307a7e3064166793f3a77fb5ad7",
                 "shasum": ""
             },
             "require": {
                 "uom/tk-base": "~3.2.0"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -3034,7 +3048,7 @@
                 "uni"
             ],
             "support": {
-                "source": "https://github.com/fvas-elearning/tk-uni/tree/3.4"
+                "source": "https://github.com/fvas-elearning/tk-uni/tree/master"
             },
             "time": "2021-12-15T00:00:00+00:00"
         },
