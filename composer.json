@@ -11,7 +11,6 @@
   "authors": [
     {
       "name": "Michael Mifsud",
-      "email": "info@tropotek.com.au",
       "homepage": "http://www.tropotek.com/"
     }
   ],
@@ -45,11 +44,11 @@
     "ext-dom": "*",
     "ext-openssl": "*",
     "ext-pdo": "*",
-    "ttek/tk-uni": "~3.4.0",
-    "ttek/tk-map": "~3.0.0",
-    "ttek/theme-cube": "~1.2.0",
-    "ttek-plg/plg-ldap": "~3.2.0",
-    "ttek-plg/mailog": "~1.0.0",
+    "uom/tk-uni": "~3.4.0",
+    "uom/tk-map": "~3.0.0",
+    "uom/theme-cube": "~1.2.0",
+    "uom-plg/plg-ldap": "~3.2.0",
+    "uom-plg/mailog": "~1.0.0",
     "mpdf/mpdf": "~8.0.0"
   },
   "require-dev": {
