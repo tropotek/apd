@@ -1,5 +1,5 @@
 {
-  "name": "ttek/apd",
+  "name": "uom/apd",
   "type": "project",
   "description": "Anatomic Pathology Database",
   "keywords": [
@@ -55,7 +55,7 @@
   },
   "config": {
     "allow-plugins": {
-      "ttek/tk-installers": true
+      "uom/tk-installers": true
     }
   }
 }
