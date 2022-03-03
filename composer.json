@@ -45,10 +45,10 @@
     "ext-openssl": "*",
     "ext-pdo": "*",
     "uom/tk-uni": "~3.6.0",
-    "uom/tk-map": "~3.0.0",
-    "uom/theme-cube": "~1.2.0",
-    "uom-plg/plg-ldap": "~3.2.0",
-    "uom-plg/mailog": "~1.0.0",
+    "uom/tk-map": "~3.2.0",
+    "uom/theme-cube": "~1.4.0",
+    "uom-plg/plg-ldap": "~3.4.0",
+    "uom-plg/mailog": "~3.0.0",
     "mpdf/mpdf": "~8.0.0"
   },
   "require-dev": {
