@@ -44,7 +44,7 @@
     "ext-dom": "*",
     "ext-openssl": "*",
     "ext-pdo": "*",
-    "uom/tk-uni": "~3.4.0",
+    "uom/tk-uni": "~3.6.0",
     "uom/tk-map": "~3.0.0",
     "uom/theme-cube": "~1.2.0",
     "uom-plg/plg-ldap": "~3.2.0",
