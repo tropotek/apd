@@ -1,6 +1,11 @@
 
 #CHANGELOG#
 
+Ver 3.0.158 [2022-05-23]:
+-------------------------------
+  - Removed the edit_log due to bad implementation
+
+
 Ver 3.0.156 [2022-03-07]:
 -------------------------------
 
