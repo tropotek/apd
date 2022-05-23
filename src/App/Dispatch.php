@@ -19,7 +19,7 @@ class Dispatch extends \Uni\Dispatch
 
         $dispatcher->addSubscriber(new \App\Listener\MailTemplateHandler());
         $dispatcher->addSubscriber(new \App\Listener\NoticeHandler());
-        $dispatcher->addSubscriber(new \App\Listener\EditLogHandler());
+        //$dispatcher->addSubscriber(new \App\Listener\EditLogHandler());
 
         if (!$this->getConfig()->isCli()) {
             $dispatcher->addSubscriber(new \App\Listener\NavRendererHandler());

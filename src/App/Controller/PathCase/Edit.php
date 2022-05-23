@@ -56,11 +56,6 @@ class Edit extends AdminEditIface
     protected $invoiceTable = null;
 
     /**
-     * @var null|\App\Table\EditLog
-     */
-    protected $editLogTable = null;
-
-    /**
      * @var null|EmailReport
      */
     protected $emailReportDialog = null;
@@ -81,31 +76,20 @@ class Edit extends AdminEditIface
     public function doDefault(Request $request)
     {
         $this->pathCase = new \App\Db\PathCase();
-        //$this->pathCase->setPathologistId($this->getAuthUser()->getId()); // May cause user not to concisely select it
+
         $this->pathCase->setPathologyId($this->pathCase->getVolatilePathologyId());
-        if ($request->has('editLogId')) {
-            /** @var EditLog $log */
-            $log = EditLogMap::create()->find($request->get('editLogId'));
-            if ($log) {
-                $this->pathCase = $log->getState();
-                $request->request->set('pathCaseId', $this->pathCase->getId());
-            }
-        } else {
-            if ($request->has('clientId'))
-                $this->pathCase->setClientId((int)$request->get('clientId'));
-            $types = \Tk\ObjectUtil::getClassConstants($this->pathCase, 'TYPE_');
-            if ($request->has('type') && in_array($request->get('type'), $types)) {
-                $this->pathCase->setType($request->get('type'));
-            }
-            $sTypes = \Tk\ObjectUtil::getClassConstants($this->pathCase, 'SUBMISSION_');
-            if ($request->has('submissionType') && in_array($request->get('submissionType'), $sTypes))
-                $this->pathCase->setSubmissionType($request->get('submissionType'));
-            if ($request->get('pathCaseId')) {
-                $this->pathCase = \App\Db\PathCaseMap::create()->find($request->get('pathCaseId'));
-            }
+        if ($request->has('clientId'))
+            $this->pathCase->setClientId((int)$request->get('clientId'));
+        $types = \Tk\ObjectUtil::getClassConstants($this->pathCase, 'TYPE_');
+        if ($request->has('type') && in_array($request->get('type'), $types)) {
+            $this->pathCase->setType($request->get('type'));
         }
-
-
+        $sTypes = \Tk\ObjectUtil::getClassConstants($this->pathCase, 'SUBMISSION_');
+        if ($request->has('submissionType') && in_array($request->get('submissionType'), $sTypes))
+            $this->pathCase->setSubmissionType($request->get('submissionType'));
+        if ($request->get('pathCaseId')) {
+            $this->pathCase = \App\Db\PathCaseMap::create()->find($request->get('pathCaseId'));
+        }
 
         if ($this->pathCase->getId()) {
             $this->setPageTitle($this->pathCase->getPathologyId() . ' - (' . ucwords($this->pathCase->getType()) . ')');
@@ -113,47 +97,23 @@ class Edit extends AdminEditIface
         if ($this->pathCase->getType())
             $this->setPageTitle('Edit Case ['.ucwords($this->pathCase->getType()).']');
 
-
-
         $this->setForm(\App\Form\PathCase::create()->setModel($this->pathCase));
         $this->initForm($request);
         // Only allow save for new path case
         if (!$this->pathCase->getId()) {
             $this->getForm()->removeField('update');
         }
-        if ($request->has('editLogId')) {
-            $this->getForm()->removeField('update');
-            $this->getForm()->removeField('save');
-            $this->getForm()->removeField('cancel');
-            $btn = $this->getForm()->appendField(new Submit('Revert', function (Form $form, Form\Event\Iface $event) {
-                /** @var EditLog $log */
-                $log = EditLogMap::create()->find($this->getConfig()->getRequest()->get('editLogId'));
-                if ($log) {
-                    vd('Revert the case to here');
-                    vd($log->getState());
-                    $log->getState()->save();
-                }
-                $event->setRedirect(\Bs\Uri::create()->remove('editLogId')->set('pathCaseId', $log->getFid()));
-            }), 'Cancel')->setAttr('title', 'Revert the path case to this revision.');
-            $btn->removeCss('btn-default');
-            $btn->addCss('btn-success');
-            $btn->setIcon('fa fa-undo');
-            $this->getForm()->appendField(new Form\Event\Link('cancel', \Bs\Uri::create()->remove('editLogId')->set('pathCaseId', $this->pathCase->getId())));
-        }
         $this->getForm()->execute();
 
         // No need to do the reset for new cases
         if (!$this->pathCase->getId()) return null;
 
-
         $this->statusTable = \Bs\Table\Status::create()
             ->setSelectedColumns(array('name', 'message', 'created'))->init();
-            //->setEditUrl(\Uni\Uri::createHomeUrl('/pathCaseManager.html'))->init();
         $filter = array(
             'model' => $this->pathCase
         );
         $this->statusTable->setList($this->statusTable->findList($filter, \Tk\Db\Tool::create('created DESC', 0)));
-
 
         $this->cassetteTable = \App\Table\Cassette::create();
         $this->cassetteTable->setEditUrl(\Bs\Uri::createHomeUrl('/cassetteEdit.html'));
@@ -181,15 +141,6 @@ class Edit extends AdminEditIface
             'pathCaseId' => $this->pathCase->getId()
         );
         $this->invoiceTable->setList($this->invoiceTable->findList($filter, \Tk\Db\Tool::create('created DESC')));
-
-        // TODO re-implement this once we have a mobile friendly pager
-//        $this->editLogTable = \App\Table\EditLog::create();
-//        $this->editLogTable->setEditUrl(\Bs\Uri::createHomeUrl('/pathCaseEdit.html')->set('pathCaseId',$this->pathCase->getId()));
-//        $this->editLogTable->init();
-//        $filter = array(
-//            'model' => $this->pathCase
-//        );
-//        $this->editLogTable->setList($this->editLogTable->findList($filter, \Tk\Db\Tool::create('created DESC', 10)));
 
         $this->emailReportDialog = new EmailReport($this->pathCase);
         $this->emailReportDialog->execute();
@@ -339,10 +290,6 @@ JS;
             $template->appendTemplate('side-panel-invoice', $this->invoiceTable->show());
             $template->setVisible('side-panel-invoice');
         }
-        if ($this->editLogTable) {
-            $template->appendTemplate('side-panel-edit-log', $this->editLogTable->show());
-            $template->setVisible('side-panel-edit-log');
-        }
 
         if ($this->pathCase->getId()) {
             $template->setVisible('panel2');
@@ -388,7 +335,6 @@ JS;
     <div class="tk-panel" data-panel-title="Status Log" data-panel-icon="fa fa-list" var="side-panel-status" choice="side-panel-status"></div>
 
     <div class="tk-panel tk-invoice-list" data-panel-title="Invoice Items" data-panel-icon="fa fa-money" var="side-panel-invoice" choice="side-panel-invoice"></div>
-    <div class="tk-panel tk-edit-log" data-panel-title="Edit History" data-panel-icon="fa fa-list" var="side-panel-edit-log" choice="side-panel-edit-log"></div>
   </div>
 </div>
 HTML;

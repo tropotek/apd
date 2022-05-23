@@ -3,7 +3,6 @@ namespace App\Db;
 
 use App\Db\Traits\AnimalTypeTrait;
 use App\Db\Traits\ClientTrait;
-use App\Db\Traits\EditLogTrait;
 use App\Db\Traits\OwnerTrait;
 use App\Db\Traits\PathologistTrait;
 use App\Db\Traits\StorageTrait;
@@ -34,7 +33,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     use UserTrait;
     use PathologistTrait;
     use AnimalTypeTrait;
-    use EditLogTrait;
 
     // TODO: Check these status's against the actual workflow.
     const STATUS_PENDING                = 'pending';            // Submitted ???
@@ -170,9 +168,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      */
     public $status = 'pending';
 
-
-    // TODO: should report, invoice objects be created to manage these statuses
-    //       This would allow for more control
     /**
      *
      * @var string
@@ -246,9 +241,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      */
     public $specimenCount = 1;
 
-
-    // TODO: Should the animal be its own record ?????????
-
     /**
      * @var string
      */
@@ -290,7 +282,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public $microchip = '';
 
     /**
-     * TODO: For now a TEXT box, but NOT sure if this should be lookup table
      * @var string
      */
     public $origin = '';
@@ -333,7 +324,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public $euthanisedMethod = '';
 
     /**
-     * after care type: General Disposal/cremation/INTernal incineration
+     * after care type: General Disposal/cremation/Internal incineration
      * @var string
      */
     public $acType = '';
@@ -595,7 +586,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
             $i = 1;
             do {
                 if (count($pidArr) >= 2 && (int)$pidArr[1] && $y == (int)$pidArr[1]) {
-                    //$str = sprintf('%03d-%s', (int)$pidArr[0] + $i, $y);
                     $str = sprintf('%d-%s', (int)$pidArr[0] + $i, $y);
                 }
                 $found = PathCaseMap::create()->findFiltered(array(
@@ -1135,7 +1125,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     }
 
     /**
-     * return the age years componenet
+     * return the age years component
      * @return int
      */
     public function getAge()
@@ -1173,9 +1163,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
         }
         return $age_m;
     }
-
-
-
 
 
     /**
