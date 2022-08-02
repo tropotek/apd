@@ -149,6 +149,13 @@ class EmailReport extends JsonForm
         $pdfString = $pdf->getPdfAttachment($filename);
         $message->addStringAttachment($pdfString, $filename);
 
+        // Attach any files attached to the case record
+        foreach ($this->pathCase->getFiles() as $file) {
+            $filePath = $this->getConfig()->getDataPath() . $file->getPath();
+            if (!is_file($filePath) || $file->getBytes() > $this->getConfig()->get('pathCase.report.maxAttachmentSize', 2000000)) continue;
+            $message->addAttachment($filePath, basename($file->getPath()), $file->getMime());
+        }
+
         $message->setContent($values['message']);
         $message->set('sig', '');
 
@@ -161,7 +168,7 @@ class EmailReport extends JsonForm
                     $form->addFieldError('to', 'Failed Sending to: ' . $to);
                 }
             } catch (\Exception $e) {
-                vd($e->getMessage());
+                \Tk\Log::debug($e->getMessage());
                 $form->addFieldError('to', 'Failed Sending to: ' . $to);
             }
         }

@@ -31,9 +31,6 @@ $config['template.public']      = $config['system.theme.public'] . '/public.html
 
 $config['template.login']       = $config['system.theme.admin']  . '/login.html';
 
-//$config['url.auth.home']            = '/';
-//$config['url.auth.login']           = '/';
-
 /*
  * Set the error page template
  */
@@ -44,7 +41,10 @@ $config['template.error']           = $config['system.template.path']   . '/them
  */
 $config['template.maintenance']     = $config['system.template.path']   . '/theme-cube/maintenance.html';
 
+/*
+ * Set the max file size for case report attachments that are emailed with the report.
+ * If a file is larger than this then the file is ignored and not attached to the outgoing email.
+ */
+$config['pathCase.report.maxAttachmentSize'] = 4000000;       // 4Mb
 
-
-//$config['request.trusted.proxies'] = array('172.23.84.121', '127.23.84.121', '103.12.109.146');
 
