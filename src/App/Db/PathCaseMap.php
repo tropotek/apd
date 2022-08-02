@@ -338,9 +338,6 @@ FROM path_case
         if (!empty($filter['submissionType'])) {
             $filter->appendWhere('a.submission_type = %s AND ', $this->quote($filter['submissionType']));
         }
-//        if (!empty($filter['status'])) {
-//            $filter->appendWhere('a.status = %s AND ', $this->quote($filter['status']));
-//        }
         if (!empty($filter['status'])) {
             $w = $this->makeMultiQuery($filter['status'], 'a.status');
             if ($w) $filter->appendWhere('(%s) AND ', $w);
@@ -449,6 +446,10 @@ FROM path_case
         }
         if (isset($filter['billable']) && $filter['billable'] !== '' && $filter['billable'] !== null) {
             $filter->appendWhere('a.billable = %s AND ', (int)$filter['billable']);
+        }
+        if (!empty($filter['accountStatus'])) {
+            $w = $this->makeMultiQuery($filter['accountStatus'], 'a.account_status');
+            if ($w) $filter->appendWhere('(%s) AND ', $w);
         }
 
         $dates = array('arrivalStart', 'arrivalEnd');

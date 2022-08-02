@@ -70,7 +70,6 @@ class CaseReportPdf extends Pdf
         if ($this->rendered) return $template;
         $this->rendered = true;
 
-
         $institution = $this->pathCase->getInstitution();
         if ($institution->getLogoUrl()) {
             $template->setAttr('logo', 'src', $institution->getLogoUrl());

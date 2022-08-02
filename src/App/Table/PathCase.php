@@ -230,6 +230,9 @@ JS;
         $list = array('Yes' => '1', 'No' => '0');
         $this->appendFilter(Field\Select::createSelect('billable', $list)->prependOption('-- Is Billable --', ''));
 
+        $list = \Tk\ObjectUtil::getClassConstants(\App\Db\PathCase::class, 'ACCOUNT_STATUS_');
+        $this->appendFilter(Field\Select::createSelect('accountStatus', $list)->prependOption('-- Account Status --', ''));
+
         $this->appendFilter(new Field\DateRange('arrival'));
 
         // Actions
