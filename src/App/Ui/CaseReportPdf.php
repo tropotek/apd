@@ -92,6 +92,11 @@ class CaseReportPdf extends Pdf
         $template->appendHtml('institution', $inst);
 
         $template->appendText('submissionDate', $this->pathCase->getCreated(\Tk\Date::FORMAT_SHORT_DATE));
+        $status = $this->pathCase->findStatusByName(PathCase::STATUS_COMPLETED);
+        if ($status) {
+            $template->appendText('completedDate', $status->getCreated(\Tk\Date::FORMAT_SHORT_DATE));
+        }
+
         $template->appendText('pathologyId', $this->pathCase->getPathologyId());
         $template->appendText('name', ucwords($this->pathCase->getReportStatus()) . ' Report');
 
@@ -379,6 +384,7 @@ JS;
           <td></td>
           <td width="40%" style="padding-top: 20px;line-height: 1.6;">
             Submission Date: <span var="submissionDate"></span>
+            <br/>Completed Date: <span var="completedDate">N/A</span>
             <br/>Pathology Number: <span var="pathologyId"></span>
             <span choice="clientName"><br/>Submitting Client: <span var="clientName"></span></span>
             <span choice="clientContactName"><br/>Submitting Contact: <span var="clientContactName"></span></span>
