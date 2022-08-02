@@ -93,7 +93,7 @@ class CaseReportPdf extends Pdf
         $template->appendText('submissionDate', $this->pathCase->getCreated(\Tk\Date::FORMAT_SHORT_DATE));
         $status = $this->pathCase->findStatusByName(PathCase::STATUS_COMPLETED);
         if ($status) {
-            $template->appendText('completedDate', $status->getCreated(\Tk\Date::FORMAT_SHORT_DATE));
+            $template->insertText('completedDate', $status->getCreated(\Tk\Date::FORMAT_SHORT_DATE));
         }
 
         $template->appendText('pathologyId', $this->pathCase->getPathologyId());
@@ -364,7 +364,7 @@ JS;
   <htmlpagefooter class="html-hide" id="myFooter1" name="myFooter1">
     <table width="100%" class="head-t">
       <tr>
-        <td width="50%">Date: {DATE j-m-Y}</td>
+        <td width="50%">Report Generated: {DATE j-m-Y}</td>
         <td width="50%" style="text-align: right;">{PAGENO}/{nbpg}</td>
       </tr>
     </table>
