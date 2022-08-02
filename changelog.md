@@ -1,6 +1,13 @@
 
 #CHANGELOG#
 
+Ver 3.0.160 [2022-08-03]:
+-------------------------------
+  - Added file attachments to pathCase email report
+  - Added case completed date to report, removed comments
+  - Added accountStatus search filter to case manager table
+
+
 Ver 3.0.158 [2022-05-23]:
 -------------------------------
   - Removed the edit_log due to bad implementation
