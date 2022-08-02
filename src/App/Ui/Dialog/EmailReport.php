@@ -62,11 +62,6 @@ class EmailReport extends JsonForm
             $list[$student->getNameFirst() . ' (' . $student->getEmail() . ')'] = $student->getEmail();
         }
 
-        /*
-        if ($this->getPathCase()->getStudentEmail())
-            $list[$this->getPathCase()->getStudent() . ' (' . $this->getPathCase()->getStudentEmail() . ')'] = $this->getPathCase()->getStudentEmail();
-        */
-
         $form->appendField(CheckboxGroup::createSelect('to', $list))->setValue(array($selected));
         $form->appendField(Input::create('toText'))->setLabel('To')->setNotes('Other emails to send the report to separate by comma, space, semi-colin.');
 
@@ -77,24 +72,7 @@ class EmailReport extends JsonForm
         $form->appendField(new Submit('save', array($this, 'doSubmit')))->setLabel('Send');
         $form->appendField(new Form\Event\Link('cancel', $this->getBackUrl()));
 
-
-//        $form->getField('save')
-//            ->appendCallback(function (\Bs\FormIface $form, \Tk\Form\Event\Iface $event) {
-//                $res = \Tk\ResponseJson::createJson($form->getModel());
-//                vd('------');
-//                if ($form->hasErrors()) {
-//                    vd($form->getAllErrors());
-//                    $errors = $form->getAllErrors();
-//                    $res = \Tk\ResponseJson::createJson($errors, \Tk\Response::HTTP_INTERNAL_SERVER_ERROR);
-//                }
-//                \Tk\Alert::clear();
-//                $res->send();
-//                exit;
-//            });
-
-
         $form->initForm();
-        //$form->execute($this->getConfig()->getRequest());
 
         parent::__construct($form, 'Email Report');
     }
@@ -135,7 +113,6 @@ class EmailReport extends JsonForm
         // Create message
         $message = $this->getConfig()->createMessage();
         $message->setFrom($this->getConfig()->getInstitution()->getEmail());
-        //$s = $this->pathCase->getPathologyId() . ': ' . $this->pathCase->getName();
         $s = $this->pathCase->getPathologyId();
         $message->setSubject($s);
 
@@ -145,7 +122,6 @@ class EmailReport extends JsonForm
         if ($this->pathCase->getReportStatus() == PathCase::REPORT_STATUS_INTERIM)
             $int = '-' . PathCase::REPORT_STATUS_INTERIM;
         $filename = 'AnatomicPathologyReport-' . $this->pathCase->getPathologyId() . '-' . $this->pathCase->getPatientNumber().$int.'.pdf';
-        //$filename = $this->pathCase->getPathologyId() . '_' . $this->pathCase->getPatientNumber().'.pdf';
         $pdfString = $pdf->getPdfAttachment($filename);
         $message->addStringAttachment($pdfString, $filename);
 
@@ -197,7 +173,6 @@ jQuery(function ($) {
     });
     
   }
-  //$('.modal-body form#email-pdf').on('init', '.modal-dialog', init).each(init);
   $('.email-report-dialog form').on('init', 'body', init).each(init);
 });
 JS;
