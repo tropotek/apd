@@ -415,6 +415,7 @@ JS;
         $this->getRenderer()->getTemplate()->appendJs($js);
 
 
+        // TODO: refactor the Field\File object, maybe create a \Bs\Fom\Field\File object that uses the \Bs\Db\File objects
         $tab = 'Files';
         $maxFiles = 10;
         /** @var Field\File $fileField */
