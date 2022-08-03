@@ -400,27 +400,19 @@ jQuery(function ($) {
                 fieldName: el.attr('name'),
                 value: ed.getContent()
               }, function (data) {
-                //console.log(data);
               }).fail(function() {
                   console.error('error')
               }).always(function() {
-                //setTimeout(function(){ el.removeClass('saving'); }, 3000);
                 el.removeClass('saving');
               });
             }
-            //console.log(ed.getContent());
           });
-          // console.log(el.attr('id'));
-          // console.log(el.val());
-          // console.log(ed.getContent());
         });
   };
   $('form').on('change', document, init).each(init);
 });
 JS;
         $this->getRenderer()->getTemplate()->appendJs($js);
-
-
 
 
         $tab = 'Files';
@@ -436,7 +428,6 @@ JS;
             $files = $this->getPathCase()->getFiles()->toArray();
             usort($files, function ($a, $b) {
                 return $a->getLabel() <=> $b->getLabel();
-                //return strcmp($a->getLabel(), $b->getLabel());
             });
             $v = json_encode($files);
             $fileField->setAttr('data-value', $v);
@@ -462,9 +453,6 @@ jQuery(function ($) {
 });
 JS;
         $this->getRenderer()->getTemplate()->appendJs($js);
-
-//        $this->appendField(new Field\File('files'))
-//            ->addCss('')->setAttr('data-path', $mediaPath)->setTabGroup($tab);
 
         if ($this->getPathCase()->getType() != \App\Db\PathCase::TYPE_BIOPSY) {
             $tab = 'After Care';
