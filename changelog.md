@@ -1,6 +1,12 @@
 
 #CHANGELOG#
 
+Ver 3.0.162 [2022-08-04]:
+-------------------------------
+  - Dissabled report file attachments for now.
+  - Added new selected property to File object
+
+
 Ver 3.0.160 [2022-08-03]:
 -------------------------------
   - Added file attachments to pathCase email report
