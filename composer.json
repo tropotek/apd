@@ -55,7 +55,8 @@
   },
   "config": {
     "allow-plugins": {
-      "ttek/tk-installers": true
+      "ttek/tk-installers": true,
+      "uom/tk-installers": false
     }
   }
 }
