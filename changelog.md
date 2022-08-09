@@ -1,6 +1,11 @@
 
 #CHANGELOG#
 
+Ver 3.2.0 [2022-08-10]:
+-------------------------------
+  - Migrated back to ttek libs
+
+
 Ver 3.0.162 [2022-08-04]:
 -------------------------------
   - Dissabled report file attachments for now.
