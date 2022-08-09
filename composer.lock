@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "95b69851509617bd5855abd3583f789a",
+    "content-hash": "a28f852cf83f850cf04453c11cb21836",
     "packages": [
         {
             "name": "guzzlehttp/psr7",
@@ -2392,12 +2392,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-base.git",
-                "reference": "333ca9b4f88b287ba31345263d04ddf3305e75f5"
+                "reference": "167ce3d529edaefef4b4b9e02e6f741146699593"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/333ca9b4f88b287ba31345263d04ddf3305e75f5",
-                "reference": "333ca9b4f88b287ba31345263d04ddf3305e75f5",
+                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/167ce3d529edaefef4b4b9e02e6f741146699593",
+                "reference": "167ce3d529edaefef4b4b9e02e6f741146699593",
                 "shasum": ""
             },
             "require": {
@@ -2446,7 +2446,7 @@
                 "issues": "https://github.com/tropotek/tk-base/issues",
                 "source": "https://github.com/tropotek/tk-base/tree/3.4"
             },
-            "time": "2022-08-09T00:00:00+00:00"
+            "time": "2021-11-26T00:00:00+00:00"
         },
         {
             "name": "ttek/tk-database",
@@ -2788,12 +2788,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-map.git",
-                "reference": "1514e2886e551a2888b0c5313cb64f234721b731"
+                "reference": "2e09e4ae5af6cc83f48997c25b14bfa7548c591b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-map/zipball/1514e2886e551a2888b0c5313cb64f234721b731",
-                "reference": "1514e2886e551a2888b0c5313cb64f234721b731",
+                "url": "https://api.github.com/repos/tropotek/tk-map/zipball/2e09e4ae5af6cc83f48997c25b14bfa7548c591b",
+                "reference": "2e09e4ae5af6cc83f48997c25b14bfa7548c591b",
                 "shasum": ""
             },
             "type": "library",
