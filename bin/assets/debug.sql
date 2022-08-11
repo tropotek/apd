@@ -3,7 +3,7 @@
 -- Date: 06/04/17
 -- ------------------------------------------------------
 
-UPDATE _migration SET path = REPLACE(path, '\/ttek\/', '\/uom\/') WHERE 1;
+-- UPDATE _migration SET path = REPLACE(path, '\/uom\/', '\/ttek\/') WHERE 1;
 
 -- --------------------------------------
 -- Change all passwords to 'password' for debug mode
