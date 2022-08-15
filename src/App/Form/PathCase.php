@@ -424,7 +424,6 @@ JS;
             ->setNotes('Upload any related files. A max. of '.$maxFiles.' files can be selected and uploaded per form submission.<br/>Select/check any file you want to be included with the email report.');
 
 
-
         $tab = 'After Care';
         if ($this->getPathCase()->getType() != \App\Db\PathCase::TYPE_BIOPSY) {
             $list = StorageMap::create()->findFiltered(['institutionId' => $this->getConfig()->getInstitutionId()], Tool::create('name'));
