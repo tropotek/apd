@@ -421,6 +421,7 @@ JS;
         /** @var \Bs\Form\Field\File $fileField */
         $this->appendField(\Bs\Form\Field\File::createFile('files[]', $this->getPathCase()))
             ->setTabGroup($tab)->setAttr('data-max-files', $maxFiles)
+            ->setAttr('data-select-title', 'Add file to report emails.')
             ->setNotes('Upload any related files. A max. of '.$maxFiles.' files can be selected and uploaded per form submission.<br/>Select/check any file you want to be included with the email report.<br/>Note: Files larger than 2Mb will not be attached to emails.');
 
 

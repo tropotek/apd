@@ -86,7 +86,6 @@ class FileMap extends Mapper
      */
     public function findFiltered($filter, $tool = null)
     {
-        vd($filter);
         return $this->selectFromFilter($this->makeQuery(Filter::create($filter)), $tool);
     }
 

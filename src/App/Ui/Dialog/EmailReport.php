@@ -125,8 +125,6 @@ class EmailReport extends JsonForm
         $pdfString = $pdf->getPdfAttachment($filename);
         $message->addStringAttachment($pdfString, $filename);
 
-        // TODO: we need to implement the selected file option b4 re-enabling this feature
-        //       They do not want all files to be emailed to the client
         // Attach any files attached to the case record
         foreach ($this->pathCase->getSelectedFileList() as $file) {
             $filePath = $this->getConfig()->getDataPath() . $file->getPath();
