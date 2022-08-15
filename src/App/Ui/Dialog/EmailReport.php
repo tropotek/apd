@@ -128,11 +128,11 @@ class EmailReport extends JsonForm
         // TODO: we need to implement the selected file option b4 re-enabling this feature
         //       They do not want all files to be emailed to the client
         // Attach any files attached to the case record
-//        foreach ($this->pathCase->getFiles() as $file) {
-//            $filePath = $this->getConfig()->getDataPath() . $file->getPath();
-//            if (!is_file($filePath) || $file->getBytes() > $this->getConfig()->get('pathCase.report.maxAttachmentSize', 2000000)) continue;
-//            $message->addAttachment($filePath, basename($file->getPath()), $file->getMime());
-//        }
+        foreach ($this->pathCase->getSelectedFileList() as $file) {
+            $filePath = $this->getConfig()->getDataPath() . $file->getPath();
+            if (!is_file($filePath) || $file->getBytes() > $this->getConfig()->get('pathCase.report.maxAttachmentSize', 2000000)) continue;
+            $message->addAttachment($filePath, basename($file->getPath()), $file->getMime());
+        }
 
         $message->setContent($values['message']);
         $message->set('sig', '');

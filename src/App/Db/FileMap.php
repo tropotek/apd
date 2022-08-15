@@ -86,6 +86,7 @@ class FileMap extends Mapper
      */
     public function findFiltered($filter, $tool = null)
     {
+        vd($filter);
         return $this->selectFromFilter($this->makeQuery(Filter::create($filter)), $tool);
     }
 
@@ -131,11 +132,10 @@ class FileMap extends Mapper
             $filter->appendWhere('a.hash = %s AND ', $this->quote($filter['hash']));
         }
         if (isset($filter['active']) && $filter['active'] !== '' && $filter['active'] !== null) {
-            if ($filter['active'] > 0) {
-                $filter->appendWhere('a.active = 1 AND ');
-            } else {
-                $filter->appendWhere('a.active = 0 AND ');
-            }
+            $filter->appendWhere('a.active = %d AND ', (int)$filter['active']);
+        }
+        if (isset($filter['selected']) && $filter['selected'] !== '' && $filter['selected'] !== null) {
+            $filter->appendWhere('a.selected = %d AND ', (int)$filter['selected']);
         }
 
         if (!empty($filter['model']) && $filter['model'] instanceof Model) {
