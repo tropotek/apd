@@ -22,7 +22,7 @@ use Uni\Db\User;
  * @link http://tropotek.com.au/
  * @license Copyright 2020 Tropotek
  */
-class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
+class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\FileIface
 {
     use TimestampTrait;
     use InstitutionTrait;
@@ -485,10 +485,36 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      * @return File[]|\Tk\Db\Map\ArrayObject
      * @throws \Exception
      */
+    public function getFileList(string $label = '', ?\Tk\Db\Tool $tool = null)
+    {
+        $filter = ['model' => $this];
+        if ($label) $filter['label'] = $label;
+        $list = FileMap::create()->findFiltered($filter, $tool);
+        return $list;
+    }
+
+    /**
+     * @param Tool|null $tool
+     * @return File[]|\Tk\Db\Map\ArrayObject
+     * @throws \Exception
+     */
+    public function getSelectedFileList(string $label = '', ?\Tk\Db\Tool $tool = null)
+    {
+        $filter = ['model' => $this, 'selected' => true];
+        if ($label) $filter['label'] = $label;
+        $list = FileMap::create()->findFiltered($filter, $tool);
+        return $list;
+    }
+
+    /**
+     * @param Tool|null $tool
+     * @return File[]|\Tk\Db\Map\ArrayObject
+     * @throws \Exception
+     * @deprecated Use getFileList()
+     */
     public function getFiles(Tool $tool = null)
     {
-        $list = FileMap::create()->findFiltered(array('model' => $this), $tool);
-        return $list;
+        return $this->getFileList('', $tool);
     }
 
     /**

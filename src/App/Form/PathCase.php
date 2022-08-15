@@ -49,9 +49,9 @@ class PathCase extends \Bs\FormIface
     {
         parent::__construct($formId);
 
-        if ($this->getConfig()->getRequest()->has('del')) {
-            $this->doDelete($this->getConfig()->getRequest());
-        }
+//        if ($this->getConfig()->getRequest()->has('del')) {
+//            $this->doDelete($this->getConfig()->getRequest());
+//        }
         if ($this->getConfig()->getRequest()->has('gc')) {
             $this->doGetContact($this->getConfig()->getRequest());
         }
@@ -415,48 +415,18 @@ JS;
         $this->getRenderer()->getTemplate()->appendJs($js);
 
 
-        // TODO: refactor the Field\File object, maybe create a \Bs\Fom\Field\File object that uses the \Bs\Db\File objects
+        // File field
         $tab = 'Files';
         $maxFiles = 10;
-        /** @var Field\File $fileField */
-        $fileField = $this->appendField(Field\File::create('files[]', $this->getPathCase()->getDataPath()))
-            ->setTabGroup($tab)->addCss('tk-multiinput')
-            ->setAttr('multiple', 'multiple')
-            //->setAttr('accept', '.png,.jpg,.jpeg,.gif')
-            ->setNotes('Upload any related files. A max. of '.$maxFiles.' files can be selected and uploaded per form submission.');
+        /** @var \Bs\Form\Field\File $fileField */
+        $this->appendField(\Bs\Form\Field\File::createFile('files[]', $this->getPathCase()))
+            ->setTabGroup($tab)->setAttr('data-max-files', $maxFiles)
+            ->setNotes('Upload any related files. A max. of '.$maxFiles.' files can be selected and uploaded per form submission.<br/>Select/check any file you want to be included with the email report.');
 
-        if ($this->getPathCase()->getId()) {
-            $files = $this->getPathCase()->getFiles()->toArray();
-            usort($files, function ($a, $b) {
-                return $a->getLabel() <=> $b->getLabel();
-            });
-            $v = json_encode($files);
-            $fileField->setAttr('data-value', $v);
-            $fileField->setAttr('data-prop-path', 'path');
-            $fileField->setAttr('data-prop-id', 'id');
-            $fileField->setAttr('data-max-files', $maxFiles);
-        }
 
-        // Enable select2 multi select for student field
-        $js = <<<JS
-jQuery(function ($) {
-    $('.tk-multiinput').each(function () {
-      var input = $(this);
-      $(this.form).on('submit', function() {
-        var max = parseInt(input.data('maxFiles'));
-        if (parseInt(input.get(0).files.length) > max){
-           alert("You can only upload a maximum of "+max+" files per form submission");
-           return false;
-        }
-      });      
-    });
-      
-});
-JS;
-        $this->getRenderer()->getTemplate()->appendJs($js);
 
+        $tab = 'After Care';
         if ($this->getPathCase()->getType() != \App\Db\PathCase::TYPE_BIOPSY) {
-            $tab = 'After Care';
             $list = StorageMap::create()->findFiltered(['institutionId' => $this->getConfig()->getInstitutionId()], Tool::create('name'));
             $this->appendField(Field\Select::createSelect('storageId', $list)->prependOption('-- Select --', ''))
                 ->setTabGroup($tab);
@@ -471,15 +441,12 @@ JS;
                 ->setLabel('Disposal Completion Date')->setTabGroup($tab);
         }
 
-
-
         foreach ($this->getFieldList() as $field) {
             if (in_array($field->getName(), $this->exceptions)) continue;
             if ($this->isReadonly()) {
                 $field->setReadonly(); //->setDisabled();
             }
         }
-
 
         $this->appendField(new Event\Submit('update', array($this, 'doSubmit')));
         $this->appendField(new Event\Submit('save', array($this, 'doSubmit')));
@@ -686,20 +653,20 @@ CSS;
     /**
      * @param \Tk\Request $request
      */
-    public function doDelete(\Tk\Request $request)
-    {
-        $fileId = $request->get('del');
-        try {
-            /** @var \App\Db\File $file */
-            $file = \App\Db\FileMap::create()->find($fileId);
-            if ($file) $file->delete();
-        } catch (\Exception $e) {
-            \Tk\ResponseJson::createJson(array('status' => 'err', 'msg' => $e->getMessage()), 500)->send();
-            exit();
-        }
-        \Tk\ResponseJson::createJson(array('status' => 'ok'))->send();
-        exit();
-    }
+//    public function doDelete(\Tk\Request $request)
+//    {
+//        $fileId = $request->get('del');
+//        try {
+//            /** @var \App\Db\File $file */
+//            $file = \App\Db\FileMap::create()->find($fileId);
+//            if ($file) $file->delete();
+//        } catch (\Exception $e) {
+//            \Tk\ResponseJson::createJson(array('status' => 'err', 'msg' => $e->getMessage()), 500)->send();
+//            exit();
+//        }
+//        \Tk\ResponseJson::createJson(array('status' => 'ok'))->send();
+//        exit();
+//    }
 
     /**
      * @param Form $form
@@ -736,9 +703,6 @@ CSS;
         }
 
         \App\Db\PathCaseMap::create()->mapForm($vals, $this->getPathCase());
-        // Do Custom Validations
-        /** @var \Tk\Form\Field\File $fileField */
-        $fileField = $form->getField('files');
 
         $form->addFieldErrors($this->getPathCase()->validate());
         if ($form->hasErrors()) {
@@ -752,8 +716,6 @@ CSS;
         $this->getPathCase()->setStatusNotify(true);
         if ($isNew)
             $this->getPathCase()->setStatusMessage('New pathology case created.');
-
-
 
         // This should automatically set the reportStatus to completed once the case is completed, as this option is sometimes fogotten
         $autocomplete = (bool)$this->getConfig()->getInstitution()->getData()->get(\App\Controller\Institution\Edit::INSTITUTION_AUTOCOMPLETE_REPORT_STATUS);
@@ -791,48 +753,9 @@ CSS;
             }
         }
 
-
-        /** @var \Tk\Form\Field\File $fileField */
+        /** @var \Bs\Form\Field\File $fileField */
         $fileField = $form->getField('files');
-        if ($fileField->hasFile()) {
-            /** @var \Symfony\Component\HttpFoundation\File\UploadedFile $file */
-            foreach ($fileField->getUploadedFiles() as $i => $file) {
-                if (!\App\Config::getInstance()->validateFile($file->getClientOriginalName())) {
-                    \Tk\Alert::addWarning('Illegal file type: ' . $file->getClientOriginalName());
-                    continue;
-                }
-                try {
-                    $filePath = $this->getConfig()->getDataPath() . $this->getPathCase()->getDataPath() . '/' . $file->getClientOriginalName();
-                    if (!is_dir(dirname($filePath))) {
-                        mkdir(dirname($filePath), $this->getConfig()->getDirMask(), true);
-                    }
-                    $file->move(dirname($filePath), basename($filePath));
-                    $oFile = \App\Db\FileMap::create()->findFiltered(array('model' => $this->getPathCase(), 'path' => $this->getPathCase()->getDataPath() . '/' . $file->getClientOriginalName()))->current();
-                    if (!$oFile) {
-                        $oFile = \App\Db\File::create($this->getPathCase(), $this->getPathCase()->getDataPath() . '/' . $file->getClientOriginalName(), $this->getConfig()->getDataPath() );
-                    }
-                    //$oFile->path = $this->report->getDataPath() . '/' . $file->getClientOriginalName();
-                    $oFile->save();
-                } catch (\Exception $e) {
-                    \Tk\Log::error($e->__toString());
-                    \Tk\Alert::addWarning('Error Uploading file: ' . $file->getClientOriginalName());
-                }
-            }
-        }
-
-        // TODO: create a new file field and move this there using AJAX calls
-        $activeList = $this->getRequest()->get('fActive', []);  // Get the active status
-        $labelList = $this->getRequest()->get('fLabel', []);    // Get the active status
-        $fileList = \App\Db\FileMap::create()->findFiltered(['model' => $this->getPathCase()]);
-        foreach ($fileList as $i => $file) {
-            if (in_array($i, $activeList)) {
-                $file->setActive(true);
-            }
-            if (isset($labelList[$i]))
-                $file->setLabel($labelList[$i]);
-            $file->save();
-        }
-
+        $fileField->doSubmit();
 
         \Tk\Alert::addSuccess('Record saved!');
         $event->setRedirect($this->getBackUrl());
