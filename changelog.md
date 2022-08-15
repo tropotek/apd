@@ -1,6 +1,12 @@
 
 #CHANGELOG#
 
+Ver 3.2.6 [2022-08-15]:
+-------------------------------
+  - updated email report file attachments
+  - Added new \Bs\Form\Field\File object for \Bs\Db\File objects
+
+
 Ver 3.2.4 [2022-08-11]:
 -------------------------------
 
