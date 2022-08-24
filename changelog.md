@@ -1,6 +1,11 @@
 
 #CHANGELOG#
 
+Ver 3.2.8 [2022-08-24]:
+-------------------------------
+  - Order test select by name
+
+
 Ver 3.2.6 [2022-08-15]:
 -------------------------------
   - updated email report file attachments
