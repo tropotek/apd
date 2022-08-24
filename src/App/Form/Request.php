@@ -6,6 +6,7 @@ use App\Db\ContactMap;
 use App\Db\Notice;
 use App\Db\ServiceMap;
 use App\Db\TestMap;
+use Tk\Db\Tool;
 use Tk\Form\Field;
 use Tk\Form\Event;
 use Tk\Form;
@@ -61,7 +62,7 @@ class Request extends \Bs\FormIface
 
         $list = ServiceMap::create()->findFiltered(array('institutionId' => $this->getRequest()->getPathCase()->getInstitutionId()));
         $this->appendField(new Field\Select('serviceId', $list))->prependOption('-- None --', '');
-        $list = TestMap::create()->findFiltered(array('institutionId' => $this->getRequest()->getPathCase()->getInstitutionId()));
+        $list = TestMap::create()->findFiltered(array('institutionId' => $this->getRequest()->getPathCase()->getInstitutionId()), Tool::create('name'));
         $this->appendField(new Field\Select('testId', $list))->prependOption('-- None --', '');
 
         if ($this->getRequest()->getId()) {
