@@ -62,7 +62,6 @@ $config['db.pass'] = 'password';
  */
 $config['auth.ldap.auto.account'] = false;
 
-
 /*
  * Debug
  */
@@ -70,8 +69,6 @@ $config['auth.ldap.auto.account'] = false;
 //$config['log.path'] = '/home/user/log/error.log';
 //$config['log.level'] = \Psr\Log\LogLevel::DEBUG;
 //$config['system.debug.email'] = 'user@example.com';
-
-
 
 // Used for the Mirror command.
 //if ($config->isDebug()) {
