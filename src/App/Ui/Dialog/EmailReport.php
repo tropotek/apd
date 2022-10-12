@@ -46,7 +46,7 @@ class EmailReport extends JsonForm
                 $selected = $client->getEmail();
             }
             foreach ($client->getEmailCcList() as $i => $e) {
-                $list['Client CC #'.$i] = $e;
+                $list['Client CC ('.$e.')'] = $e;
             }
 
         }
@@ -138,8 +138,11 @@ class EmailReport extends JsonForm
             $message->addAttachment($filePath, basename($file->getPath()), $file->getMime());
         }
 
+        $message->set('clientName', $this->getPathCase()->getClient()->getName());
+        $message->set('pathologyId', $this->pathCase->getPathologyId());
         $message->setContent($values['message']);
         $message->set('sig', '');
+        vd($message->all(), $values, $list);
 
         // Email individually to selected email addresses
         foreach ( $list as $to) {

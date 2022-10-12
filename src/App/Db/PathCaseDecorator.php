@@ -43,6 +43,13 @@ class PathCaseDecorator
                         'name' => $case->getClient()->getNameFirst(),
                         'email' => $case->getClient()->getEmail()
                     );
+                    foreach ($case->getClient()->getEmailCcList() as $e) {
+                        $users[] = array(
+                            'type' => $mailTemplate->getRecipientType(),
+                            'name' => $case->getClient()->getNameFirst(),
+                            'email' => $e
+                        );
+                    }
                 }
                 break;
             case MailTemplate::RECIPIENT_PATHOLOGIST:
@@ -61,6 +68,13 @@ class PathCaseDecorator
                         'name' => $student->getName(),
                         'email' => $student->getEmail()
                     ];
+                    foreach ($student->getEmailCcList() as $e) {
+                        $users[] = array(
+                            'type' => $mailTemplate->getRecipientType(),
+                            'name' => $student->getName(),
+                            'email' => $e
+                        );
+                    }
                 }
                 break;
             case MailTemplate::RECIPIENT_OWNER:
@@ -70,6 +84,13 @@ class PathCaseDecorator
                         'name' => $case->getOwner()->getNameFirst(),
                         'email' => $case->getOwner()->getEmail()
                     ];
+                    foreach ($case->getOwner()->getEmailCcList() as $e) {
+                        $users[] = array(
+                            'type' => $mailTemplate->getRecipientType(),
+                            'name' => $case->getOwner()->getName(),
+                            'email' => $e
+                        );
+                    }
                 }
                 break;
         }
