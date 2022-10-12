@@ -114,7 +114,7 @@ class Contact extends \Bs\FormIface
         if ($form->hasErrors()) {
             return;
         }
-        vd($this->getClient());
+
         $isNew = (bool)$this->getClient()->getId();
         $this->getClient()->save();
 

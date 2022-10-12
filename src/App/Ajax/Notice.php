@@ -211,7 +211,6 @@ class Notice
                 $out['unAlert'] = $unAlert;
             }
         }
-        vd($out);
         return $out;
     }
 

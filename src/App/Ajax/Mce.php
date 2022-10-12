@@ -49,7 +49,6 @@ class Mce
             return ResponseJson::createJson(['ok' => 'Cannot save a new case field.']);
         }
 
-        //vd($request->all());
         if ($fieldName && $obj == 'PathCase') {
             if (!$this->getAuthUser() || !$this->getAuthUser()->isStaff())
                 return ResponseJson::createJson(['err' => 'No valid user found.'], Response::HTTP_INTERNAL_SERVER_ERROR);

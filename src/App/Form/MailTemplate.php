@@ -30,7 +30,6 @@ class MailTemplate extends \Bs\FormIface
     {
 
         $mediaPath = $this->getMailTemplate()->getInstitution()->getDataPath().'/mtpl/media';
-        //vd($mediaPath);
 
         $list = MailTemplateEventMap::create()->findFiltered(array()); //->toArray('id', 'name');
         $this->appendField(new Field\Select('mailTemplateEventId', $list))->prependOption('-- Select --', '');

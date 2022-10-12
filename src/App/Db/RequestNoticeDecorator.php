@@ -10,8 +10,6 @@ class RequestNoticeDecorator extends NoticeDecoratorInterface
      */
     public function onCreateNotice($notice)
     {
-//        vd('************************************************');
-//        vd('New Request created and Notify object initiated');
         /** @var Request $request */
         $request = $notice->getModel();
         $case = $request->getPathCase();

@@ -26,14 +26,10 @@ class NoticeHandler implements Subscriber
      */
     public function onModelInsert(\Bs\Event\DbEvent $event)
     {
-        //
 //        $strat = Notice::makeNoticeDecorator($event->getModel());
 //        if (!$event->getModel() instanceof Notice && $strat) {
 //            vd('Add notify on new model insert');
 //            Notice::create($event->getModel());
-//
-//
-//
 //        }
     }
 
@@ -51,8 +47,6 @@ class NoticeHandler implements Subscriber
         if ($strat) {
 //            vd($event->getStatus()->getModel()->getCurrentStatus());
 //            vd('Add notify on status change');
-
-
         }
     }
 

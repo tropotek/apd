@@ -566,7 +566,6 @@ class Contact extends \Tk\Db\Map\Model implements \Tk\ValidInterface
             $errors['email'] = 'Invalid value: email';
         }
         if ($this->getEmailCc()) {
-            vd($this->getEmailCcList());
             foreach ($this->getEmailCcList() as $e) {
                 if (!filter_var($e, FILTER_VALIDATE_EMAIL)) {
                     $errors['emailCc'] = 'Invalid email CC value: ' . $e;

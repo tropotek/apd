@@ -59,7 +59,6 @@ class CmsPanel extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayIn
     public function doDefault(Request $request)
     {
         if ($request->has('cmsSave')) {
-            //vd($request->all());
             $this->setContent($request->get('cmsSave'));
         }
 
