@@ -1,6 +1,13 @@
 
 #CHANGELOG#
 
+Ver 3.2.12 [2022-10-13]:
+-------------------------------
+  - Update case email report template
+  - added a new emailCc field for extra emails per client
+  - fixed mirror command file cleanup
+
+
 Ver 3.2.10 [2022-09-22]:
 -------------------------------
 
