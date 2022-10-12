@@ -49,7 +49,7 @@ class Contact extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public $type = '';
 
     /**
-     * University account code or their accounts dep. account code for invoicing
+     * University account code or their accounts' dep. account code for invoicing
      * @var string
      */
     public $accountCode = '';
@@ -73,6 +73,11 @@ class Contact extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      * @var string
      */
     public $email = '';
+
+    /**
+     * @var string
+     */
+    public $emailCc = '';
 
     /**
      * @var string
@@ -302,6 +307,38 @@ class Contact extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     }
 
     /**
+     * @return string
+     */
+    public function getEmailCc(): string
+    {
+        return $this->emailCc;
+    }
+
+    /**
+     * @return array
+     */
+    public function getEmailCcList(): array
+    {
+        $arr = explode("\n", preg_replace("/[\s,;]+/", "\n", strtolower($this->getEmailCc() ?? '')));
+        $arr = array_filter($arr, function($e) {
+            return filter_var(
+                filter_var($e, FILTER_SANITIZE_EMAIL),
+                FILTER_VALIDATE_EMAIL);
+        });
+        return $arr;
+    }
+
+    /**
+     * @param string $email_cc
+     * @return Contact
+     */
+    public function setEmailCc($emailCc): Contact
+    {
+        $this->emailCc = $emailCc;
+        return $this;
+    }
+
+    /**
      * @param string $phone
      * @return Contact
      */
@@ -525,11 +562,20 @@ class Contact extends \Tk\Db\Map\Model implements \Tk\ValidInterface
             $errors['nameFirst'] = 'Please enter at least one name for this record.';
         }
 
-//        if (!$this->email || $this->email && !filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
-//            $errors['email'] = 'Invalid value: email';
-//        }
+        if ($this->getEmail() && !filter_var($this->getEmail(), FILTER_VALIDATE_EMAIL)) {
+            $errors['email'] = 'Invalid value: email';
+        }
+        if ($this->getEmailCc()) {
+            vd($this->getEmailCcList());
+            foreach ($this->getEmailCcList() as $e) {
+                if (!filter_var($e, FILTER_VALIDATE_EMAIL)) {
+                    $errors['emailCc'] = 'Invalid email CC value: ' . $e;
+                    break;
+                }
+            }
+        }
 
-        // find existing contact with same type and same first and last name (case insensitive search)
+        // find existing contact with same type and same first and last name (case in-sensitive search)
         if ($this->getNameFirst() || $this->getNameLast()) {
             $found = ContactMap::create()->findFiltered([
                 'institutionId' => $this->getInstitutionId(),

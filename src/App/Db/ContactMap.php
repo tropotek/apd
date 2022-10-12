@@ -34,6 +34,7 @@ class ContactMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Text('nameLast', 'name_last'));
             $this->dbMap->addPropertyMap(new Db\Text('accountCode', 'account_code'));
             $this->dbMap->addPropertyMap(new Db\Text('email'));
+            $this->dbMap->addPropertyMap(new Db\Text('emailCc', 'email_cc'));
             $this->dbMap->addPropertyMap(new Db\Text('phone'));
             $this->dbMap->addPropertyMap(new Db\Text('fax'));
 
@@ -68,6 +69,7 @@ class ContactMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Text('nameFirst'));
             $this->formMap->addPropertyMap(new Form\Text('nameLast'));
             $this->formMap->addPropertyMap(new Form\Text('email'));
+            $this->formMap->addPropertyMap(new Form\Text('emailCc'));
             $this->formMap->addPropertyMap(new Form\Text('phone'));
             $this->formMap->addPropertyMap(new Form\Text('fax'));
 
@@ -111,6 +113,7 @@ class ContactMap extends Mapper
             $w .= sprintf('a.phone LIKE %s OR ', $this->quote($kw));
             $w .= sprintf('a.fax LIKE %s OR ', $this->quote($kw));
             $w .= sprintf('a.email LIKE %s OR ', $this->quote($kw));
+            $w .= sprintf('a.email_cc LIKE %s OR ', $this->quote($kw));
             if (is_numeric($filter['keywords'])) {
                 $id = (int)$filter['keywords'];
                 $w .= sprintf('a.id = %d OR ', $id);

@@ -144,7 +144,10 @@ jQuery(function ($) {
     placeholder: 'Select Contact',
     allowClear: false,
     maximumSelectionLength: 1,
-    minimumInputLength: 0
+    minimumInputLength: 0,
+    escapeMarkup: function (item) {
+      return '<span class="tk-selection_choice_label">'+item+'</span>';
+    }
   }).on('change', function () {
     // Disable the add contact button if one is selected
     var btn = $(this).closest('.input-group').find('button');
@@ -459,23 +462,19 @@ JS;
 jQuery(function ($) {
   
   	var init = function() {
-  	  $(this).parent().find('.select2-selection__choice').each(function() {
+  	  $(this).parent().find('.tk-selection_choice_label').each(function() {
         $(this).on('mouseenter', function (e) {
+          if ($('.tk-contact .pinned').length) return;
           $('.tk-contact').remove();
           
           var el = $(this);
-          var data = $(this).data()['data'];
+          var data = $(this).closest('.select2-selection__choice').data()['data'];
           var name = data['text'].split('(')[0];
           var email = '';
           if (data['text'].indexOf('(') > -1 && data['text'].split('(')[1].replace(')', '')) {
             email = data['text'].split('(')[1].replace(')', '');
           }
           //console.log(data['text']); // TODO: get the name and email from here for instant data
-          var off = el.closest('.form-group').offset();
-          // var x = e.pageX - this.offsetLeft;
-          // var y = e.pageY - this.offsetTop;
-          var x = e.pageX - off.left;
-          var y = e.pageY - off.top;
             
           $.get(document.location, {
               'gc': data['id'],
@@ -497,7 +496,7 @@ jQuery(function ($) {
             if (contact.email)
               html += '<li><i class="fa fa-envelope-o"></i> <a href="mailto:'+contact.email+'">'+contact.email+'</a></li>';
             if (contact.nameCompany)
-              html += '<li><i class="fa fa-building"></i> <a href="tel:'+contact.nameCompany+'">'+contact.nameCompany+'</a></li>';
+              html += '<li><i class="fa fa-building"></i> <a href="contactEdit.html?contactId='+contact.id+'" target="_blank">'+contact.nameCompany+'</a></li>';
             if (contact.phone)
               html += '<li><i class="fa fa-phone"></i> <a href="tel:'+contact.phone+'">'+contact.phone+'</a></li>';
             if (contact.fax)
@@ -512,6 +511,13 @@ jQuery(function ($) {
             
             html += '</div>';
             
+            //var off = el.closest('.form-group').offset();
+            var off = el.offset();
+            // var x = e.pageX - this.offsetLeft;
+            // var y = e.pageY - this.offsetTop;
+            var x = e.pageX - off.left;
+            var y = e.pageY - off.top;
+          
             var panel = $(html);
             panel.css('left', x);
             panel.css('top', y);

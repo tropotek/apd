@@ -37,11 +37,13 @@ class Contact extends \Bs\FormIface
 
         $layout = $this->getForm()->getRenderer()->getLayout();
 
+        $layout->removeRow('nameCompany', 'col');
+        $layout->removeRow('accountCode', 'col');
         $layout->removeRow('fax', 'col');
         $layout->removeRow('postcode', 'col');
         $layout->removeRow('country', 'col');
         $layout->removeRow('nameLast', 'col');
-        $layout->removeRow('accountCode', 'col');
+        $layout->removeRow('emailCc', 'col');
 
         $tab = 'Details';
         //if (!$this->getConfig()->getRequest()->query->has('type') && !$this->isTypeHidden()) {
@@ -54,11 +56,13 @@ class Contact extends \Bs\FormIface
         }
 
         $this->appendField(new Field\Input('nameCompany'))->setLabel('Company Name')->setTabGroup($tab);
+        $this->appendField(new Field\Input('accountCode'))->setTabGroup($tab)
+            ->setNotes('The clients billing account code if available.');
         $this->appendField(new Field\Input('nameFirst'))->setLabel('Contact Firstname')->setTabGroup($tab);
         $this->appendField(new Field\Input('nameLast'))->setLabel('Contact Surname')->setTabGroup($tab);
         $this->appendField(new Field\Input('email'))->setTabGroup($tab);
-        $this->appendField(new Field\Input('accountCode'))->setTabGroup($tab)
-            ->setNotes('The clients billing account code if available.');
+        $this->appendField(new Field\Input('emailCc'))->setTabGroup($tab)
+            ->setNotes('Add multiple emails seperated by a comma or semicolon.');
         $this->appendField(new Field\Input('phone'))->setTabGroup($tab);
         $this->appendField(new Field\Input('fax'))->setTabGroup($tab);
 
@@ -110,7 +114,7 @@ class Contact extends \Bs\FormIface
         if ($form->hasErrors()) {
             return;
         }
-
+        vd($this->getClient());
         $isNew = (bool)$this->getClient()->getId();
         $this->getClient()->save();
 

@@ -40,9 +40,15 @@ class EmailReport extends JsonForm
 
 
         $client = $this->getPathCase()->getClient();
-        if ($client && $client->getEmail()) {
-            $list[$client->getNameFirst() . ' (' . $client->getEmail() . ')'] = $client->getEmail();
-            $selected = $client->getEmail();
+        if ($client) {
+            if ($client->getEmail()) {
+                $list[$client->getNameFirst() . ' (' . $client->getEmail() . ')'] = $client->getEmail();
+                $selected = $client->getEmail();
+            }
+            foreach ($client->getEmailCcList() as $i => $e) {
+                $list['Client CC #'.$i] = $e;
+            }
+
         }
 
         $user = $this->getPathCase()->getUser();
