@@ -142,7 +142,6 @@ class EmailReport extends JsonForm
         $message->set('pathologyId', $this->pathCase->getPathologyId());
         $message->setContent($values['message']);
         $message->set('sig', '');
-        vd($message->all(), $values, $list);
 
         // Email individually to selected email addresses
         foreach ( $list as $to) {
