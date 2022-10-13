@@ -581,15 +581,13 @@ class Contact extends \Tk\Db\Map\Model implements \Tk\ValidInterface
                 'type' => $this->getType(),
                 'nameFirst' => $this->getNameFirst(),
                 'nameLast' => $this->getNameLast(),
+                'nameCompany' => $this->getNameCompany(),
                 'exclude' => $this->getVolatileId()
             ]);
             if ($found->count()) {
                 $errors['nameFirst'] = 'A record with this name already exists.';
             }
-        }
-
-        // check for same comapny name??
-        if ($this->getNameCompany()) {
+        } else if ($this->getNameCompany()) { // check for same company name??
             $found = ContactMap::create()->findFiltered([
                 'institutionId' => $this->getInstitutionId(),
                 'type' => $this->getType(),
