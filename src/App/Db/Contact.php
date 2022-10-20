@@ -575,27 +575,29 @@ class Contact extends \Tk\Db\Map\Model implements \Tk\ValidInterface
         }
 
         // find existing contact with same type and same first and last name (case in-sensitive search)
-        if ($this->getNameFirst() || $this->getNameLast()) {
-            $found = ContactMap::create()->findFiltered([
-                'institutionId' => $this->getInstitutionId(),
-                'type' => $this->getType(),
-                'nameFirst' => $this->getNameFirst(),
-                'nameLast' => $this->getNameLast(),
-                'nameCompany' => $this->getNameCompany(),
-                'exclude' => $this->getVolatileId()
-            ]);
-            if ($found->count()) {
-                $errors['nameFirst'] = 'A record with this name already exists.';
-            }
-        } else if ($this->getNameCompany()) { // check for same company name??
-            $found = ContactMap::create()->findFiltered([
-                'institutionId' => $this->getInstitutionId(),
-                'type' => $this->getType(),
-                'nameCompany' => $this->getNameCompany(),
-                'exclude' => $this->getVolatileId()
-            ]);
-            if ($found->count()) {
-                $errors['nameCompany'] = 'A record with this name already exists.';
+        if (!$this->getId()) {
+            if ($this->getNameFirst() || $this->getNameLast()) {
+                $found = ContactMap::create()->findFiltered([
+                    'institutionId' => $this->getInstitutionId(),
+                    'type' => $this->getType(),
+                    'nameFirst' => $this->getNameFirst(),
+                    'nameLast' => $this->getNameLast(),
+                    'nameCompany' => $this->getNameCompany(),
+                    'exclude' => $this->getVolatileId()
+                ]);
+                if ($found->count()) {
+                    $errors['nameFirst'] = 'A record with this name already exists.';
+                }
+            } else if ($this->getNameCompany()) { // check for same company name??
+                $found = ContactMap::create()->findFiltered([
+                    'institutionId' => $this->getInstitutionId(),
+                    'type' => $this->getType(),
+                    'nameCompany' => $this->getNameCompany(),
+                    'exclude' => $this->getVolatileId()
+                ]);
+                if ($found->count()) {
+                    $errors['nameCompany'] = 'A record with this Company name already exists.';
+                }
             }
         }
 
