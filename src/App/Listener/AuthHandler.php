@@ -27,6 +27,8 @@ class AuthHandler extends \Bs\Listener\AuthHandler
             $config->getMasqueradeHandler()->masqueradeClear();
         }
 
+        // If using DB auth and no password send verify email and request user to create a new password
+
         if ($event->getAdapter() instanceof \Tk\Auth\Adapter\Ldap) {
             // Find user data from ldap connection
             $filter = substr($adapter->getBaseDn(), 0, strpos($adapter->getBaseDn(), ','));
@@ -46,12 +48,6 @@ class AuthHandler extends \Bs\Listener\AuthHandler
                     if (!$user && $email) {
                         $user = $config->getUserMapper()->findByEmail($email, $config->getInstitutionId());
                     }
-//                    if (!$user) {   // Error out if no user
-//                        $event->setResult(new \Tk\Auth\Result(\Tk\Auth\Result::FAILURE_CREDENTIAL_INVALID,
-//                                $adapter->get('username'), 'Invalid username. Please contact your administrator to setup an account.'));
-//                        return;
-//                    }
-
 
                     if (!$user) { // Create a user record if none exists
                         if (!$config->get('auth.ldap.auto.account')) {
@@ -78,20 +74,19 @@ class AuthHandler extends \Bs\Listener\AuthHandler
                                 'title' => ucwords(strtolower($ldapData[0]['auedupersonsalutation'][0])),
                                 'nameFirst' => $ldapData[0]['givenname'][0],
                                 'nameLast' => $ldapData[0]['sn'][0],
-                                'uid' => $uid,
-                                'ldapData' => $ldapData
+                                'uid' => $uid
                             );
                             $user = $config->createUser();
                             $config->getUserMapper()->mapForm($userData, $user);
 
-                            $error = $user->validate();
-                            if (count($error)) {
-                                try {
-                                    $user->setNewPassword($adapter->get('password'));
-                                } catch (\Exception $e) {
-                                    \Tk\Log::info($e->__toString());
-                                }
-                            }
+//                            $error = $user->validate();
+//                            if (count($error)) {
+//                                try {
+//                                    $user->setNewPassword($adapter->get('password'));
+//                                } catch (\Exception $e) {
+//                                    \Tk\Log::info($e->__toString());
+//                                }
+//                            }
                         } else {
                             $msg = sprintf('Only institution staff can access "%s". Please contact %s for more information.',
                                 $this->getConfig()->getSiteTitle(), $this->getConfig()->getInstitution()->getEmail());
@@ -112,10 +107,9 @@ class AuthHandler extends \Bs\Listener\AuthHandler
                         if (!$user->getEmail())
                             $user->setEmail($email);
 
-                        $user->setNewPassword($adapter->get('password'));
+                        //$user->setNewPassword($adapter->get('password'));
                         $user->save();
                         $user->addPermission($this->getConfig()->getPermission()->getDefaultUserPermissions($user->getType()));
-//                        $user->addPermission(\App\Db\Permission::getDefaultPermissionList($user->getType()));
 
                         if (method_exists($user, 'getData')) {
                             $data = $user->getData();
@@ -133,61 +127,6 @@ class AuthHandler extends \Bs\Listener\AuthHandler
             }
         }
 
-        // TODO:
-        // TODO: This need to be tested before releasing it
-        // TODO:
-
-        // LTI Authentication
-        if ($event->getAdapter() instanceof \Lti\Auth\LtiAdapter) {
-            $config = \Uni\Config::getInstance();
-
-            /** @var \Lti\Auth\LtiAdapter $adapter */
-            $adapter = $event->getAdapter();
-            $userData = $adapter->get('userData');
-            $subjectData = $adapter->get('subjectData');
-            $ltiData = $adapter->getLaunchData();
-
-            if ($userData['type'] != \Uni\Db\User::TYPE_STAFF) {
-                $msg = sprintf('Only institution staff can access "%s". Please contact %s for more information.',
-                    $this->getConfig()->getSiteTitle(), $this->getConfig()->getInstitution()->getEmail());
-                $event->setResult(new \Tk\Auth\Result(\Tk\Auth\Result::FAILURE_CREDENTIAL_INVALID, $adapter->get('username'), $msg));
-                return;
-            }
-
-            // Setup/Find User and log them in
-            $user = $config->getUserMapper()->findByUsername($adapter->get('username'), $adapter->getInstitution()->getId());
-            if (!$user) {
-                $user = $config->getUserMapper()->findByEmail($userData['email'], $adapter->getInstitution()->getId());
-            }
-
-            // Create the new user account
-            if (!$user) {
-                $user = $config->createUser();
-                $config->getUserMapper()->mapForm($userData, $user);
-                $user->save();
-                $user->addPermission($this->getConfig()->getPermission()->getDefaultUserPermissions($user->getType()));
-                //$user->addPermission(\Uni\Db\Permission::getDefaultPermissionList($user->getType()));
-                $adapter->set('user', $user);
-            }
-
-            // Update user details from login
-            if (!$user->getEmail())
-                $user->setEmail($userData['email']);
-            if (!$user->getName())
-                $user->setName($userData['name']);
-            if (!$user->getImage() && !empty($userData['image']))
-                $user->setImage($userData['image']);
-
-            $user->save();
-            if ($ltiData && method_exists($user, 'getData')) {
-                $data = $user->getData();
-                $data->set('lti.last.login', json_encode($ltiData));
-                $data->save();
-            }
-
-            $config->getSession()->set('auth.password.access', false);
-            $event->setResult(new \Tk\Auth\Result(\Tk\Auth\Result::SUCCESS, $config->getUserIdentity($user)));
-        }
     }
 
     /**
@@ -247,6 +186,7 @@ class AuthHandler extends \Bs\Listener\AuthHandler
 
         $adapter = $config->getAuthDbTableAdapter($event->all());
         $result = $auth->authenticate($adapter);
+        vd($result);
 
 
         $event->setResult($result);

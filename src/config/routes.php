@@ -26,8 +26,10 @@ $routes->add('login', Route::create('/login.html', 'App\Controller\Login::doInsL
 $routes->add('institution-login', Route::create('/inst/{instHash}/login.html', 'App\Controller\Login::doInsLogin'));
 $routes->add('admin-login', Route::create('/xlogin.html', 'App\Controller\Login::doDefault'));
 
-$routes->add('recover', Route::create('/recover.html', 'App\Controller\Recover::doDefault'));
-$routes->add('install', Route::create('/install.html', 'App\Controller\Install::doDefault'));
+$routes->remove('recover');
+//$routes->add('recover', Route::create('/recover.html', 'App\Controller\Recover::doDefault'));
+//$routes->add('install', Route::create('/install.html', 'App\Controller\Install::doDefault'));
+
 
 // Admin Pages
 $routes->add('admin-dashboard', Route::create('/admin/index.html', 'App\Controller\User\AdminDashboard::doDefault'));
