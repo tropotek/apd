@@ -186,7 +186,6 @@ class AuthHandler extends \Bs\Listener\AuthHandler
 
         $adapter = $config->getAuthDbTableAdapter($event->all());
         $result = $auth->authenticate($adapter);
-        vd($result);
 
 
         $event->setResult($result);
