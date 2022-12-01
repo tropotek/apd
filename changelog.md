@@ -1,6 +1,12 @@
 
 #CHANGELOG#
 
+Ver 3.2.18 [2022-12-01]:
+-------------------------------
+  - Fixed owner_id filter for PathCase search
+  - added activate account email for user accounts with no password
+
+
 Ver 3.2.16 [2022-10-20]:
 -------------------------------
 
