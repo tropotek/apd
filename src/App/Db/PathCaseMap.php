@@ -307,6 +307,9 @@ FROM path_case
         if (!empty($filter['soUserId'])) {
             $filter->appendWhere('a.so_user_id = %s AND ', (int)$filter['soUserId']);
         }
+        if (!empty($filter['ownerId'])) {
+            $filter->appendWhere('a.owner_id = %s AND ', (int)$filter['ownerId']);
+        }
 
 
         if (!empty($filter['pathologistId']) && !empty($filter['userId']) && !empty($filter['user_pathologist_or'])) {
