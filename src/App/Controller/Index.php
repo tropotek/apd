@@ -10,10 +10,7 @@ use Tk\Request;
  */
 class Index extends \Uni\Controller\Index
 {
-    /**
-     * @var null|\Tk\Table
-     */
-    protected $table = null;
+
     
     /**
      * @param Request $request
@@ -22,32 +19,6 @@ class Index extends \Uni\Controller\Index
     {
         parent::doDefault($request);
 
-        $this->table = $this->getConfig()->createTable('institution-list');
-        $this->table = $this->getConfig()->createTable('institution-list');
-        $this->table->setRenderer($this->getConfig()->createTableRenderer($this->table));
-
-        $actionsCell = new \Tk\Table\Cell\Actions();
-        $actionsCell->addButton(\Tk\Table\Cell\ActionButton::create('Login', \Tk\Uri::create(), 'fa  fa-sign-in', 'button-small soft')->setAttr('title', 'Institution Login'))
-            ->addOnShow(function ($cell, $obj, $button) {
-                /* @var $obj \Uni\Db\Institution */
-                /* @var $button \Tk\Table\Cell\ActionButton */
-                $button->setUrl($obj->getLoginUrl());
-            });
-
-        $this->table->appendCell($actionsCell);
-        $this->table->appendCell(new \Tk\Table\Cell\Text('name'))->setUrl(\Tk\Uri::create('/institutionEdit.html'))
-            ->addOnPropertyValue(function ($cell, $obj, $value) {
-                /* @var $obj \Uni\Db\Institution */
-                /* @var $cell \Tk\Table\Cell\Text */
-                $cell->setUrl($obj->getLoginUrl());
-                return $value;
-            });
-        $this->table->appendCell(new \Tk\Table\Cell\Text('description'))->addCss('key')->setCharacterLimit(150);
-
-        $filter = $this->table->getFilterValues();
-        $filter['active'] = true;
-        $list = $this->getConfig()->getInstitutionMapper()->findFiltered($filter, $this->table->getTool());
-        $this->table->setList($list);
     }
 
 
@@ -60,14 +31,13 @@ class Index extends \Uni\Controller\Index
 
         $template->insertText('site-title', $this->getConfig()->get('site.title'));
 
-        $template->appendTemplate('table', $this->table->getRenderer()->show());
 
-        if ($this->getConfig()->getInstitutionMapper()->findActive()->count() > 1) {
-            $template->setVisible("multiInstitutions");
-        } else {
-            $template->setAttr('institution-login', 'href', $this->getConfig()->getInstitution()->getLoginUrl());
-            $template->setVisible("login");
-        }
+//        if ($this->getConfig()->getInstitutionMapper()->findActive()->count() > 1) {
+//            $template->setVisible("multiInstitutions");
+//        } else {
+//            $template->setAttr('institution-login', 'href', $this->getConfig()->getInstitution()->getLoginUrl());
+//            $template->setVisible("login");
+//        }
 
         return $template;
     }
@@ -81,64 +51,211 @@ class Index extends \Uni\Controller\Index
     {
         $xhtml = <<<HTML
 <div>
+  <!-- Hero -->
+  <div class="overflow-hidden">
+    <div class="container content-space-t-1 content-space-t-lg-2">
+      <div class="row justify-content-center align-items-lg-center">
+        <div class="col-lg-7 mb-7 mb-sm-10 mb-lg-0">
+          <div class="pe-lg-5">
+            <div class="mb-4">
+              <h1 class="display-4">APD<br />Lab reporting<br />made easy</h1>
+              <p class="fs-3">Hand-picked professionals and expertly crafted components, designed for any kind of entrepreneur.</p>
+            </div>
 
-  <div class="tabbed-nav" data-tabbed="" id="nav">
-    <div class="full-width">
-      <nav class="desktop-nav" role="tablist">
-        <a href="#welcome" role="tab">Welcome</a>
-        <a href="#institutions" role="tab" choice="multiInstitutions">Institutions</a>
-        <a href="#contact" role="tab">Contact</a>
-        <a href="/login.html" var="institution-login" role="tab" choice1="login">Login</a>
-      </nav>
-    </div>
+            <div class="mb-7">
+              <a class="btn btn-primary btn-pointer" href="/contact.html">Request a demo</a>
+            </div>
 
-    <div class="tab" id="welcome" role="tabpanel">
-      <section class="with-figure">
-        <h2 class="title" var="site-title">FVAS VOCE</h2>
-        <div>
-          <h1>The Project</h1>
-          <p>
-            Welcome to the <span var="site-title">Project</span>.<br/>
-            This project has been developed by FVAS staff.
-          </p>
-<!--          <h1>Access Via LMS</h1>-->
-<!--          <p>-->
-<!--            The application is accessed as an <a href="https://www.imsglobal.org/activity/learning-tools-interoperability" target="_blank">LTI</a>-->
-<!--            Web Link within the LMS.-->
-<!--          </p>-->
-<!--          <p>-->
-<!--            If you wish to use this LTI Tool in your course all you need to do is add a web link into your-->
-<!--            LMS course content. Contact our team today if you want to find out more.-->
-<!--          </p>-->
+            <div class="row">
+              <div class="col-sm-auto">
+                <div class="pe-sm-4">
+                  <p>&nbsp;</p>
+                  <p>&nbsp;</p>
+                </div>
+              </div>
+              <!-- End Col -->
+
+              <div class="col-sm-auto">
+                <div class="ps-sm-4">
+                  <p>&nbsp;</p>
+                  <p>&nbsp;</p>
+                </div>
+              </div>
+              <!-- End Col -->
+            </div>
+            <!-- End Row -->
+          </div>
         </div>
-      </section>
-<!--      <hr class="spacer" />-->
-<!--      <p class="center"><a class="button-hero" href="https://app.lms.unimelb.edu.au/">Access The LMS</a></p>-->
-    </div>
+        <!-- End Col -->
 
-    <div class="tab" id="institutions" role="tabpanel" choice="multiInstitutions">
-      <section var="table"></section>
-    </div>
+        <div class="col-sm-9 col-lg-5">
+          <div class="position-relative">
+            <!-- Card -->
+            <div class="card card-shadow mb-3">
+              <div class="card-body">
+                <div class="text-center mb-5">
+                  <h4 class="card-title">Monthly Pricing</h4>
+                </div>
 
-    <div class="tab" id="contact" role="tabpanel">
-      <section>
-        <div class="contact-box">
-          <h1>Werribee Campus</h1>
-          <dl>
-            <dt>Address</dt>
-            <dd>250 Princes Highway<br />Werribee Victoria 3030</dd>
-            <dt>Email</dt>
-            <dd><a href="mailto: fvas-elearning@unimelb.edu.au">fvas-elearning@unimelb.edu.au</a></dd>
-          </dl>
+                <!-- List -->
+                <ul class="list-unstyled list-py-1">
+                  <li>
+                    <!-- Radio Check -->
+                    <label class="form-check form-check-reverse form-check-select form-check-pinned-top-end" for="formCheckSelect1">
+                      <input type="radio" class="form-check-input" name="formCheckSelect" id="formCheckSelect1" />
+                      <span class="form-check-label">
+                          <span class="fw-medium">Professional</span>
+                          <span class="d-block h4 mb-0">$500</span>
+                          <span class="d-block fs-6 text-muted">All the basics</span>
+                        </span>
+                      <span class="form-check-stretched-bg"></span>
+                    </label>
+                    <!-- End Radio Check -->
+                  </li>
+
+                  <li>
+                    <!-- Radio Check -->
+                    <label class="form-check form-check-reverse form-check-select form-check-pinned-top-end" for="formCheckSelect2">
+                      <input type="radio" class="form-check-input" name="formCheckSelect" id="formCheckSelect2" checked="checked" />
+                      <span class="form-check-label">
+                          <span class="fw-medium">Team <span class="badge bg-soft-primary text-primary rounded-pill">Most popular</span></span>
+                          <span class="d-block h4 mb-0">$850</span>
+                          <span class="d-block fs-6 text-muted">Additional development options</span>
+                        </span>
+                      <span class="form-check-stretched-bg"></span>
+                    </label>
+                    <!-- End Radio Check -->
+                  </li>
+
+                  <li>
+                    <!-- Radio Check -->
+                    <label class="form-check form-check-reverse form-check-select form-check-pinned-top-end" for="formCheckSelect3">
+                      <input type="radio" class="form-check-input" name="formCheckSelect" id="formCheckSelect3" />
+                      <span class="form-check-label">
+                          <span class="fw-medium">Enterprise</span>
+                          <span class="d-block h4 mb-0">$1500</span>
+                          <span class="d-block fs-6 text-muted">Advanced features for scaling to your needs</span>
+                        </span>
+                      <span class="form-check-stretched-bg"></span>
+                    </label>
+                    <!-- End Radio Check -->
+                  </li>
+                </ul>
+                <!-- End List -->
+
+                <div class="d-grid">
+                  <button type="button" class="btn btn-primary">Request A Demo</button>
+                </div>
+              </div>
+            </div>
+            <!-- End Card -->
+
+            <!-- SVG Shape -->
+            <figure class="position-absolute top-0 end-0 zi-n1 d-none d-sm-block me-n10" style="width: 4rem;">
+              <img class="img-fluid" src="/html/public/assets/svg/components/pointer-up.svg" alt="Image Description" />
+            </figure>
+            <!-- End SVG Shape -->
+          </div>
+
+          <div class="text-center">
+            <p class="fs-5 text-muted">Need custom plan? <a class="link link-pointer" href="/contact.html">Contact sales</a></p>
+          </div>
         </div>
-      </section>
-      <section class="fullwidth">
-        <div class="gmap__canvas" data-grayscale="" data-latlng="-37.889149, 144.693133" data-pin="-37.889149, 144.693133"></div>
-      </section>
+        <!-- End Col -->
+      </div>
+      <!-- End Row -->
     </div>
-
-
   </div>
+  <!-- End Hero -->
+
+  <!-- Features -->
+  <div class="overflow-hidden content-space-t-2 content-space-t-lg-3">
+    <div class="container position-relative content-space-2 content-space-lg-3">
+      <div class="row">
+        <div class="col-lg-5 align-self-lg-end mb-7 mb-lg-0">
+          <h2>For pathologist and lab technicians working as a team</h2>
+          <div class="d-none d-lg-flex justify-content-center mt-7" style="width: 15rem;">
+            <img class="img-fluid" src="/html/public/assets/svg/illustrations/plane.svg" alt="Image Description" />
+          </div>
+        </div>
+        <!-- End Col -->
+
+        <div class="col-lg-7 align-self-lg-center">
+          <div class="row">
+            <div class="col-lg-6 mb-4">
+              <!-- Card -->
+              <div class="card card-shadow h-100">
+                <div class="card-body">
+                  <div class="mb-3">
+                    <i class="bi-emoji-smile fs-2 text-dark"></i>
+                  </div>
+                  <h4>Hosting</h4>
+                  <p class="mb-0">We host and maintain the software and servers.</p>
+                </div>
+              </div>
+              <!-- End Card -->
+            </div>
+            <!-- End Col -->
+
+            <div class="col-lg-6 mb-4">
+              <!-- Card -->
+              <div class="card card-shadow h-100">
+                <div class="card-body">
+                  <div class="mb-3">
+                    <i class="bi-droplet fs-2 text-dark"></i>
+                  </div>
+                  <h4>Be more focused</h4>
+                  <p class="mb-0">Let us manage the system upgrades and software security.</p>
+                </div>
+              </div>
+              <!-- End Card -->
+            </div>
+            <!-- End Col -->
+
+            <div class="w-100"></div>
+
+            <div class="col-lg-6 mb-4 mb-lg-0">
+              <!-- Card -->
+              <div class="card card-shadow h-100">
+                <div class="card-body">
+                  <div class="mb-3">
+                    <i class="bi-briefcase fs-2 text-dark"></i>
+                  </div>
+                  <h4>Built for business</h4>
+                  <p class="mb-0">Functionality your customers actually want.</p>
+                </div>
+              </div>
+              <!-- End Card -->
+            </div>
+            <!-- End Col -->
+
+            <div class="col-lg-6">
+              <!-- Card -->
+              <div class="card card-shadow h-100">
+                <div class="card-body">
+                  <div class="mb-3">
+                    <i class="bi-speedometer2 fs-2 text-dark"></i>
+                  </div>
+                  <h4>Built for speed</h4>
+                  <p class="mb-0">72% faster loading speed compared to traditional websites.</p>
+                </div>
+              </div>
+              <!-- End Card -->
+            </div>
+            <!-- End Col -->
+          </div>
+          <!-- End Row -->
+        </div>
+        <!-- End Col -->
+      </div>
+      <!-- End Row -->
+
+      <div class="position-absolute top-0 start-0 w-100 w-lg-65 h-65 h-lg-100 bg-light rounded-3 zi-n1 ms-n5"></div>
+    </div>
+  </div>
+  <!-- End Features -->
+
+  <div class="overflow-hidden content-space-t-2 content-space-t-lg-3"></div>
 
 </div>
 HTML;
