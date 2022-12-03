@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a28f852cf83f850cf04453c11cb21836",
+    "content-hash": "6d1a2e53c167d67a0d78e24078b9c705",
     "packages": [
         {
             "name": "guzzlehttp/psr7",
@@ -2400,12 +2400,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-base.git",
-                "reference": "72a9e8a9a053ea0f6e8fad83f6f6ad0d60b05731"
+                "reference": "5d833cbdc7f9f6f5543f23db9a005aef56d7538b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/72a9e8a9a053ea0f6e8fad83f6f6ad0d60b05731",
-                "reference": "72a9e8a9a053ea0f6e8fad83f6f6ad0d60b05731",
+                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/5d833cbdc7f9f6f5543f23db9a005aef56d7538b",
+                "reference": "5d833cbdc7f9f6f5543f23db9a005aef56d7538b",
                 "shasum": ""
             },
             "require": {
@@ -2846,12 +2846,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-mvc.git",
-                "reference": "f3ad19bbb160301e2d02f5833e5bcdf22ea6f79e"
+                "reference": "1f80bb6e6a0f6b5059d03ea68d117e5383c63054"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-mvc/zipball/f3ad19bbb160301e2d02f5833e5bcdf22ea6f79e",
-                "reference": "f3ad19bbb160301e2d02f5833e5bcdf22ea6f79e",
+                "url": "https://api.github.com/repos/tropotek/tk-mvc/zipball/1f80bb6e6a0f6b5059d03ea68d117e5383c63054",
+                "reference": "1f80bb6e6a0f6b5059d03ea68d117e5383c63054",
                 "shasum": ""
             },
             "require": {
@@ -3049,12 +3049,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-uni.git",
-                "reference": "828ccd022916d8a518d511d459e144a0792e4619"
+                "reference": "69c67eca73632920b11b28c322ac7b6355a8c806"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-uni/zipball/828ccd022916d8a518d511d459e144a0792e4619",
-                "reference": "828ccd022916d8a518d511d459e144a0792e4619",
+                "url": "https://api.github.com/repos/tropotek/tk-uni/zipball/69c67eca73632920b11b28c322ac7b6355a8c806",
+                "reference": "69c67eca73632920b11b28c322ac7b6355a8c806",
                 "shasum": ""
             },
             "require": {
