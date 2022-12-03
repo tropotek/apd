@@ -29,12 +29,6 @@ class PageTemplateHandler extends \Uni\Listener\PageTemplateHandler
         $page = $controller->getPage();
         $template = $page->getTemplate();
 
-        // For the uni default public template
-        if ($page->getTemplatePath() == $this->getConfig()->getSitePath() . $this->getConfig()->get('template.public')) {
-            \Tk\Alert::$CSS = 'notice';
-            \Tk\Alert::$CSS_PREFIX = 'notice--';
-        }
-
         parent::showPage($event);
 
         $controller = $event->get('controller');

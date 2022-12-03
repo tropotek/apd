@@ -17,6 +17,23 @@ use Bs\Controller\Iface;
 class Recover extends \Uni\Controller\Recover
 {
 
+
+    public function doInsRecover(\Tk\Request $request, $instHash = '')
+    {
+        $this->institution = $this->getConfig()->getInstitutionMapper()->findByHash($instHash);
+        if (!$this->institution && $request->attributes->has('institutionId')) {
+            $this->institution = $this->getConfig()->getInstitutionMapper()->find($request->attributes->get('institutionId'));
+        }
+
+        // get institution by hostname
+        if (!$this->institution || !$this->institution->active ) {
+            $this->institution = $this->getConfig()->getInstitutionMapper()->findByDomain($request->getTkUri()->getHost());
+        }
+
+        $this->doDefault($request);
+    }
+
+
     /**
      * @throws \Exception
      */

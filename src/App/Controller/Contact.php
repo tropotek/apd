@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use Tk\Alert;
 use Tk\Request;
 use Tk\Form;
 use Tk\Form\Event;
@@ -76,9 +77,7 @@ class Contact extends \Bs\Controller\Iface
     public function doSubmit($form)
     {
         $values = $form->getValues();
-        /** @var Field\File $attach */
-        $attach = $form->getField('attach');
-vd($values);
+
         // Bot detection
         if (!empty($values['email'])) {
             $form->addFieldError('Invalid form submission');
@@ -118,10 +117,10 @@ vd($values);
      */
     private function sendEmail($form)
     {
-        $name = $form->getFieldValue('firstName') . $form->getFieldValue('lastName');
-        $email = $form->getFieldValue('contact');
-        $company = $form->getFieldValue('company');
-        $web = $form->getFieldValue('website');
+        $name = strip_tags($form->getFieldValue('firstName') . ' ' . $form->getFieldValue('lastName'));
+        $email = strip_tags($form->getFieldValue('contact'));
+        $company = strip_tags($form->getFieldValue('company'));
+        $web = strip_tags($form->getFieldValue('website'));
         $messageStr = strip_tags($form->getFieldValue('message'));
 
         $content = <<<HTML
@@ -155,7 +154,7 @@ HTML;
 
    
     <!-- Card Grid -->
-    <div choice="hide" class="container content-space-t-3 content-space-t-lg-4">
+    <div choice="hide" class="container content-space-t-3 content-space-t-lg-2">
       <div class="text-center mb-7">
         <h1 class="display-5">How can we help?</h1>
       </div>
@@ -251,7 +250,7 @@ HTML;
 
     <!-- Contact Form -->
     <div class="overflow-hidden">
-      <div class="container content-space-1 content-space-lg-4">
+      <div class="container content-space-1 content-space-lg-2">
         <div class="row">
           <div class="col-lg-6 mb-10 mb-lg-0">
             <div class="pe-lg-10">

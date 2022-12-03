@@ -23,15 +23,13 @@ $routes->add('home', Route::create('/index.html', 'App\Controller\Index::doDefau
 $routes->add('home-base', Route::create('/', 'App\Controller\Index::doDefault'));
 
 $routes->add('login', Route::create('/login.html', 'App\Controller\Login::doInsLogin'));
+$routes->add('recover', Route::create('/recover.html', 'App\Controller\Recover::doInsRecover'));
 $routes->add('institution-login', Route::create('/inst/{instHash}/login.html', 'App\Controller\Login::doInsLogin'));
+$routes->add('institution-recover', Route::create('/inst/{instHash}/recover.html', 'App\Controller\Recover::doInsRecover'));
 $routes->add('admin-login', Route::create('/xlogin.html', 'App\Controller\Login::doDefault'));
 
 $routes->add('contact', Route::create('/contact.html', 'App\Controller\Contact::doDefault'));
-
 $routes->remove('install');
-$routes->remove('recover');
-//$routes->add('recover', Route::create('/recover.html', 'App\Controller\Recover::doDefault'));
-//$routes->add('install', Route::create('/install.html', 'App\Controller\Install::doDefault'));
 
 
 // Admin Pages
