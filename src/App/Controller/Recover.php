@@ -18,22 +18,6 @@ class Recover extends \Uni\Controller\Recover
 {
 
 
-    public function doInsRecover(\Tk\Request $request, $instHash = '')
-    {
-        $this->institution = $this->getConfig()->getInstitutionMapper()->findByHash($instHash);
-        if (!$this->institution && $request->attributes->has('institutionId')) {
-            $this->institution = $this->getConfig()->getInstitutionMapper()->find($request->attributes->get('institutionId'));
-        }
-
-        // get institution by hostname
-        if (!$this->institution || !$this->institution->active ) {
-            $this->institution = $this->getConfig()->getInstitutionMapper()->findByDomain($request->getTkUri()->getHost());
-        }
-
-        $this->doDefault($request);
-    }
-
-
     /**
      * @throws \Exception
      */
@@ -47,16 +31,11 @@ class Recover extends \Uni\Controller\Recover
         $f->prepend('<span class="input-group-text"><i class="fa fa-user mx-auto"></i></span>');
 
         $this->form->getField('recover')->addCss('col-12');
-
     }
-
-
 
     public function show()
     {
         $template = parent::show();
-
-
         return $template;
     }
 
