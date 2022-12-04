@@ -144,7 +144,7 @@ class Index extends \Uni\Controller\Index
                 <!-- End List -->
 
                 <div class="d-grid">
-                  <button type="button" class="btn btn-primary">Request A Demo</button>
+                  <a class="btn btn-primary" href="/contact.html">Request A Demo</a>
                 </div>
               </div>
             </div>
