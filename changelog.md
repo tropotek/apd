@@ -1,6 +1,13 @@
 
 #CHANGELOG#
 
+Ver 3.4.0 [2022-12-04]:
+-------------------------------
+  - Added timeout on password recovery
+  - Fixed recover password pages
+  - Started new public template page
+
+
 Ver 3.2.20 [2022-12-02]:
 -------------------------------
 
