@@ -160,8 +160,9 @@ class PathCase extends \Bs\TableIface
             ->addOnShowOption(function (\Dom\Template $template, \Tk\Form\Field\Option $option, $var) {
                 /** @var \App\Db\Contact $contact */
                 $contact = ContactMap::create()->find($option->getValue());
-                if ($contact)
+                if ($contact) {
                     $option->setName($contact->getDisplayName());
+                }
             });
 
         $list = ContactMap::create()->findFiltered(array(
@@ -173,8 +174,9 @@ class PathCase extends \Bs\TableIface
             ->addOnShowOption(function (\Dom\Template $template, \Tk\Form\Field\Option $option, $var) {
                 /** @var \App\Db\Contact $contact */
                 $contact = ContactMap::create()->find($option->getValue());
-                if ($contact)
+                if ($contact) {
                     $option->setName($contact->getDisplayName());
+                }
             });
 
         $js = <<<JS

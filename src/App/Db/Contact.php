@@ -218,11 +218,14 @@ class Contact extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 
     public function getDisplayName()
     {
+        $displayName = [];
         if ($this->getName()) {
-            return $this->getName();
+            $displayName[] = $this->getName();
         }
-        if ($this->getNameCompany())
-            return $this->getNameCompany();
+        if ($this->getNameCompany() && $this->getNameCompany() !=  $this->getName()) {
+            $displayName[] = $this->getNameCompany();
+        }
+        return implode(' - ', $displayName);
     }
 
     /**
