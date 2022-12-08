@@ -155,13 +155,14 @@ class PathCase extends \Bs\TableIface
             'institutionId' => $this->getConfig()->getInstitutionId(),
             'type' => \App\Db\Contact::TYPE_CLIENT
         ), Tool::create('name_company, name_first, name_last'));
-        $this->appendFilter(Field\Select::createSelect('clientId', $list))//; //->prependOption('-- Submitter/Client --'))
+        $this->appendFilter(Field\Select::createSelect('clientId', $list))
             ->addCss('tk-multiselect1')->prependOption('-- Submitter/Client --')
             ->addOnShowOption(function (\Dom\Template $template, \Tk\Form\Field\Option $option, $var) {
                 /** @var \App\Db\Contact $contact */
                 $contact = ContactMap::create()->find($option->getValue());
-                if ($contact)
+                if ($contact) {
                     $option->setName($contact->getDisplayName());
+                }
             });
 
         $list = ContactMap::create()->findFiltered(array(
@@ -173,20 +174,21 @@ class PathCase extends \Bs\TableIface
             ->addOnShowOption(function (\Dom\Template $template, \Tk\Form\Field\Option $option, $var) {
                 /** @var \App\Db\Contact $contact */
                 $contact = ContactMap::create()->find($option->getValue());
-                if ($contact)
+                if ($contact) {
                     $option->setName($contact->getDisplayName());
+                }
             });
 
         $js = <<<JS
 jQuery(function ($) {
   	$('select.tk-multiselect1').select2({
         placeholder: '-- Submitter/Client --',
-        allowClear: false,
+        allowClear: true,
         minimumInputLength: 0
     });
   	$('select.tk-multiselect2').select2({
         placeholder: '-- Owner --',
-        allowClear: false,
+        allowClear: true,
         minimumInputLength: 0
     });
 });

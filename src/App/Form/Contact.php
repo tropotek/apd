@@ -60,7 +60,8 @@ class Contact extends \Bs\FormIface
             ->setNotes('The clients billing account code if available.');
         $this->appendField(new Field\Input('nameFirst'))->setLabel('Contact Firstname')->setTabGroup($tab);
         $this->appendField(new Field\Input('nameLast'))->setLabel('Contact Surname')->setTabGroup($tab);
-        $this->appendField(new Field\Input('email'))->setTabGroup($tab);
+        $this->appendField(new Field\Input('email'))->setTabGroup($tab)
+            ->setNotes('Single main contact/business email only');
         $this->appendField(new Field\Input('emailCc'))->setTabGroup($tab)
             ->setNotes('Add multiple emails seperated by a comma or semicolon.');
         $this->appendField(new Field\Input('phone'))->setTabGroup($tab);
