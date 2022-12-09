@@ -78,8 +78,6 @@ JS;
             if ($this->getConfig()->getInstitution()) {
                 $template->insertText('login-title', $this->getConfig()->getInstitution()->getName());
                 $template->setVisible('has-inst');
-
-                $template->setAttr('loginUrl', 'href', Uri::create('/microsoftLogin.html'));
             } else {
                 $template->insertText('login-title', $this->getConfig()->get('site.title'));
                 $template->setVisible('no-inst');
@@ -87,8 +85,8 @@ JS;
 
 
             // Add anything to the page template here ...
-            $url = \Bs\Uri::create('/html/app/img/unimelb-logo-lge.png');
-            $template->appendHtml('nav-footer', sprintf('<a href="https://fvas.unimelb.edu.au/" target="_blank" title="Visit FVAS"><img src="%s" class="img-fluid" alt="Logo" /></a>', $url));
+            //$url = \Bs\Uri::create('/html/app/img/unimelb-logo-lge.png');
+            //$template->appendHtml('nav-footer', sprintf('<a href="https://fvas.unimelb.edu.au/" target="_blank" title="Visit FVAS"><img src="%s" class="img-fluid" alt="Logo" /></a>', $url));
 
         }
     }
