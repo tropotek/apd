@@ -28,6 +28,9 @@ $routes->add('institution-login', Route::create('/inst/{instHash}/login.html', '
 $routes->add('institution-recover', Route::create('/inst/{instHash}/recover.html', 'App\Controller\Recover::doInsRecover'));
 $routes->add('admin-login', Route::create('/xlogin.html', 'App\Controller\Login::doDefault'));
 
+$routes->add('login-microsoft', Route::create('/microsoftLogin.html', 'Uni\Auth\Microsoft\Controller::doInsLogin'));
+//$routes->add('institution-login-microsoft', Route::create('/inst/{instHash}/microsoftLogin.html', 'Uni\Auth\Microsoft\Controller::doInsLogin'));
+
 $routes->add('contact', Route::create('/contact.html', 'App\Controller\Contact::doDefault'));
 $routes->remove('install');
 

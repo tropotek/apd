@@ -4,6 +4,7 @@ namespace App\Listener;
 use Tk\ConfigTrait;
 use Tk\Util\IpThrottle;
 use Uni\Db\User;
+use Uni\Uri;
 
 /**
  * This object helps cleanup the structure of the controller code
@@ -40,7 +41,6 @@ class PageTemplateHandler extends \Uni\Listener\PageTemplateHandler
             $user = $controller->getAuthUser();
 
             if ($user) {
-
                 // About dialog
                 $dialog = new \Bs\Ui\AboutDialog();
                 $template->appendTemplate($template->getBodyElement(), $dialog->show());
@@ -73,16 +73,18 @@ class PageTemplateHandler extends \Uni\Listener\PageTemplateHandler
 config.userHash = '$hash';
 JS;
                 $template->appendJs($js, array('data-jsl-priority' => -1000));
-
             }
 
             if ($this->getConfig()->getInstitution()) {
                 $template->insertText('login-title', $this->getConfig()->getInstitution()->getName());
                 $template->setVisible('has-inst');
+
+                $template->setAttr('loginUrl', 'href', Uri::create('/microsoftLogin.html'));
             } else {
                 $template->insertText('login-title', $this->getConfig()->get('site.title'));
                 $template->setVisible('no-inst');
             }
+
 
             // Add anything to the page template here ...
             $url = \Bs\Uri::create('/html/app/img/unimelb-logo-lge.png');
