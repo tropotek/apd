@@ -2,6 +2,9 @@
 -- Version: 3.4.10
 --
 -- Author: Michael Mifsud <info@tropotek.com>
+--
+-- This is a cleanup of the DB for initial release to
+--    the tropotek
 -- ---------------------------------
 
 
@@ -22,5 +25,5 @@ DELETE FROM `_plugin_zone` WHERE `plugin_name` LIKE 'plg-lti' AND `zone_name` LI
 DELETE FROM _data WHERE fkey = 'plg-ldap.institution';
 DELETE FROM _data WHERE fkey = 'plg-lti';
 
-
+INSERT INTO _data (fid, fkey, `key`, value) VALUES (1, 'Uni\\Db\\Institution', 'inst.microsoftLogin', 'inst.microsoftLogin');
 
