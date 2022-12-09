@@ -5,6 +5,7 @@ use Tk\Db\Tool;
 use Tk\Form\Field;
 use Tk\Form\Event;
 use Uni\Db\InstitutionMap;
+use Uni\Uri;
 
 
 /**
@@ -38,6 +39,10 @@ class Login extends \Uni\Controller\Login
                 $this->getSession()->writeClose();
                 \Uni\Uri::create('/microsoftLogin.html')->redirect();
             }
+        }
+
+        if ($this->getAuthUser()) {
+            Uri::createHomeUrl('/index.html')->redirect();
         }
         $this->doDefault($request);
     }

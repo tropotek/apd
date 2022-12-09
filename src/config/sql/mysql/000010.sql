@@ -27,3 +27,4 @@ DELETE FROM _data WHERE fkey = 'plg-lti';
 
 INSERT INTO _data (fid, fkey, `key`, value) VALUES (1, 'Uni\\Db\\Institution', 'inst.microsoftLogin', 'inst.microsoftLogin');
 
+UPDATE institution SET domain = 'apd-unimelb.com' WHERE id = 1;
