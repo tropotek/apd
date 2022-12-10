@@ -42,15 +42,15 @@ class InvoiceItemMin extends \Bs\TableIface
 
         $this->appendCell(new Cell\Checkbox('id'));
         $this->appendCell(new Cell\Text('description'))->addCss('key')->setUrl($this->getEditUrl());
+        $this->appendCell(new Cell\Text('code'));
         $this->appendCell(new Cell\Text('qty'));
-        $this->appendCell(new Cell\Text('price'));
+        $this->appendCell(new Cell\Text('price'))->setLabel('Unit');
         $this->appendCell(new Cell\Text('total'))->setOrderProperty('')
             ->addOnPropertyValue(function (\Tk\Table\Cell\Iface $cell, \App\Db\InvoiceItem $obj, $value) {
                 $value = $obj->getTotal()->toString();
                 return $value;
             }
         );
-        //$this->appendCell(new Cell\Date('created'));
 
         // Filters
         //$this->appendFilter(new Field\Input('keywords'))->setAttr('placeholder', 'Search');
@@ -94,7 +94,7 @@ jQuery(function($) {
       });
       $(this).find('tr.tk-invoice-total').remove();
       var html = '<tr class="tk-invoice-total">' +
-       ' <td colspan="4" class="total-label">Total:</td>' +
+       ' <td colspan="5" class="total-label">Total:</td>' +
        ' <td class="total-val">$'+total.toFixed(2)+'</td>' +
        '</tr>';
       $(this).find('table').append(html);

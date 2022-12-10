@@ -40,8 +40,11 @@ class InvoiceItem extends \Bs\FormIface
         $layout->removeRow('qty', 'cell');
         $layout->removeRow('price', 'cell');
 
-        $this->appendField(new Field\Input('description'));
-        //$this->appendField(new Field\Input('code'));
+        $this->appendField(\App\Form\Field\Autocomplete::createAutocomplete('description', \Tk\Uri::create('/ajax/product/findByName.html')))
+            ->setLabel('Description/Product')->setAttr('data-value-type', 'label')
+            ->setAttr('placeholder', 'Description/Product')->setRequired();
+        //$this->appendField(new Field\Input('description'));
+        $this->appendField(new Field\Hidden('code'));
         $this->appendField(new Field\Input('qty'));
         $this->appendField(new Money('price'))->addCss('money');
 
@@ -49,6 +52,25 @@ class InvoiceItem extends \Bs\FormIface
         $this->appendField(new Event\Submit('save', array($this, 'doSubmit')));
         $this->appendField(new Event\Link('cancel', $this->getBackUrl()));
 
+
+        $js = <<<JS
+jQuery(function ($) {
+  
+  function init() {
+    var form = $(this);
+    $('input.autocomplete', form).each(function () {
+      $(this).on('autocompleteselect', function( event, ui ) {
+        $('[name="code"]', form).val(ui.item.code);
+        $('[name="price"]', form).val(ui.item.price);
+      });
+    });
+  }
+  
+  $('form').on('init', document, init).each(init);
+  
+});
+JS;
+        $this->getRenderer()->getTemplate()->appendJs($js);
     }
 
     /**
@@ -68,11 +90,15 @@ class InvoiceItem extends \Bs\FormIface
      */
     public function doSubmit($form, $event)
     {
+        $values = $form->getValues();
         // Load the object with form data
-        \App\Db\InvoiceItemMap::create()->mapForm($form->getValues(), $this->getInvoiceItem());
+        \App\Db\InvoiceItemMap::create()->mapForm($values, $this->getInvoiceItem());
+
+        if (!$this->getInvoiceItem()->getDescription() && isset($values['ac-description'])) {
+            $this->getInvoiceItem()->setDescription($values['ac-description']);
+        }
 
         // Do Custom Validations
-
         $form->addFieldErrors($this->getInvoiceItem()->validate());
         if ($form->hasErrors()) {
             return;
@@ -81,7 +107,6 @@ class InvoiceItem extends \Bs\FormIface
         $isNew = (bool)$this->getInvoiceItem()->getId();
         $this->getInvoiceItem()->save();
 
-        // Do Custom data saving
 
         \Tk\Alert::addSuccess('Record saved!');
         $event->setRedirect($this->getBackUrl());

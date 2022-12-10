@@ -181,7 +181,7 @@ class InvoiceItem extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 //        }
 
         // TODO: are we going to allow negative or 0 value items??? Should this be configurable?
-        if (!$this->price || $this->price->getAmount() <= 0) {
+        if (!$this->price || $this->price->getAmount() < 0) {
             $errors['price'] = 'Invalid value: price';
         }
 
