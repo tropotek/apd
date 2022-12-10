@@ -88,6 +88,10 @@ $routes->add('animalType-edit', Route::create('/staff/animalTypeEdit.html', 'App
 $routes->add('invoiceItem-manager', Route::create('/staff/invoiceItemManager.html', 'App\Controller\InvoiceItem\Manager::doDefault'));
 $routes->add('invoiceItem-edit', Route::create('/staff/invoiceItemEdit.html', 'App\Controller\InvoiceItem\Edit::doDefault'));
 
+$routes->add('product-manager', Route::create('/staff/productManager.html', 'App\Controller\Product\Manager::doDefault'));
+$routes->add('product-edit', Route::create('/staff/productEdit.html', 'App\Controller\Product\Edit::doDefault'));
+
+
 
 
 // -------------------------   Ajax Urls -------------------------
@@ -96,4 +100,6 @@ $routes->add('invoiceItem-edit', Route::create('/staff/invoiceItemEdit.html', 'A
 //$routes->add('ajax-notice-get-list', Route::create('/ajax/notice/getList', 'App\Ajax\Notice::doGetList'));
 $routes->add('ajax-notice-mark-read', Route::create('/ajax/notice/{action}', 'App\Ajax\Notice::doDefault'));
 $routes->add('ajax-case-update', Route::create('/ajax/mceAutosave', 'App\Ajax\Mce::doMceAutosave'));
+
+$routes->add('ajax-product-findByName', new \Tk\Routing\Route('/ajax/product/findByName.html', 'App\Ajax\Product::doFindByName'));
 

@@ -60,6 +60,8 @@ class Edit extends \Uni\Controller\Institution\Edit
                 \Uni\Uri::createHomeUrl('/animalTypeManager.html'), 'fa fa-paw'));
             $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Test Types',
                 \Uni\Uri::createHomeUrl('/testManager.html'), 'fa fa-flask'));
+            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Products',
+                \Uni\Uri::createHomeUrl('/productManager.html'), 'fa fa-cube'));
         }
 
     }
