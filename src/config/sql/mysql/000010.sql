@@ -29,7 +29,6 @@ INSERT INTO product (institution_id, code, name, price, modified, created) VALUE
     (1, '', 'H&E stain each side inc GST', 1550, NOW(), NOW()),
     (1, '', 'H&E stain additional side inc GST', 850, NOW(), NOW()),
     (1, '', 'Immunohistochemistry inc GST', 15600, NOW(), NOW()),
-    (1, '', 'Immunocytochemistry inc GST', 15600, NOW(), NOW()),
     (1, '', 'After hours fee (double the necropsy fee)', 0, NOW(), NOW()),
     (1, '', 'Other test', 0, NOW(), NOW()),
     (1, '', 'External lab send out fee', 6000, NOW(), NOW()),
