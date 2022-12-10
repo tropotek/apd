@@ -68,7 +68,7 @@ jQuery(function ($) {
       
       el.autocomplete({
         source: el.data('src'),
-        minLength: 1,
+        minLength: 0,
         appendTo: el.parent(),
         select: function( event, ui ) {
           if (el.data('valueType') !== 'label') {
@@ -84,8 +84,11 @@ jQuery(function ($) {
           .append(item.label)
           .appendTo(ul);
       };
+      el.focus(function(){     
+        $(this).trigger(jQuery.Event("keydown"));
+      });
       
-    });
+    })
   }
   
   $('form').on('init', document, init).each(init);

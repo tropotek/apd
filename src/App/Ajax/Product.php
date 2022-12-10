@@ -1,6 +1,7 @@
 <?php
 namespace App\Ajax;
 
+use Tk\ConfigTrait;
 use Tk\Request;
 /**
  * @author Michael Mifsud <info@tropotek.com>
@@ -9,6 +10,7 @@ use Tk\Request;
  */
 class Product
 {
+    use ConfigTrait;
 
     /**
      * @param Request $request
@@ -46,13 +48,20 @@ class Product
             $data = [];
             if (count($filter)) {
                 if (!empty($filter['term'])) $filter ['keywords'] = $filter['term'];
+                $filter['institutionId'] = $this->getConfig()->getInstitutionId();
                 $list = \App\Db\ProductMap::create()->findFiltered($filter, \Tk\Db\Tool::create('name'));
                 foreach ($list as $product) {
+                    $label = $product->getName();
+                    if ($product->getPrice()->getAmount() > 0) {
+                        $label .= sprintf(' [$%s]', $product->getPrice()->toFloatString());
+                    }
+
                     $data[] = [
                         'id' => $product->getId(),
                         'value' => $product->getName(),
-                        'label' => $product->getName(),
+                        'label' => $label,
                         'code' => $product->getCode(),
+                        'qty' => '1',
                         'price' => $product->getPrice()->toFloatString()
                     ];
                 }

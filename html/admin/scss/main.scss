@@ -42,3 +42,13 @@
 small.dlg-error {
   color: #e84e40;
 }
+// InvoiceItem dialog autocomplete
+.ui-menu.ui-autocomplete {
+  li {
+    padding: 1px 5px;
+  }
+  li:hover {
+    background-color: #EEE;
+  }
+}
+

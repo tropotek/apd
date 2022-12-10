@@ -2,8 +2,6 @@
 namespace App\Controller\PathCase;
 
 use App\Config;
-use App\Db\EditLog;
-use App\Db\EditLogMap;
 use App\Db\PathCase;
 use App\Db\Permission;
 use App\Form\Note;
@@ -12,11 +10,8 @@ use Bs\Controller\AdminEditIface;
 use Dom\Template;
 use Tk\Alert;
 use Tk\Crumbs;
-use Tk\Form;
-use Tk\Form\Event\Submit;
 use Tk\Request;
 use Tk\Ui\ButtonDropdown;
-use Uni\Uri;
 
 /**
  * TODO: Add Route to routes.php:
@@ -202,10 +197,10 @@ class Edit extends AdminEditIface
                 'Request List',
                 \Uni\Uri::createHomeUrl('/requestManager.html')->set('pathCaseId', $this->pathCase->getId()),
                 'fa fa-medkit fa-add-action'));
-            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn(
-                'Invoice Items',
-                \Uni\Uri::createHomeUrl('/invoiceItemManager.html')->set('pathCaseId', $this->pathCase->getId()),
-                'fa fa-money fa-add-action'));
+//            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn(
+//                'Invoice Items',
+//                \Uni\Uri::createHomeUrl('/invoiceItemManager.html')->set('pathCaseId', $this->pathCase->getId()),
+//                'fa fa-money fa-add-action'));
 
             $links = [
                 \Tk\Ui\Link::create('PDF View', \Uni\Uri::create()->set('pdf-view')->set(Crumbs::CRUMB_IGNORE), 'fa fa-file-pdf-o')->setAttr('target', '_blank')->setAttr('title', 'Download/View Case Details'),

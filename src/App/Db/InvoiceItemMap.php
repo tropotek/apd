@@ -1,6 +1,7 @@
 <?php
 namespace App\Db;
 
+use Tk\Date;
 use Tk\Db\Tool;
 use Tk\Db\Map\ArrayObject;
 use Tk\DataMap\Db;
@@ -100,6 +101,30 @@ class InvoiceItemMap extends Mapper
         }
         if (!empty($filter['price'])) {
             $filter->appendWhere('a.price = %s AND ', (float)$filter['price']);
+        }
+
+
+        $dates = array('createdStart', 'createdEnd');
+        foreach ($dates as $name) {
+            if (!empty($filter[$name]) && !$filter[$name] instanceof \DateTime) {
+                $filter[$name] = Date::createFormDate($filter[$name]);
+            }
+        }
+        if (!empty($filter['createdStart'])) {
+            /** @var \DateTime $date */
+            $date = Date::floor($filter['createdStart']);
+            $filter->appendWhere('a.created >= %s AND ', $this->quote($date->format(Date::FORMAT_ISO_DATETIME)));
+        }
+        if (!empty($filter['createdEnd'])) {
+            /** @var \DateTime $date */
+            $date = Date::ceil($filter['createdEnd']);
+            $filter->appendWhere('a.created <= %s AND ', $this->quote($date->format(Date::FORMAT_ISO_DATETIME)));
+        }
+
+
+        if (!empty($filter['exclude'])) {
+            $w = $this->makeMultiQuery($filter['exclude'], 'a.id', 'AND', '!=');
+            if ($w) $filter->appendWhere('(%s) AND ', $w);
         }
 
         if (!empty($filter['exclude'])) {

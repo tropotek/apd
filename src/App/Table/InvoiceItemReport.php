@@ -1,8 +1,10 @@
 <?php
 namespace App\Table;
 
+use Tk\Date;
 use Tk\Form\Field;
 use Tk\Table\Cell;
+use Uni\Uri;
 
 /**
  * Example:
@@ -20,7 +22,7 @@ use Tk\Table\Cell;
  * @link http://tropotek.com.au/
  * @license Copyright 2021 Tropotek
  */
-class InvoiceItem extends \Bs\TableIface
+class InvoiceItemReport extends \Bs\TableIface
 {
 
     /**
@@ -29,31 +31,35 @@ class InvoiceItem extends \Bs\TableIface
      */
     public function init()
     {
-
-        $this->appendCell(new Cell\Checkbox('id'));
+        $this->appendCell(new Cell\Text('pathologyId'))
+            ->setUrl(Uri::createHomeUrl('/pathCaseEdit.html'))
+            ->setUrlProperty('pathCaseId')
+            ->addOnPropertyValue(function (\Tk\Table\Cell\Iface $cell, \App\Db\InvoiceItem $obj, $value) {
+                $value = $obj->getPathCase()->getPathologyId();
+                return $value;
+            });
         $this->appendCell(new Cell\Text('description'))->addCss('key')->setUrl($this->getEditUrl());
         $this->appendCell(new Cell\Text('code'));
         $this->appendCell(new Cell\Text('qty'));
-        $this->appendCell(new Cell\Text('price'))->setLabel('Total');
-//        $this->appendCell(new Cell\Text('total'))->setOrderProperty('')
-//            ->addOnPropertyValue(function (\Tk\Table\Cell\Iface $cell, \App\Db\InvoiceItem $obj, $value) {
-//                $value = $obj->getTotal()->toString();
-//                return $value;
-//            }
-//        );
+        $this->appendCell(new Cell\Text('price'));
+        $this->appendCell(new Cell\Text('total'))->setOrderProperty('')
+            ->addOnPropertyValue(function (\Tk\Table\Cell\Iface $cell, \App\Db\InvoiceItem $obj, $value) {
+                $value = $obj->getTotal()->toString();
+                return $value;
+            }
+        );
         $this->appendCell(new Cell\Date('created'));
 
         // Filters
         $this->appendFilter(new Field\Input('keywords'))->setAttr('placeholder', 'Search');
+        $f = $this->appendFilter(new Field\DateRange('created'));
+        $this->getFilterForm()->load([
+            'createdStart' => Date::getMonthStart(Date::create()->sub(new \DateInterval('P1M')))->format(Date::FORMAT_SHORT_DATE)
+        ]);
 
         // Actions
-        //$this->appendAction(\Tk\Table\Action\Link::createLink('New Invoice Item', \Bs\Uri::createHomeUrl('/invoice/itemEdit.html'), 'fa fa-plus'));
         //$this->appendAction(\Tk\Table\Action\ColumnSelect::create()->setUnselected(array('modified', 'created')));
-        $this->appendAction(\Tk\Table\Action\Delete::create());
         $this->appendAction(\Tk\Table\Action\Csv::create());
-
-        // load table
-        //$this->setList($this->findList());
 
         return $this;
     }
@@ -66,7 +72,7 @@ class InvoiceItem extends \Bs\TableIface
      */
     public function findList($filter = array(), $tool = null)
     {
-        if (!$tool) $tool = $this->getTool();
+        if (!$tool) $tool = $this->getTool('created, path_case_id');
         $filter = array_merge($this->getFilterValues(), $filter);
         $list = \App\Db\InvoiceItemMap::create()->findFiltered($filter, $tool);
         return $list;

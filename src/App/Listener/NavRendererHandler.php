@@ -123,7 +123,10 @@ class NavRendererHandler implements Subscriber
             //$menu->append(Item::create('Mail Log', \Uni\Uri::createHomeUrl(MailLog::createMailLogUrl('/manager.html', $this->getConfig()->getInstitution())), 'fa fa-envelope'));
 
 
-
+            if ($user->hasPermission(Permission::MANAGE_SITE)) {
+                $sub = $menu->append(Item::create('Reporting', '#', 'fa fa-list-alt'));
+                $sub->append(Item::create('All Invoiced Items', \Uni\Uri::createHomeUrl('/invoiceItemReport.html'), 'fa fa-money'));
+            }
 
         }
 

@@ -74,9 +74,10 @@ class InvoiceItem extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      * @param string $code
      * @return InvoiceItem
      */
-    public static function create($description, $price, $qty = 1, $code = '')
+    public static function create($pathCaseId, $description, $price, $qty = 1, $code = '')
     {
         $obj = new static();
+        $obj->setPathCaseId($pathCaseId);
         $obj->setDescription($description);
         $obj->setPrice($price);
         $obj->setQty($qty);
@@ -159,6 +160,7 @@ class InvoiceItem extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 
     /**
      * @return \Tk\Money
+     * @deprecatd Do not use this the price is the final value
      */
     public function getTotal()
     {

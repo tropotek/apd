@@ -30,19 +30,19 @@ INSERT INTO _data (fid, fkey, `key`, value) VALUES (1, 'Uni\\Db\\Institution', '
 UPDATE institution SET domain = 'apd-unimelb.com' WHERE id = 1;
 
 
-
+/*
 
 CREATE TABLE IF NOT EXISTS `product` (
-    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `institution_id` INT UNSIGNED NOT NULL DEFAULT 0,
-    `name` VARCHAR(450) NOT NULL DEFAULT '',
-    `code` VARCHAR(255) NOT NULL DEFAULT '',
-    `price` INT NOT NULL DEFAULT 0,
-    `description` TEXT,
-    `del` TINYINT(1) NOT NULL DEFAULT 0,
-    `modified` DATETIME NOT NULL,
-    `created` DATETIME NOT NULL,
-    KEY (institution_id)
+ `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+ `institution_id` INT UNSIGNED NOT NULL DEFAULT 0,
+ `name` VARCHAR(450) NOT NULL DEFAULT '',
+ `code` VARCHAR(255) NOT NULL DEFAULT '',
+ `price` INT NOT NULL DEFAULT 0,
+ `description` TEXT,
+ `del` TINYINT(1) NOT NULL DEFAULT 0,
+ `modified` DATETIME NOT NULL,
+ `created` DATETIME NOT NULL,
+ KEY (institution_id)
 ) ENGINE=InnoDB;
 
 TRUNCATE product;
@@ -71,14 +71,10 @@ INSERT INTO product (institution_id, code, name, price, modified, created) VALUE
     (1, '', 'Faecal floatatiom inc GST', 0, NOW(), NOW()),
     (1, '', 'Giardia SNAP test inc GST', 0, NOW(), NOW()),
     (1, '', 'Agrifood Rodenticide screen inc GST', 0, NOW(), NOW()),
-    (1, '', 'APCAH molecular biology', 0, NOW(), NOW()),
-    (1, '', 'Other test', 0, NOW(), NOW())
+    (1, '', 'APCAH molecular biology', 0, NOW(), NOW())
 ;
 
-
-
-
-
+*/
 
 
 
