@@ -86,6 +86,7 @@ $routes->add('animalType-edit', Route::create('/staff/animalTypeEdit.html', 'App
 
 $routes->add('invoiceItem-manager', Route::create('/staff/invoiceItemManager.html', 'App\Controller\InvoiceItem\Manager::doDefault'));
 $routes->add('invoiceItem-edit', Route::create('/staff/invoiceItemEdit.html', 'App\Controller\InvoiceItem\Edit::doDefault'));
+$routes->add('invoiceItem-report', Route::create('/staff/invoiceItemReport.html', 'App\Controller\InvoiceItem\Report::doDefault'));
 
 $routes->add('product-manager', Route::create('/staff/productManager.html', 'App\Controller\Product\Manager::doDefault'));
 $routes->add('product-edit', Route::create('/staff/productEdit.html', 'App\Controller\Product\Edit::doDefault'));

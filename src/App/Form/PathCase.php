@@ -75,7 +75,7 @@ class PathCase extends \Bs\FormIface
         $layout->removeRow('arrival', 'col');
 
         $layout->removeRow('type', 'col');
-        $layout->removeRow('clientId', 'col');
+        //$layout->removeRow('clientId', 'col');
 
         $layout->addRow('billable', 'col-2');
         $layout->removeRow('accountStatus', 'col');

@@ -43,9 +43,9 @@ class InvoiceItem extends \Bs\FormIface
         $this->appendField(\App\Form\Field\Autocomplete::createAutocomplete('description', \Tk\Uri::create('/ajax/product/findByName.html')))
             ->setLabel('Description/Product')->setAttr('data-value-type', 'label')
             ->setAttr('placeholder', 'Description/Product')->setRequired();
-        //$this->appendField(new Field\Input('description'));
+
         $this->appendField(new Field\Hidden('code'));
-        $this->appendField(new Field\Input('qty'));
+        $this->appendField(new Field\Input('qty'))->setAttr('type', 'number');
         $this->appendField(new Money('price'))->addCss('money');
 
         $this->appendField(new Event\Submit('update', array($this, 'doSubmit')));
@@ -62,6 +62,8 @@ jQuery(function ($) {
       $(this).on('autocompleteselect', function( event, ui ) {
         $('[name="code"]', form).val(ui.item.code);
         $('[name="price"]', form).val(ui.item.price);
+        $('[name="qty"]', form).val(ui.item.qty);
+        $('[name="qty"]', form).data('unitPrice', parseFloat(ui.item.price).toFixed(2));
       });
     });
   }
@@ -91,22 +93,28 @@ JS;
     public function doSubmit($form, $event)
     {
         $values = $form->getValues();
+
+        $this->model = new \App\Db\InvoiceItem();
+        $this->model->setPathCaseId($this->getConfig()->getRequest()->get('pathCaseId'));
+        if ($values['id'] ?? 0) {
+            $this->model = \App\Db\InvoiceItemMap::create()->find($values['id']);
+        }
+
         // Load the object with form data
         \App\Db\InvoiceItemMap::create()->mapForm($values, $this->getInvoiceItem());
-
-        if (!$this->getInvoiceItem()->getDescription() && isset($values['ac-description'])) {
-            $this->getInvoiceItem()->setDescription($values['ac-description']);
+        if ($this->getConfig()->getRequest()->get('ac-description')) {
+            $this->getInvoiceItem()->setDescription($this->getConfig()->getRequest()->get('ac-description'));
         }
 
         // Do Custom Validations
         $form->addFieldErrors($this->getInvoiceItem()->validate());
+
         if ($form->hasErrors()) {
             return;
         }
 
         $isNew = (bool)$this->getInvoiceItem()->getId();
         $this->getInvoiceItem()->save();
-
 
         \Tk\Alert::addSuccess('Record saved!');
         $event->setRedirect($this->getBackUrl());

@@ -41,16 +41,36 @@ class InvoiceItemMin extends \Bs\TableIface
         $this->getDialog()->init();
 
         $this->appendCell(new Cell\Checkbox('id'));
-        $this->appendCell(new Cell\Text('description'))->addCss('key')->setUrl($this->getEditUrl());
+        $this->appendCell(new Cell\Text('pathologyId'))->setVisible(false)
+            ->addOnPropertyValue(function (\Tk\Table\Cell\Iface $cell, \App\Db\InvoiceItem $obj, $value) {
+                $value = $obj->getPathCase()->getPathologyId();
+                return $value;
+            });
+        $this->appendCell(new Cell\Text('description'))->addCss('key')
+            ->addOnCellHtml(function (\Tk\Table\Cell\Iface $cell, \App\Db\InvoiceItem $obj, $html) {
+                $description = htmlentities($obj->getDescription());
+                $objStr = htmlentities(json_encode([
+                    'id' => $obj->getId(),
+                    'description' => $obj->getDescription(),
+                    'price' => $obj->getPrice()->toFloatString(),
+                    'qty' => $obj->getQty()
+                ]));
+                $html = <<<HTML
+<a class="" href="/staff/invoice/itemEdit.html" data-invoiceItemId="{$obj->getId()}"  data-obj="{$objStr}" data-toggle="modal" data-target="#{$this->getDialog()->getId()}">{$description}</a>
+HTML;
+
+
+                return $html;
+            });
         $this->appendCell(new Cell\Text('code'));
         $this->appendCell(new Cell\Text('qty'));
-        $this->appendCell(new Cell\Text('price'))->setLabel('Unit');
-        $this->appendCell(new Cell\Text('total'))->setOrderProperty('')
-            ->addOnPropertyValue(function (\Tk\Table\Cell\Iface $cell, \App\Db\InvoiceItem $obj, $value) {
-                $value = $obj->getTotal()->toString();
-                return $value;
-            }
-        );
+        $this->appendCell(new Cell\Text('price'))->setLabel('Total');
+//        $this->appendCell(new Cell\Text('total'))->setOrderProperty('')
+//            ->addOnPropertyValue(function (\Tk\Table\Cell\Iface $cell, \App\Db\InvoiceItem $obj, $value) {
+//                $value = $obj->getTotal()->toString();
+//                return $value;
+//            }
+//        );
 
         // Filters
         //$this->appendFilter(new Field\Input('keywords'))->setAttr('placeholder', 'Search');
@@ -89,12 +109,12 @@ jQuery(function($) {
     // Add a totals row at the footer of the table
     $(this).on('invoice::updateTotal', function () {
       var total = 0.0;
-      $(this).find('td.mTotal').each(function () {
+      $(this).find('td.mPrice').each(function () {
         total += parseFloat($(this).text().substring(1), 2);
       });
       $(this).find('tr.tk-invoice-total').remove();
       var html = '<tr class="tk-invoice-total">' +
-       ' <td colspan="5" class="total-label">Total:</td>' +
+       ' <td colspan="4" class="total-label">Total:</td>' +
        ' <td class="total-val">$'+total.toFixed(2)+'</td>' +
        '</tr>';
       $(this).find('table').append(html);

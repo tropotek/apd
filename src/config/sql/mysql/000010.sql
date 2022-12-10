@@ -44,8 +44,7 @@ INSERT INTO product (institution_id, code, name, price, modified, created) VALUE
     (1, '', 'Faecal floatatiom inc GST', 0, NOW(), NOW()),
     (1, '', 'Giardia SNAP test inc GST', 0, NOW(), NOW()),
     (1, '', 'Agrifood Rodenticide screen inc GST', 0, NOW(), NOW()),
-    (1, '', 'APCAH molecular biology', 0, NOW(), NOW()),
-    (1, '', 'Other test', 0, NOW(), NOW())
+    (1, '', 'APCAH molecular biology', 0, NOW(), NOW())
 ;
 
 
