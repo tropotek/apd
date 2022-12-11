@@ -2356,12 +2356,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-auth.git",
-                "reference": "a5b2380fac49931f2117e603eba60fb80f04dfa3"
+                "reference": "a6eb79133823b4c37fd70a47caca50397da5ae88"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-auth/zipball/a5b2380fac49931f2117e603eba60fb80f04dfa3",
-                "reference": "a5b2380fac49931f2117e603eba60fb80f04dfa3",
+                "url": "https://api.github.com/repos/tropotek/tk-auth/zipball/a6eb79133823b4c37fd70a47caca50397da5ae88",
+                "reference": "a6eb79133823b4c37fd70a47caca50397da5ae88",
                 "shasum": ""
             },
             "type": "library",
@@ -2402,12 +2402,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-base.git",
-                "reference": "203e3e7855263d40c7cd98d0f4da4580c40f9fca"
+                "reference": "0cd204a5fab74f595005d3a73cdc80a8482e53fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/203e3e7855263d40c7cd98d0f4da4580c40f9fca",
-                "reference": "203e3e7855263d40c7cd98d0f4da4580c40f9fca",
+                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/0cd204a5fab74f595005d3a73cdc80a8482e53fa",
+                "reference": "0cd204a5fab74f595005d3a73cdc80a8482e53fa",
                 "shasum": ""
             },
             "require": {
@@ -3051,12 +3051,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-uni.git",
-                "reference": "77c7aaed11ad9af4a9039693f75fa84c40907feb"
+                "reference": "8add33ebe7eed0b17138f4aa3780bee1c6945717"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-uni/zipball/77c7aaed11ad9af4a9039693f75fa84c40907feb",
-                "reference": "77c7aaed11ad9af4a9039693f75fa84c40907feb",
+                "url": "https://api.github.com/repos/tropotek/tk-uni/zipball/8add33ebe7eed0b17138f4aa3780bee1c6945717",
+                "reference": "8add33ebe7eed0b17138f4aa3780bee1c6945717",
                 "shasum": ""
             },
             "require": {
