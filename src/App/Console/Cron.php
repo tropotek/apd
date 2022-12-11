@@ -52,7 +52,6 @@ class Cron extends \Bs\Console\Iface
         $institutionList = InstitutionMap::create()->findFiltered(['active' => true]);
         foreach ($institutionList as $institution) {
             $this->sendDisposalReminders($institution);
-
         }
 
         $this->write('', OutputInterface::VERBOSITY_VERBOSE);

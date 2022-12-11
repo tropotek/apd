@@ -16,7 +16,7 @@ use \Tk\Routing\Route;
 $config = \App\Config::getInstance();
 $routes = $config->getRouteCollection();
 if (!$routes) return;
-
+$routes->remove('install');
 
 // Default Home catchall
 $routes->add('home', Route::create('/index.html', 'App\Controller\Index::doDefault'));
@@ -29,7 +29,8 @@ $routes->add('institution-recover', Route::create('/inst/{instHash}/recover.html
 $routes->add('admin-login', Route::create('/xlogin.html', 'App\Controller\Login::doDefault'));
 
 $routes->add('contact', Route::create('/contact.html', 'App\Controller\Contact::doDefault'));
-$routes->remove('install');
+$routes->add('terms', Route::create('/terms.html', 'App\Controller\Terms::doDefault'));
+$routes->add('privacy', Route::create('/privacy.html', 'App\Controller\Privacy::doDefault'));
 
 
 // Admin Pages

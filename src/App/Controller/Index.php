@@ -58,8 +58,8 @@ class Index extends \Uni\Controller\Index
         <div class="col-lg-7 mb-7 mb-sm-10 mb-lg-0">
           <div class="pe-lg-5">
             <div class="mb-4">
-              <h1 class="display-4">APD<br />Lab reporting<br />made easy</h1>
-              <p class="fs-3">Hand-picked professionals and expertly crafted components, designed for any kind of entrepreneur.</p>
+              <h1 class="display-4">Anatomic Pathology Database</h1>
+              <p class="fs-3">Lab reporting and client tracking software. Contact us today for a demo</p>
             </div>
 
             <div class="mb-7">
@@ -104,8 +104,8 @@ class Index extends \Uni\Controller\Index
                     <label class="form-check form-check-reverse form-check-select form-check-pinned-top-end" for="formCheckSelect1">
                       <input type="radio" class="form-check-input" name="formCheckSelect" id="formCheckSelect1" />
                       <span class="form-check-label">
-                          <span class="fw-medium">Professional</span>
-                          <span class="d-block h4 mb-0">$500</span>
+                          <span class="fw-medium">Basic</span>
+                          <span class="d-block h4 mb-0">AU $500</span>
                           <span class="d-block fs-6 text-muted">All the basics</span>
                         </span>
                       <span class="form-check-stretched-bg"></span>
@@ -118,8 +118,8 @@ class Index extends \Uni\Controller\Index
                     <label class="form-check form-check-reverse form-check-select form-check-pinned-top-end" for="formCheckSelect2">
                       <input type="radio" class="form-check-input" name="formCheckSelect" id="formCheckSelect2" checked="checked" />
                       <span class="form-check-label">
-                          <span class="fw-medium">Team <span class="badge bg-soft-primary text-primary rounded-pill">Most popular</span></span>
-                          <span class="d-block h4 mb-0">$850</span>
+                          <span class="fw-medium">Professional <span class="badge bg-soft-primary text-primary rounded-pill">Most popular</span></span>
+                          <span class="d-block h4 mb-0">AU $850</span>
                           <span class="d-block fs-6 text-muted">Additional development options</span>
                         </span>
                       <span class="form-check-stretched-bg"></span>
@@ -133,7 +133,7 @@ class Index extends \Uni\Controller\Index
                       <input type="radio" class="form-check-input" name="formCheckSelect" id="formCheckSelect3" />
                       <span class="form-check-label">
                           <span class="fw-medium">Enterprise</span>
-                          <span class="d-block h4 mb-0">$1500</span>
+                          <span class="d-block h4 mb-0">AU $1250</span>
                           <span class="d-block fs-6 text-muted">Advanced features for scaling to your needs</span>
                         </span>
                       <span class="form-check-stretched-bg"></span>
