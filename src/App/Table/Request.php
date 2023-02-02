@@ -189,7 +189,8 @@ class Request extends \Bs\TableIface
         $this->appendCell(\Tk\Table\Cell\Text::create('pathologist'))
             ->setOrderProperty('p.name_first')
             ->addOnPropertyValue(function (\Tk\Table\Cell\Iface $cell, \App\Db\Request $obj, $value) {
-                if ($obj->getPathCase()) {
+                $value = 'N/A';
+                if ($obj->getPathCase() && $obj->getPathCase()->getPathologist()) {
                     //$cell->getRow()->setAttr('data-pathology-id', $obj->getPathCase()->getPathologyId());
                     //$cell->setUrl(\Bs\Uri::createHomeUrl('/pathCaseEdit.html')->set('pathCaseId', $obj->getPathCaseId()));
                     $value = $obj->getPathCase()->getPathologist()->getName();
