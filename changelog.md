@@ -1,6 +1,11 @@
 
 #CHANGELOG#
 
+Ver 3.4.24 [2023-03-02]:
+-------------------------------
+  - Use replyTo instead of from for emails
+
+
 Ver 3.4.22 [2023-03-02]:
 -------------------------------
   - Update composer
