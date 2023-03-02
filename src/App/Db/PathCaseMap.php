@@ -434,7 +434,7 @@ FROM path_case
         }
 
         if (isset($filter['reminderSent']) && $filter['reminderSent'] !== '' && $filter['reminderSent'] !== null) {
-            $filter->appendFrom(' LEFT JOIN %s c ON (b.id = c.path_case_id AND c.type = %s)',
+            $filter->appendFrom(' LEFT JOIN %s c ON (s.id = c.path_case_id AND c.type = %s)',
                 $this->quoteTable('mail_sent'), $this->quote('reminder'));
             if ($filter['reminderSent'] > 0) {
                 $filter->appendWhere('c.`date` IS NOT NULL');

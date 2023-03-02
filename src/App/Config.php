@@ -54,6 +54,43 @@ class Config extends \Uni\Config
 
 
 
+    /**
+     * @param string $xtplFile The mail template filename as found in the /html/xtpl/mail folder
+     * @return \Tk\Mail\CurlyMessage
+     * @TODO: Should this be a direct filepath so we can create a message with any template?
+     */
+    public function createMessage($xtplFile = 'mail.default')
+    {
+        $config = self::getInstance();
+        $request = $config->getRequest();
+
+        $template = '{content}';
+        $xtplFile = str_replace(array('./', '../'), '', strip_tags(trim($xtplFile)));
+        $xtplFile = $config->getSitePath() . $config->get('template.xtpl.path') . '/mail/' . $xtplFile . $config->get('template.xtpl.ext');
+        if (is_file($xtplFile)) {
+            $template = file_get_contents($xtplFile);
+            if (!$template) {
+                \Tk\log::warning('Template file not found, using default template: ' . $xtplFile);
+                $template = '{content}';
+            }
+        }
+
+        $message = \Tk\Mail\CurlyMessage::create($template);
+        //$message->setFrom($config->get('site.email'));
+        $message->setReplyTo($config->get('site.email'));
+
+        if ($request->getTkUri())
+            $message->set('_uri', \Tk\Uri::create('')->toString());
+        if ($request->getReferer())
+            $message->set('_referer', $request->getReferer()->toString());
+        if ($request->getClientIp())
+            $message->set('_ip', $request->getClientIp());
+        if ($request->getUserAgent())
+            $message->set('_user_agent', $request->getUserAgent());
+
+        return $message;
+    }
+
 //    /**
 //     * validate a filename and see if we think it is a script or harmful
 //     * to upload to the server
