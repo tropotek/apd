@@ -1,6 +1,12 @@
 
 #CHANGELOG#
 
+Ver 3.4.22 [2023-03-02]:
+-------------------------------
+  - Update composer
+  - Fixed invoice total calculations
+
+
 Ver 3.4.20 [2023-02-07]:
 -------------------------------
   - Fixed Azure MS logout issue
