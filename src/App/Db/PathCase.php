@@ -536,6 +536,18 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
      */
     public function getDataPath()
     {
+        // TODO: we need to implement this to reduce folder list sizes, but first write a script to:
+        //       - move all existing files in data folder (use path_case.created year
+        //       - update any file paths in the DB file, path_case content fields
+        //
+
+//        $path = sprintf( '/pathCase/%s/%s', $this->getCreated('Y'), $this->getVolatileId());
+//        if ($this->getInstitution()) {
+//            $path = sprintf('%s%s', $this->getInstitution()->getDataPath(), $path);
+//        }
+//        return $path;
+
+
         if ($this->getInstitution()) {
             return sprintf('%s/pathCase/%s', $this->getInstitution()->getDataPath(), $this->getVolatileId());
         }

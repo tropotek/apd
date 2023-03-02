@@ -64,13 +64,10 @@ HTML;
             });
         $this->appendCell(new Cell\Text('code'));
         $this->appendCell(new Cell\Text('qty'));
-        $this->appendCell(new Cell\Text('price'))->setLabel('Total');
-//        $this->appendCell(new Cell\Text('total'))->setOrderProperty('')
-//            ->addOnPropertyValue(function (\Tk\Table\Cell\Iface $cell, \App\Db\InvoiceItem $obj, $value) {
-//                $value = $obj->getTotal()->toString();
-//                return $value;
-//            }
-//        );
+        $this->appendCell(new Cell\Text('price'))->setLabel('Total')
+        ->addOnPropertyValue(function (\Tk\Table\Cell\Iface $cell, \App\Db\InvoiceItem $obj, $value) {
+            return $obj->getPrice()->toString('.', '');
+        });
 
         // Filters
         //$this->appendFilter(new Field\Input('keywords'))->setAttr('placeholder', 'Search');
@@ -110,7 +107,7 @@ jQuery(function($) {
     $(this).on('invoice::updateTotal', function () {
       var total = 0.0;
       $(this).find('td.mPrice').each(function () {
-        total += parseFloat($(this).text().substring(1), 2);
+        total += parseFloat($(this).text().replace(/[^\d.]/g,''), 2);
       });
       $(this).find('tr.tk-invoice-total').remove();
       var html = '<tr class="tk-invoice-total">' +
