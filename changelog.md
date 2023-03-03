@@ -1,6 +1,11 @@
 
 #CHANGELOG#
 
+Ver 3.4.26 [2023-03-03]:
+-------------------------------
+  - Update from to replyTo
+
+
 Ver 3.4.24 [2023-03-02]:
 -------------------------------
   - Use replyTo instead of from for emails
