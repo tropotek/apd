@@ -1,6 +1,11 @@
 
 #CHANGELOG#
 
+Ver 3.4.28 [2023-03-03]:
+-------------------------------
+  - Fixed issue with request when pathologist not selectd.
+
+
 Ver 3.4.26 [2023-03-03]:
 -------------------------------
   - Update from to replyTo
