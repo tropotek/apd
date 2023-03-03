@@ -117,6 +117,7 @@ class PathCaseDecorator
                 $subject = '[#' . $case->getId() . '] ' . ObjectUtil::basename($case) . ' ' . ucfirst($status->getName()) . ': ' . $case->getPathologyId();
             }
             $message->setSubject($subject);
+            //$message->setFrom(Message::joinEmail($case->getInstitution()->getEmail(), $case->getInstitution()->getName()));
             $message->setReplyTo(Message::joinEmail($case->getInstitution()->getEmail(), $case->getInstitution()->getName()));
 
             $message->addTo($recipient['email']);
