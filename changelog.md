@@ -1,6 +1,13 @@
 
 #CHANGELOG#
 
+Ver 3.4.30 [2023-03-06]:
+-------------------------------
+  - Update composer
+  - Formatting
+  - Fixed invoice total on path case table
+
+
 Ver 3.4.28 [2023-03-03]:
 -------------------------------
   - Fixed issue with request when pathologist not selectd.
