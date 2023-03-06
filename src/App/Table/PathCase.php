@@ -3,9 +3,11 @@ namespace App\Table;
 
 use App\Db\AnimalTypeMap;
 use App\Db\ContactMap;
+use App\Db\InvoiceItemMap;
 use App\Db\PathCaseMap;
 use Tk\Db\Tool;
 use Tk\Form\Field;
+use Tk\Money;
 use Tk\Table\Cell;
 use Uni\Db\User;
 
@@ -75,7 +77,10 @@ class PathCase extends \Bs\TableIface
 
         $this->appendCell(new Cell\Text('accountStatus'));
         $this->appendCell(new Cell\Boolean('billable'));
-        $this->appendCell(new Cell\Text('cost'));
+        //$this->appendCell(new Cell\Text('cost'));
+        $this->appendCell(new Cell\Text('cost'))->addOnPropertyValue(function (Cell\Text $cell, \App\Db\PathCase $obj, $value) {
+            return $obj->getInvoiceTotal();
+        });
         $this->appendCell(new Cell\Boolean('submissionReceived'));
         $this->appendCell(new Cell\Boolean('afterHours'));
 

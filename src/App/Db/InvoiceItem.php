@@ -85,6 +85,7 @@ class InvoiceItem extends \Tk\Db\Map\Model implements \Tk\ValidInterface
         return $obj;
     }
 
+
     /**
      * @param string $code
      * @return InvoiceItem

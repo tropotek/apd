@@ -188,6 +188,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
     /**
      * This should be a cost for the case billed to the clientId
      * @var Money
+     * @deprecated Use the
      */
     public $cost = null;
 
@@ -552,6 +553,16 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
             return sprintf('%s/pathCase/%s', $this->getInstitution()->getDataPath(), $this->getVolatileId());
         }
         return sprintf('pathCase/%s', $this->getVolatileId());
+    }
+
+    public function getInvoiceTotal(): Money
+    {
+        $value = 0;
+        $items = InvoiceItemMap::create()->findFiltered(['pathCaseId' => $this->getVolatileId()]);
+        foreach ($items as $item) {
+            $value += $item->getTotal()->getAmount();
+        }
+        return Money::create($value);
     }
 
     /**
