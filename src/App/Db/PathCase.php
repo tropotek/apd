@@ -1615,7 +1615,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
     public function isEditable(User $user)
     {
         if (!$user->hasPermission(Permission::CASE_FULL_EDIT) && $this->hasStatus(self::STATUS_COMPLETED)) {
-        //if (!$user->hasPermission(Permission::CASE_ADMIN) && $this->hasStatus(self::STATUS_COMPLETED)) {
             return false;
         }
         return true;
@@ -1643,9 +1642,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
             $errors['institutionId'] = 'Invalid value: institutionId';
         }
 
-//        if (!$this->pathologistId) {
-//            $errors['pathologistId'] = 'Invalid value: pathologistId';
-//        }
         if (!$this->pathologyId) {
             $errors['pathologyId'] = 'Invalid value: pathologyId';
         } else {

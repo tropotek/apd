@@ -39,7 +39,6 @@ class PathCase extends \Bs\TableIface
         $this->addCss('tk-pathCase-table');
 
         $this->appendCell(new Cell\Checkbox('id'));
-        //$this->resetSession();
         $this->appendCell(new Cell\Text('pathologyId'))->setLabel('Pathology #')
             ->addCss('key')->setOrderProperty('s.pathIdx')->setUrl($this->getEditUrl());
 
@@ -77,7 +76,6 @@ class PathCase extends \Bs\TableIface
 
         $this->appendCell(new Cell\Text('accountStatus'));
         $this->appendCell(new Cell\Boolean('billable'));
-        //$this->appendCell(new Cell\Text('cost'));
         $this->appendCell(new Cell\Text('cost'))->addOnPropertyValue(function (Cell\Text $cell, \App\Db\PathCase $obj, $value) {
             return $obj->getInvoiceTotal();
         });
@@ -98,7 +96,6 @@ class PathCase extends \Bs\TableIface
                 return $value;
             });
         $this->appendCell(new Cell\Text('species'));
-        //$this->appendCell(new Cell\Text('breed'));
         $this->appendCell(new Cell\Text('sex'));
         $this->appendCell(new Cell\Boolean('desexed'));
         $this->appendCell(new Cell\Text('patientNumber'));
@@ -149,10 +146,6 @@ class PathCase extends \Bs\TableIface
         
         $this->appendFilter(Field\Select::createSelect('pathologistId', $list)->prependOption('-- Pathologist --'));
 
-//        $list = $this->getConfig()->getUserMapper()->findFiltered(array(
-//            'institutionId' => $this->getConfig()->getInstitutionId(),
-//            'type' => User::TYPE_STAFF
-//        ));
         $this->appendFilter(Field\Select::createSelect('userId', $list)->prependOption('-- Creator --'));
 
 
@@ -223,11 +216,6 @@ JS;
         $speciesList = PathCaseMap::create()->findSpeciesList();
         $this->appendFilter(Field\Select::createSelect('species', $speciesList)->prependOption('-- Species --'));
 
-        // Breed Filter
-//        $breedList = PathCaseMap::create()->findBreedList();
-//        $this->appendFilter(Field\Select::createSelect('breed', $breedList)->prependOption('-- Breed --'));
-        // TODO: create an auto update JS when the species is selected repopulate the breed select options.
-
         $list = array('Yes' => '1', 'No' => '0');
         $this->appendFilter(Field\Select::createSelect('isDisposed', $list)->prependOption('-- Is Disposed --', ''));
 
@@ -243,8 +231,6 @@ JS;
         $this->appendFilter(new Field\DateRange('arrival'));
 
         // Actions
-        //$this->appendAction(\Tk\Table\Action\Link::createLink('New Path Case', \Bs\Uri::createHomeUrl('/pathCaseEdit.html'), 'fa fa-plus'));
-        //$this->appendAction(\Tk\Table\Action\ColumnSelect::create()->setUnselected(array('modified')));
         $this->appendAction(\Tk\Table\Action\ColumnSelect::create()->setSelected(
                 array('id', 'pathologyId', 'pathologistId', 'clientId', 'owner', 'age',
                     'patientNumber', 'type', 'submissionType', 'status', 'arrival')
@@ -253,9 +239,6 @@ JS;
         $this->appendAction(\Tk\Table\Action\Delete::create());
         $this->appendAction(\Tk\Table\Action\Csv::create());
         $this->appendAction(\App\Table\Action\Status::create(\App\Db\PathCase::getStatusList()));
-
-        // load table
-        //$this->setList($this->findList());
 
         return $this;
     }
@@ -270,8 +253,7 @@ JS;
     {
         if (!$tool) $tool = $this->getTool();
         $filter = array_merge($this->getFilterValues(), $filter);
-        $list = \App\Db\PathCaseMap::create()->findFiltered($filter, $tool);
-        return $list;
+        return \App\Db\PathCaseMap::create()->findFiltered($filter, $tool);
     }
 
 }
