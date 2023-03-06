@@ -188,7 +188,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
     /**
      * This should be a cost for the case billed to the clientId
      * @var Money
-     * @deprecated Use the
+     * @deprecated Use PathCase::getInvoiceTotal()
      */
     public $cost = null;
 
@@ -686,6 +686,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
     /**
      * @param Money|float $cost
      * @return PathCase
+     * @deprecated Use PathCase::getInvoiceTotal()
      */
     public function setCost($cost) : PathCase
     {
@@ -698,6 +699,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
 
     /**
      * @return Money
+     * @deprecated Use PathCase::getInvoiceTotal()
      */
     public function getCost() : Money
     {

@@ -222,7 +222,7 @@ class TestData extends \Bs\Console\TestData
 
             if (rand(0, 1)) {
                 $case->setBillable(true);
-                $case->setCost(Money::create((float)(rand(10, 1500) . '.' . rand(0, 99))));
+                //$case->setCost(Money::create((float)(rand(10, 1500) . '.' . rand(0, 99))));
             }
             $case->setAfterHours((bool)rand(0, 1));
 
