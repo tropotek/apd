@@ -3,6 +3,7 @@ namespace App;
 
 
 use App\Db\Permission;
+use Tk\Mail\Message;
 
 /**
  * @author Michael Mifsud <info@tropotek.com>
@@ -78,6 +79,10 @@ class Config extends \Uni\Config
         $message = \Tk\Mail\CurlyMessage::create($template);
         $message->setFrom($config->get('site.email'));
         //$message->setReplyTo($config->get('site.email'));
+        if ($this->getInstitution()) {
+            $message->setFrom(Message::joinEmail($this->getInstitution()->getEmail(),
+                $this->getInstitution()->getName()));
+        }
 
         if ($request->getTkUri())
             $message->set('_uri', \Tk\Uri::create('')->toString());

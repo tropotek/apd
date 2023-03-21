@@ -8,6 +8,7 @@ use Tk\Form\Event\Submit;
 use Tk\Form\Field\CheckboxGroup;
 use Tk\Form\Field\Input;
 use Tk\Form\Field\Textarea;
+use Tk\Mail\Message;
 use Tk\Ui\Dialog\JsonForm;
 
 /**
@@ -119,7 +120,9 @@ class EmailReport extends JsonForm
         // Create message
         $message = $this->getConfig()->createMessage();
         //$message->setFrom('noreply@' . $_SERVER['HTTP_HOST']);
-        $message->setFrom($this->getConfig()->getInstitution()->getEmail());
+        //$message->setFrom($this->getConfig()->getInstitution()->getEmail());
+        $message->setFrom(Message::joinEmail($this->getConfig()->getInstitution()->getEmail(),
+            $this->getConfig()->getInstitution()->getName()));
         //$message->setReplyTo($this->getConfig()->getInstitution()->getEmail());
         $s = $this->pathCase->getPathologyId();
         $message->setSubject($s);
