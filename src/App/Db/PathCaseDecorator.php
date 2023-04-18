@@ -118,7 +118,6 @@ class PathCaseDecorator
             }
             $message->setSubject($subject);
             $message->setFrom(Message::joinEmail($case->getInstitution()->getEmail(), $case->getInstitution()->getName()));
-            //$message->setReplyTo(Message::joinEmail($case->getInstitution()->getEmail(), $case->getInstitution()->getName()));
 
             $message->addTo($recipient['email']);
             $message->replace(Collection::prefixArrayKeys($recipient, 'recipient::'));

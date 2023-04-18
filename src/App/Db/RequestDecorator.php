@@ -56,8 +56,6 @@ class RequestDecorator
             $message->setSubject($subject);
             $message->setFrom(Message::joinEmail($request->getPathCase()->getInstitution()->getEmail(),
                 $request->getPathCase()->getInstitution()->getName()));
-//            $message->setReplyTo(Message::joinEmail($request->getPathCase()->getInstitution()->getEmail(),
-//                $request->getPathCase()->getInstitution()->getName()));
 
             $message->addTo($recipient['email']);
             $message->replace(Collection::prefixArrayKeys($recipient, 'recipient::'));

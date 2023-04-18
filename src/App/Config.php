@@ -78,7 +78,6 @@ class Config extends \Uni\Config
 
         $message = \Tk\Mail\CurlyMessage::create($template);
         $message->setFrom($config->get('site.email'));
-        //$message->setReplyTo($config->get('site.email'));
         if ($this->getInstitution()) {
             $message->setFrom(Message::joinEmail($this->getInstitution()->getEmail(),
                 $this->getInstitution()->getName()));
