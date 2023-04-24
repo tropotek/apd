@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use Tk\Request;
+use Uni\Uri;
 
 /**
  * @author Michael Mifsud <info@tropotek.com>
@@ -31,13 +32,12 @@ class Index extends \Uni\Controller\Index
 
         $template->insertText('site-title', $this->getConfig()->get('site.title'));
 
-
-//        if ($this->getConfig()->getInstitutionMapper()->findActive()->count() > 1) {
-//            $template->setVisible("multiInstitutions");
-//        } else {
-//            $template->setAttr('institution-login', 'href', $this->getConfig()->getInstitution()->getLoginUrl());
-//            $template->setVisible("login");
-//        }
+        if ($this->getConfig()->isDebug() && $this->getConfig()->getAuthUser()) {
+            $url = Uri::createHomeUrl('/index.html');
+            $this->getPage()->getTemplate()->setAttr('loginUrl', 'href', $url);
+            $this->getPage()->getTemplate()->addCss('loginUrl', 'btn-success');
+            $this->getPage()->getTemplate()->setText('loginUrl', $this->getConfig()->getAuthUser()->getUsername());
+        }
 
         return $template;
     }
