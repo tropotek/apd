@@ -176,11 +176,11 @@ jQuery(function ($) {
     var form = $(this);
     var dialog = form.closest('.modal.email-report-dialog');
     
-    // dialog.on('DialogForm:error', function (e, xhr, errMsg, errHtml) {
-    //   console.log('\App\Ui\Dialog\EmailReport:');
-    //   console.log(arguments);
-    //   alert(errMsg);
-    // });
+    dialog.on('DialogForm:error', function (e, xhr, errMsg, errHtml) {
+      console.log('\App\Ui\Dialog\EmailReport:');
+      console.log(arguments);
+      alert(errMsg);
+    });
     
   }
   $('.email-report-dialog form').on('init', 'body', init).each(init);
