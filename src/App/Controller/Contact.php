@@ -6,6 +6,7 @@ use Tk\Request;
 use Tk\Form;
 use Tk\Form\Event;
 use Tk\Form\Field;
+use Uni\Uri;
 
 /**
  * @author Michael Mifsud <info@tropotek.com>
@@ -32,6 +33,10 @@ class Contact extends \Bs\Controller\Iface
      */
     public function doDefault(Request $request)
     {
+        if ($this->getConfig()->getInstitution() && $this->getConfig()->getInstitution()->getDomain() == Uri::create()->getHost()) {
+            // Redirect to main site contact form
+            Uri::create('https://'.$this->getConfig()->get('site.domain').'/contact.html')->redirect();
+        }
 
         $this->form = new Form('contactForm');
 
@@ -291,7 +296,7 @@ HTML;
                         <!-- Form -->
                         <div class="mb-4">
                           <label class="form-label" for="contactsFormFirstName">First name</label>
-                          <input type="text" class="form-control" name="firstName" id="contactsFormFirstName" placeholder="Jacob" aria-label="Jacob" />
+                          <input type="text" class="form-control" name="firstName" id="contactsFormFirstName" />
                         </div>
                         <!-- End Form -->
                       </div>
@@ -301,7 +306,7 @@ HTML;
                         <!-- Form -->
                         <div class="mb-4">
                           <label class="form-label" for="contactsFormLasttName">Last name</label>
-                          <input type="text" class="form-control" name="lastName" id="contactsFormLasttName" placeholder="Williams" aria-label="Williams" />
+                          <input type="text" class="form-control" name="lastName" id="contactsFormLastName"/>
                         </div>
                         <!-- End Form -->
                       </div>
@@ -314,7 +319,7 @@ HTML;
                         <!-- Form -->
                         <div class="mb-4">
                           <label class="form-label" for="contactsFormCompany">Company</label>
-                          <input type="text" class="form-control" name="company" id="contactsFormCompany" placeholder="Htmlstream" aria-label="Htmlstream" />
+                          <input type="text" class="form-control" name="company" id="contactsFormCompany" />
                         </div>
                         <!-- End Form -->
                       </div>
@@ -324,7 +329,7 @@ HTML;
                         <!-- Form -->
                         <div class="mb-4">
                           <label class="form-label" for="contactsFormCompanyWebsite">Company website</label>
-                          <input type="text" class="form-control" name="website" id="contactsFormCompanyWebsite" placeholder="htmlstream.com" aria-label="htmlstream.com" />
+                          <input type="text" class="form-control" name="website" id="contactsFormCompanyWebsite" />
                         </div>
                         <!-- End Form -->
                       </div>
@@ -335,14 +340,14 @@ HTML;
                     <!-- Form -->
                     <div class="mb-4">
                       <label class="form-label" for="contactsFormWorkEmail">Work email</label>
-                      <input type="text" class="form-control" name="contact" id="contactsFormWorkEmail" placeholder="email@site.com" aria-label="email@site.com" />
+                      <input type="text" class="form-control" name="contact" id="contactsFormWorkEmail" />
                     </div>
                     <!-- End Form -->
 
                     <!-- Form -->
                     <div class="mb-4">
                       <label class="form-label" for="contactsFormDetails">Details</label>
-                      <textarea class="form-control" name="message" id="contactsFormDetails" placeholder="Tell us about your payment sales" aria-label="Tell us about your payment sales" rows="4"></textarea>
+                      <textarea class="form-control" name="message" id="contactsFormDetails" placeholder="Tell us about your requirements" aria-label="Tell us about your requirements" rows="4"></textarea>
                     </div>
                     <!-- End Form -->
 

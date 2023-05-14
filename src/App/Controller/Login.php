@@ -30,7 +30,7 @@ class Login extends \Uni\Controller\Login
         }
 
         if (!$this->institution || !$this->institution->active ) {
-            //\Tk\Alert::addWarning('Invalid or inactive Institution. Setup an active institution to continue.');
+            //\Tk\Alert::addWarning('Invalid or inactive Institution. Set up an active institution to continue.');
             \Uni\Uri::create('/xlogin.html')->redirect();
         } else {
             if (!$this->getAuthUser() && $this->institution->getData()->get('inst.microsoftLogin')) {
