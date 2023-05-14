@@ -54,6 +54,25 @@ class Config extends \Uni\Config
     }
 
 
+    /**
+     * getEmailGateway
+     *
+     * @return \Tk\Mail\Gateway
+     */
+    public function getEmailGateway()
+    {
+        if (!$this->get('email.gateway')) {
+            if ($this->getInstitution() && $this->getInstitution()->getData()->get('inst.dkim.enable')) {
+                $this['mail.dkim.domain'] = $this->getInstitution()->getData()->get('inst.dkim.domain');
+                $this['mail.dkim.private_string'] = $this->getInstitution()->getData()->get('inst.dkim.private');
+            }
+            $gateway = new \Tk\Mail\Gateway($this);
+            $gateway->setDispatcher($this->getEventDispatcher());
+            $this->set('email.gateway', $gateway);
+        }
+        return $this->get('email.gateway');
+    }
+
 
     /**
      * @param string $xtplFile The mail template filename as found in the /html/xtpl/mail folder
