@@ -101,9 +101,8 @@ class Config extends \Uni\Config
         if ($this->getInstitution()) {
             $message->setFrom(Message::joinEmail($this->getInstitution()->getEmail(),
                 $this->getInstitution()->getName()));
-            $message->addHeader('Sender', 'anat-vet@apd-vet.com');
-            $message->setReplyTo(Message::joinEmail($this->getInstitution()->getEmail(),
-                $this->getInstitution()->getName()));
+//            $message->setReplyTo(Message::joinEmail($this->getInstitution()->getEmail(),
+//                $this->getInstitution()->getName()));
         }
 
         if ($request->getTkUri())
