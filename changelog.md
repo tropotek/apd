@@ -1,6 +1,10 @@
 
 #CHANGELOG#
 
+Ver 3.4.46 [2023-05-14]:
+-------------------------------
+
+
 Ver 3.4.44 [2023-05-14]:
 -------------------------------
   - Added DKIM signing to institution settings
