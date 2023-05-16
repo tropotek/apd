@@ -100,6 +100,7 @@ class Config extends \Uni\Config
 
         if ($this->getInstitution()) {
 //            ini_set('sendmail_from', $config->get('site.email'));
+            ini_set('sendmail_from', '');
 //            $message->setFrom(Message::joinEmail($this->getInstitution()->getEmail(),
 //                $this->getInstitution()->getName()));
             $message->setFrom(Message::joinEmail($config->get('site.email'),
