@@ -123,7 +123,7 @@ class EmailReport extends JsonForm
 //            $this->getConfig()->getInstitution()->getName()));
         $message->setReplyTo(Message::joinEmail($this->getConfig()->getInstitution()->getEmail(),
             $this->getConfig()->getInstitution()->getName()));
-        
+
         $s = $this->pathCase->getPathologyId();
         $message->setSubject($s);
 

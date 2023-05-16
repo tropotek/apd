@@ -35,14 +35,14 @@ class Edit extends \Uni\Controller\Institution\Edit
         $this->getForm()->appendField(new Field\Textarea(self::INSTITUTION_REPORT_TEMPLATE))->setTabGroup('Details')
             ->addCss('mce-min')->setLabel('Report Email Template')->setAttr('data-elfinder-path', $this->getInstitution()->getDataPath().'/media');
 
-//        $this->getForm()->appendField(new Field\Checkbox(self::INSTITUTION_DKIM_ENABLE), 'email')
-//            ->setTabGroup('DKIM')->setLabel('Enable DKIM')->setCheckboxLabel('Sign outgoing emails with a DKIM key');
-//        $this->getForm()->appendField(new Field\Input(self::INSTITUTION_DKIM_DOMAIN), self::INSTITUTION_DKIM_ENABLE)
-//            ->setLabel('DKIM Domain')->setTabGroup('DKIM')->setNotes('The mail domain to sign DKIM outgoing emails with.');
-//        $this->getForm()->appendField(new Field\Textarea(self::INSTITUTION_DKIM_PUBLIC), self::INSTITUTION_DKIM_DOMAIN)
-//            ->setLabel('DKIM Public Key')->setTabGroup('DKIM')->setNotes('Give this key to your mail administrators.');
-//        $this->getForm()->appendField(new Field\Textarea(self::INSTITUTION_DKIM_PRIVATE), self::INSTITUTION_DKIM_PUBLIC)
-//            ->setLabel('DKIM Private Key')->setTabGroup('DKIM')->setNotes('This key should not be shared with anyone.');
+        $this->getForm()->appendField(new Field\Checkbox(self::INSTITUTION_DKIM_ENABLE), 'email')
+            ->setTabGroup('DKIM')->setLabel('Enable DKIM')->setCheckboxLabel('Sign outgoing emails with a DKIM key');
+        $this->getForm()->appendField(new Field\Input(self::INSTITUTION_DKIM_DOMAIN), self::INSTITUTION_DKIM_ENABLE)
+            ->setLabel('DKIM Domain')->setTabGroup('DKIM')->setNotes('The mail domain to sign DKIM outgoing emails with.');
+        $this->getForm()->appendField(new Field\Textarea(self::INSTITUTION_DKIM_PUBLIC), self::INSTITUTION_DKIM_DOMAIN)
+            ->setLabel('DKIM Public Key')->setTabGroup('DKIM')->setNotes('Give this key to your mail administrators.');
+        $this->getForm()->appendField(new Field\Textarea(self::INSTITUTION_DKIM_PRIVATE), self::INSTITUTION_DKIM_PUBLIC)
+            ->setLabel('DKIM Private Key')->setTabGroup('DKIM')->setNotes('This key should not be shared with anyone.');
 
 
     }
