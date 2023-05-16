@@ -119,8 +119,11 @@ class EmailReport extends JsonForm
 
         // Create message
         $message = $this->getConfig()->createMessage();
-        $message->setFrom(Message::joinEmail($this->getConfig()->getInstitution()->getEmail(),
+//        $message->setFrom(Message::joinEmail($this->getConfig()->getInstitution()->getEmail(),
+//            $this->getConfig()->getInstitution()->getName()));
+        $message->setReplyTo(Message::joinEmail($this->getConfig()->getInstitution()->getEmail(),
             $this->getConfig()->getInstitution()->getName()));
+        
         $s = $this->pathCase->getPathologyId();
         $message->setSubject($s);
 

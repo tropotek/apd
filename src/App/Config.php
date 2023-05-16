@@ -62,10 +62,10 @@ class Config extends \Uni\Config
     public function getEmailGateway()
     {
         if (!$this->get('email.gateway')) {
-            if ($this->getInstitution() && $this->getInstitution()->getData()->get('inst.dkim.enable')) {
-                $this['mail.dkim.domain'] = $this->getInstitution()->getData()->get('inst.dkim.domain');
-                $this['mail.dkim.private_string'] = $this->getInstitution()->getData()->get('inst.dkim.private');
-            }
+//            if ($this->getInstitution() && $this->getInstitution()->getData()->get('inst.dkim.enable')) {
+//                $this['mail.dkim.domain'] = $this->getInstitution()->getData()->get('inst.dkim.domain');
+//                $this['mail.dkim.private_string'] = $this->getInstitution()->getData()->get('inst.dkim.private');
+//            }
             $gateway = new \Tk\Mail\Gateway($this);
             $gateway->setDispatcher($this->getEventDispatcher());
             $this->set('email.gateway', $gateway);
@@ -99,10 +99,12 @@ class Config extends \Uni\Config
         $message->setFrom($config->get('site.email'));
 
         if ($this->getInstitution()) {
-            $message->setFrom(Message::joinEmail($this->getInstitution()->getEmail(),
-                $this->getInstitution()->getName()));
-//            $message->setReplyTo(Message::joinEmail($this->getInstitution()->getEmail(),
+//            $message->setFrom(Message::joinEmail($this->getInstitution()->getEmail(),
 //                $this->getInstitution()->getName()));
+            $message->setFrom(Message::joinEmail($config->get('site.email'),
+                $this->getInstitution()->getName()));
+            $message->setReplyTo(Message::joinEmail($this->getInstitution()->getEmail(),
+                $this->getInstitution()->getName()));
         }
 
         if ($request->getTkUri())
