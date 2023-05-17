@@ -109,17 +109,19 @@ class PathCaseDecorator
     {
         $status = $case->getCurrentStatus();
         $messageList = [];
+        $config = Config::getInstance();
 
         $recipientList = self::getRecipients($case, $mailTemplate);
         foreach ($recipientList as $recipient) {
-            //$message = CurlyMessage::create($mailTemplate->getTemplate());
-            $message = Config::getInstance()->createMessage();
+            $message = CurlyMessage::create($mailTemplate->getTemplate());
             $message->set('_mailTemplate', $mailTemplate);
             if (!$subject) {
                 $subject = '[#' . $case->getId() . '] ' . ObjectUtil::basename($case) . ' ' . ucfirst($status->getName()) . ': ' . $case->getPathologyId();
             }
             $message->setSubject($subject);
-            //$message->setFrom(Message::joinEmail($case->getInstitution()->getEmail(), $case->getInstitution()->getName()));
+
+            $message->setFrom(Message::joinEmail($config->get('site.email'),
+                $case->getInstitution()->getName()));
             $message->setReplyTo(Message::joinEmail($case->getInstitution()->getEmail(), $case->getInstitution()->getName()));
 
             $message->addTo($recipient['email']);

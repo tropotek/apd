@@ -46,18 +46,19 @@ class RequestDecorator
     {
         $status = $request->getCurrentStatus();
         $messageList = [];
+        $config = Config::getInstance();
 
         $recipientList = self::getRecipients($request, $mailTemplate);
         foreach ($recipientList as $recipient) {
-            //$message = CurlyMessage::create($mailTemplate->getTemplate());
-            $message = Config::getInstance()->createMessage();
+            $message = CurlyMessage::create($mailTemplate->getTemplate());
             $message->set('_mailTemplate', $mailTemplate);
             if (!$subject) {
                 $subject = '[#' . $request->getId() . '] Pathology Request - ' . ucfirst($status->getName()) . ': ' . $request->getPathCase()->getPathologyId();
             }
             $message->setSubject($subject);
-//            $message->setFrom(Message::joinEmail($request->getPathCase()->getInstitution()->getEmail(),
-//                $request->getPathCase()->getInstitution()->getName()));
+
+            $message->setFrom(Message::joinEmail($config->get('site.email'),
+                $request->getPathCase()->getInstitution()->getName()));
             $message->setReplyTo(Message::joinEmail($request->getPathCase()->getInstitution()->getEmail(),
                 $request->getPathCase()->getInstitution()->getName()));
 
