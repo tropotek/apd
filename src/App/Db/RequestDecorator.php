@@ -1,6 +1,7 @@
 <?php
 namespace App\Db;
 
+use App\Config;
 use Tk\Collection;
 use Tk\Db\Map\Model;
 use Tk\Mail\CurlyMessage;
@@ -48,7 +49,8 @@ class RequestDecorator
 
         $recipientList = self::getRecipients($request, $mailTemplate);
         foreach ($recipientList as $recipient) {
-            $message = CurlyMessage::create($mailTemplate->getTemplate());
+            //$message = CurlyMessage::create($mailTemplate->getTemplate());
+            $message = Config::getInstance()->createMessage();
             $message->set('_mailTemplate', $mailTemplate);
             if (!$subject) {
                 $subject = '[#' . $request->getId() . '] Pathology Request - ' . ucfirst($status->getName()) . ': ' . $request->getPathCase()->getPathologyId();
