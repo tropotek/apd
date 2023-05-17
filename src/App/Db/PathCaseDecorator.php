@@ -4,6 +4,7 @@
 namespace App\Db;
 
 
+use App\Config;
 use Bs\Event\StatusEvent;
 use Tk\Collection;
 use Tk\Db\Map\Model;
@@ -111,7 +112,8 @@ class PathCaseDecorator
 
         $recipientList = self::getRecipients($case, $mailTemplate);
         foreach ($recipientList as $recipient) {
-            $message = CurlyMessage::create($mailTemplate->getTemplate());
+            //$message = CurlyMessage::create($mailTemplate->getTemplate());
+            $message = Config::getInstance()->createMessage();
             $message->set('_mailTemplate', $mailTemplate);
             if (!$subject) {
                 $subject = '[#' . $case->getId() . '] ' . ObjectUtil::basename($case) . ' ' . ucfirst($status->getName()) . ': ' . $case->getPathologyId();
