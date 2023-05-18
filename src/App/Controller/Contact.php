@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use Tk\Alert;
+use Tk\Encrypt;
 use Tk\Request;
 use Tk\Form;
 use Tk\Form\Event;
@@ -40,6 +41,17 @@ class Contact extends \Bs\Controller\Iface
 
         $this->form = new Form('contactForm');
 
+        $nc = $this->getSession()->get('nc');
+        if (!$request->request->has('nc') || !$this->getSession()->has('nc')) {
+            $ts = time();
+            $nc = array(
+                'ts' => $ts,
+                'nc' => Encrypt::create('CT&%&%^gFGBF$^' . $ts)->encode(md5($ts))
+            );
+            $this->getSession()->set('nc', $nc);
+        }
+
+        $this->form->appendField(new Field\Hidden('nc'))->setValue($nc['nc']);
         $this->form->appendField(new Field\Hidden('email'));
         $this->form->appendField(new Field\Input('firstName'));
         $this->form->appendField(new Field\Input('lastName'));
@@ -47,6 +59,7 @@ class Contact extends \Bs\Controller\Iface
         $this->form->appendField(new Field\Input('company'));
         $this->form->appendField(new Field\Input('website'));
         $this->form->appendField(new Field\Textarea('message'));
+
 
         $this->form->appendField(new Event\Submit('send', array($this, 'doSubmit')))->addCss('btn-primary');
         
@@ -83,6 +96,12 @@ class Contact extends \Bs\Controller\Iface
     {
         $values = $form->getValues();
 
+        $nc = $this->getSession()->get('nc');
+        //vd($nc, time() - (60*10));
+        if (!$nc || empty($values['nc']) || ($nc['ts'] < time() - (60*10))) {
+            $form->addError('Invalid form submission. Please try again.');
+        }
+
         // Bot detection
         if (!empty($values['email'])) {
             $form->addFieldError('Invalid form submission');
@@ -107,6 +126,7 @@ class Contact extends \Bs\Controller\Iface
 
         if ($this->sendEmail($form)) {
             \Tk\Alert::addSuccess('<strong>Success!</strong> Your form has been sent.');
+            $this->getSession()->remove('nc');
         } else {
             \Tk\Alert::addError('<strong>Error!</strong> Something went wrong and your message has not been sent.');
         }
