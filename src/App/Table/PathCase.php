@@ -100,15 +100,7 @@ class PathCase extends \Bs\TableIface
         $this->appendCell(new Cell\Boolean('desexed'));
         $this->appendCell(new Cell\Text('patientNumber'));
         $this->appendCell(new Cell\Text('microchip'));
-        $this->appendCell(new Cell\Text('owner'))
-            ->addOnPropertyValue(function (Cell\Text $cell, \App\Db\PathCase $obj, $value) {
-                $owner = $obj->getOwner();
-                $value = '';
-                if ($owner) {
-                    $value = $owner->getName();
-                }
-                return $value;
-            });
+        $this->appendCell(new Cell\Text('ownerName'));
         $this->appendCell(new Cell\Text('origin'));
         $this->appendCell(new Cell\Text('colour'));
         $this->appendCell(new Cell\Text('weight'));

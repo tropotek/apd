@@ -239,11 +239,15 @@ JS;
         $form->removeField('notes');
 
 
-        $list = \App\Db\Contact::getSelectList(\App\Db\Contact::TYPE_OWNER);
-        $this->appendField(Field\DialogSelect::createDialogSelect('ownerId[]', $list, $form, 'Create Owner'))
-            ->addCss('tk-multiselect tk-multiselect1')
-            ->setTabGroup($tab)->setLabel('Owner Name')
-            ->setNotes('Start typing to find an owner, if not found use the + icon to create a new owner.<br/>The Client Record of the animal owner.');
+        if (\App\Db\PathCase::useOwnerObject()) {
+            $list = \App\Db\Contact::getSelectList(\App\Db\Contact::TYPE_OWNER);
+            $this->appendField(Field\DialogSelect::createDialogSelect('ownerId[]', $list, $form, 'Create Owner'))
+                ->addCss('tk-multiselect tk-multiselect1')
+                ->setTabGroup($tab)->setLabel('Owner Name')
+                ->setNotes('Start typing to find an owner, if not found use the + icon to create a new owner.<br/>The Client Record of the animal owner.');
+        } else {
+            $this->appendField(new Field\Input('ownerName'))->setTabGroup($tab);
+        }
 
         $this->appendField(new Field\Input('animalName'))->setLabel('Animal Name/ID')->setTabGroup($tab);
         $this->appendField(new Field\Input('patientNumber'))->setTabGroup($tab);
@@ -633,7 +637,9 @@ CSS;
     {
         if ($this->getRequest()->has('action')) return;        // ignore column requests
         $this->getForm()->getField('clientId')->getDialog()->execute($request);
-        $this->getForm()->getField('ownerId')->getDialog()->execute($request);
+        if ($this->getForm()->getField('ownerId')) {
+            $this->getForm()->getField('ownerId')->getDialog()->execute($request);
+        }
         $this->getForm()->getField('students')->getDialog()->execute($request);
 
         $this->load(\App\Db\PathCaseMap::create()->unmapForm($this->getPathCase()));

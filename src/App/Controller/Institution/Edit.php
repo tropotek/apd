@@ -14,35 +14,49 @@ class Edit extends \Uni\Controller\Institution\Edit
     const INSTITUTION_FAX = 'inst.fax';
     const INSTITUTION_REPORT_TEMPLATE = 'inst.report.mail.tpl';
     const INSTITUTION_AUTOCOMPLETE_REPORT_STATUS = 'inst.pathCase.autocomplete.reportStatus';
+    const INSTITUTION_OWNER_NAME_ONLY = 'inst.pathCase.owner.name.only';
 
-    const INSTITUTION_DKIM_ENABLE  = 'inst.dkim.enable';
-    const INSTITUTION_DKIM_DOMAIN  = 'inst.dkim.domain';
-    const INSTITUTION_DKIM_PUBLIC  = 'inst.dkim.public';
-    const INSTITUTION_DKIM_PRIVATE = 'inst.dkim.private';
+//    const INSTITUTION_DKIM_ENABLE  = 'inst.dkim.enable';
+//    const INSTITUTION_DKIM_DOMAIN  = 'inst.dkim.domain';
+//    const INSTITUTION_DKIM_PUBLIC  = 'inst.dkim.public';
+//    const INSTITUTION_DKIM_PRIVATE = 'inst.dkim.private';
 
     public function initForm(\Tk\Request $request)
     {
-        // Nedded for the PDF report
+        // Needed for the PDF report
         $this->getForm()->removeField('description');
         $this->getForm()->removeField('feature');
 
         $this->getForm()->appendField(new Field\Input(self::INSTITUTION_FAX), 'phone')
-            ->setLabel('Fax')->setTabGroup('Details');
-
-        $this->getForm()->appendField(new Field\Checkbox(self::INSTITUTION_AUTOCOMPLETE_REPORT_STATUS), self::INSTITUTION_FAX)
-            ->setTabGroup('Details')->setLabel('Auto-complete Report Status')->setCheckboxLabel('Automatically set the pathCase.reportStatus to completed once the case status is completed');
+            ->setLabel('Fax')
+            ->setTabGroup('Details');
 
         $this->getForm()->appendField(new Field\Textarea(self::INSTITUTION_REPORT_TEMPLATE))->setTabGroup('Details')
-            ->addCss('mce-min')->setLabel('Report Email Template')->setAttr('data-elfinder-path', $this->getInstitution()->getDataPath().'/media');
+            ->addCss('mce-min')
+            ->setLabel('Report Email Template')
+            ->setAttr('data-elfinder-path', $this->getInstitution()->getDataPath().'/media');
 
-        $this->getForm()->appendField(new Field\Checkbox(self::INSTITUTION_DKIM_ENABLE), 'email')
-            ->setTabGroup('DKIM')->setLabel('Enable DKIM')->setCheckboxLabel('Sign outgoing emails with a DKIM key');
-        $this->getForm()->appendField(new Field\Input(self::INSTITUTION_DKIM_DOMAIN), self::INSTITUTION_DKIM_ENABLE)
-            ->setLabel('DKIM Domain')->setTabGroup('DKIM')->setNotes('The mail domain to sign DKIM outgoing emails with.');
-        $this->getForm()->appendField(new Field\Textarea(self::INSTITUTION_DKIM_PUBLIC), self::INSTITUTION_DKIM_DOMAIN)
-            ->setLabel('DKIM Public Key')->setTabGroup('DKIM')->setNotes('Give this key to your mail administrators.');
-        $this->getForm()->appendField(new Field\Textarea(self::INSTITUTION_DKIM_PRIVATE), self::INSTITUTION_DKIM_PUBLIC)
-            ->setLabel('DKIM Private Key')->setTabGroup('DKIM')->setNotes('This key should not be shared with anyone.');
+        $this->getForm()->appendField(new Field\Checkbox(self::INSTITUTION_AUTOCOMPLETE_REPORT_STATUS), 'address')
+            ->setTabGroup('Settings')
+            ->setLabel('Auto-complete Report Status')
+            ->setCheckboxLabel('Automatically set the pathCase.reportStatus to completed once the case status is completed');
+
+        $this->getForm()->appendField(new Field\Checkbox(self::INSTITUTION_OWNER_NAME_ONLY), 'address')
+            ->setTabGroup('Settings')
+            ->setLabel('Owner Contact')
+            ->setNotes('Uncheck this to use a full contact card storing all owner details.')
+            ->setCheckboxLabel('Use a free text field storing only the owner\'s name.');
+
+
+
+//        $this->getForm()->appendField(new Field\Checkbox(self::INSTITUTION_DKIM_ENABLE), 'email')
+//            ->setTabGroup('DKIM')->setLabel('Enable DKIM')->setCheckboxLabel('Sign outgoing emails with a DKIM key');
+//        $this->getForm()->appendField(new Field\Input(self::INSTITUTION_DKIM_DOMAIN), self::INSTITUTION_DKIM_ENABLE)
+//            ->setLabel('DKIM Domain')->setTabGroup('DKIM')->setNotes('The mail domain to sign DKIM outgoing emails with.');
+//        $this->getForm()->appendField(new Field\Textarea(self::INSTITUTION_DKIM_PUBLIC), self::INSTITUTION_DKIM_DOMAIN)
+//            ->setLabel('DKIM Public Key')->setTabGroup('DKIM')->setNotes('Give this key to your mail administrators.');
+//        $this->getForm()->appendField(new Field\Textarea(self::INSTITUTION_DKIM_PRIVATE), self::INSTITUTION_DKIM_PUBLIC)
+//            ->setLabel('DKIM Private Key')->setTabGroup('DKIM')->setNotes('This key should not be shared with anyone.');
 
 
     }

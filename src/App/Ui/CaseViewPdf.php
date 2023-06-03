@@ -104,8 +104,7 @@ class CaseViewPdf extends Pdf
         $template->appendText('bioSamples', $this->pathCase->getBioSamples());
         $template->appendText('bioNotes', $this->pathCase->getBioNotes());
         $template->appendText('status', $this->pathCase->getStatus());
-        if ($this->pathCase->getOwner())
-            $template->appendText('ownerId', $this->pathCase->getOwner()->getDisplayName());
+        $template->appendText('ownerName', $this->pathCase->getOwnerName());
         $template->appendText('animalName', $this->pathCase->getAnimalName());
         $template->appendText('patientNumber', $this->pathCase->getPatientNumber());
         $template->appendText('microchip', $this->pathCase->getMicrochip());
@@ -406,7 +405,7 @@ JS;
           <td class="label">Status:</td>
           <td><span var="status"></span></td>
           <td class="label">Owner Name:</td>
-          <td><span var="ownerId"></span></td>
+          <td><span var="ownerName"></span></td>
         </tr>
         <tr>
           <td class="label">Animal Name/ID:</td>

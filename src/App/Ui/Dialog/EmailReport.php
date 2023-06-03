@@ -56,9 +56,11 @@ class EmailReport extends JsonForm
         if ($user && $user->getEmail())
             $list[$user->getName() . ' (' . $user->getEmail() . ')'] = $user->getEmail();
 
-        $owner = $this->getPathCase()->getOwner();
-        if ($owner && $owner->getEmail())
-            $list[$owner->getNameFirst() . ' (' . $owner->getEmail() . ')'] = $owner->getEmail();
+        if (PathCase::useOwnerObject()) {
+            $owner = $this->getPathCase()->getOwner();
+            if ($owner && $owner->getEmail())
+                $list[$owner->getNameFirst() . ' (' . $owner->getEmail() . ')'] = $owner->getEmail();
+        }
 
         $path = $this->getPathCase()->getPathologist();
         if ($path && $path->getEmail())
@@ -145,6 +147,26 @@ class EmailReport extends JsonForm
 
         $message->set('clientName', $this->getPathCase()->getClient()->getName());
         $message->set('pathologyId', $this->pathCase->getPathologyId());
+        $message->set('animalName', $this->pathCase->getAnimalName());
+        $message->set('animalType', '');
+        $message->set('animalType', '');
+        $message->set('animalTypeId', '');
+        $message->set('clientName', $this->pathCase->getOwnerName());
+        $message->set('pathologistName', '');
+        if ($this->pathCase->getPathologist()) {
+            $message->set('pathologistName', $this->pathCase->getPathologist()->getName());
+            //$message->set('clientName', $this->pathCase->getPathologist()->getName());
+        }
+        if ($this->pathCase->getAnimalType()) {
+            $message->set('animalType', $this->pathCase->getAnimalType()->getName());
+            $message->set('animalTypeId', $this->pathCase->getAnimalTypeId());
+        }
+        if ($this->pathCase->getClient()) {
+            $message->set('clientName', $this->pathCase->getClient()->getName());
+            if (!$this->pathCase->getClient()->getName() && $this->pathCase->getClient()->getNameCompany()) {
+                $message->set('clientName', $this->pathCase->getClient()->getNameCompany());
+            }
+        }
         $message->setContent($values['message']);
         $message->set('sig', '');
 

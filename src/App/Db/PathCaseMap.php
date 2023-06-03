@@ -54,6 +54,7 @@ class PathCaseMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Integer('bioSamples', 'bio_samples'));
             $this->dbMap->addPropertyMap(new Db\Text('bioNotes', 'bio_notes'));
             $this->dbMap->addPropertyMap(new Db\Integer('specimenCount', 'specimen_count'));
+            $this->dbMap->addPropertyMap(new Db\Text('ownerName', 'owner_name'));
             $this->dbMap->addPropertyMap(new Db\Text('animalName', 'animal_name'));
             $this->dbMap->addPropertyMap(new Db\Integer('animalTypeId', 'animal_type_id'));
             $this->dbMap->addPropertyMap(new Db\Text('species'));
@@ -129,6 +130,7 @@ class PathCaseMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Integer('bioSamples'));
             $this->formMap->addPropertyMap(new Form\Text('bioNotes'));
             $this->formMap->addPropertyMap(new Form\Integer('specimenCount'));
+            $this->formMap->addPropertyMap(new Form\Text('ownerName'));
             $this->formMap->addPropertyMap(new Form\Text('animalName'));
             $this->formMap->addPropertyMap(new Form\Integer('animalTypeId'));
             $this->formMap->addPropertyMap(new Form\Text('species'));
@@ -309,6 +311,9 @@ FROM path_case
         }
         if (!empty($filter['ownerId'])) {
             $filter->appendWhere('a.owner_id = %s AND ', (int)$filter['ownerId']);
+        }
+        if (!empty($filter['ownerName'])) {
+            $filter->appendWhere('a.owner_name = %s AND ', $this->quote($filter['ownerName']));
         }
 
 

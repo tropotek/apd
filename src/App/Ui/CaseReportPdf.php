@@ -110,20 +110,26 @@ class CaseReportPdf extends Pdf
             }
         }
 
-        $owner = $this->pathCase->getOwner();
-        if ($owner) {
-            $template->appendText('ownerName', $owner->getName());
-            $template->appendText('ownerPhone', $owner->getPhone());
-            $addr = '&nbsp;';
-            if ($owner->getStreet()) {
-                $addr = sprintf('<p>Address:</p><blockquote>%s<br/>%s</blockquote>',
-                    $owner->getStreet(),
-                    $owner->getCity() . ' ' . $owner->getState() . ' ' . $owner->getPostcode()
-                );
+        if (PathCase::useOwnerObject()) {
+            $owner = $this->pathCase->getOwner();
+            if ($owner) {
+                $template->appendText('ownerName', $owner->getName());
+                $template->appendText('ownerPhone', $owner->getPhone());
+                $addr = '&nbsp;';
+                if ($owner->getStreet()) {
+                    $addr = sprintf('<p>Address:</p><blockquote>%s<br/>%s</blockquote>',
+                        $owner->getStreet(),
+                        $owner->getCity() . ' ' . $owner->getState() . ' ' . $owner->getPostcode()
+                    );
+                }
+                $template->appendHtml('ownerAddress', $addr);
+                //$template->appendText('ownerCity', $owner->getCity());
+                $template->appendText('ownerEmail', $owner->getEmail());
+                $template->setVisible('ownerObject');
             }
-            $template->appendHtml('ownerAddress', $addr);
-            //$template->appendText('ownerCity', $owner->getCity());
-            $template->appendText('ownerEmail', $owner->getEmail());
+        } else {
+            $template->appendText('ownerName', $this->pathCase->getOwnerName());
+            $template->setVisible('ownerText');
         }
 
         $template->appendText('animalName', $this->pathCase->getAnimalName());
@@ -391,8 +397,8 @@ JS;
         </tr>
       </table>
       
-      <br/>
-      <table width="100%" style="" class="border details">
+      <br choice="ownerObject" />
+      <table width="100%" style="" class="border details" choice="ownerObject">
         <tr>
           <td width="50%"><b>Owner Details:</b></td>
           <td width="50%"></td>
@@ -412,6 +418,10 @@ JS;
         <tr>
           <td width="50%"><b>Patient Details:</b></td>
           <td width="50%"></td>
+        </tr>
+        <tr choice="ownerText">
+          <td>Owner Name: <span var="ownerName"></span></td>
+          <td>&nbsp;</td>
         </tr>
         <tr>
           <td>Name: <span var="animalName"></span></td>
