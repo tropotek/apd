@@ -143,7 +143,8 @@ class Request extends \Bs\TableIface
                     $button->setAttr('disabled')->addCss('disabled');
                 }
             });
-        $aCell->addButton(Cell\ActionButton::create('Select All Case Requests', Uri::create('#'), 'fa fa-check-square-o')->addCss('btn-light'))
+        $aCell->addButton(Cell\ActionButton::create('Select All Case Requests', Uri::create('#'), 'fa fa-check-square-o')
+            ->addCss('btn-light'))
             ->setShowLabel(false)
             ->addCss('btn-select-all');
 
@@ -167,7 +168,7 @@ class Request extends \Bs\TableIface
         }
         $this->appendCell($this->getActionCell())->setLabel('');
 
-        $this->appendCell(new Cell\Text('cassetteId'))->addCss('key')->setUrl($this->getEditUrl())->
+        $this->appendCell(new Cell\Text('cassetteId'))->setUrl($this->getEditUrl())->
         addOnPropertyValue(function (Cell\Text $cell, \App\Db\Request $obj, $value) {
             \Tk\Db\Map\Mapper::$HIDE_DELETED = false;
             if ($obj->getCassette()) {
@@ -179,10 +180,10 @@ class Request extends \Bs\TableIface
             \Tk\Db\Map\Mapper::$HIDE_DELETED = true;
             return $value;
         });
-        $this->appendCell(new Cell\Html('comments'))
+        $this->appendCell(new Cell\Html('comments'))->addCss('key')
             ->addOnPropertyValue(function (\Tk\Table\Cell\Iface $cell, \App\Db\Request $obj, $value) {
                 //$value = '<div style="max-width: 400px;overflow: auto;">' . $obj->getComments() . '</div>';
-                $cell->setAttr('style', 'min-width: 200px;');
+                $cell->setAttr('style', 'min-width: 200px;white-space: unset;');
                 return htmlspecialchars($value);
             });
         $this->appendCell(new Cell\Text('status'));
@@ -456,7 +457,8 @@ JS;
             $css = <<<CSS
 .tk-table td.mComments {
   position: relative;
-   cursor: pointer;
+  cursor: pointer;
+  line-height: 1.5em;
 }
 .mComments:after {
    font: normal normal normal 14px/1 FontAwesome;
@@ -464,12 +466,13 @@ JS;
    display: inline-block;
    position: absolute;
    float: left;
-   right: 12px;
-   top: 17px;
+   right: 2px;
+   top: 2px;
    padding-right: 3px;
    vertical-align: middle;
    font-weight:900;
    cursor: pointer;
+   opacity: 0.50;
 }
 CSS;
             $template->appendCss($css);

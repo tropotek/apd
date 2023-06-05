@@ -271,12 +271,13 @@ JS;
    display: inline-block;
    position: absolute;
    float: left;
-   right: 12px;
-   top: 17px;
+   right: 2px;
+   top: 2px;
    padding-right: 3px;
    vertical-align: middle;
    font-weight:900;
    cursor: pointer;
+   opacity: 0.50;
 }
 CSS;
         $template->appendCss($css);
