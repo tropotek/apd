@@ -1,6 +1,10 @@
 
 #CHANGELOG#
 
+Ver 3.4.78 [2023-06-05]:
+-------------------------------
+
+
 Ver 3.4.76 [2023-06-05]:
 -------------------------------
   - Only send disposal reminders to necropsy cases
