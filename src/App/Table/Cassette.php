@@ -263,7 +263,8 @@ JS;
         $css = <<<CSS
 .tk-table td.mComments {
   position: relative;
-   cursor: pointer;
+  cursor: pointer;
+  line-height: 1.5em;
 }
 .mComments:after {
    font: normal normal normal 14px/1 FontAwesome;
