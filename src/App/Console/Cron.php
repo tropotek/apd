@@ -73,6 +73,7 @@ class Cron extends \Bs\Console\Iface
 
         $caseList = PathCaseMap::create()->findFiltered([
             'institutionId' => $institution->getId(),
+            'type' => PathCase::TYPE_NECROPSY,
             'isDisposed' => true,
             'disposedAfter' => \Tk\Date::create()->add(new \DateInterval('P'.$days.'D')),
             'reminderSent' => false     // TODO:
