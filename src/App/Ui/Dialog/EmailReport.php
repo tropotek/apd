@@ -3,6 +3,7 @@ namespace App\Ui\Dialog;
 
 use App\Db\Contact;
 use App\Db\PathCase;
+use Tk\CurlyTemplate;
 use Tk\Form;
 use Tk\Form\Event\Submit;
 use Tk\Form\Field\CheckboxGroup;
@@ -145,6 +146,7 @@ class EmailReport extends JsonForm
             $message->addAttachment($filePath, basename($file->getPath()), $file->getMime());
         }
 
+
         $message->set('clientName', $this->getPathCase()->getClient()->getName());
         $message->set('pathologyId', $this->pathCase->getPathologyId());
         $message->set('animalName', $this->pathCase->getAnimalName());
@@ -167,7 +169,15 @@ class EmailReport extends JsonForm
                 $message->set('clientName', $this->pathCase->getClient()->getNameCompany());
             }
         }
-        $message->setContent($values['message']);
+        $message->set('caseType::'.$this->getPathCase()->getType(), true);
+
+        // A BIG OLD -- HACK -- HERE!!! (its late...)
+        // Well this is working for some reason????????????????????
+        // TODO: Figure out why the template blocks are not working for the message
+        $mTest = new CurlyTemplate($values['message']);
+        $message->setContent($mTest->parse($message->all()));
+
+        //$message->setContent($values['message']);
         $message->set('sig', '');
 
         // Email individually to selected email addresses

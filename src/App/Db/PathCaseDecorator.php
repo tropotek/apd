@@ -1,23 +1,16 @@
 <?php
-
-
 namespace App\Db;
 
-
 use App\Config;
-use Bs\Event\StatusEvent;
 use Tk\Collection;
 use Tk\Db\Map\Model;
 use Tk\Mail\CurlyMessage;
 use Tk\Mail\Message;
-use Bs\Db\Status;
 use Tk\ObjectUtil;
-use Uni\Db\User;
 use Uni\Uri;
 
 class PathCaseDecorator
 {
-
 
     /**
      * @param Model|PathCase $case
