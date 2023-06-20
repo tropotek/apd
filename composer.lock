@@ -2749,12 +2749,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-mail.git",
-                "reference": "802a0ac3e6cab5c02b73adc3968a9e9c7c05646b"
+                "reference": "64732e578f3515a1ca0ee7c28c82e7300d1b27b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-mail/zipball/802a0ac3e6cab5c02b73adc3968a9e9c7c05646b",
-                "reference": "802a0ac3e6cab5c02b73adc3968a9e9c7c05646b",
+                "url": "https://api.github.com/repos/tropotek/tk-mail/zipball/64732e578f3515a1ca0ee7c28c82e7300d1b27b8",
+                "reference": "64732e578f3515a1ca0ee7c28c82e7300d1b27b8",
                 "shasum": ""
             },
             "require": {
