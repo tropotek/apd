@@ -139,9 +139,11 @@ class CaseReportPdf extends Pdf
         $template->appendText('species', $this->pathCase->getSpecies());
         $template->appendText('breed', $this->pathCase->getBreed());
         $template->appendText('age', sprintf('%sy %sm', $this->pathCase->getAge(), $this->pathCase->getAgeMonths()));
-        $sex = 'Male';
-        if (strtoupper($this->pathCase->getSex()) != 'M')
-            $sex = 'Female';
+
+        $sex = 'N/A';
+        if ($this->pathCase->getSex()) {
+            $sex = (strtoupper($this->pathCase->getSex()) == 'M') ? 'Male' : 'Female';
+        }
 
         $spayed = '';
         if ($this->pathCase->isDesexed())

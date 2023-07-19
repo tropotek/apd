@@ -114,9 +114,10 @@ class CaseViewPdf extends Pdf
         $template->appendText('species', $this->pathCase->getSpecies());
         $template->appendText('specimenCount', $this->pathCase->getSpecimenCount());
 
-        $sex = 'Male';
-        if (strtoupper($this->pathCase->getSex()) != 'M')
-            $sex = 'Female';
+        $sex = 'N/A';
+        if ($this->pathCase->getSex()) {
+            $sex = (strtoupper($this->pathCase->getSex()) == 'M') ? 'Male' : 'Female';
+        }
 
         $desexed = '';
         if ($this->pathCase->isDesexed())
