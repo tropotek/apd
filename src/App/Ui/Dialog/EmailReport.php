@@ -103,7 +103,7 @@ class EmailReport extends JsonForm
      * @param Form\Event\Iface $event
      * @throws \Exception
      */
-    public function doSubmit($form, $event)
+    public function doSubmit(Form $form, Form\Event\Iface $event)
     {
         $values = $form->getValues();
         $list = array();
@@ -122,20 +122,32 @@ class EmailReport extends JsonForm
 
         // Create message
         $message = $this->getConfig()->createMessage();
-//        $message->setFrom(Message::joinEmail($this->getConfig()->getInstitution()->getEmail(),
-//            $this->getConfig()->getInstitution()->getName()));
         $message->setReplyTo(Message::joinEmail($this->getConfig()->getInstitution()->getEmail(),
             $this->getConfig()->getInstitution()->getName()));
 
-        $s = $this->pathCase->getPathologyId();
-        $message->setSubject($s);
+        $ownerName = '';
+        if ($this->pathCase->getOwnerName()) {
+            $ownerName = '- ' . $this->pathCase->getOwnerName();
+        }
+        $subject = sprintf('Pathology results of %s %s', $this->pathCase->getAnimalName(), $ownerName);
+        $message->setSubject($subject);
 
         // Attach PDF
         $pdf = \App\Ui\CaseReportPdf::createReport($this->pathCase);
-        $int = '';
+        $intermStatus = '';
         if ($this->pathCase->getReportStatus() == PathCase::REPORT_STATUS_INTERIM)
-            $int = '-' . PathCase::REPORT_STATUS_INTERIM;
-        $filename = 'AnatomicPathologyReport-' . $this->pathCase->getPathologyId() . '-' . $this->pathCase->getPatientNumber().$int.'.pdf';
+            $intermStatus = '_' . PathCase::REPORT_STATUS_INTERIM;
+        $ownerName = '';
+        if ($this->pathCase->getOwnerName()) {
+            $ownerName = str_replace(' ', '-', $this->pathCase->getOwnerName());
+        }
+        $animalName = str_replace(' ', '-', $this->pathCase->getAnimalName());
+        $filename = sprintf('PathologyResults_%s_%s_%s%s.pdf',
+            $this->pathCase->getPathologyId(),
+            $animalName,
+            $ownerName,
+            $intermStatus
+        );
         $pdfString = $pdf->getPdfAttachment($filename);
         $message->addStringAttachment($pdfString, $filename);
 
@@ -145,7 +157,6 @@ class EmailReport extends JsonForm
             if (!is_file($filePath) || $file->getBytes() > $this->getConfig()->get('pathCase.report.maxAttachmentSize', 2000000)) continue;
             $message->addAttachment($filePath, basename($file->getPath()), $file->getMime());
         }
-
 
         $message->set('clientName', $this->getPathCase()->getClient()->getName());
         $message->set('pathologyId', $this->pathCase->getPathologyId());
@@ -172,8 +183,8 @@ class EmailReport extends JsonForm
         $message->set('caseType::'.$this->getPathCase()->getType(), true);
 
         // A BIG OLD -- HACK -- HERE!!! (its late...)
-        // Well this is working for some reason????????????????????
-        // TODO: Figure out why the template blocks are not working for the message
+        // Parsing blocks in a sub template is working but the main template it is not  ???
+        // TODO: Figure out why the main $message template blocks are not working (above)
         $mTest = new CurlyTemplate($values['message']);
         $message->setContent($mTest->parse($message->all()));
 
