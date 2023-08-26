@@ -1,6 +1,11 @@
 
 #CHANGELOG#
 
+Ver 3.4.86 [2023-08-26]:
+-------------------------------
+  - Changes the subject and attachment titles
+
+
 Ver 3.4.84 [2023-07-19]:
 -------------------------------
   - Update sex value on reports
