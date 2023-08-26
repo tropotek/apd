@@ -1,55 +1,55 @@
 {
-    "name": "ttek/apd",
-    "type": "project",
-    "description": "Anatomic Pathology Database",
-    "keywords":  [
-        "tropotek"
-    ],
-    "time": "2023-08-26",
-    "license": "MIT",
-    "minimum-stability": "stable",
-    "authors":  [
-         {
-            "name": "Michael Mifsud",
-            "homepage": "http://www.tropotek.com/"
-        }
-    ],
-    "autoload":  {
-        "psr-0":  {
-            "": "src/"
-        }
-    },
-    "scripts":  {
-        "post-install-cmd":  [
-            "Tk\\Composer\\SetupEvent::postInstall"
-        ],
-        "post-update-cmd":  [
-            "Tk\\Composer\\SetupEvent::postUpdate"
-        ]
-    },
-    "extra":  {
-        "branch-alias":  {
-            "dev-master": "3.4.x-dev"
-        }
-    },
-    "require":  {
-        "php": "^7.3.0",
-        "ext-json": "*",
-        "ext-dom": "*",
-        "ext-openssl": "*",
-        "ext-pdo": "*",
-        "ttek/tk-uni": "~3.6.0",
-        "ttek/tk-map": "~3.2.0",
-        "ttek/theme-cube": "~1.4.0",
-        "ttek-plg/plg-ldap": "~3.4.0",
-        "ttek-plg/mailog": "~3.0.0",
-        "mpdf/mpdf": "~8.0.0"
-    },
-    "require-dev":  {
-    },
-    "config":  {
-        "allow-plugins":  {
-            "ttek/tk-installers": true
-        }
+  "name": "ttek/apd",
+  "type": "project",
+  "description": "Anatomic Pathology Database",
+  "keywords": [
+    "tropotek"
+  ],
+  "time": "2020-07-22",
+  "license": "MIT",
+  "minimum-stability": "dev",
+  "authors": [
+    {
+      "name": "Michael Mifsud",
+      "homepage": "http://www.tropotek.com/"
     }
+  ],
+  "autoload": {
+    "psr-0": {
+      "": "src/"
+    }
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "Tk\\Composer\\SetupEvent::postInstall"
+    ],
+    "post-update-cmd": [
+      "Tk\\Composer\\SetupEvent::postUpdate"
+    ]
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "3.4.x-dev"
+    }
+  },
+  "require": {
+    "php": "^7.3.0",
+    "ext-json": "*",
+    "ext-dom": "*",
+    "ext-openssl": "*",
+    "ext-pdo": "*",
+    "ttek/tk-uni": "~3.6.0",
+    "ttek/tk-map": "~3.2.0",
+    "ttek/theme-cube": "~1.4.0",
+    "ttek-plg/plg-ldap": "~3.4.0",
+    "ttek-plg/mailog": "~3.0.0",
+    "mpdf/mpdf": "~8.0.0"
+  },
+  "require-dev": {
+  },
+  "config": {
+    "allow-plugins": {
+      "ttek/tk-installers": true
+    }
+  }
 }
