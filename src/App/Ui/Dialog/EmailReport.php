@@ -3,6 +3,8 @@ namespace App\Ui\Dialog;
 
 use App\Db\Contact;
 use App\Db\PathCase;
+use Bs\Uri;
+use Tk\Alert;
 use Tk\CurlyTemplate;
 use Tk\Form;
 use Tk\Form\Event\Submit;
@@ -192,7 +194,7 @@ class EmailReport extends JsonForm
         $message->set('sig', '');
 
         // Email individually to selected email addresses
-        foreach ( $list as $to) {
+        foreach ($list as $to) {
             $message->reset();
             $message->addTo($to);
             try {
@@ -204,8 +206,6 @@ class EmailReport extends JsonForm
                 $form->addFieldError('to', 'Failed Sending to: ' . $to);
             }
         }
-
-
     }
 
     /**
