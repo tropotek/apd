@@ -1,6 +1,11 @@
 
 #CHANGELOG#
 
+Ver 3.4.88 [2023-08-29]:
+-------------------------------
+  - updated pdf filenames
+
+
 Ver 3.4.86 [2023-08-26]:
 -------------------------------
   - Changes the subject and attachment titles
