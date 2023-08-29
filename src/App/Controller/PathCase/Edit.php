@@ -157,10 +157,7 @@ class Edit extends AdminEditIface
     public function doPdf(\Tk\Request $request)
     {
         $pdf = \App\Ui\CaseReportPdf::createReport($this->pathCase);
-        $int = '';
-        if ($this->pathCase->getReportStatus() == PathCase::REPORT_STATUS_INTERIM)
-            $int = '-' . PathCase::REPORT_STATUS_INTERIM;
-        $filename = 'AnatomicPathologyReport-' . $this->pathCase->getPathologyId() . '-' . $this->pathCase->getPatientNumber().$int.'.pdf';
+        $filename = $this->pathCase->getReportPdfFilename();
         if (!$request->has('isHtml'))
             $pdf->output($filename);     // comment this to see html version
         return $pdf->show();
@@ -174,10 +171,7 @@ class Edit extends AdminEditIface
     public function doPdfView(\Tk\Request $request)
     {
         $pdf = \App\Ui\CaseViewPdf::createReport($this->pathCase);
-        $int = '';
-        if ($this->pathCase->getReportStatus() == PathCase::REPORT_STATUS_INTERIM)
-            $int = '-' . PathCase::REPORT_STATUS_INTERIM;
-        $filename = 'AnatomicPathologyCase-' . $this->pathCase->getPathologyId() . '-' . $this->pathCase->getPatientNumber().$int.'.pdf';
+        $filename = $this->pathCase->getCasePdfFilename();
         if (!$request->has('isHtml'))
             $pdf->output($filename);     // comment this to see html version
         return $pdf->show();

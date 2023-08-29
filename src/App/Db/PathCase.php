@@ -577,6 +577,49 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
         return sprintf('pathCase/%s', $this->getVolatileId());
     }
 
+
+    public function getReportPdfFilename(): string
+    {
+        $animalName = '';
+        if ($this->getAnimalName()) {
+            $animalName = '_' . str_replace(' ', '-', $this->getAnimalName());
+        }
+        $ownerName = '';
+        if ($this->getOwnerName()) {
+            $ownerName = '_' . str_replace(' ', '-', $this->getOwnerName());
+        }
+        $interimStatus = '';
+        if ($this->getReportStatus() == PathCase::REPORT_STATUS_INTERIM)
+            $interimStatus = '_' . PathCase::REPORT_STATUS_INTERIM;
+        return sprintf('PathologyResults_%s%s%s%s.pdf',
+            $this->getPathologyId(),
+            $animalName,
+            $ownerName,
+            $interimStatus
+        );
+    }
+
+    public function getCasePdfFilename(): string
+    {
+        $animalName = '';
+        if ($this->getAnimalName()) {
+            $animalName = '_' . str_replace(' ', '-', $this->getAnimalName());
+        }
+        $ownerName = '';
+        if ($this->getOwnerName()) {
+            $ownerName = '_' . str_replace(' ', '-', $this->getOwnerName());
+        }
+        $interimStatus = '';
+        if ($this->getReportStatus() == PathCase::REPORT_STATUS_INTERIM)
+            $interimStatus = '_' . PathCase::REPORT_STATUS_INTERIM;
+        return sprintf('PathologyCase_%s%s%s%s.pdf',
+            $this->getPathologyId(),
+            $animalName,
+            $ownerName,
+            $interimStatus
+        );
+    }
+
     public function getInvoiceTotal(): Money
     {
         $value = 0;

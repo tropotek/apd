@@ -131,25 +131,16 @@ class EmailReport extends JsonForm
         if ($this->pathCase->getOwnerName()) {
             $ownerName = '- ' . $this->pathCase->getOwnerName();
         }
-        $subject = sprintf('Pathology results of %s %s', $this->pathCase->getAnimalName(), $ownerName);
+        $subject = sprintf('[%s] Pathology results of %s %s',
+            $this->pathCase->getPathologyId(),
+            $this->pathCase->getAnimalName(),
+            $ownerName
+        );
         $message->setSubject($subject);
 
         // Attach PDF
         $pdf = \App\Ui\CaseReportPdf::createReport($this->pathCase);
-        $intermStatus = '';
-        if ($this->pathCase->getReportStatus() == PathCase::REPORT_STATUS_INTERIM)
-            $intermStatus = '_' . PathCase::REPORT_STATUS_INTERIM;
-        $ownerName = '';
-        if ($this->pathCase->getOwnerName()) {
-            $ownerName = str_replace(' ', '-', $this->pathCase->getOwnerName());
-        }
-        $animalName = str_replace(' ', '-', $this->pathCase->getAnimalName());
-        $filename = sprintf('PathologyResults_%s_%s_%s%s.pdf',
-            $this->pathCase->getPathologyId(),
-            $animalName,
-            $ownerName,
-            $intermStatus
-        );
+        $filename = $this->pathCase->getReportPdfFilename();
         $pdfString = $pdf->getPdfAttachment($filename);
         $message->addStringAttachment($pdfString, $filename);
 
@@ -170,7 +161,6 @@ class EmailReport extends JsonForm
         $message->set('pathologistName', '');
         if ($this->pathCase->getPathologist()) {
             $message->set('pathologistName', $this->pathCase->getPathologist()->getName());
-            //$message->set('clientName', $this->pathCase->getPathologist()->getName());
         }
         if ($this->pathCase->getAnimalType()) {
             $message->set('animalType', $this->pathCase->getAnimalType()->getName());
@@ -189,8 +179,6 @@ class EmailReport extends JsonForm
         // TODO: Figure out why the main $message template blocks are not working (above)
         $mTest = new CurlyTemplate($values['message']);
         $message->setContent($mTest->parse($message->all()));
-
-        //$message->setContent($values['message']);
         $message->set('sig', '');
 
         // Email individually to selected email addresses
@@ -223,8 +211,6 @@ jQuery(function ($) {
     var dialog = form.closest('.modal.email-report-dialog');
     
     dialog.on('DialogForm:error', function (e, xhr, errMsg, errHtml) {
-      console.log('\App\Ui\Dialog\EmailReport:');
-      console.log(arguments);
       alert(errMsg);
     });
     
