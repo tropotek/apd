@@ -582,11 +582,13 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
     {
         $animalName = '';
         if ($this->getAnimalName()) {
-            $animalName = '_' . str_replace(' ', '-', $this->getAnimalName());
+            $animalName = '_' . preg_replace('/[^a-z0-9-]/i', '', $this->getAnimalName());
         }
         $ownerName = '';
-        if ($this->getOwnerName()) {
-            $ownerName = '_' . str_replace(' ', '-', $this->getOwnerName());
+        if ($this->getPatientNumber()) {
+            $ownerName = '_' . preg_replace('/[^a-z0-9-]/i', '', $this->getPatientNumber());
+        } elseif ($this->getOwnerName()) {
+            $ownerName = '_' . preg_replace('/[^a-z0-9-]/i', '', $this->getOwnerName());
         }
         $interimStatus = '';
         if ($this->getReportStatus() == PathCase::REPORT_STATUS_INTERIM)
@@ -603,11 +605,13 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
     {
         $animalName = '';
         if ($this->getAnimalName()) {
-            $animalName = '_' . str_replace(' ', '-', $this->getAnimalName());
+            $animalName = '_' . preg_replace('/[^a-z0-9-]/i', '', $this->getAnimalName());
         }
         $ownerName = '';
-        if ($this->getOwnerName()) {
-            $ownerName = '_' . str_replace(' ', '-', $this->getOwnerName());
+        if ($this->getPatientNumber()) {
+            $ownerName = '_' . preg_replace('/[^a-z0-9-]/i', '', $this->getPatientNumber());
+        } elseif ($this->getOwnerName()) {
+            $ownerName = '_' . preg_replace('/[^a-z0-9-]/i', '', $this->getOwnerName());
         }
         $interimStatus = '';
         if ($this->getReportStatus() == PathCase::REPORT_STATUS_INTERIM)
