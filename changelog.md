@@ -1,6 +1,11 @@
 
 #CHANGELOG#
 
+Ver 3.4.92 [2023-09-06]:
+-------------------------------
+  - Add permission descriptions
+
+
 Ver 3.4.90 [2023-08-30]:
 -------------------------------
   - modify pdf file name
