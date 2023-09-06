@@ -71,8 +71,8 @@ class Permission extends \Uni\Db\Permission
             default:          // TYPE_STAFF
                 $arr = array(
                     'Manage Site Settings' => self::MANAGE_SITE,
-                    'Manage Staff Records' => self::MANAGE_STAFF,
                     //'Manage Site Plugins' => self::MANAGE_PLUGINS,
+                    'Manage Staff Records' => self::MANAGE_STAFF,
                     'Can Masquerade' => self::CAN_MASQUERADE,
                     'Is Pathologist' => self::IS_PATHOLOGIST,
                     'Is Technician' => self::IS_TECHNICIAN,
@@ -81,6 +81,24 @@ class Permission extends \Uni\Db\Permission
                 );
         }
         return $arr;
+    }
+
+    public function getPermissionDescriptions(): array
+    {
+        return [
+            self::MANAGE_SITE => 'Can manage site settings and manage site configuration (Notes, Cms content)',
+            self::MANAGE_PLUGINS => 'Can manage site plugins (deprecated)',
+            self::CAN_MASQUERADE => 'Can masquerade as lower permission users to view their data',
+            self::MANAGE_STAFF => 'Can create/update other staff user accounts',
+            self::MANAGE_SUBJECT => 'Can manage Subject settings, enrollment',
+            self::IS_COORDINATOR => 'Is the coordinator of a Course, access/emails/notifications of associated Courses, Subjects and Students ',
+            self::IS_LECTURER => 'Is a lecturer of a subject, access/email/notifications of associated Subjects, Students',
+            self::IS_MENTOR => 'Is a mentor of a student, restricted access to student/site information',
+            self::IS_PATHOLOGIST => 'Can be selected as a pathologist of a case',
+            self::IS_TECHNICIAN => 'Receive disposal reminder emails',
+            self::CASE_ADMIN => 'Change the status of a case after a case is set to completed',
+            self::CASE_FULL_EDIT => 'Edit a case after a case is set to completed',
+        ];
     }
 
     /**
