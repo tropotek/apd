@@ -136,11 +136,14 @@ jQuery(function ($) {
       editBtn.show();
       saveBtn.hide();
       form.hide();  // textarea
-      $.get(document.location, {
-          cmsSave: html,
-          crumb_ignore: 'crumb_ignore',
-          key: el.data('contentKey'),
-          nolog: 'nolog'
+      let contentKey = el.data('contentKey');
+      let url = document.location;
+      url += `?nolog=nolog&crumb_ignore=crumb_ignore&key=\${contentKey}`;
+      $.post(url, {
+          cmsSave: html
+          // crumb_ignore: 'crumb_ignore',
+          // key: el.data('contentKey'),
+          // nolog: 'nolog'
       }, function (html) { }, 'html');
       contentEl.empty().html(html).show();
     }
