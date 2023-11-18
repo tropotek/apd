@@ -51,6 +51,7 @@ class TestData extends \Bs\Console\TestData
     {
         parent::execute($input, $output);
         $this->testData();
+        return 0;
     }
 
 

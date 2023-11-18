@@ -55,6 +55,7 @@ class Cron extends \Bs\Console\Iface
         }
 
         $this->write('', OutputInterface::VERBOSITY_VERBOSE);
+        return 0;
     }
 
     /**

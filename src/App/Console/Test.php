@@ -44,6 +44,7 @@ class Test extends \Bs\Console\Iface
 
         $output->writeln('Complete!!!');
 
+        return 0;
     }
 
 
