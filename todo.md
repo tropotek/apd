@@ -1,6 +1,22 @@
-# apd
+# APD
 
-### TODO Tasks:
+
+
+
+### TODO Tasks 17/11/23:
+
+- 
+
+
+
+
+
+
+
+
+
+
+### TODO System Tasks:
 
 - [ ] Github now supports private repositories for free, move to private repository and use issues instead of this
 todo file.
@@ -13,3 +29,6 @@ todo file.
 - [x] Update the APD contact form to email owner only, disable contact form on all subdomain accounts.
   all subdomain accounts should redirect to login/home page, no access to public pages for security.
     - Implemented a redirect to the main domain contact page for users clicking on the contact page 
+
+
+
