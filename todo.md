@@ -38,8 +38,18 @@ __No Charge - System Updates__
 
 - Remove outdated Contact system once updates are completed. [4hrs]
   - Check owner field in old cases is correct and entered, if not create script to populate case field on old cases.
-  - Remove the setting to select owner text field
-- Check the masquerade bug on logout not going back to correct page left from. [1hrs]
+```sql
+-- update owner_name field for path cases
+UPDATE path_case pc
+LEFT JOIN contact c ON (pc.owner_Id = c.id)
+SET pc.owner_name = TRIM(CONCAT_WS(' ', c.name_company, c.name_first, c.name_last))
+WHERE pc.owner_id != 0 AND pc.owner_name = ''
+;
+-- TODO: drop owner_id field on release
+-- ALTER TABLE path_case DROP COLUMN owner_id;
+```
+  - Remove the setting to select owner text field and other code using it.
+- ~~Check the masquerade bug on logout not going back to correct page left from. [1hrs]~~
 - Fix staff delete/disable, review delete option in place of deactivate Check that it is obvious to remove a staff member.
   Test what happens when we delete a staff. [2hrs]
 - Fix the Client field hover getting in the way. Maybe a longer timeout or only on click, update layout of panel. [1hrs]

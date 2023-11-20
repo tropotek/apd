@@ -273,7 +273,8 @@ class Request extends \Bs\TableIface
 
             $list = $this->getConfig()->getUserMapper()->findFiltered(array(
                 'institutionId' => $this->getConfig()->getInstitutionId(),
-                'type' => User::TYPE_STAFF
+                'type' => User::TYPE_STAFF,
+                'active' => true
             ));
             $this->appendFilter(Field\Select::createSelect('pathologistId', $list)->prependOption('-- Pathologist --'));
 

@@ -131,10 +131,11 @@ class PathCase extends \Bs\TableIface
 
         $this->appendFilter(new Field\Input('age'))->setAttr('placeholder', 'Age');
 
-        $list = $this->getConfig()->getUserMapper()->findFiltered(array(
+        $list = $this->getConfig()->getUserMapper()->findFiltered([
             'institutionId' => $this->getConfig()->getInstitutionId(),
-            'type' => User::TYPE_STAFF
-        ), Tool::create('name_first, name_last'));
+            'type' => User::TYPE_STAFF,
+            'active' => true
+        ], Tool::create('active DESC, name_first, name_last'));
         
         $this->appendFilter(Field\Select::createSelect('pathologistId', $list)->prependOption('-- Pathologist --'));
 
