@@ -28,10 +28,10 @@ class Storage extends \Bs\FormIface
     public function init()
     {
         $layout = $this->getForm()->getRenderer()->getLayout();
-        $layout->removeRow('name', 'col-10');
+        //$layout->removeRow('name', 'col-8');
 
-        $this->appendField(new Field\Input('uid'));
         $this->appendField(new Field\Input('name'));
+        $this->appendField(new Field\Input('uid'))->setLabel('Storage ID')->setNotes('Internal location ID (ie: room 130, locker 334)');
         $this->appendField(new Field\Textarea('notes'));
 
         // TODO: Add a map field here

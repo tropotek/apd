@@ -135,7 +135,9 @@ class Edit extends AdminEditIface
     <div class="tk-panel" data-panel-title="Service Edit" data-panel-icon="fa fa-tags" var="panel"></div>
   </div>
   <div class="col-4" var="right-panel">
-    <div class="tk-panel" data-panel-title="Staff" data-panel-icon="fa fa-group" var="right-panel-01"></div>
+    <div class="tk-panel" data-panel-title="Staff" data-panel-icon="fa fa-group" var="right-panel-01">
+      <p>Manage users who will receive a notification/alert on their dashboard when requests are created.</p>
+    </div>
   </div>
 </div>
 HTML;

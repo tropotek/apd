@@ -82,16 +82,18 @@ class Edit extends \Uni\Controller\Institution\Edit
                 \Uni\Uri::createHomeUrl('/mailTemplateManager.html'), 'fa fa-envelope'));
             $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Storage Locations',
                 \Uni\Uri::createHomeUrl('/storageManager.html'), 'fa fa-archive'));
-            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Available Services',
+            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Services',
                 \Uni\Uri::createHomeUrl('/serviceManager.html'), 'fa fa-tags'));
-            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Contacts',
-                \Uni\Uri::createHomeUrl('/contactManager.html'), 'fa fa-user-o'));
             $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Animal Types',
                 \Uni\Uri::createHomeUrl('/animalTypeManager.html'), 'fa fa-paw'));
             $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Test Types',
                 \Uni\Uri::createHomeUrl('/testManager.html'), 'fa fa-flask'));
             $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Products',
                 \Uni\Uri::createHomeUrl('/productManager.html'), 'fa fa-cube'));
+
+            // TODO: remove this
+            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Contacts',
+                \Uni\Uri::createHomeUrl('/contactManager.html'), 'fa fa-user-o'));
         }
 
     }

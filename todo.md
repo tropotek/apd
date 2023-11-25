@@ -19,9 +19,8 @@ Auto-populate contact select field when new client is selected. [4hrs]
 
 - Add a Student table/object and copy the data from the Contacts table, Update code to use new Student object. (Manager, Edit, etc) [4hrs]  
 
-- When Histology requests are all completed, send a reminder to pathologist (cc site admin) after 24 hours  
-to `complete` the report if not completed already. [4hrs]
-    - Q: Is this only for biopsy cases or both?
+- For biopsy cases when all Histology requests are completed, send a reminder to pathologist (cc site admin) after 24 hours  
+to `complete` the __report__ if not completed already. [4hrs]
 
 - For necropsy cases add a `necropsyPerformed` date field (consider adding a `Necropsy Complete` button to add today's date), 
 once this field has been set send a reminder to the pathologist (CC site admin) after 15 working days if case not completed. [4hrs] 
@@ -49,10 +48,10 @@ WHERE pc.owner_id != 0 AND pc.owner_name = ''
 -- ALTER TABLE path_case DROP COLUMN owner_id;
 ```
   - Remove the setting to select owner text field and other code using it.
-- ~~Check the masquerade bug on logout not going back to correct page left from. [1hrs]~~
-- Fix staff delete/disable, review delete option in place of deactivate Check that it is obvious to remove a staff member.
-  Test what happens when we delete a staff. [2hrs]
 - Fix the Client field hover getting in the way. Maybe a longer timeout or only on click, update layout of panel. [1hrs]
+- ~~Check the masquerade bug on logout not going back to correct page left from.~~ [1hrs]
+- ~~Fix staff delete/disable, review delete option in place of deactivate Check that it is obvious to remove a staff member.
+  Test what happens when we delete a staff.~~ [2hrs]
 
 
 
