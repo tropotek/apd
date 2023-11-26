@@ -3,6 +3,33 @@
 -- ---------------------------------
 
 
+-- function to set all words to uppercase
+DROP FUNCTION IF EXISTS ucwords;
+CREATE FUNCTION ucwords(s VARCHAR(255)) RETURNS VARCHAR(255)
+BEGIN
+  declare c int;
+  declare x VARCHAR(255);
+  declare y VARCHAR(255);
+  declare z VARCHAR(255);
+
+  set x = UPPER( SUBSTRING( s, 1, 1));
+  set y = SUBSTR( s, 2);
+  set c = instr( y, ' ');
+
+  while c > 0
+    do
+      set z = SUBSTR( y, 1, c);
+      set x = CONCAT( x, z);
+      set z = UPPER( SUBSTR( y, c+1, 1));
+      set x = CONCAT( x, z);
+      set y = SUBSTR( y, c+2);
+      set c = INSTR( y, ' ');
+  end while;
+  set x = CONCAT(x, y);
+  return x;
+END;
+
+
 -- Add a setting to disable mentor lists
 INSERT IGNORE INTO _data (fid, fkey, `key`, value) VALUES (0,'system', 'site.mentors.enabled', '');
 INSERT IGNORE INTO _data (fid, fkey, `key`, value) VALUES (0,'system', 'site.courses.enabled', '');
@@ -187,33 +214,6 @@ UPDATE contact SET name_company = 'RSPCA' WHERE id IN (1914);
 UPDATE contact SET name_company = '', name_first = 'S', name_last = 'Harvey' WHERE id IN (61);
 UPDATE contact SET name_company = '', name_first = 'Smitha', name_last = 'Georgy' WHERE id IN (1098);
 
--- function to set all words to uppercase
-DROP FUNCTION IF EXISTS ucwords;
-DELIMITER $$
-CREATE FUNCTION ucwords(s VARCHAR(255)) RETURNS VARCHAR(255)
-BEGIN
-  declare c int;
-  declare x VARCHAR(255);
-  declare y VARCHAR(255);
-  declare z VARCHAR(255);
-
-  set x = UPPER( SUBSTRING( s, 1, 1));
-  set y = SUBSTR( s, 2);
-  set c = instr( y, ' ');
-
-  while c > 0
-    do
-      set z = SUBSTR( y, 1, c);
-      set x = CONCAT( x, z);
-      set z = UPPER( SUBSTR( y, c+1, 1));
-      set x = CONCAT( x, z);
-      set y = SUBSTR( y, c+2);
-      set c = INSTR( y, ' ');
-  end while;
-  set x = CONCAT(x, y);
-  return x;
-END $$
-DELIMITER ;
 
 SET FOREIGN_KEY_CHECKS = 0;
 TRUNCATE company_contact;
