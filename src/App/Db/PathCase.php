@@ -102,6 +102,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
      * Animal Owner, (the owner client id)
      * Generally the same as client ID, so pre populate in new cases when this is 0
      * @var int
+     * @deprecated
      */
     public $ownerId = 0;
 

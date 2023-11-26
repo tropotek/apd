@@ -523,37 +523,26 @@ FROM path_case
 
 
 
-    /**
-     * @param int $pathCaseId
-     * @param int $contactId
-     * @return boolean
-     * @throws Exception
-     */
-    public function hasContact($pathCaseId, $contactId)
+    public function hasContact(int $pathCaseId, int $contactId): bool
     {
-        $stm = $this->getDb()->prepare('SELECT * FROM path_case_has_contact WHERE path_case_id = ? AND contact_id = ?');
+        $stm = $this->getDb()->prepare('SELECT * FROM path_case_has_company_contact WHERE path_case_id = ? AND company_contact_id = ?');
         $stm->bindParam(1, $pathCaseId);
         $stm->bindParam(2, $contactId);
         $stm->execute();
         return ($stm->rowCount() > 0);
     }
 
-    /**
-     * @param null|int $pathCaseId (optional) If not provided all Cases`s for that Contact are removed
-     * @param null|int $contactId (optional) If not provided all Contacts for that Case are removed
-     * @throws Exception
-     */
-    public function removeContact($pathCaseId = null, $contactId = null)
+    public function removeContact(?int $pathCaseId = null, ?int $contactId = null)
     {
         if (!$pathCaseId && !$contactId) throw new Exception('At least one parameter should be set.');
         $where = '';
         if ($pathCaseId)
-            $where = sprintf('path_case_id = %d AND ', (int)$pathCaseId);
+            $where = sprintf('path_case_id = %d AND ', $pathCaseId);
         if ($contactId)
-            $where = sprintf('contact_id = %d AND ', (int)$contactId);
+            $where = sprintf('company_contact_id = %d AND ', $contactId);
         if ($where)
             $where = substr($where, 0, -4);
-        $stm = $this->getDb()->prepare('DELETE FROM path_case_has_contact WHERE ' . $where);
+        $stm = $this->getDb()->prepare('DELETE FROM path_case_has_company_contact WHERE ' . $where);
         $stm->execute();
     }
 
@@ -565,7 +554,7 @@ FROM path_case
     public function addContact($pathCaseId, $contactId)
     {
         if ($this->hasContact($pathCaseId, $contactId)) return;
-        $stm = $this->getDb()->prepare('INSERT INTO path_case_has_contact (path_case_id, contact_id)  VALUES (?, ?) ');
+        $stm = $this->getDb()->prepare('INSERT INTO path_case_has_company_contact (path_case_id, company_contact_id)  VALUES (?, ?) ');
         $stm->bindParam(1, $pathCaseId);
         $stm->bindParam(2, $contactId);
         $stm->execute();

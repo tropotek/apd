@@ -72,7 +72,7 @@ class Student extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     {
         // clean email
         [$email, $n] = Message::splitEmail($email);
-        $this->email = $email;
+        $this->email = strtolower($email);
         return $this;
     }
 

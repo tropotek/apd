@@ -111,7 +111,11 @@ class NavRendererHandler implements Subscriber
 
             $menu->append(Item::create('Cases', \Uni\Uri::createHomeUrl('/pathCaseManager.html'), 'fa fa-paw'));
             $menu->append(Item::create('Requests', \Uni\Uri::createHomeUrl('/requestManager.html'), 'fa fa-medkit'));
-            $menu->append(Item::create('Contacts', \Uni\Uri::createHomeUrl('/contactManager.html'), 'fa fa-user-o'));
+
+            $menu->append(Item::create('Contacts', \Uni\Uri::createHomeUrl('/contactManager.html'), 'fa fa-user'));
+
+            $menu->append(Item::create('Clients', \Uni\Uri::createHomeUrl('/clientManager.html'), 'fa fa-user'));
+            $menu->append(Item::create('Students', \Uni\Uri::createHomeUrl('/studentManager.html'), 'fa fa-user-o'));
             $menu->append(Item::create('Roster', \Uni\Uri::createHomeUrl('/roster.html'), 'fa fa-calendar'));
             $menu->append(Item::create('Sampling Protocols', \Uni\Uri::createHomeUrl('/protocols.html'), 'fa fa-flask'));
             $menu->append(Item::create('Tissue Sample Requests', \Uni\Uri::createHomeUrl('/sampling.html'), 'fa fa-heartbeat'));

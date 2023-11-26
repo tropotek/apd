@@ -614,15 +614,16 @@ CSS;
 
         // Load the object with form data
         $vals = $form->getValues();
-        if (!empty($vals['clientId']) && is_array($vals['clientId']))
-            $vals['clientId'] = current($vals['clientId']);
-        else
-            $vals['clientId'] = 0;
 
-        if (!empty($vals['ownerId']) && is_array($vals['ownerId']))
-            $vals['ownerId'] = current($vals['ownerId']);
-        else
-            $vals['ownerId'] = 0;
+//        if (!empty($vals['clientId']) && is_array($vals['clientId']))
+//            $vals['clientId'] = current($vals['clientId']);
+//        else
+//            $vals['clientId'] = 0;
+
+//        if (!empty($vals['ownerId']) && is_array($vals['ownerId']))
+//            $vals['ownerId'] = current($vals['ownerId']);
+//        else
+//            $vals['ownerId'] = 0;
 
         if (!isset($vals['billable']) || !$vals['billable']) {
             unset($vals['accountStatus']);
@@ -677,6 +678,8 @@ CSS;
         if (!trim($this->getPathCase()->getSecondOpinion())) {
             $this->getPathCase()->setSoUserId(0);
         }
+
+        // TODO save selected company contacts...
 
         // Save selected students
         if (!empty($vals['students']) && is_array($vals['students'])) {
