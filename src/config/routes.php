@@ -65,6 +65,9 @@ $routes->add('cassette-edit', Route::create('/staff/cassetteEdit.html', 'App\Con
 $routes->add('contact-manager', Route::create('/staff/contactManager.html', 'App\Controller\Contact\Manager::doDefault'));
 $routes->add('contact-edit', Route::create('/staff/contactEdit.html', 'App\Controller\Contact\Edit::doDefault'));
 
+$routes->add('student-manager', Route::create('/staff/studentManager.html', 'App\Controller\Student\Manager::doDefault'));
+$routes->add('student-edit', Route::create('/staff/studentEdit.html', 'App\Controller\Student\Edit::doDefault'));
+
 $routes->add('storage-manager', Route::create('/staff/storageManager.html', 'App\Controller\Storage\Manager::doDefault'));
 $routes->add('storage-edit', Route::create('/staff/storageEdit.html', 'App\Controller\Storage\Edit::doDefault'));
 

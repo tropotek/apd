@@ -5,12 +5,6 @@ use App\Db\Traits\MailTemplateEventTrait;
 use Bs\Db\Traits\TimestampTrait;
 use Uni\Db\Traits\InstitutionTrait;
 
-/**
- * @author Mick Mifsud
- * @created 2020-08-17
- * @link http://tropotek.com.au/
- * @license Copyright 2020 Tropotek
- */
 class MailTemplate extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 {
     use InstitutionTrait;
@@ -20,7 +14,6 @@ class MailTemplate extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 
     const RECIPIENT_AUTHOR              = 'author';
     const RECIPIENT_CLIENT              = 'client';
-    const RECIPIENT_OWNER               = 'owner';
     const RECIPIENT_PATHOLOGIST         = 'pathologist';
     const RECIPIENT_STUDENTS            = 'students';
     const RECIPIENT_SERVICE_TEAM        = 'serviceTeam';
@@ -30,7 +23,6 @@ class MailTemplate extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     {
         return [
             'Client' => self::RECIPIENT_CLIENT,             // Changes based on if it is a case or request
-            'Animal Owner' => self::RECIPIENT_OWNER,
             'Pathologist' => self::RECIPIENT_PATHOLOGIST,
             'Service Team' => self::RECIPIENT_SERVICE_TEAM,
             'Students' => self::RECIPIENT_STUDENTS,
@@ -96,33 +88,6 @@ class MailTemplate extends \Tk\Db\Map\Model implements \Tk\ValidInterface
         $this->_TimestampTrait();
         $this->institutionId = $this->getConfig()->getInstitutionId();
     }
-
-//    /**
-//     * @param string $event
-//     * @return MailTemplate
-//     */
-//    public function setEvent($event) : MailTemplate
-//    {
-//        $this->event = $event;
-//        return $this;
-//    }
-//
-//    /**
-//     * @return string
-//     */
-//    public function getEvent() : string
-//    {
-//        return $this->event;
-//    }
-
-//    /**
-//     * @return MailTemplateEvent|object|\Tk\Db\Map\Model|null
-//     * @throws \Exception
-//     */
-//    public function getMailTemplateEvent()
-//    {
-//        return MailTemplateEventMap::create()->findFiltered(array('event' => $this->event))->current();
-//    }
 
     /**
      * @param string $recipientType

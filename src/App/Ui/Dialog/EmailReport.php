@@ -59,19 +59,15 @@ class EmailReport extends JsonForm
         if ($user && $user->getEmail())
             $list[$user->getName() . ' (' . $user->getEmail() . ')'] = $user->getEmail();
 
-        if (PathCase::useOwnerObject()) {
-            $owner = $this->getPathCase()->getOwner();
-            if ($owner && $owner->getEmail())
-                $list[$owner->getNameFirst() . ' (' . $owner->getEmail() . ')'] = $owner->getEmail();
-        }
-
         $path = $this->getPathCase()->getPathologist();
         if ($path && $path->getEmail())
             $list[$path->getName() . ' (' . $path->getEmail() . ')'] = $path->getEmail();
 
-        /** @var Contact $student */
+        /** @var Student $student */
         foreach ($this->getPathCase()->getStudentList() as $student) {
-            $list[$student->getNameFirst() . ' (' . $student->getEmail() . ')'] = $student->getEmail();
+            if (!$student->getEmail()) continue;
+            $list[$student->getName() . ' - [' . $student->getEmail() . ']'] = $student->getEmail();
+
         }
 
         $form->appendField(CheckboxGroup::createSelect('to', $list))->setValue(array($selected));

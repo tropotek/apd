@@ -41,24 +41,6 @@ class Edit extends \Uni\Controller\Institution\Edit
             ->setLabel('Auto-complete Report Status')
             ->setCheckboxLabel('Automatically set the pathCase.reportStatus to completed once the case status is completed');
 
-        $this->getForm()->appendField(new Field\Checkbox(self::INSTITUTION_OWNER_NAME_ONLY), 'address')
-            ->setTabGroup('Settings')
-            ->setLabel('Owner Contact')
-            ->setNotes('Uncheck this to use a full contact card storing all owner details.')
-            ->setCheckboxLabel('Use a free text field storing only the owner\'s name.');
-
-
-
-//        $this->getForm()->appendField(new Field\Checkbox(self::INSTITUTION_DKIM_ENABLE), 'email')
-//            ->setTabGroup('DKIM')->setLabel('Enable DKIM')->setCheckboxLabel('Sign outgoing emails with a DKIM key');
-//        $this->getForm()->appendField(new Field\Input(self::INSTITUTION_DKIM_DOMAIN), self::INSTITUTION_DKIM_ENABLE)
-//            ->setLabel('DKIM Domain')->setTabGroup('DKIM')->setNotes('The mail domain to sign DKIM outgoing emails with.');
-//        $this->getForm()->appendField(new Field\Textarea(self::INSTITUTION_DKIM_PUBLIC), self::INSTITUTION_DKIM_DOMAIN)
-//            ->setLabel('DKIM Public Key')->setTabGroup('DKIM')->setNotes('Give this key to your mail administrators.');
-//        $this->getForm()->appendField(new Field\Textarea(self::INSTITUTION_DKIM_PRIVATE), self::INSTITUTION_DKIM_PUBLIC)
-//            ->setLabel('DKIM Private Key')->setTabGroup('DKIM')->setNotes('This key should not be shared with anyone.');
-
-
     }
 
     /**
@@ -90,6 +72,8 @@ class Edit extends \Uni\Controller\Institution\Edit
                 \Uni\Uri::createHomeUrl('/testManager.html'), 'fa fa-flask'));
             $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Products',
                 \Uni\Uri::createHomeUrl('/productManager.html'), 'fa fa-cube'));
+            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Students',
+                \Uni\Uri::createHomeUrl('/studentManager.html'), 'fa fa-user-o'));
 
             // TODO: remove this
             $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Contacts',

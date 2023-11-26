@@ -7,6 +7,7 @@ use App\Db\Notice;
 use App\Db\PathCaseMap;
 use App\Db\Permission;
 use App\Db\StorageMap;
+use App\Db\StudentMap;
 use Tk\Alert;
 use Tk\Db\Tool;
 use Tk\Form\Field;
@@ -48,10 +49,6 @@ class PathCase extends \Bs\FormIface
     public function __construct($formId = '')
     {
         parent::__construct($formId);
-
-//        if ($this->getConfig()->getRequest()->has('del')) {
-//            $this->doDelete($this->getConfig()->getRequest());
-//        }
         if ($this->getConfig()->getRequest()->has('gc')) {
             $this->doGetContact($this->getConfig()->getRequest());
         }
@@ -75,7 +72,6 @@ class PathCase extends \Bs\FormIface
         $layout->removeRow('arrival', 'col');
 
         $layout->removeRow('type', 'col');
-        //$layout->removeRow('clientId', 'col');
 
         $layout->addRow('billable', 'col-2');
         $layout->removeRow('accountStatus', 'col');
@@ -96,20 +92,15 @@ class PathCase extends \Bs\FormIface
 
         $layout->removeRow('weight', 'col');
         $layout->removeRow('colour', 'col');
-        //$layout->removeRow('origin', 'col');
 
         $layout->removeRow('dob', 'col');
         $layout->removeRow('dod', 'col');
-
-        //$layout->removeRow('resident', 'col');
 
         $layout->removeRow('euthanisedMethod', 'col');
 
 
         // FORM FIELDS
         $tab = 'Details';
-
-        
         $this->appendField(new Field\Input('pathologyId'))->setLabel('Pathology ID')->setTabGroup($tab)
                 ->addCss('tk-input-lock');
 
@@ -199,14 +190,9 @@ jQuery(function ($) {
 JS;
         $this->getRenderer()->getTemplate()->appendJs($js);
 
-
-
         $list = \Tk\ObjectUtil::getClassConstants($this->getPathCase(), 'ACCOUNT_STATUS', true);
         $this->appendField(Field\Select::createSelect('accountStatus', $list)->prependOption('-- Select --', ''))
             ->setTabGroup($tab);
-
-//        $this->appendField(new Money('cost'))->addCss('money')->setLabel('Billable Amount')->setTabGroup($tab)
-//            ->setNotes('');
 
         $this->appendField(new Field\Checkbox('submissionReceived'))->setTabGroup($tab)
             ->setNotes('Has the submission form been received?');
@@ -226,11 +212,6 @@ JS;
                 ->setNotes('Set the status. Use the checkbox to disable notification emails.');
         }
 
-        // TODO: would be nice to be able to add fieldsets to a tabgroup
-        //->setFieldset($fieldset);
-        //$tab = 'Animal';
-        $fieldset = 'Animal';
-
         $contact = new \App\Db\Contact();
         $contact->setType(\App\Db\Contact::TYPE_OWNER);
         $form = \App\Form\Contact::create('ownerSelect')->setType(\App\Db\Contact::TYPE_OWNER)->setModel($contact);
@@ -238,22 +219,11 @@ JS;
         $form->removeField('nameCompany');
         $form->removeField('notes');
 
-
-        if (\App\Db\PathCase::useOwnerObject()) {
-            $list = \App\Db\Contact::getSelectList(\App\Db\Contact::TYPE_OWNER);
-            $this->appendField(Field\DialogSelect::createDialogSelect('ownerId[]', $list, $form, 'Create Owner'))
-                ->addCss('tk-multiselect tk-multiselect1')
-                ->setTabGroup($tab)->setLabel('Owner Name')
-                ->setNotes('Start typing to find an owner, if not found use the + icon to create a new owner.<br/>The Client Record of the animal owner.');
-        } else {
-            $this->appendField(new Field\Input('ownerName'))->setTabGroup($tab);
-        }
-
+        $this->appendField(new Field\Input('ownerName'))->setTabGroup($tab);
         $this->appendField(new Field\Input('animalName'))->setLabel('Animal Name/ID')->setTabGroup($tab);
         $this->appendField(new Field\Input('patientNumber'))->setTabGroup($tab);
         $this->appendField(new Field\Input('microchip'))->setTabGroup($tab);
 
-        // \App\Db\PathCase::getSpeciesList($this->getPathCase()->getSpecies())
         $list = AnimalTypeMap::create()->findFiltered(['institutionId' => $this->getConfig()->getInstitutionId(), 'parent_id' => 0]);
         $this->appendField(Field\Select::createSelect('animalTypeId', $list)->prependOption('-- Select --', ''))
             ->setTabGroup($tab);
@@ -267,21 +237,18 @@ JS;
             ->setTabGroup($tab);
         $this->appendField(new Field\Checkbox('desexed'))->setTabGroup($tab);
 
-        //$list = array('Extra-small < 1kg' => 'Extra-small < 1kg', 'Male' => 'M', 'Female' => 'F');
-        $list = array(
+        $list = [
             '-- N/A --' => '',
             'Extra-small < 1kg' => 'Extra-small < 1kg',
             'Small < 10kg' => 'Small < 10kg',
             'Medium < 50kg' => 'Medium < 50kg',
             'Large < 200kg' => 'Large < 200kg',
-            'Extra-large > 200kg' => 'Extra-large > 200kg');
+            'Extra-large > 200kg' => 'Extra-large > 200kg'
+        ];
         $this->appendField(Field\Select::createSelect('size', $list))
-            ->setTabGroup($tab); //->setValue('Small < 10kg');
+            ->setTabGroup($tab);
         $this->appendField(new Field\Input('weight'))->setTabGroup($tab);
         $this->appendField(new Field\Input('colour'))->setTabGroup($tab);
-        //$this->appendField(new Field\Input('origin'))->setTabGroup($tab);
-
-
         $this->appendField(new \App\Form\Field\Age('age'))->setTabGroup($tab);
 
         // TODO: we need to validate the dob is < dod at some point
@@ -289,8 +256,6 @@ JS;
             ->setAttr('placeholder', 'dd/mm/yyyy');
         $this->appendField(new Field\Input('dod'))->setTabGroup($tab)->addCss('date')
             ->setAttr('placeholder', 'dd/mm/yyyy');
-        // END Animal
-
 
         $list  = $this->getConfig()->getUserMapper()->findFiltered(
             array('institutionId'=> $this->getPathCase()->getInstitutionId(), 'permission' => Permission::IS_PATHOLOGIST, 'active' => true),
@@ -300,19 +265,12 @@ JS;
             ->prependOption('-- Select --', ''))
             ->setTabGroup($tab)->setLabel('Pathologist');
 
-
-        $contact = new \App\Db\Contact();
-        $contact->setType(\App\Db\Contact::TYPE_STUDENT);
-        $form = \App\Form\Contact::create('studentSelect')->setType(\App\Db\Contact::TYPE_STUDENT)->setModel($contact);
-        $form->removeField('nameCompany');
-        $form->removeField('accountCode');
-        $form->removeField('fax');
-        $form->removeField('notes');
-
-        $list = \App\Db\Contact::getSelectList(\App\Db\Contact::TYPE_STUDENT);
+        $student = new \App\Db\Student();
+        $form = \App\Form\Student::create('studentSelect')->setModel($student);
+        $list = \App\Db\Student::getSelectList();
         $this->appendField(Field\DialogSelect::createDialogSelect('students[]', $list, $form,'Create Student'))
             ->addCss('tk-multiselect tk-multiselect2')
-            ->setTabGroup($tab)->setLabel('Students')->setNotes('Start typing to find a student, if not found use the + icon to create a new student.')
+            ->setTabGroup($tab)->setLabel('Students')->setNotes('(Optional) Start typing to find an existing student, only create a new student record if not found in list.')
             ->setValue($this->getPathCase()->getStudentList()->toArray('id'));
 
         // Enable select2 multi select for student field
@@ -327,10 +285,8 @@ jQuery(function ($) {
 JS;
         $this->getRenderer()->getTemplate()->appendJs($js);
 
-
         $this->appendField(new Field\Checkbox('euthanised'))->setTabGroup($tab);
         $this->appendField(new Field\Input('euthanisedMethod'))->setTabGroup($tab);
-
 
         $this->appendField(Field\CheckboxInput::create('zoonotic'))->setTabGroup($tab)->setLabel('Zoonotic/Other Risks')
             ->setNotes('Tick the checkbox to alert users of these risks when viewing this case.')
@@ -343,7 +299,6 @@ JS;
 
         $this->appendField(new Field\Textarea('clinicalHistory'))
             ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
-
 
         $tab = 'Reporting';
         $list  = ObjectUtil::getClassConstants($this->getPathCase(), 'REPORT_STATUS', true);
@@ -385,7 +340,7 @@ JS;
         $this->appendField(new Field\Textarea('addendum'))
             ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
 
-        // Setup auto-save on the MCE instances
+        // Setup auto-save on the tinymce instances
         $js = <<<JS
 jQuery(function ($) {
   
@@ -401,7 +356,7 @@ jQuery(function ($) {
               el.addClass('saving');
               $.post(config.siteUrl + '/ajax/mceAutosave', {
                 crumb_ignore: 'crumb_ignore',
-                //nolog: 'nolog',
+                nolog: 'nolog',
                 obj: 'PathCase',
                 id: urlParams.get('pathCaseId'),
                 fieldName: el.attr('name'),
@@ -464,98 +419,92 @@ JS;
         // Add contact hover box
         $js = <<<JS
 jQuery(function ($) {
-  
-  	var init = function() {
-  	  $(this).parent().find('.tk-selection_choice_label').each(function() {
-        $(this).on('mouseenter', function (e) {
-          if ($('.tk-contact .pinned').length) return;
-          $('.tk-contact').remove();
-          
-          var el = $(this);
-          var data = $(this).closest('.select2-selection__choice').data()['data'];
-          var name = data['text'].split('(')[0];
-          var email = '';
-          if (data['text'].indexOf('(') > -1 && data['text'].split('(')[1].replace(')', '')) {
-            email = data['text'].split('(')[1].replace(')', '');
-          }
-          //console.log(data['text']); // TODO: get the name and email from here for instant data
-            
-          $.get(document.location, {
-              'gc': data['id'],
-              crumb_ignore: 'crumb_ignore',
-              nolog: 'nolog'
-            }, function (gcData) {
-            var contact = gcData.contact;
-            var html = '<div class="tk-contact"><div class="control">' +
-              '<a href="javascript:;" class="tk-close"><i class="fa fa-times"></i></a>' +
-              '<a href="contactEdit.html?contactId='+contact.id+'&crumb_ignore=&nolog=" target="_blank" class="tk-edit"><i class="fa fa-pencil"></i></a>' +
-              '<a href="javascript:;" class="tk-pin"><i class="fa fa-thumb-tack"></i></a>' +
-              '</div>' +
-              '<h3 class="name"><a href="contactEdit.html?contactId='+contact.id+'&crumb_ignore=&nolog=" target="_blank">' + name + '</a></h3>';
-            // if (email)
-            //   html += '<p><a href="mailto:'+email+'" class="email">' + email + '</a></p>';
-            //html += '<hr/>';
-            html += '<div class="details"><b>Contact:</b><br/>';
-            html += '<ul>';
-            if (contact.email)
-              html += '<li><i class="fa fa-envelope-o"></i> <a href="mailto:'+contact.email+'">'+contact.email+'</a></li>';
-            if (contact.nameCompany)
-              html += '<li><i class="fa fa-building"></i> <a href="contactEdit.html?contactId='+contact.id+'" target="_blank">'+contact.nameCompany+'</a></li>';
-            if (contact.phone)
-              html += '<li><i class="fa fa-phone"></i> <a href="tel:'+contact.phone+'">'+contact.phone+'</a></li>';
-            if (contact.fax)
-              html += '<li><i class="fa fa-fax"></i> <a href="tel:'+contact.fax+'">'+contact.fax+'</a></li>';
-            if (contact.address)
-              html += '<li><i class="fa fa-building"></i> <a href="tel:'+contact.address+'">'+contact.address+'</a></li>';
-            html += '</ul></div>';
-            html += '';
-            
-            if (contact.notes && contact.notes !== '***')
-              html += '<p>'+contact.notes+'</p>';
-            
-            html += '</div>';
-            
-            //var off = el.closest('.form-group').offset();
-            var off = el.offset();
-            // var x = e.pageX - this.offsetLeft;
-            // var y = e.pageY - this.offsetTop;
-            var x = e.pageX - off.left;
-            var y = e.pageY - off.top;
-          
-            var panel = $(html);
-            panel.css('left', x);
-            panel.css('top', y);
-            el.closest('.form-group').append(panel);
-            
-            panel.on('mouseout', function () {
-              if ($('.tk-contact:hover').length || $('.tk-contact .pinned').length) return;
-              $('.tk-contact').fadeOut(function () {
-                $(this).remove();
-              });
-            });
-            panel.find('a.tk-close').on('click', function () {
-              $('.tk-contact').fadeOut(function () {
-                $(this).remove();
-              });
-            });
-            panel.find('a.tk-pin').on('click', function () {
-              $(this).toggleClass('pinned');
-            });
-          }, 'json');
-          
+
+    function closePanel()
+    {
+        if ($('.tk-contact:hover').length || $('.tk-contact .pinned').length) return;
+        $('.tk-contact').fadeOut(function () {
+             $('.tk-contact').remove();
         });
+    }
         
-        $(this).on('mouseout', function () {
-          if ($('.tk-contact:hover').length || $('.tk-contact .pinned').length) return;
-          $('.tk-contact').fadeOut(function () {
-            $(this).remove();
-          });
+    var init = function () {
+        $(document).on('click', closePanel);
+        
+        $(this).parent().find('.tk-selection_choice_label').each(function (e) {
+            $(this).attr('title', 'Click to view details');
+            $(this).on('click', function (e) {
+                if ($('.tk-contact .pinned').length) return;
+                $('.tk-contact').remove();
+
+                var el = $(this);
+                var data = $(this).closest('.select2-selection__choice').data()['data'];
+                var name = data['text'].split('(')[0];
+                var email = '';
+                if (data['text'].indexOf('(') > -1 && data['text'].split('(')[1].replace(')', '')) {
+                    email = data['text'].split('(')[1].replace(')', '');
+                }
+
+                $.get(document.location, {
+                    'gc': data['id'],
+                    crumb_ignore: 'crumb_ignore',
+                    nolog: 'nolog'
+                }, function (gcData) {
+                    var contact = gcData.contact;
+                    var html = '<div class="tk-contact"><div class="control">' +
+                        '<a href="javascript:;" class="tk-close"><i class="fa fa-times"></i></a>' +
+                        '<a href="contactEdit.html?contactId=' + contact.id + '&crumb_ignore=&nolog=" target="_blank" class="tk-edit"><i class="fa fa-pencil"></i></a>' +
+                        '<a href="javascript:;" class="tk-pin"><i class="fa fa-thumb-tack"></i></a>' +
+                        '</div>' +
+                        '<h3 class="name"><a href="contactEdit.html?contactId=' + contact.id + '&crumb_ignore=&nolog=" target="_blank">' + name + '</a></h3>';
+                    // if (email)
+                    //   html += '<p><a href="mailto:'+email+'" class="email">' + email + '</a></p>';
+                    //html += '<hr/>';
+                    html += '<div class="details"><b>Contact:</b><br/>';
+                    html += '<ul>';
+                    if (contact.email)
+                        html += '<li><i class="fa fa-envelope-o"></i> <a href="mailto:' + contact.email + '">' + contact.email + '</a></li>';
+                    if (contact.nameCompany)
+                        html += '<li><i class="fa fa-building"></i> <a href="contactEdit.html?contactId=' + contact.id + '" target="_blank">' + contact.nameCompany + '</a></li>';
+                    if (contact.phone)
+                        html += '<li><i class="fa fa-phone"></i> <a href="tel:' + contact.phone + '">' + contact.phone + '</a></li>';
+                    if (contact.fax)
+                        html += '<li><i class="fa fa-fax"></i> <a href="tel:' + contact.fax + '">' + contact.fax + '</a></li>';
+                    if (contact.address)
+                        html += '<li><i class="fa fa-building"></i> <a href="tel:' + contact.address + '">' + contact.address + '</a></li>';
+                    html += '</ul></div>';
+                    html += '';
+
+                    if (contact.notes && contact.notes !== '***')
+                        html += '<p>' + contact.notes + '</p>';
+
+                    html += '</div>';
+
+                    var off = el.offset();
+                    var x = e.pageX - off.left;
+                    var y = e.pageY - off.top;
+
+                    var panel = $(html);
+                    panel.css('left', x);
+                    panel.css('top', y);
+                    el.closest('.form-group').append(panel);
+
+                    panel.find('a.tk-close').on('click', function () {
+                        $('.tk-contact').fadeOut(function () {
+                             $('.tk-contact').remove();
+                        });
+                    });
+                    panel.find('a.tk-pin').on('click', function () {
+                        $(this).toggleClass('pinned');
+                    });
+                }, 'json');
+
+            });
+
         });
-  	    
-  	  });
-  	  
-  	};
-  	$('.tk-multiselect').on('change', document, init).each(init);
+
+    };
+    $('.tk-multiselect').on('change', document, init).each(init);
 });
 JS;
         $this->getRenderer()->getTemplate()->appendJs($js);
@@ -604,13 +553,6 @@ JS;
   margin-right: 0.2em;
 }
 
-/*
-.tk-contact ul li::before {
-    content: "\\f005";
-    font-family: "Font Awesome 5 Free";
-}
-*/
-
 .tk-contact .details .fa {
   color: #999;
 }
@@ -640,14 +582,13 @@ CSS;
         if ($this->getForm()->getField('ownerId')) {
             $this->getForm()->getField('ownerId')->getDialog()->execute($request);
         }
+        // TODO:
         $this->getForm()->getField('students')->getDialog()->execute($request);
 
         $this->load(\App\Db\PathCaseMap::create()->unmapForm($this->getPathCase()));
         parent::execute($request);
     }
-    /**
-     * @param \Tk\Request $request
-     */
+
     public function doGetContact(\Tk\Request $request)
     {
         $data = [];
@@ -661,24 +602,6 @@ CSS;
         \Tk\ResponseJson::createJson(['status' => 'err', 'msg' => 'Contact Not Found!'])->send();
         exit();
     }
-
-    /**
-     * @param \Tk\Request $request
-     */
-//    public function doDelete(\Tk\Request $request)
-//    {
-//        $fileId = $request->get('del');
-//        try {
-//            /** @var \App\Db\File $file */
-//            $file = \App\Db\FileMap::create()->find($fileId);
-//            if ($file) $file->delete();
-//        } catch (\Exception $e) {
-//            \Tk\ResponseJson::createJson(array('status' => 'err', 'msg' => $e->getMessage()), 500)->send();
-//            exit();
-//        }
-//        \Tk\ResponseJson::createJson(array('status' => 'ok'))->send();
-//        exit();
-//    }
 
     /**
      * @param Form $form
@@ -755,12 +678,14 @@ CSS;
             $this->getPathCase()->setSoUserId(0);
         }
 
-        // Save the student field
+        // Save selected students
         if (!empty($vals['students']) && is_array($vals['students'])) {
+            // Remove all existing linked students
+            PathCaseMap::create()->removeStudent($this->getPathCase()->getId());
             foreach ($vals['students'] as $id) {
-                $contact = ContactMap::create()->find($id);
-                if ($contact) {
-                    PathCaseMap::create()->addContact($this->getPathCase()->getId(), $contact->getId());
+                $student = StudentMap::create()->find($id);
+                if ($student) {
+                    PathCaseMap::create()->addStudent($this->getPathCase()->getId(), $student->getId());
                 }
             }
         }

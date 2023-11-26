@@ -486,6 +486,43 @@ FROM path_case
     }
 
 
+    public function hasStudent(int $pathCaseId, int $studentId): bool
+    {
+        $stm = $this->getDb()->prepare('SELECT * FROM path_case_has_student WHERE path_case_id = ? AND student_id = ?');
+        $stm->bindParam(1, $pathCaseId);
+        $stm->bindParam(2, $studentId);
+        $stm->execute();
+        return ($stm->rowCount() > 0);
+    }
+
+    public function removeStudent(int $pathCaseId = null, int $studentId = null)
+    {
+        if (!$pathCaseId && !$studentId) throw new Exception('At least one parameter should be set.');
+        $where = '';
+        if ($pathCaseId)
+            $where = sprintf('path_case_id = %d AND ', (int)$pathCaseId);
+        if ($studentId)
+            $where = sprintf('student_id = %d AND ', (int)$studentId);
+        if ($where)
+            $where = substr($where, 0, -4);
+        $stm = $this->getDb()->prepare('DELETE FROM path_case_has_student WHERE ' . $where);
+        $stm->execute();
+    }
+
+    public function addStudent(int $pathCaseId, int $studentId)
+    {
+        if ($this->hasContact($pathCaseId, $studentId)) return;
+        $stm = $this->getDb()->prepare('INSERT INTO path_case_has_student (path_case_id, student_id)  VALUES (?, ?) ');
+        $stm->bindParam(1, $pathCaseId);
+        $stm->bindParam(2, $studentId);
+        $stm->execute();
+    }
+
+
+
+
+
+
     /**
      * @param int $pathCaseId
      * @param int $contactId
@@ -533,6 +570,8 @@ FROM path_case
         $stm->bindParam(2, $contactId);
         $stm->execute();
     }
+
+
 
 
     /**

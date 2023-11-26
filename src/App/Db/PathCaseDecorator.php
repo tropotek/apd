@@ -71,24 +71,6 @@ class PathCaseDecorator
                     }
                 }
                 break;
-            case MailTemplate::RECIPIENT_OWNER:
-                if (PathCase::useOwnerObject()) {
-                    if ($case->getOwner()) {
-                        $users[] = [
-                            'type' => $mailTemplate->getRecipientType(),
-                            'name' => $case->getOwner()->getNameFirst(),
-                            'email' => $case->getOwner()->getEmail()
-                        ];
-                        foreach ($case->getOwner()->getEmailCcList() as $e) {
-                            $users[] = array(
-                                'type' => $mailTemplate->getRecipientType(),
-                                'name' => $case->getOwner()->getName(),
-                                'email' => $e
-                            );
-                        }
-                    }
-                }
-                break;
         }
         return $users;
     }
