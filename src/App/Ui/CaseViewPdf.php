@@ -94,8 +94,13 @@ class CaseViewPdf extends Pdf
         $template->appendText('pathologyId', $this->pathCase->getPathologyId());
         $template->appendText('arrival', $this->pathCase->getArrival(\Tk\Date::FORMAT_SHORT_DATE));
         $template->appendText('submissionType', $this->pathCase->getSubmissionType());
-        if ($this->pathCase->getClient())
-            $template->appendText('clientId', $this->pathCase->getClient()->getDisplayName());
+        if ($this->pathCase->getCompany()) {
+            $template->appendText('clientId', $this->pathCase->getCompany()->getName());
+            $list = $this->pathCase->getContactList();
+            if ($list->count()) {
+                $template->appendText('contacts', implode(', ', $list->toArray('name')));
+            }
+        }
         $template->appendText('created', $this->pathCase->getCreated(\Tk\Date::FORMAT_SHORT_DATE));
         $template->appendText('billable', ($this->pathCase->isBillable() ? 'Yes' : 'No'));
         $template->appendText('accountStatus', $this->pathCase->getAccountStatus());
@@ -381,8 +386,8 @@ JS;
         <tr>
           <td class="label">Submission Date:</td>
           <td><span var="created"></span></td>
-          <td class="label"></td>
-          <td></td>
+          <td class="label">Client Contacts:</td>
+          <td><span var="contacts"></span></td>
         </tr>
         <tr>
           <td class="label">Billable:</td>

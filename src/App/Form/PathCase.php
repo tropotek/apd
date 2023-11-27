@@ -61,9 +61,10 @@ class PathCase extends \Bs\FormIface
     public function doGetContactList(\Tk\Request $request)
     {
         $companyId = $request->request->getInt('gcl');
-        $contacts = CompanyContactMap::create()->findFiltered([
-            'companyId' => $companyId
-        ], Tool::create('name'))->toArray();
+//        $contacts = CompanyContactMap::create()->findFiltered([
+//            'companyId' => $companyId
+//        ], Tool::create('name'))->toArray();
+        $contacts = \App\Db\CompanyContact::getSelectList($companyId);
         \Tk\ResponseJson::createJson($contacts)->send();
         exit();
     }
@@ -194,8 +195,12 @@ jQuery(function ($) {
             //nolog: 'nolog' 
         })
         .done(function(data) {
+            console.log(data);
             select.empty();
-            data.map(o => select.append("<option value=\"" + o.id + "\">" + o.name + "</option>"));
+            for(const k in data) {
+                select.append("<option value=\"" + data[k] + "\">" + k + "</option>")
+            }
+            //data.map(o => select.append("<option value=\"" + o.id + "\">" + o.name + "</option>"));
         })
         .fail(function() {
             console.error('Cannot load company contacts.')
@@ -513,7 +518,10 @@ JS;
 
 
 
-        // Add contact hover box
+        // TODO Add contact hover box (see if this is still needed?????)
+        //      We could add an info icon at the end of the company field
+        //      that a user can click removing the hover issue altogether
+        //      Also consider moving this to a .js file and relevant CSS
         $js = <<<JS
 jQuery(function ($) {
 
@@ -707,6 +715,8 @@ CSS;
             $vals = $newVals;
         }
 
+        $orgCompanyId = $this->getPathCase()->getCompanyId();
+
         \App\Db\PathCaseMap::create()->mapForm($vals, $this->getPathCase());
 
         $form->addFieldErrors($this->getPathCase()->validate());
@@ -748,6 +758,10 @@ CSS;
             $this->getPathCase()->setSoUserId(0);
         }
 
+        // Clear contacts if company has changed
+        if ($this->getPathCase()->getCompanyId() != $orgCompanyId) {
+            PathCaseMap::create()->removeContact($this->getPathCase()->getId());
+        }
         // save selected company contacts...
         if (!empty($vals['contacts']) && is_array($vals['contacts'])) {
             // Remove all existing linked contacts

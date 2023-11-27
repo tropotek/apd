@@ -31,18 +31,22 @@ class PathCaseDecorator
                 }
                 break;
             case MailTemplate::RECIPIENT_CLIENT:
-                if ($case->getClient()) {
-                    $users[] = array(
-                        'type' => $mailTemplate->getRecipientType(),
-                        'name' => $case->getClient()->getNameFirst(),
-                        'email' => $case->getClient()->getEmail()
-                    );
-                    foreach ($case->getClient()->getEmailCcList() as $e) {
+                if ($case->getCompany()) {
+                    if ($case->getCompany()->getEmail()) {
                         $users[] = array(
-                            'type' => $mailTemplate->getRecipientType(),
-                            'name' => $case->getClient()->getNameFirst(),
-                            'email' => $e
+                            'type'  => $mailTemplate->getRecipientType(),
+                            'name'  => $case->getCompany()->getName(),
+                            'email' => $case->getCompany()->getEmail()
                         );
+                    }
+                    foreach ($case->getContactList() as $contact) {
+                        if ($contact->getEmail()) {
+                            $users[] = array(
+                                'type'  => $mailTemplate->getRecipientType(),
+                                'name'  => $contact->getName(),
+                                'email' => $contact->getEmail()
+                            );
+                        }
                     }
                 }
                 break;
@@ -116,8 +120,8 @@ class PathCaseDecorator
             $message->replace(Collection::prefixArrayKeys(\App\Db\PathCaseMap::create()->unmapForm($case), 'pathCase::'));
             if ($case->getInstitution())
                 $message->replace(Collection::prefixArrayKeys(\Uni\Db\InstitutionMap::create()->unmapForm($case->getInstitution()), 'institution::'));
-            if ($case->getClient())
-                $message->replace(Collection::prefixArrayKeys(\App\Db\ContactMap::create()->unmapForm($case->getClient()), 'client::'));
+            if ($case->getCompany())
+                $message->replace(Collection::prefixArrayKeys(\App\Db\ContactMap::create()->unmapForm($case->getCompany()), 'client::'));
             $messageList[] = $message;
         }
         return $messageList;

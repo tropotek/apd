@@ -39,21 +39,23 @@ class EmailReport extends JsonForm
         $form = $this->getConfig()->createForm('email-pdf');
         $form->setRenderer($this->getConfig()->createFormRenderer($form));
 
-        $selected = '';
-        $list = array();
+        $selected = [];
+        $list = [];
 
-
-        $client = $this->getPathCase()->getClient();
-        if ($client) {
-            if ($client->getEmail()) {
-                $list[$client->getNameFirst() . ' (' . $client->getEmail() . ')'] = $client->getEmail();
-                $selected = $client->getEmail();
+        $company = $this->getPathCase()->getCompany();
+        if ($company) {
+            if ($company->getEmail()) {
+                $list[$company->getName() . ' [' . $company->getEmail() . ']'] = $company->getEmail();
+                $selected[] = $company->getEmail();
             }
-            foreach ($client->getEmailCcList() as $i => $e) {
-                $list['Client CC ('.$e.')'] = $e;
+            $contacts = $this->getPathCase()->getContactList();
+            foreach ($contacts as $contact) {
+                if (!$contact->getEmail()) continue;
+                $list[$company->getName() . ' - ' . $contact->getName() . ' [' . $contact->getEmail() . ']'] = $contact->getEmail();
             }
-
         }
+
+
 
         $user = $this->getPathCase()->getUser();
         if ($user && $user->getEmail())
@@ -70,7 +72,7 @@ class EmailReport extends JsonForm
 
         }
 
-        $form->appendField(CheckboxGroup::createSelect('to', $list))->setValue(array($selected));
+        $form->appendField(CheckboxGroup::createSelect('to', $list))->setValue($selected);
         $form->appendField(Input::create('toText'))->setLabel('To')->setNotes('Other emails to send the report to separate by comma, space, semi-colin.');
 
         $form->appendField(Textarea::create('message'))
@@ -147,13 +149,15 @@ class EmailReport extends JsonForm
             $message->addAttachment($filePath, basename($file->getPath()), $file->getMime());
         }
 
-        $message->set('clientName', $this->getPathCase()->getClient()->getName());
+        $message->set('clientName', 'N/A');
+        if ($this->getPathCase()->getCompany()) {
+            $message->set('clientName', $this->getPathCase()->getCompany()->getName());
+        }
         $message->set('pathologyId', $this->pathCase->getPathologyId());
         $message->set('animalName', $this->pathCase->getAnimalName());
         $message->set('animalType', '');
         $message->set('animalType', '');
         $message->set('animalTypeId', '');
-        $message->set('clientName', $this->pathCase->getOwnerName());
         $message->set('pathologistName', '');
         if ($this->pathCase->getPathologist()) {
             $message->set('pathologistName', $this->pathCase->getPathologist()->getName());
@@ -161,12 +165,6 @@ class EmailReport extends JsonForm
         if ($this->pathCase->getAnimalType()) {
             $message->set('animalType', $this->pathCase->getAnimalType()->getName());
             $message->set('animalTypeId', $this->pathCase->getAnimalTypeId());
-        }
-        if ($this->pathCase->getClient()) {
-            $message->set('clientName', $this->pathCase->getClient()->getName());
-            if (!$this->pathCase->getClient()->getName() && $this->pathCase->getClient()->getNameCompany()) {
-                $message->set('clientName', $this->pathCase->getClient()->getNameCompany());
-            }
         }
         $message->set('caseType::'.$this->getPathCase()->getType(), true);
 

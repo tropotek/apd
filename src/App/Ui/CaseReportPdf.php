@@ -99,16 +99,18 @@ class CaseReportPdf extends Pdf
         $template->appendText('pathologyId', $this->pathCase->getPathologyId());
         $template->appendText('name', ucwords($this->pathCase->getReportStatus()) . ' Report');
 
-        if ($this->pathCase->getClient()) {
-            if ($this->pathCase->getClient()->getNameCompany()) {
-                $template->appendText('clientName', $this->pathCase->getClient()->getNameCompany());
-                $template->setVisible('clientName');
-            }
-            if ($this->pathCase->getClient()->getName()) {
-                $template->appendText('clientContactName', $this->pathCase->getClient()->getName());
+
+        if ($this->pathCase->getCompany()) {
+            $template->appendText('clientName', $this->pathCase->getCompany()->getName());
+            $template->setVisible('clientName');
+
+            $list = $this->pathCase->getContactList();
+            if ($list->count()) {
+                $template->appendText('clientContactName', implode(', ', $list->toArray('name')));
                 $template->setVisible('clientContactName');
             }
         }
+
 
         $template->appendText('ownerName', $this->pathCase->getOwnerName());
         $template->setVisible('ownerText');
@@ -375,7 +377,7 @@ JS;
             <br/>Completed Date: <span var="completedDate">N/A</span>
             <br/>Pathology Number: <span var="pathologyId"></span>
             <span choice="clientName"><br/>Submitting Client: <span var="clientName"></span></span>
-            <span choice="clientContactName"><br/>Submitting Contact: <span var="clientContactName"></span></span>
+            <span choice="clientContactName"><br/>Contacts: <span var="clientContactName"></span></span>
           </td>
         </tr>
       </table>

@@ -31,11 +31,11 @@ class PathCaseMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Integer('institutionId', 'institution_id'));
             $this->dbMap->addPropertyMap(new Db\Integer('userId', 'user_id'));
             $this->dbMap->addPropertyMap(new Db\Integer('companyId', 'company_id'));
-            $this->dbMap->addPropertyMap(new Db\Integer('clientId', 'client_id'));
-            $this->dbMap->addPropertyMap(new Db\Integer('ownerId', 'owner_id'));
+            // $this->dbMap->addPropertyMap(new Db\Integer('clientId', 'client_id'));
+            // $this->dbMap->addPropertyMap(new Db\Integer('ownerId', 'owner_id'));
             $this->dbMap->addPropertyMap(new Db\Integer('pathologistId', 'pathologist_id'));
             $this->dbMap->addPropertyMap(new Db\Integer('soUserId', 'so_user_id'));
-            $this->dbMap->addPropertyMap(new Db\Text('resident'));
+            // $this->dbMap->addPropertyMap(new Db\Text('resident'));
             $this->dbMap->addPropertyMap(new Db\Text('pathologyId', 'pathology_id'));
             $this->dbMap->addPropertyMap(new Db\Text('name'));
             $this->dbMap->addPropertyMap(new Db\Text('type'));
@@ -46,7 +46,7 @@ class PathCaseMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Text('reportStatus', 'report_status'));
             $this->dbMap->addPropertyMap(new Db\Boolean('billable'));
             $this->dbMap->addPropertyMap(new Db\Text('accountStatus', 'account_status'));
-            $this->dbMap->addPropertyMap(new Db\Money('cost'));
+            // $this->dbMap->addPropertyMap(new Db\Money('cost'));
             $this->dbMap->addPropertyMap(new Db\Boolean('afterHours', 'after_hours'));
             $this->dbMap->addPropertyMap(new Db\Text('zoonotic'));
             $this->dbMap->addPropertyMap(new Db\Boolean('zoonoticAlert', 'zoonotic_alert'));
@@ -108,11 +108,11 @@ class PathCaseMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Integer('institutionId'));
             $this->formMap->addPropertyMap(new Form\Integer('userId'));
             $this->formMap->addPropertyMap(new Form\Integer('companyId'));
-            $this->formMap->addPropertyMap(new Form\Integer('clientId'));
-            $this->formMap->addPropertyMap(new Form\Integer('ownerId'));
+            //$this->formMap->addPropertyMap(new Form\Integer('clientId'));
+            //$this->formMap->addPropertyMap(new Form\Integer('ownerId'));
             $this->formMap->addPropertyMap(new Form\Integer('pathologistId'));
             //$this->formMap->addPropertyMap(new Form\Integer('soUserId'));
-            $this->formMap->addPropertyMap(new Form\Text('resident'));
+            //$this->formMap->addPropertyMap(new Form\Text('resident'));
             $this->formMap->addPropertyMap(new Form\Text('pathologyId'));
             $this->formMap->addPropertyMap(new Form\Text('name'));
             $this->formMap->addPropertyMap(new Form\Text('type'));
@@ -123,7 +123,7 @@ class PathCaseMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Text('reportStatus'));
             $this->formMap->addPropertyMap(new Form\Boolean('billable'));
             $this->formMap->addPropertyMap(new Form\Text('accountStatus'));
-            $this->formMap->addPropertyMap(new Form\Money('cost'));
+            //$this->formMap->addPropertyMap(new Form\Money('cost'));
             $this->formMap->addPropertyMap(new Form\Boolean('afterHours'));
             $this->formMap->addPropertyMap(new Form\Text('zoonotic'));
             $this->formMap->addPropertyMap(new Form\Boolean('zoonoticAlert'));
@@ -308,15 +308,15 @@ FROM path_case
         if (!empty($filter['companyId'])) {
             $filter->appendWhere('a.company_id = %s AND ', (int)$filter['companyId']);
         }
-        if (!empty($filter['clientId'])) {
-            $filter->appendWhere('a.client_id = %s AND ', (int)$filter['clientId']);
-        }
+//        if (!empty($filter['clientId'])) {
+//            $filter->appendWhere('a.client_id = %s AND ', (int)$filter['clientId']);
+//        }
         if (!empty($filter['soUserId'])) {
             $filter->appendWhere('a.so_user_id = %s AND ', (int)$filter['soUserId']);
         }
-        if (!empty($filter['ownerId'])) {
-            $filter->appendWhere('a.owner_id = %s AND ', (int)$filter['ownerId']);
-        }
+//        if (!empty($filter['ownerId'])) {
+//            $filter->appendWhere('a.owner_id = %s AND ', (int)$filter['ownerId']);
+//        }
         if (!empty($filter['ownerName'])) {
             $filter->appendWhere('a.owner_name = %s AND ', $this->quote($filter['ownerName']));
         }
@@ -342,9 +342,9 @@ FROM path_case
         if (!empty($filter['animalTypeId'])) {
             $filter->appendWhere('a.animal_type_id = %s AND ', $this->quote($filter['animalTypeId']));
         }
-        if (!empty($filter['resident'])) {
-            $filter->appendWhere('a.resident = %s AND ', $this->quote($filter['resident']));
-        }
+//        if (!empty($filter['resident'])) {
+//            $filter->appendWhere('a.resident = %s AND ', $this->quote($filter['resident']));
+//        }
         if (!empty($filter['type'])) {
             $filter->appendWhere('a.type = %s AND ', $this->quote($filter['type']));
         }

@@ -1,9 +1,7 @@
 <?php
 namespace App\Db;
 
-use App\Config;
 use App\Db\Traits\AnimalTypeTrait;
-use App\Db\Traits\ClientTrait;
 use App\Db\Traits\CompanyTrait;
 use App\Db\Traits\OwnerTrait;
 use App\Db\Traits\PathologistTrait;
@@ -18,18 +16,12 @@ use Tk\Money;
 use Uni\Db\Traits\InstitutionTrait;
 use Uni\Db\User;
 
-/**
- * @author Mick Mifsud
- * @created 2020-07-29
- * @link http://tropotek.com.au/
- * @license Copyright 2020 Tropotek
- */
+
 class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\FileIface
 {
     use TimestampTrait;
     use InstitutionTrait;
     use CompanyTrait;
-    use ClientTrait;
     use OwnerTrait;
     use StorageTrait;
     use StatusTrait;
@@ -37,7 +29,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
     use PathologistTrait;
     use AnimalTypeTrait;
 
-    // TODO: Check these status's against the actual workflow.
+
     const STATUS_PENDING                = 'pending';            // Submitted ???
     const STATUS_HOLD                   = 'hold';               // Awaiting review???
     const STATUS_FROZEN_STORAGE         = 'frozenStorage';      //
@@ -54,7 +46,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
     const TYPE_BIOPSY                   = 'biopsy';
     const TYPE_NECROPSY                 = 'necropsy';
 
-    // TODO: Go ovber these types with stakeholder's b4 release
     const SUBMISSION_INTERNAL_DIAG      = 'internalDiagnostic';
     const SUBMISSION_EXTERNAL_DIAG      = 'externalDiagnostic';
     const SUBMISSION_RESEARCH           = 'research';
@@ -62,14 +53,14 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
     const SUBMISSION_OTHER              = 'other';
 
     // Report Status
-    const REPORT_STATUS_INTERIM         = 'interim';            //
-    const REPORT_STATUS_COMPLETED       = 'completed';          //
+    const REPORT_STATUS_INTERIM         = 'interim';
+    const REPORT_STATUS_COMPLETED       = 'completed';
 
     // Report Status
-    const ACCOUNT_STATUS_PENDING        = 'pending';           //
-    const ACCOUNT_STATUS_INVOICED       = 'invoiced';          //
-    const ACCOUNT_STATUS_UVET_INVOICED  = 'uvetInvoiced';      //
-    const ACCOUNT_STATUS_CANCELLED      = 'cancelled';         //
+    const ACCOUNT_STATUS_PENDING        = 'pending';
+    const ACCOUNT_STATUS_INVOICED       = 'invoiced';
+    const ACCOUNT_STATUS_UVET_INVOICED  = 'uvetInvoiced';
+    const ACCOUNT_STATUS_CANCELLED      = 'cancelled';
 
     // After Care Options
     const AC_GENERAL                    = 'general';
@@ -89,7 +80,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
 
     /**
      * Staff who created this case
-     *
      * @var int
      */
     public $userId = 0;
@@ -99,21 +89,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
      * @var int
      */
     public $companyId = 0;
-
-    /**
-     * Submitting Client (the billable client)
-     * @var int
-     * @deprecated Use companyId field
-     */
-    public $clientId = 0;
-
-    /**
-     * Animal Owner, (the owner client id)
-     * Generally the same as client ID, so pre-populate in new cases when this is 0
-     * @var int
-     * @deprecated owner name text field used now
-     */
-    public $ownerId = 0;
 
     /**
      * userId of the pathologist user
@@ -129,19 +104,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
     public $soUserId = 0;
 
     /**
-     * @var string
-     * @deprecated
-     */
-    public $resident = '';
-
-    /**
-     * Staff only notes
-     * @var string
-     * @deprecated Not in use for now
-     */
-    public $name = '';
-
-    /**
      * Pathology Number
      * @var string
      */
@@ -154,7 +116,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
     public $type = '';
 
     /**
-     * direct client/external vet/Inernal vet/researcher/ Other - Specify
+     * direct client/external vet/Internal vet/researcher/ Other - Specify
      * @var string
      */
     public $submissionType = '';
@@ -194,14 +156,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
      * @var string
      */
     public $accountStatus = '';
-
-    /**
-     * This should be a cost for the case billed to the clientId
-     * @var Money
-     * @deprecated Use PathCase::getInvoiceTotal()
-     */
-    public $cost = null;
-
 
     /**
      * @var bool
@@ -244,7 +198,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
      * @var string
      */
     public $bioNotes = '';
-
 
     /**
      * Is in fact the animal count (Generally 1 but could be a heard of 10 cattle for example.)
@@ -466,9 +419,9 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
      */
     public function __sleep()
     {
-        $arr = ['id', 'institutionId', 'userId', 'clientId', 'ownerId', 'soUserId', 'pathologistId', 'resident',
-            'name', 'pathologyId', 'type', 'submissionType', 'submissionReceived', 'arrival', 'status',
-            'reportStatus', 'billable', 'accountStatus', 'cost', 'afterHours', 'zoonotic', 'zoonoticAlert',
+        $arr = ['id', 'institutionId', 'userId', 'companyId', 'soUserId', 'pathologistId',
+            'pathologyId', 'type', 'submissionType', 'submissionReceived', 'arrival', 'status',
+            'reportStatus', 'billable', 'accountStatus', 'afterHours', 'zoonotic', 'zoonoticAlert',
             'issue', 'issueAlert', 'bioSamples', 'bioNotes', 'specimenCount', 'ownerName', 'animalName', 'animalTypeId',
             'species', 'breed', 'sex', 'desexed', 'patientNumber', 'microchip', 'origin', 'colour', 'weight',
             'dob', 'dod', 'euthanised', 'euthanisedMethod', 'acType', 'acHold', 'storageId', 'studentReport',
@@ -737,29 +690,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
     {
         $this->accountStatus = $accountStatus;
         return $this;
-    }
-
-    /**
-     * @param Money|float $cost
-     * @return PathCase
-     * @deprecated Use PathCase::getInvoiceTotal()
-     */
-    public function setCost($cost) : PathCase
-    {
-        if (!is_object($cost)) {
-            $cost = Money::create((float)$cost);
-        }
-        $this->cost = $cost;
-        return $this;
-    }
-
-    /**
-     * @return Money
-     * @deprecated Use PathCase::getInvoiceTotal()
-     */
-    public function getCost() : Money
-    {
-        return $this->cost;
     }
 
     /**
@@ -1367,24 +1297,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
         if ($format && $this->disposal)
             return $this->disposal->format($format);
         return $this->disposal;
-    }
-
-    /**
-     * @return string
-     */
-    public function getResident(): string
-    {
-        return $this->resident;
-    }
-
-    /**
-     * @param string $resident
-     * @return PathCase
-     */
-    public function setResident(string $resident): PathCase
-    {
-        $this->resident = $resident;
-        return $this;
     }
 
     /**

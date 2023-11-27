@@ -39,7 +39,6 @@ class CompanyContact extends \Bs\FormIface
         $this->appendField(new Event\Submit('update', array($this, 'doSubmit')));
         $this->appendField(new Event\Submit('save', array($this, 'doSubmit')));
         $this->appendField(new Event\Link('cancel', $this->getBackUrl()));
-vd();
     }
 
     /**

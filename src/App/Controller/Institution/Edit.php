@@ -78,8 +78,8 @@ class Edit extends \Uni\Controller\Institution\Edit
                 \Uni\Uri::createHomeUrl('/companyManager.html'), 'fa fa-building-o'));
 
             // TODO: remove this
-            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Contacts',
-                \Uni\Uri::createHomeUrl('/contactManager.html'), 'fa fa-user-o'));
+//            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Contacts',
+//                \Uni\Uri::createHomeUrl('/contactManager.html'), 'fa fa-user-o'));
         }
 
     }
