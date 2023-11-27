@@ -54,7 +54,8 @@ class CompanyContactMap extends Mapper
      */
     public function findFiltered($filter, $tool = null)
     {
-        return $this->selectFromFilter($this->makeQuery(\Tk\Db\Filter::create($filter)), $tool);
+        $r = $this->selectFromFilter($this->makeQuery(\Tk\Db\Filter::create($filter)), $tool);
+        return $r;
     }
 
     /**
@@ -101,12 +102,11 @@ class CompanyContactMap extends Mapper
             if ($w) $filter->appendWhere('(%s) AND ', $w);
         }
 
-        // TODO: see if we need this type of condition here/
-//        if (!empty($filter['pathCaseId'])) {
-//            // link to path_case_has_contact ???
-//            $filter->appendFrom(', %s z', $this->quoteTable('path_case_has_contact'));
-//            $filter->appendWhere('a.id = z.contact_id AND z.path_case_id = %s AND ', (int)$filter['pathCaseId']);
-//        }
+        if (!empty($filter['pathCaseId'])) {
+            // link to path_case_has_contact ???
+            $filter->appendFrom(', %s z', $this->quoteTable('path_case_has_company_contact'));
+            $filter->appendWhere('a.id = z.company_contact_id AND z.path_case_id = %s AND ', (int)$filter['pathCaseId']);
+        }
 
         return $filter;
     }

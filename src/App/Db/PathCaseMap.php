@@ -30,6 +30,7 @@ class PathCaseMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Integer('id'), 'key');
             $this->dbMap->addPropertyMap(new Db\Integer('institutionId', 'institution_id'));
             $this->dbMap->addPropertyMap(new Db\Integer('userId', 'user_id'));
+            $this->dbMap->addPropertyMap(new Db\Integer('companyId', 'company_id'));
             $this->dbMap->addPropertyMap(new Db\Integer('clientId', 'client_id'));
             $this->dbMap->addPropertyMap(new Db\Integer('ownerId', 'owner_id'));
             $this->dbMap->addPropertyMap(new Db\Integer('pathologistId', 'pathologist_id'));
@@ -106,6 +107,7 @@ class PathCaseMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Integer('id'), 'key');
             $this->formMap->addPropertyMap(new Form\Integer('institutionId'));
             $this->formMap->addPropertyMap(new Form\Integer('userId'));
+            $this->formMap->addPropertyMap(new Form\Integer('companyId'));
             $this->formMap->addPropertyMap(new Form\Integer('clientId'));
             $this->formMap->addPropertyMap(new Form\Integer('ownerId'));
             $this->formMap->addPropertyMap(new Form\Integer('pathologistId'));
@@ -302,6 +304,9 @@ FROM path_case
 
         if (!empty($filter['institutionId'])) {
             $filter->appendWhere('a.institution_id = %s AND ', (int)$filter['institutionId']);
+        }
+        if (!empty($filter['companyId'])) {
+            $filter->appendWhere('a.company_id = %s AND ', (int)$filter['companyId']);
         }
         if (!empty($filter['clientId'])) {
             $filter->appendWhere('a.client_id = %s AND ', (int)$filter['clientId']);
@@ -520,9 +525,6 @@ FROM path_case
 
 
 
-
-
-
     public function hasContact(int $pathCaseId, int $contactId): bool
     {
         $stm = $this->getDb()->prepare('SELECT * FROM path_case_has_company_contact WHERE path_case_id = ? AND company_contact_id = ?');
@@ -546,12 +548,7 @@ FROM path_case
         $stm->execute();
     }
 
-    /**
-     * @param int $pathCaseId
-     * @param int $contactId
-     * @throws Exception
-     */
-    public function addContact($pathCaseId, $contactId)
+    public function addContact(int $pathCaseId, int $contactId)
     {
         if ($this->hasContact($pathCaseId, $contactId)) return;
         $stm = $this->getDb()->prepare('INSERT INTO path_case_has_company_contact (path_case_id, company_contact_id)  VALUES (?, ?) ');

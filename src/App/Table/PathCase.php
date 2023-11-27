@@ -61,14 +61,24 @@ class PathCase extends \Bs\TableIface
                 }
                 return $value;
             });
-        $this->appendCell(new Cell\Text('clientId'))
+        $this->appendCell(new Cell\Text('companyId'))
+            ->setLabel('Client')
             ->addOnPropertyValue(function (Cell\Text $cell, \App\Db\PathCase $obj, $value) {
                 $value = '';
-                $user = $obj->getClient();
+                $user = $obj->getCompany();
                 if ($user) {
                     $value = $user->getName();
                 }
                 return $value;
+            });
+        $this->appendCell(new Cell\Text('contacts'))
+            ->setLabel('Client Contacts')
+            ->addOnCellHtml(function (\Tk\Table\Cell\Iface $cell, $obj, $html) {
+                $list = $obj->getContactList(Tool::create('name'));
+                if ($list->count()) {
+                    $html .= implode(', ', $list->toArray('name'));
+                }
+                return $html;
             });
         $this->appendCell(new Cell\Text('type'));
         $this->appendCell(new Cell\Text('submissionType'));
@@ -225,7 +235,7 @@ JS;
 
         // Actions
         $this->appendAction(\Tk\Table\Action\ColumnSelect::create()->setSelected(
-                array('id', 'pathologyId', 'pathologistId', 'clientId', 'owner', 'age',
+                array('id', 'pathologyId', 'pathologistId', 'companyId', 'owner', 'age',
                     'patientNumber', 'type', 'submissionType', 'status', 'arrival')
             )
         );

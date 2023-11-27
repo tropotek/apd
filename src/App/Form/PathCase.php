@@ -2,6 +2,7 @@
 namespace App\Form;
 
 use App\Db\AnimalTypeMap;
+use App\Db\CompanyContactMap;
 use App\Db\ContactMap;
 use App\Db\Notice;
 use App\Db\PathCaseMap;
@@ -52,6 +53,33 @@ class PathCase extends \Bs\FormIface
         if ($this->getConfig()->getRequest()->has('gc')) {
             $this->doGetContact($this->getConfig()->getRequest());
         }
+        if ($this->getConfig()->getRequest()->has('gcl')) {
+            $this->doGetContactList($this->getConfig()->getRequest());
+        }
+    }
+
+    public function doGetContactList(\Tk\Request $request)
+    {
+        $companyId = $request->request->getInt('gcl');
+        $contacts = CompanyContactMap::create()->findFiltered([
+            'companyId' => $companyId
+        ], Tool::create('name'))->toArray();
+        \Tk\ResponseJson::createJson($contacts)->send();
+        exit();
+    }
+
+    public function doGetContact(\Tk\Request $request)
+    {
+        $data = [];
+        $contact = ContactMap::create()->find($request->get('gc'));
+        if ($contact) {
+            $contact->address = $contact->getAddress();
+            $data['contact'] = $contact;
+            \Tk\ResponseJson::createJson($data)->send();
+            exit();
+        }
+        \Tk\ResponseJson::createJson(['status' => 'err', 'msg' => 'Contact Not Found!'])->send();
+        exit();
     }
 
 
@@ -114,54 +142,123 @@ class PathCase extends \Bs\FormIface
         }
 
         $list = \Tk\ObjectUtil::getClassConstants($this->getPathCase(), 'SUBMISSION', true);
-        $this->appendField(Field\Select::createSelect('submissionType', $list)->prependOption('-- Select --', ''))
+        $this->appendField(Field\Select::createSelect('submissionType', $list))
+            ->prependOption('-- Select --', '')
             ->setTabGroup($tab);
 
-        $contact = new \App\Db\Contact();
-        $contact->setType(\App\Db\Contact::TYPE_CLIENT);
-        $form = \App\Form\Contact::create('clientSelect')->setType(\App\Db\Contact::TYPE_CLIENT)->setModel($contact);
-        $form->removeField('notes');
-        $list = \App\Db\Contact::getSelectList(\App\Db\Contact::TYPE_CLIENT);
-        $this->appendField(Field\DialogSelect::createDialogSelect('clientId[]', $list, $form, 'Create Client'))
-            ->addCss('tk-multiselect tk-multiselect1')
+        $layout->removeRow('contacts', 'col');
+
+        $list = \App\Db\CompanyMap::create()->findFiltered([
+            'institutionId' => $this->getConfig()->getInstitutionId()
+        ], Tool::create("FIELD(name, 'Private Clients') DESC, a.name"));
+        $this->appendField(Field\Select::createSelect('companyId', $list))
+            ->prependOption('-- None --', '')
+            ->addCss('tk-ms-company')
+            ->setTabGroup($tab);
+
+        $contact = new \App\Db\CompanyContact();
+        $form = \App\Form\CompanyContact::create('contactSelect')->setModel($contact);
+        $form->appendField(Field\Hidden::create('companyId'));
+        $list = \App\Db\CompanyContact::getSelectList($this->getPathCase()->getCompanyId() ?? 0);
+        $field = Field\DialogSelect::createDialogSelect('contacts[]', $list, $form, 'Create Contact');
+        $this->appendField($field)
+            ->addCss('tk-multiselect tk-ms-contact')
             ->setAttr('data-reset-on-hide', true)
-            ->setTabGroup($tab)->setLabel('Submitting Client')
-            ->setNotes('Start typing to find a client, if not found use the + icon to create a new client.<br/>The client to be invoiced.');
+            //->setAttr('disabled', true)
+            ->setTabGroup($tab)->setLabel('Company Contacts')
+            ->setNotes('Select Client Contacts that will be able to receive the pathology report.')
+            ->setValue($this->getPathCase()->getContactList()->toArray('id'));;
+
+        $modalId = json_encode($field->getDialog()->getId());
+        $companyId = json_encode($this->getPathCase()->getCompanyId() ?? 0);
 
         $js = <<<JS
 jQuery(function ($) {
-  
-  $('select.tk-multiselect1').select2({
-    placeholder: 'Select Contact',
-    allowClear: false,
-    maximumSelectionLength: 1,
-    minimumInputLength: 0,
-    escapeMarkup: function (item) {
-      return '<span class="tk-selection_choice_label">'+item+'</span>';
-    }
-  }).on('change', function () {
-    // Disable the add contact button if one is selected
-    var btn = $(this).closest('.input-group').find('button');
-    if ($(this).val().length) {
-      btn.attr('title', 'Clear selected to create new record.');
-      btn.attr('disabled', 'disabled');
-    } else {
-      btn.attr('title', $(btn.attr('data-target') + ' .modal-title').text());
-      btn.removeAttr('disabled', 'disabled');
-    }
+    const contactModal = $('#' + {$modalId});
+    let select = $('select.tk-ms-contact');
+    let companyId = ${companyId};
     
-    // Limit to one selection after a new contact created
-    if ($(this).val().length > 1) {
-      var a = $(this).val();
-      $(this).val([a[a.length-1]]);
-      $(this).trigger('change');
-    }
+    contactModal.on('shown.bs.modal', function() {
+        // Set the company ID for new contact
+        $('input[name=companyId]', contactModal).val(companyId);
+    });
     
-  }).trigger('change');
+    $('select.tk-ms-company').on('change', function () {
+        // Populate the contactId field
+        companyId = $(this).val();
+        
+        // AJAX call for list of available contacts (if any)
+        $.get(document.location, { 
+            'gcl': companyId, 
+            crumb_ignore: 'crumb_ignore',
+            //nolog: 'nolog' 
+        })
+        .done(function(data) {
+            select.empty();
+            data.map(o => select.append("<option value=\"" + o.id + "\">" + o.name + "</option>"));
+        })
+        .fail(function() {
+            console.error('Cannot load company contacts.')
+        });
+    });
+    
+    select.select2({
+        placeholder: 'Select Contact',
+        allowClear: false,
+        minimumInputLength: 0
+    });
   
 });
 JS;
         $this->getRenderer()->getTemplate()->appendJs($js);
+
+
+//        $contact = new \App\Db\Contact();
+//        $contact->setType(\App\Db\Contact::TYPE_CLIENT);
+//        $form = \App\Form\Contact::create('clientSelect')->setType(\App\Db\Contact::TYPE_CLIENT)->setModel($contact);
+//        $form->removeField('notes');
+//        $list = \App\Db\Contact::getSelectList(\App\Db\Contact::TYPE_CLIENT);
+//        $this->appendField(Field\DialogSelect::createDialogSelect('clientId[]', $list, $form, 'Create Client'))
+//            ->addCss('tk-multiselect tk-multiselect1')
+//            ->setAttr('data-reset-on-hide', true)
+//            ->setAttr('disabled', true)
+//            ->setTabGroup($tab)->setLabel('Submitting Client')
+//            ->setNotes('[@deprecated] Start typing to find a client, if not found use the + icon to create a new client.<br/>The client to be invoiced.');
+//
+//        $js = <<<JS
+//jQuery(function ($) {
+//
+//  $('select.tk-multiselect1').select2({
+//    placeholder: 'Select Contact',
+//    allowClear: false,
+//    maximumSelectionLength: 1,
+//    minimumInputLength: 0,
+//    escapeMarkup: function (item) {
+//      return '<span class="tk-selection_choice_label">'+item+'</span>';
+//    }
+//  }).on('change', function () {
+//    // Disable the add contact button if one is selected
+//    var btn = $(this).closest('.input-group').find('button');
+//    if ($(this).val().length) {
+//      btn.attr('title', 'Clear selected to create new record.');
+//      btn.attr('disabled', 'disabled');
+//    } else {
+//      btn.attr('title', $(btn.attr('data-target') + ' .modal-title').text());
+//      btn.removeAttr('disabled', 'disabled');
+//    }
+//
+//    // Limit to one selection after a new contact created
+//    if ($(this).val().length > 1) {
+//      var a = $(this).val();
+//      $(this).val([a[a.length-1]]);
+//      $(this).trigger('change');
+//    }
+//
+//  }).trigger('change');
+//
+//});
+//JS;
+//        $this->getRenderer()->getTemplate()->appendJs($js);
 
         $this->appendField(new Field\Checkbox('billable'))->setTabGroup($tab)
             ->setNotes('Is this case billable?');
@@ -578,29 +675,11 @@ CSS;
     public function execute($request = null)
     {
         if ($this->getRequest()->has('action')) return;        // ignore column requests
-        $this->getForm()->getField('clientId')->getDialog()->execute($request);
-        if ($this->getForm()->getField('ownerId')) {
-            $this->getForm()->getField('ownerId')->getDialog()->execute($request);
-        }
-        // TODO:
+        $this->getForm()->getField('contacts')->getDialog()->execute($request);
         $this->getForm()->getField('students')->getDialog()->execute($request);
 
         $this->load(\App\Db\PathCaseMap::create()->unmapForm($this->getPathCase()));
         parent::execute($request);
-    }
-
-    public function doGetContact(\Tk\Request $request)
-    {
-        $data = [];
-        $contact = ContactMap::create()->find($request->get('gc'));
-        if ($contact) {
-            $contact->address = $contact->getAddress();
-            $data['contact'] = $contact;
-            \Tk\ResponseJson::createJson($data)->send();
-            exit();
-        }
-        \Tk\ResponseJson::createJson(['status' => 'err', 'msg' => 'Contact Not Found!'])->send();
-        exit();
     }
 
     /**
@@ -614,16 +693,6 @@ CSS;
 
         // Load the object with form data
         $vals = $form->getValues();
-
-//        if (!empty($vals['clientId']) && is_array($vals['clientId']))
-//            $vals['clientId'] = current($vals['clientId']);
-//        else
-//            $vals['clientId'] = 0;
-
-//        if (!empty($vals['ownerId']) && is_array($vals['ownerId']))
-//            $vals['ownerId'] = current($vals['ownerId']);
-//        else
-//            $vals['ownerId'] = 0;
 
         if (!isset($vals['billable']) || !$vals['billable']) {
             unset($vals['accountStatus']);
@@ -679,17 +748,21 @@ CSS;
             $this->getPathCase()->setSoUserId(0);
         }
 
-        // TODO save selected company contacts...
+        // save selected company contacts...
+        if (!empty($vals['contacts']) && is_array($vals['contacts'])) {
+            // Remove all existing linked contacts
+            PathCaseMap::create()->removeContact($this->getPathCase()->getId());
+            foreach ($vals['contacts'] as $id) {
+                PathCaseMap::create()->addContact($this->getPathCase()->getId(), $id);
+            }
+        }
 
         // Save selected students
         if (!empty($vals['students']) && is_array($vals['students'])) {
             // Remove all existing linked students
             PathCaseMap::create()->removeStudent($this->getPathCase()->getId());
             foreach ($vals['students'] as $id) {
-                $student = StudentMap::create()->find($id);
-                if ($student) {
-                    PathCaseMap::create()->addStudent($this->getPathCase()->getId(), $student->getId());
-                }
+                PathCaseMap::create()->addStudent($this->getPathCase()->getId(), $id);
             }
         }
 

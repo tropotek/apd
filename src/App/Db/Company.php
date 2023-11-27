@@ -270,13 +270,15 @@ class Company extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 
         // find existing contact with same type and same first and last name (case in-sensitive search)
         if (!$this->getId()) {
-            $found = CompanyMap::create()->findFiltered([
-                'institutionId' => $this->getInstitutionId(),
-                'name' => $this->getName(),
-                'exclude' => $this->getVolatileId()
-            ]);
-            if ($found->count()) {
-                $errors['name'] = 'A record with this name already exists.';
+            if ($this->getName()) {
+                $found = CompanyMap::create()->findFiltered([
+                    'institutionId' => $this->getInstitutionId(),
+                    'name' => $this->getName(),
+                    'exclude' => $this->getVolatileId()
+                ]);
+                if ($found->count()) {
+                    $errors['name'] = 'A record with this name already exists.';
+                }
             }
 
             if ($this->getEmail()) {

@@ -4,6 +4,7 @@ namespace App\Db;
 use App\Config;
 use App\Db\Traits\AnimalTypeTrait;
 use App\Db\Traits\ClientTrait;
+use App\Db\Traits\CompanyTrait;
 use App\Db\Traits\OwnerTrait;
 use App\Db\Traits\PathologistTrait;
 use App\Db\Traits\StorageTrait;
@@ -27,6 +28,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
 {
     use TimestampTrait;
     use InstitutionTrait;
+    use CompanyTrait;
     use ClientTrait;
     use OwnerTrait;
     use StorageTrait;
@@ -96,13 +98,20 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
      * Submitting Client (the billable client)
      * @var int
      */
+    public $companyId = 0;
+
+    /**
+     * Submitting Client (the billable client)
+     * @var int
+     * @deprecated Use companyId field
+     */
     public $clientId = 0;
 
     /**
      * Animal Owner, (the owner client id)
-     * Generally the same as client ID, so pre populate in new cases when this is 0
+     * Generally the same as client ID, so pre-populate in new cases when this is 0
      * @var int
-     * @deprecated
+     * @deprecated owner name text field used now
      */
     public $ownerId = 0;
 
@@ -111,7 +120,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
      * @var int
      */
     public $pathologistId = 0;
-
 
     /**
      * Staff who last edited the secondOpinion text box
@@ -469,18 +477,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
             'comments', 'notes', 'modified', 'created'];
         return $arr;
     }
-
-    /**
-     * Return the institution setting inst.pathCase.owner.name.only
-     * If true then use the pathCase::ownerName otherwise use a contact object for the owner.
-     */
-    public static function useOwnerObject(): bool
-    {
-        $inst = Config::getInstance()->getInstitution();
-        if (!$inst) return false;
-        return !$inst->getData()->get(\App\Controller\Institution\Edit::INSTITUTION_OWNER_NAME_ONLY, false);
-    }
-
 
     /**
      * @return int
@@ -1414,7 +1410,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
      * @return array|\Tk\Db\Map\ArrayObject|Student[]
      * @throws \Exception
      */
-    public function getStudentList($tool = null)
+    public function getStudentList(?\Tk\Db\Tool $tool = null)
     {
         return StudentMap::create()->findFiltered([
             'pathCaseId' => $this->getVolatileId()
@@ -1422,14 +1418,19 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
     }
 
     /**
-     * @param int|Contact $contactId
-     * @return PathCase
+     * @param null|\Tk\Db\Tool $tool
+     * @return array|\Tk\Db\Map\ArrayObject|Student[]
+     * @throws \Exception
      */
-    public function addStudent($contactId): PathCase
+    public function getContactList(?\Tk\Db\Tool $tool = null)
     {
-        if ($contactId instanceof Contact) $contactId = $contactId->getVolatileId();
-        PathCaseMap::create()->addContact($this->getVolatileId(), $contactId);
-        return $this;
+        $filter = [
+            'pathCaseId' => $this->getVolatileId()
+        ];
+        if ($this->getCompanyId()) {
+            $filter['companyId'] = $this->getCompanyId();
+        }
+        return CompanyContactMap::create()->findFiltered($filter, $tool);
     }
 
     /**
@@ -1713,9 +1714,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
                 $errors['pathologyId'] = 'Case already exists with pathologyId: ' . $this->getPathologyId();
             }
         }
-        if (!$this->clientId) {
-            $errors['clientId'] = 'Invalid value: clientId';
-        }
+
         if ($this->isBillable() && !$this->getAccountStatus()) {
             $errors['accountStatus'] = 'Please enter a valid account status';
         }

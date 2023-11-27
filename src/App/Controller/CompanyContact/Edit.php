@@ -1,5 +1,5 @@
 <?php
-namespace App\Controller\Student;
+namespace App\Controller\CompanyContact;
 
 use Bs\Controller\AdminEditIface;
 use Dom\Template;
@@ -7,10 +7,10 @@ use Tk\Request;
 
 /**
  * TODO: Add Route to routes.php:
- *      $routes->add('student-edit', Route::create('/staff/studentEdit.html', 'App\Controller\Student\Edit::doDefault'));
+ *      $routes->add('company-contact-edit', Route::create('/staff/company/contactEdit.html', 'App\Controller\CompanyContact\Edit::doDefault'));
  *
  * @author Mick Mifsud
- * @created 2023-11-26
+ * @created 2023-11-27
  * @link http://tropotek.com.au/
  * @license Copyright 2023 Tropotek
  */
@@ -18,9 +18,9 @@ class Edit extends AdminEditIface
 {
 
     /**
-     * @var \App\Db\Student
+     * @var \App\Db\CompanyContact
      */
-    protected $student = null;
+    protected $companyContact = null;
 
 
     /**
@@ -28,7 +28,7 @@ class Edit extends AdminEditIface
      */
     public function __construct()
     {
-        $this->setPageTitle('Student Edit');
+        $this->setPageTitle('Contact Edit');
     }
 
     /**
@@ -37,12 +37,13 @@ class Edit extends AdminEditIface
      */
     public function doDefault(Request $request)
     {
-        $this->student = new \App\Db\Student();
-        if ($request->get('studentId')) {
-            $this->student = \App\Db\StudentMap::create()->find($request->get('studentId'));
+        $this->companyContact = new \App\Db\CompanyContact();
+        $this->companyContact->setCompanyId($request->request->getInt('companyId'));
+        if ($request->get('companyContactId')) {
+            $this->companyContact = \App\Db\CompanyContactMap::create()->find($request->get('companyContactId'));
         }
 
-        $this->setForm(\App\Form\Student::create()->setModel($this->student));
+        $this->setForm(\App\Form\CompanyContact::create()->setModel($this->companyContact));
         $this->initForm($request);
         $this->getForm()->execute();
     }
@@ -66,7 +67,7 @@ class Edit extends AdminEditIface
     public function __makeTemplate()
     {
         $xhtml = <<<HTML
-<div class="tk-panel" data-panel-title="Student Edit" data-panel-icon="fa fa-user-o" var="panel"></div>
+<div class="tk-panel" data-panel-title="Contact Edit" data-panel-icon="fa fa-user-o" var="panel"></div>
 HTML;
         return \Dom\Loader::load($xhtml);
     }

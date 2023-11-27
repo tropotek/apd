@@ -83,10 +83,22 @@ class CompanyContact extends \Tk\Db\Map\Model implements \Tk\ValidInterface
         return $this->phone;
     }
 
-    public function setFax(string $fax) : CompanyContact
+    public static function getSelectList(int $companyId): array
     {
-        $this->fax = $fax;
-        return $this;
+        if (!$companyId) return [];
+        $list = CompanyContactMap::create()->findFiltered(
+            compact('companyId'),
+            \Tk\Db\Tool::create('name')
+        );
+        $arr = [];
+        foreach ($list as $item) {
+            $label = $item->getName();
+            if ($item->getEmail()) {
+                $label .= sprintf(' - [%s]', $item->getEmail());
+            }
+            $arr[$label] = $item->getId();
+        }
+        return $arr;
     }
 
     public function validate(): array
@@ -94,7 +106,7 @@ class CompanyContact extends \Tk\Db\Map\Model implements \Tk\ValidInterface
         $errors = [];
 
         if (!$this->getName()) {
-            $errors['name'] = 'Please enter at a name for this company contact.';
+            $errors['name'] = 'Please enter at a name for this contact.';
         }
 
         if ($this->getEmail() && !filter_var($this->getEmail(), FILTER_VALIDATE_EMAIL)) {
@@ -103,23 +115,25 @@ class CompanyContact extends \Tk\Db\Map\Model implements \Tk\ValidInterface
 
         // find existing contact with same type and same first and last name (case in-sensitive search)
         if (!$this->getId()) {
-            $found = CompanyMap::create()->findFiltered([
-                'companyId' => $this->getCompanyId(),
-                'name' => $this->getName(),
-                'exclude' => $this->getVolatileId()
-            ]);
-            if ($found->count()) {
-                $errors['name'] = 'A record with this name already exists for this company.';
+            if ($this->getName()) {
+                $found = CompanyContactMap::create()->findFiltered([
+                    'companyId' => $this->getCompanyId(),
+                    'name' => $this->getName(),
+                    'exclude' => $this->getVolatileId()
+                ]);
+                if ($found->count()) {
+                    $errors['name'] = 'A Contact with this name already exists for this company.';
+                }
             }
 
             if ($this->getEmail()) {
-                $found = CompanyMap::create()->findFiltered([
+                $found = CompanyContactMap::create()->findFiltered([
                     'companyId' => $this->getCompanyId(),
                     'email' => $this->getEmail(),
                     'exclude' => $this->getVolatileId()
                 ]);
                 if ($found->count()) {
-                    $errors['email'] = 'A Company with this email already exists for this company.';
+                    $errors['email'] = 'A Contact with this email already exists for this company.';
                 }
             }
         }

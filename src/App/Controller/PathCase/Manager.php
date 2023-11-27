@@ -2,9 +2,12 @@
 namespace App\Controller\PathCase;
 
 use Bs\Controller\AdminManagerIface;
+use Bs\Uri;
 use Dom\Template;
 use Tk\Db\Tool;
 use Tk\Request;
+use Tk\Ui\Button;
+use Tk\Ui\ButtonDropdown;
 
 /**
  * TODO: Add Route to routes.php:
@@ -45,8 +48,12 @@ class Manager extends AdminManagerIface
      */
     public function initActionPanel()
     {
-        $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('New Case',
-            $this->getTable()->getEditUrl(), 'fa fa-paw fa-add-action'));
+        $links = [
+            \Tk\Ui\Link::create('New Necropsy Case', Uri::createHomeUrl('/pathCaseEdit.html?type=necropsy'), 'fa fa-paw'),
+            \Tk\Ui\Link::create('New Biopsy Case', Uri::createHomeUrl('/pathCaseEdit.html?type=biopsy'), 'fa fa-paw'),
+        ];
+        $this->getActionPanel()->append(ButtonDropdown::createButtonDropdown('New Case', '', $links));
+
     }
 
     /**

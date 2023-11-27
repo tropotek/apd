@@ -65,10 +65,10 @@ $routes->add('cassette-edit', Route::create('/staff/cassetteEdit.html', 'App\Con
 $routes->add('contact-manager', Route::create('/staff/contactManager.html', 'App\Controller\Contact\Manager::doDefault'));
 $routes->add('contact-edit', Route::create('/staff/contactEdit.html', 'App\Controller\Contact\Edit::doDefault'));
 
-$routes->add('apd-client-manager', Route::create('/staff/clientManager.html', 'App\Controller\Client\Manager::doDefault'));
-$routes->add('apd-client-edit', Route::create('/staff/clientEdit.html', 'App\Controller\Client\Edit::doDefault'));
-//$routes->add('apd-contact-manager', Route::create('/staff/contactManager.html', 'App\Controller\Contact\Manager::doDefault'));
-//$routes->add('apd-contact-edit', Route::create('/staff/contactEdit.html', 'App\Controller\Contact\Edit::doDefault'));
+$routes->add('company-manager', Route::create('/staff/companyManager.html', 'App\Controller\Company\Manager::doDefault'));
+$routes->add('company-edit', Route::create('/staff/companyEdit.html', 'App\Controller\Company\Edit::doDefault'));
+$routes->add('company-contact-manager', Route::create('/staff/companyContactManager.html', 'App\Controller\CompanyContact\Manager::doDefault'));
+$routes->add('company-contact-edit', Route::create('/staff/companyContactEdit.html', 'App\Controller\CompanyContact\Edit::doDefault'));
 
 $routes->add('student-manager', Route::create('/staff/studentManager.html', 'App\Controller\Student\Manager::doDefault'));
 $routes->add('student-edit', Route::create('/staff/studentEdit.html', 'App\Controller\Student\Edit::doDefault'));

@@ -64,10 +64,6 @@ class NavRendererHandler implements Subscriber
         }
         if ($user->hasPermission(\Uni\Db\Permission::MANAGE_STAFF)) {
             $menu->append(Item::create('Staff', \Uni\Uri::createHomeUrl('/staffUserManager.html'), 'fa fa-user-md'));
-
-            $menu->append(Item::create('Storage Locations', \Uni\Uri::createHomeUrl('/storageManager.html'), 'fa fa-archive'));
-            $menu->append(Item::create('Available Services', \Uni\Uri::createHomeUrl('/serviceManager.html'), 'fa fa-tags'));
-            $menu->append(Item::create('Contact', \Uni\Uri::createHomeUrl('/contactManager.html'), 'fa fa-user-o'));
         }
         if ($user->hasPermission(Permission::MANAGE_SITE))
             $menu->append(Item::create('Settings', \Uni\Uri::createHomeUrl('/settings.html'), 'fa fa-cogs'), 'Staff');
@@ -94,7 +90,6 @@ class NavRendererHandler implements Subscriber
             $menu->append(Item::create('Settings', \Uni\Uri::createHomeUrl('/settings.html'), 'fa fa-cogs'));
             if ($this->getConfig()->isDebug()) {
                 $sub = $menu->append(Item::create('Development', '#', 'fa fa-bug'));
-                // <a href="/admin/tailLog.html"><i class="fa fa-road"></i> Tail Log</a>
                 $sub->append(Item::create('Tail Log', \Uni\Uri::createHomeUrl('/dev/tailLog.html'), 'fa fa-road'));
                 $sub->append(Item::create('Events', \Uni\Uri::createHomeUrl('/dev/dispatcherEvents.html'), 'fa fa-empire'));
                 $sub->append(Item::create('Forms', \Uni\Uri::createHomeUrl('/dev/forms.html'), 'fa fa-rebel'));
@@ -106,31 +101,32 @@ class NavRendererHandler implements Subscriber
             $menu->append(Item::create('Mail Log', \Uni\Uri::createHomeUrl(MailLog::createMailLogUrl('/manager.html', $this->getAuthUser()->getInstitution())), 'fa fa-envelope'));
         }
         if ($user->isStaff()) {
-            if ($user->hasPermission(Permission::MANAGE_SITE))
+            $menu->append(Item::create('System')->addCss('nav-header d-none d-lg-block'));
+
+            if ($user->hasPermission(Permission::MANAGE_SITE)) {
                 $menu->append(Item::create('Settings', \Uni\Uri::createHomeUrl('/settings.html'), 'fa fa-cogs'));
+            }
 
             $menu->append(Item::create('Cases', \Uni\Uri::createHomeUrl('/pathCaseManager.html'), 'fa fa-paw'));
             $menu->append(Item::create('Requests', \Uni\Uri::createHomeUrl('/requestManager.html'), 'fa fa-medkit'));
 
-            $menu->append(Item::create('Contacts', \Uni\Uri::createHomeUrl('/contactManager.html'), 'fa fa-user'));
+            if ($user->hasPermission([Permission::IS_PATHOLOGIST, Permission::IS_TECHNICIAN, Permission::MANAGE_SITE])) {
+                $menu->append(Item::create('Clients', \Uni\Uri::createHomeUrl('/companyManager.html'), 'fa fa-building-o'));
+                $menu->append(Item::create('Students', \Uni\Uri::createHomeUrl('/studentManager.html'), 'fa fa-user-o'));
+            }
 
-            $menu->append(Item::create('Clients', \Uni\Uri::createHomeUrl('/clientManager.html'), 'fa fa-user'));
-            $menu->append(Item::create('Students', \Uni\Uri::createHomeUrl('/studentManager.html'), 'fa fa-user-o'));
-            $menu->append(Item::create('Roster', \Uni\Uri::createHomeUrl('/roster.html'), 'fa fa-calendar'));
-            $menu->append(Item::create('Sampling Protocols', \Uni\Uri::createHomeUrl('/protocols.html'), 'fa fa-flask'));
-            $menu->append(Item::create('Tissue Sample Requests', \Uni\Uri::createHomeUrl('/sampling.html'), 'fa fa-heartbeat'));
-            $menu->append(Item::create('Stored Specimens', \Uni\Uri::createHomeUrl('/specimens.html'), 'fa fa-archive'));
-            //$menu->append(Item::create('Storage List', \Uni\Uri::createHomeUrl('/storageManager.html'), 'fa fa-question'));
-            //$menu->append(Item::create('Service List', \Uni\Uri::createHomeUrl('/serviceManager.html'), 'fa fa-question'));
-            //$menu->append(Item::create('Request List', \Uni\Uri::createHomeUrl('/requestManager.html'), 'fa fa-flask'));\
-            //$menu->append(Item::create('Cassette List', \Uni\Uri::createHomeUrl('/cassetteManager.html'), 'fa fa-question'));
             //$menu->append(Item::create('Mail Log', \Uni\Uri::createHomeUrl(MailLog::createMailLogUrl('/manager.html', $this->getConfig()->getInstitution())), 'fa fa-envelope'));
-
-
             if ($user->hasPermission(Permission::MANAGE_SITE)) {
                 $sub = $menu->append(Item::create('Reporting', '#', 'fa fa-list-alt'));
                 $sub->append(Item::create('All Invoiced Items', \Uni\Uri::createHomeUrl('/invoiceItemReport.html'), 'fa fa-money'));
             }
+
+            $menu->append(Item::create('Procedures/Information')->addCss('nav-header d-none d-lg-block'));
+
+            $menu->append(Item::create('Roster', \Uni\Uri::createHomeUrl('/roster.html'), 'fa fa-calendar'));
+            $menu->append(Item::create('Sampling Protocols', \Uni\Uri::createHomeUrl('/protocols.html'), 'fa fa-flask'));
+            $menu->append(Item::create('Tissue Sample Requests', \Uni\Uri::createHomeUrl('/sampling.html'), 'fa fa-heartbeat'));
+            $menu->append(Item::create('Stored Specimens', \Uni\Uri::createHomeUrl('/specimens.html'), 'fa fa-archive'));
 
         }
 

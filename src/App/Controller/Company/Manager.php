@@ -1,5 +1,5 @@
 <?php
-namespace App\Controller\Student;
+namespace App\Controller\Company;
 
 use Bs\Controller\AdminManagerIface;
 use Dom\Template;
@@ -7,10 +7,10 @@ use Tk\Request;
 
 /**
  * TODO: Add Route to routes.php:
- *      $routes->add('student-manager', Route::create('/staff/studentManager.html', 'App\Controller\Student\Manager::doDefault'));
+ *      $routes->add('company-manager', Route::create('/staff/companyManager.html', 'App\Controller\Company\Manager::doDefault'));
  *
  * @author Mick Mifsud
- * @created 2023-11-26
+ * @created 2023-11-27
  * @link http://tropotek.com.au/
  * @license Copyright 2023 Tropotek
  */
@@ -22,7 +22,7 @@ class Manager extends AdminManagerIface
      */
     public function __construct()
     {
-        $this->setPageTitle('Student Manager');
+        $this->setPageTitle('Client Manager');
     }
 
     /**
@@ -31,11 +31,13 @@ class Manager extends AdminManagerIface
      */
     public function doDefault(Request $request)
     {
-        $this->setTable(\App\Table\Student::create());
-        $this->getTable()->setEditUrl(\Bs\Uri::createHomeUrl('/studentEdit.html'));
+        $this->setTable(\App\Table\Company::create());
+        $this->getTable()->setEditUrl(\Bs\Uri::createHomeUrl('/companyEdit.html'));
         $this->getTable()->init();
 
-        $filter = array();
+        $filter = [
+            'institutionId' => $this->getConfig()->getInstitutionId()
+        ];
         $this->getTable()->setList($this->getTable()->findList($filter));
     }
 
@@ -44,8 +46,8 @@ class Manager extends AdminManagerIface
      */
     public function initActionPanel()
     {
-        $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('New Student',
-            $this->getTable()->getEditUrl(), 'fa fa-user-o fa-add-action'));
+        $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('New Client',
+            $this->getTable()->getEditUrl(), 'fa fa-building-o fa-add-action'));
     }
 
     /**
@@ -67,7 +69,7 @@ class Manager extends AdminManagerIface
     public function __makeTemplate()
     {
         $xhtml = <<<HTML
-<div class="tk-panel" data-panel-title="Students" data-panel-icon="fa fa-user-o" var="panel"></div>
+<div class="tk-panel" data-panel-title="Clients" data-panel-icon="fa fa-building-o" var="panel"></div>
 HTML;
         return \Dom\Loader::load($xhtml);
     }

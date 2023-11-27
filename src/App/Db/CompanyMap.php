@@ -138,13 +138,6 @@ class CompanyMap extends Mapper
             if ($w) $filter->appendWhere('(%s) AND ', $w);
         }
 
-        // TODO: see if we need this type of condition here/
-//        if (!empty($filter['pathCaseId'])) {
-//            // link to path_case_has_contact ???
-//            $filter->appendFrom(', %s z', $this->quoteTable('path_case_has_contact'));
-//            $filter->appendWhere('a.id = z.contact_id AND z.path_case_id = %s AND ', (int)$filter['pathCaseId']);
-//        }
-
         return $filter;
     }
 

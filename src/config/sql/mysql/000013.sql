@@ -135,7 +135,7 @@ CREATE TABLE IF NOT EXISTS company_contact
 -- Add company ID to case table
 ALTER TABLE path_case ADD company_id INT UNSIGNED NULL AFTER client_id;
 ALTER TABLE path_case ADD
-    CONSTRAINT fk_path_case__company_id FOREIGN KEY (company_id) REFERENCES company (id) ON DELETE CASCADE ON UPDATE CASCADE;
+    CONSTRAINT fk_path_case__company_id FOREIGN KEY (company_id) REFERENCES company (id) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 UPDATE contact SET name_company = TRIM(REPLACE(name_company, UNHEX('C2A0'),'')) WHERE 1;
 UPDATE contact SET notes = TRIM(REPLACE(notes, UNHEX('C2A0'),'')) WHERE 1;
