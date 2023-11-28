@@ -154,7 +154,7 @@ class PathCase extends \Bs\FormIface
         ], Tool::create("FIELD(name, 'Private Clients') DESC, a.name"));
         $this->appendField(Field\Select::createSelect('companyId', $list))
             ->prependOption('-- None --', '')
-            ->addCss('tk-ms-company')
+            ->addCss('tk-ms-company')->setLabel('Submitting Client')
             ->setTabGroup($tab);
 
         $contact = new \App\Db\CompanyContact();
@@ -166,7 +166,7 @@ class PathCase extends \Bs\FormIface
             ->addCss('tk-multiselect tk-ms-contact')
             ->setAttr('data-reset-on-hide', true)
             //->setAttr('disabled', true)
-            ->setTabGroup($tab)->setLabel('Company Contacts')
+            ->setTabGroup($tab)->setLabel('Client Contacts')
             ->setNotes('Select Client Contacts that will be able to receive the pathology report.')
             ->setValue($this->getPathCase()->getContactList()->toArray('id'));;
 
@@ -184,9 +184,15 @@ jQuery(function ($) {
         $('input[name=companyId]', contactModal).val(companyId);
     });
     
+    select.on('change', function () {
+        $(document).trigger('company-panel.refresh');
+    });
+    
     $('select.tk-ms-company').on('change', function () {
         // Populate the contactId field
         companyId = $(this).val();
+        
+        $(document).trigger('company-panel.refresh');
         
         // AJAX call for list of available contacts (if any)
         $.get(document.location, { 
@@ -195,7 +201,6 @@ jQuery(function ($) {
             //nolog: 'nolog' 
         })
         .done(function(data) {
-            console.log(data);
             select.empty();
             for(const k in data) {
                 select.append("<option value=\"" + data[k] + "\">" + k + "</option>")
@@ -217,53 +222,6 @@ jQuery(function ($) {
 JS;
         $this->getRenderer()->getTemplate()->appendJs($js);
 
-
-//        $contact = new \App\Db\Contact();
-//        $contact->setType(\App\Db\Contact::TYPE_CLIENT);
-//        $form = \App\Form\Contact::create('clientSelect')->setType(\App\Db\Contact::TYPE_CLIENT)->setModel($contact);
-//        $form->removeField('notes');
-//        $list = \App\Db\Contact::getSelectList(\App\Db\Contact::TYPE_CLIENT);
-//        $this->appendField(Field\DialogSelect::createDialogSelect('clientId[]', $list, $form, 'Create Client'))
-//            ->addCss('tk-multiselect tk-multiselect1')
-//            ->setAttr('data-reset-on-hide', true)
-//            ->setAttr('disabled', true)
-//            ->setTabGroup($tab)->setLabel('Submitting Client')
-//            ->setNotes('[@deprecated] Start typing to find a client, if not found use the + icon to create a new client.<br/>The client to be invoiced.');
-//
-//        $js = <<<JS
-//jQuery(function ($) {
-//
-//  $('select.tk-multiselect1').select2({
-//    placeholder: 'Select Contact',
-//    allowClear: false,
-//    maximumSelectionLength: 1,
-//    minimumInputLength: 0,
-//    escapeMarkup: function (item) {
-//      return '<span class="tk-selection_choice_label">'+item+'</span>';
-//    }
-//  }).on('change', function () {
-//    // Disable the add contact button if one is selected
-//    var btn = $(this).closest('.input-group').find('button');
-//    if ($(this).val().length) {
-//      btn.attr('title', 'Clear selected to create new record.');
-//      btn.attr('disabled', 'disabled');
-//    } else {
-//      btn.attr('title', $(btn.attr('data-target') + ' .modal-title').text());
-//      btn.removeAttr('disabled', 'disabled');
-//    }
-//
-//    // Limit to one selection after a new contact created
-//    if ($(this).val().length > 1) {
-//      var a = $(this).val();
-//      $(this).val([a[a.length-1]]);
-//      $(this).trigger('change');
-//    }
-//
-//  }).trigger('change');
-//
-//});
-//JS;
-//        $this->getRenderer()->getTemplate()->appendJs($js);
 
         $this->appendField(new Field\Checkbox('billable'))->setTabGroup($tab)
             ->setNotes('Is this case billable?');
@@ -515,165 +473,7 @@ JS;
         $this->appendField(new Event\Submit('update', array($this, 'doSubmit')));
         $this->appendField(new Event\Submit('save', array($this, 'doSubmit')));
         $this->appendField(new Event\Link('cancel', $this->getBackUrl()));
-
-
-
-        // TODO Add contact hover box (see if this is still needed?????)
-        //      We could add an info icon at the end of the company field
-        //      that a user can click removing the hover issue altogether
-        //      Also consider moving this to a .js file and relevant CSS
-        $js = <<<JS
-jQuery(function ($) {
-
-    function closePanel()
-    {
-        if ($('.tk-contact:hover').length || $('.tk-contact .pinned').length) return;
-        $('.tk-contact').fadeOut(function () {
-             $('.tk-contact').remove();
-        });
-    }
         
-    var init = function () {
-        $(document).on('click', closePanel);
-        
-        $(this).parent().find('.tk-selection_choice_label').each(function (e) {
-            $(this).attr('title', 'Click to view details');
-            $(this).on('click', function (e) {
-                if ($('.tk-contact .pinned').length) return;
-                $('.tk-contact').remove();
-
-                var el = $(this);
-                var data = $(this).closest('.select2-selection__choice').data()['data'];
-                var name = data['text'].split('(')[0];
-                var email = '';
-                if (data['text'].indexOf('(') > -1 && data['text'].split('(')[1].replace(')', '')) {
-                    email = data['text'].split('(')[1].replace(')', '');
-                }
-
-                $.get(document.location, {
-                    'gc': data['id'],
-                    crumb_ignore: 'crumb_ignore',
-                    nolog: 'nolog'
-                }, function (gcData) {
-                    var contact = gcData.contact;
-                    var html = '<div class="tk-contact"><div class="control">' +
-                        '<a href="javascript:;" class="tk-close"><i class="fa fa-times"></i></a>' +
-                        '<a href="contactEdit.html?contactId=' + contact.id + '&crumb_ignore=&nolog=" target="_blank" class="tk-edit"><i class="fa fa-pencil"></i></a>' +
-                        '<a href="javascript:;" class="tk-pin"><i class="fa fa-thumb-tack"></i></a>' +
-                        '</div>' +
-                        '<h3 class="name"><a href="contactEdit.html?contactId=' + contact.id + '&crumb_ignore=&nolog=" target="_blank">' + name + '</a></h3>';
-                    // if (email)
-                    //   html += '<p><a href="mailto:'+email+'" class="email">' + email + '</a></p>';
-                    //html += '<hr/>';
-                    html += '<div class="details"><b>Contact:</b><br/>';
-                    html += '<ul>';
-                    if (contact.email)
-                        html += '<li><i class="fa fa-envelope-o"></i> <a href="mailto:' + contact.email + '">' + contact.email + '</a></li>';
-                    if (contact.nameCompany)
-                        html += '<li><i class="fa fa-building"></i> <a href="contactEdit.html?contactId=' + contact.id + '" target="_blank">' + contact.nameCompany + '</a></li>';
-                    if (contact.phone)
-                        html += '<li><i class="fa fa-phone"></i> <a href="tel:' + contact.phone + '">' + contact.phone + '</a></li>';
-                    if (contact.fax)
-                        html += '<li><i class="fa fa-fax"></i> <a href="tel:' + contact.fax + '">' + contact.fax + '</a></li>';
-                    if (contact.address)
-                        html += '<li><i class="fa fa-building"></i> <a href="tel:' + contact.address + '">' + contact.address + '</a></li>';
-                    html += '</ul></div>';
-                    html += '';
-
-                    if (contact.notes && contact.notes !== '***')
-                        html += '<p>' + contact.notes + '</p>';
-
-                    html += '</div>';
-
-                    var off = el.offset();
-                    var x = e.pageX - off.left;
-                    var y = e.pageY - off.top;
-
-                    var panel = $(html);
-                    panel.css('left', x);
-                    panel.css('top', y);
-                    el.closest('.form-group').append(panel);
-
-                    panel.find('a.tk-close').on('click', function () {
-                        $('.tk-contact').fadeOut(function () {
-                             $('.tk-contact').remove();
-                        });
-                    });
-                    panel.find('a.tk-pin').on('click', function () {
-                        $(this).toggleClass('pinned');
-                    });
-                }, 'json');
-
-            });
-
-        });
-
-    };
-    $('.tk-multiselect').on('change', document, init).each(init);
-});
-JS;
-        $this->getRenderer()->getTemplate()->appendJs($js);
-
-        $css = <<<CSS
-.tk-contact {
-  background-color: white;
-  border: 1px solid #CCC;
-  position: absolute;
-  box-shadow: 2px 2px 2px #CCC;
-  z-index: 9999;
-  padding: 10px;
-  min-width: 300px;
-  max-width: 450px;
-  border-radius: 5px;
-  font-size: 0.9em;
-}
-.tk-contact .control a {
-  color: #666;
-  display: inline-block;
-  padding: 0 5px;
-  float: right;
-}
-.tk-contact .control a.tk-pin {
-  transform: rotate(90deg);
-}
-.tk-contact .control a.tk-pin.pinned {
-  transform: rotate(45deg);
-  color: #000;
-}
-.tk-contact h3 {
- padding: 0;
- margin: 0 0 10px 0;
-}
-.tk-contact ul {
-  list-style: none;
-  padding: 0;
-  margin: 0.2em 0 0.2em 3em;
-}
-.tk-contact ul li {
-  list-style-position: outside;
-  text-indent: -0.6em;
-  margin-top: 0.4em;
-}
-.tk-contact ul li .fa {
-  margin-right: 0.2em;
-}
-
-.tk-contact .details .fa {
-  color: #999;
-}
-.tk-contact .details p {
-  padding: 0px 0px;
-  margin: 5px 0px 5px 20px;
-}
-
-/* Fix Google place autocomplete z-index */
-.pac-container {
-    z-index: 10000 !important;
-}
-
-CSS;
-        $this->getRenderer()->getTemplate()->appendCss($css);
-
     }
 
     /**

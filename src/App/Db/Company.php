@@ -197,12 +197,12 @@ class Company extends \Tk\Db\Map\Model implements \Tk\ValidInterface
         return $this;
     }
 
-    public function getPostcode() : string
+    public function getPostcode(): string
     {
         return $this->postcode;
     }
 
-    public function getAddress()
+    public function getAddress(): string
     {
         $str = '';
         if ($this->getStreet())

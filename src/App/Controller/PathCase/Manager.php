@@ -49,8 +49,8 @@ class Manager extends AdminManagerIface
     public function initActionPanel()
     {
         $links = [
-            \Tk\Ui\Link::create('New Necropsy Case', Uri::createHomeUrl('/pathCaseEdit.html?type=necropsy'), 'fa fa-paw'),
-            \Tk\Ui\Link::create('New Biopsy Case', Uri::createHomeUrl('/pathCaseEdit.html?type=biopsy'), 'fa fa-paw'),
+            \Tk\Ui\Link::create('New Necropsy Case', Uri::createHomeUrl('/pathCaseEdit.html?type=necropsy'), 'fa fa-heart'),
+            \Tk\Ui\Link::create('New Biopsy Case', Uri::createHomeUrl('/pathCaseEdit.html?type=biopsy'), 'fa fa-heartbeat'),
         ];
         $this->getActionPanel()->append(ButtonDropdown::createButtonDropdown('New Case', '', $links));
 
@@ -75,7 +75,7 @@ class Manager extends AdminManagerIface
     public function __makeTemplate()
     {
         $xhtml = <<<HTML
-<div class="tk-panel" data-panel-title="Case List" data-panel-icon="fa fa-paw" var="panel"></div>
+<div class="tk-panel" data-panel-title="Case List" data-panel-icon="fa fa-heart" var="panel"></div>
 HTML;
         return \Dom\Loader::load($xhtml);
     }

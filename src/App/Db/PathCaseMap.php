@@ -37,7 +37,7 @@ class PathCaseMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Integer('soUserId', 'so_user_id'));
             // $this->dbMap->addPropertyMap(new Db\Text('resident'));
             $this->dbMap->addPropertyMap(new Db\Text('pathologyId', 'pathology_id'));
-            $this->dbMap->addPropertyMap(new Db\Text('name'));
+            //$this->dbMap->addPropertyMap(new Db\Text('name'));
             $this->dbMap->addPropertyMap(new Db\Text('type'));
             $this->dbMap->addPropertyMap(new Db\Text('submissionType', 'submission_type'));
             $this->dbMap->addPropertyMap(new Db\Boolean('submissionReceived', 'submission_received'));
@@ -114,7 +114,7 @@ class PathCaseMap extends Mapper
             //$this->formMap->addPropertyMap(new Form\Integer('soUserId'));
             //$this->formMap->addPropertyMap(new Form\Text('resident'));
             $this->formMap->addPropertyMap(new Form\Text('pathologyId'));
-            $this->formMap->addPropertyMap(new Form\Text('name'));
+            //$this->formMap->addPropertyMap(new Form\Text('name'));
             $this->formMap->addPropertyMap(new Form\Text('type'));
             $this->formMap->addPropertyMap(new Form\Text('submissionType'));
             $this->formMap->addPropertyMap(new Form\Boolean('submissionReceived'));

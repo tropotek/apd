@@ -107,7 +107,7 @@ class NavRendererHandler implements Subscriber
                 $menu->append(Item::create('Settings', \Uni\Uri::createHomeUrl('/settings.html'), 'fa fa-cogs'));
             }
 
-            $menu->append(Item::create('Cases', \Uni\Uri::createHomeUrl('/pathCaseManager.html'), 'fa fa-paw'));
+            $menu->append(Item::create('Cases', \Uni\Uri::createHomeUrl('/pathCaseManager.html'), 'fa fa-heart-o'));
             $menu->append(Item::create('Requests', \Uni\Uri::createHomeUrl('/requestManager.html'), 'fa fa-medkit'));
 
             if ($user->hasPermission([Permission::IS_PATHOLOGIST, Permission::IS_TECHNICIAN, Permission::MANAGE_SITE])) {
@@ -125,7 +125,7 @@ class NavRendererHandler implements Subscriber
 
             $menu->append(Item::create('Roster', \Uni\Uri::createHomeUrl('/roster.html'), 'fa fa-calendar'));
             $menu->append(Item::create('Sampling Protocols', \Uni\Uri::createHomeUrl('/protocols.html'), 'fa fa-flask'));
-            $menu->append(Item::create('Tissue Sample Requests', \Uni\Uri::createHomeUrl('/sampling.html'), 'fa fa-heartbeat'));
+            $menu->append(Item::create('Tissue Sample Requests', \Uni\Uri::createHomeUrl('/sampling.html'), 'fa fa-clipboard'));
             $menu->append(Item::create('Stored Specimens', \Uni\Uri::createHomeUrl('/specimens.html'), 'fa fa-archive'));
 
         }

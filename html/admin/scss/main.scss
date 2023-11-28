@@ -52,3 +52,8 @@ small.dlg-error {
   }
 }
 
+.tk-table .table tbody > tr > td,
+.tk-table .table tbody > tr > th {
+  line-height: 1.4;
+  vertical-align: top;
+}

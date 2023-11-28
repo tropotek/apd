@@ -5,6 +5,7 @@ use App\Config;
 use App\Db\PathCase;
 use App\Db\Permission;
 use App\Form\Note;
+use App\Ui\CompanyInfo;
 use App\Ui\Dialog\EmailReport;
 use Bs\Controller\AdminEditIface;
 use Dom\Template;
@@ -16,11 +17,6 @@ use Tk\Ui\ButtonDropdown;
 /**
  * TODO: Add Route to routes.php:
  *      $routes->add('path-case-edit', Route::create('/staff/path/caseEdit.html', 'App\Controller\PathCase\Edit::doDefault'));
- *
- * @author Mick Mifsud
- * @created 2020-07-29
- * @link http://tropotek.com.au/
- * @license Copyright 2020 Tropotek
  */
 class Edit extends AdminEditIface
 {
@@ -54,6 +50,11 @@ class Edit extends AdminEditIface
      * @var null|EmailReport
      */
     protected $emailReportDialog = null;
+
+    /**
+     * @var null|CompanyInfo
+     */
+    protected $companyPanel = null;
 
 
     /**
@@ -140,6 +141,11 @@ class Edit extends AdminEditIface
 
         $this->emailReportDialog = new EmailReport($this->pathCase);
         $this->emailReportDialog->execute();
+
+        $canEdit = $this->getAuthUser()->hasPermission([Permission::IS_PATHOLOGIST, Permission::IS_TECHNICIAN, Permission::MANAGE_SITE]);
+        $this->companyPanel = new CompanyInfo($this->pathCase, $canEdit);
+        $this->companyPanel->doDefault($request);
+
 
         // Add view count to Content
         if ($request->has('pdf')) {
@@ -287,8 +293,13 @@ JS;
             $template->setAttr('panel1', 'class', 'col-12');
         }
 
-        if ($this->emailReportDialog)
+        if ($this->emailReportDialog) {
             $template->appendBodyTemplate($this->emailReportDialog->show());
+        }
+
+        if ($this->companyPanel) {
+            $template->prependTemplate('panel2', $this->companyPanel->show());
+        }
 
         if ($this->pathCase->getId()) {
             $notesList = \App\Table\Note::create('note-table')->init();
@@ -302,6 +313,10 @@ JS;
             $template->setVisible('notes-panel');
         }
 
+        if ($this->pathCase->getType() == PathCase::TYPE_BIOPSY) {
+            $template->setAttr('panel', 'data-panel-icon', 'fa fa-heartbeat');
+        }
+
         return $template;
     }
 
@@ -313,7 +328,7 @@ JS;
         $xhtml = <<<HTML
 <div class="row path-case-edit">
   <div class="col-8" var="panel1">
-    <div class="tk-panel" data-panel-title="Case Edit" data-panel-icon="fa fa-paw" var="panel"></div>
+    <div class="tk-panel" data-panel-title="Case Edit" data-panel-icon="fa fa-heart" var="panel"></div>
   </div>
   <div class="col-4" var="panel2" choice="panel2">
     <div class="tk-panel" data-panel-title="Staff Notes" data-panel-icon="fa fa-sticky-note" var="notes-body" choice="notes-panel"></div>

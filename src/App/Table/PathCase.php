@@ -21,11 +21,6 @@ use Uni\Db\User;
  *   $tableTemplate = $table->show();
  *   $template->appendTemplate($tableTemplate);
  * </code>
- *
- * @author Mick Mifsud
- * @created 2020-07-29
- * @link http://tropotek.com.au/
- * @license Copyright 2020 Tropotek
  */
 class PathCase extends \Bs\TableIface
 {
@@ -41,6 +36,7 @@ class PathCase extends \Bs\TableIface
         $this->appendCell(new Cell\Checkbox('id'));
         $this->appendCell(new Cell\Text('pathologyId'))->setLabel('Pathology #')
             ->addCss('key')->setOrderProperty('s.pathIdx')->setUrl($this->getEditUrl());
+        $this->appendCell(new Cell\Text('type'));
 
         $this->appendCell(new Cell\Text('pathologistId'))->setLabel('Pathologist')
             ->addOnPropertyValue(function (Cell\Text $cell, \App\Db\PathCase $obj, $value) {
@@ -76,11 +72,11 @@ class PathCase extends \Bs\TableIface
             ->addOnCellHtml(function (\Tk\Table\Cell\Iface $cell, $obj, $html) {
                 $list = $obj->getContactList(Tool::create('name'));
                 if ($list->count()) {
-                    $html .= implode(', ', $list->toArray('name'));
+                    //$html .= implode(', ', $list->toArray('name'));
+                    $html .= implode('<br/>', $list->toArray('name'));
                 }
                 return $html;
             });
-        $this->appendCell(new Cell\Text('type'));
         $this->appendCell(new Cell\Text('submissionType'));
         $this->appendCell(new Cell\Text('status'));
 
@@ -235,7 +231,7 @@ JS;
 
         // Actions
         $this->appendAction(\Tk\Table\Action\ColumnSelect::create()->setSelected(
-                array('id', 'pathologyId', 'pathologistId', 'companyId', 'owner', 'age',
+                array('id', 'pathologyId', 'pathologistId', 'companyId', 'contacts', 'owner', 'age',
                     'patientNumber', 'type', 'submissionType', 'status', 'arrival')
             )
         );
