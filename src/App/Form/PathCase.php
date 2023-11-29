@@ -10,6 +10,7 @@ use App\Db\Permission;
 use App\Db\StorageMap;
 use App\Db\StudentMap;
 use Tk\Alert;
+use Tk\Date;
 use Tk\Db\Tool;
 use Tk\Form\Field;
 use Tk\Form\Event;
@@ -61,25 +62,8 @@ class PathCase extends \Bs\FormIface
     public function doGetContactList(\Tk\Request $request)
     {
         $companyId = $request->request->getInt('gcl');
-//        $contacts = CompanyContactMap::create()->findFiltered([
-//            'companyId' => $companyId
-//        ], Tool::create('name'))->toArray();
         $contacts = \App\Db\CompanyContact::getSelectList($companyId);
         \Tk\ResponseJson::createJson($contacts)->send();
-        exit();
-    }
-
-    public function doGetContact(\Tk\Request $request)
-    {
-        $data = [];
-        $contact = ContactMap::create()->find($request->get('gc'));
-        if ($contact) {
-            $contact->address = $contact->getAddress();
-            $data['contact'] = $contact;
-            \Tk\ResponseJson::createJson($data)->send();
-            exit();
-        }
-        \Tk\ResponseJson::createJson(['status' => 'err', 'msg' => 'Contact Not Found!'])->send();
         exit();
     }
 
@@ -99,6 +83,7 @@ class PathCase extends \Bs\FormIface
         $layout = $this->getRenderer()->getLayout();
 
         $layout->removeRow('arrival', 'col');
+        $layout->removeRow('necropsyPerformedOn', 'col');
 
         $layout->removeRow('type', 'col');
 
@@ -135,7 +120,12 @@ class PathCase extends \Bs\FormIface
 
         $this->appendField(new Field\Input('arrival'))->setTabGroup($tab)->addCss('date')
             ->setAttr('placeholder', 'dd/mm/yyyy')->setNotes('The date the case was received.');
-            
+
+        if ($this->getPathCase()->getType() == \App\Db\PathCase::TYPE_NECROPSY) {
+            $this->appendField(new Field\Input('necropsyPerformedOn'))->setTabGroup($tab)->addCss('date')
+                ->setAttr('placeholder', 'dd/mm/yyyy');
+        }
+
         if (!$this->getPathCase()->getType()) {
             $list = \Tk\ObjectUtil::getClassConstants($this->getPathCase(), 'TYPE', true);
             $this->appendField(Field\Select::createSelect('type', $list)->prependOption('-- Select --', ''))
@@ -165,7 +155,6 @@ class PathCase extends \Bs\FormIface
         $this->appendField($field)
             ->addCss('tk-multiselect tk-ms-contact')
             ->setAttr('data-reset-on-hide', true)
-            //->setAttr('disabled', true)
             ->setTabGroup($tab)->setLabel('Client Contacts')
             ->setNotes('Select Client Contacts that will be able to receive the pathology report.')
             ->setValue($this->getPathCase()->getContactList()->toArray('id'));;
@@ -205,7 +194,6 @@ jQuery(function ($) {
             for(const k in data) {
                 select.append("<option value=\"" + data[k] + "\">" + k + "</option>")
             }
-            //data.map(o => select.append("<option value=\"" + o.id + "\">" + o.name + "</option>"));
         })
         .fail(function() {
             console.error('Cannot load company contacts.')
@@ -384,8 +372,8 @@ JS;
         $this->appendField(new Field\Textarea('ancillaryTesting'))
             ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
 
-            $this->appendField(new Field\Textarea('morphologicalDiagnosis'))
-                ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
+        $this->appendField(new Field\Textarea('morphologicalDiagnosis'))
+            ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
 
         $this->appendField(new Field\Textarea('causeOfDeath'))
             ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
@@ -399,6 +387,24 @@ JS;
 
         $this->appendField(new Field\Textarea('addendum'))
             ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
+
+        if (
+            !$this->getPathCase()->getReviewedById() &&
+            $this->getPathCase()->hasStatus([\App\Db\PathCase::STATUS_EXAMINED, \App\Db\PathCase::STATUS_REPORTED, \App\Db\PathCase::STATUS_COMPLETED]) &&
+            $this->getAuthUser()->hasPermission(Permission::CAN_REVIEW_CASE)
+        ) {
+            $this->appendField(Field\Checkbox::create('reviewCase'))
+                ->setCheckboxLabel('Click the checkbox to mark this case as reviewed by ' . $this->getAuthUser()->getName());
+        } elseif ($this->getPathCase()->getReviewedById()) {
+            // show reviewed user and date details
+            $reviewer = $this->getPathCase()->getReviewer();
+            $html = sprintf('%s, <em>%s</em> on %s',
+                $reviewer->getName(),
+                $reviewer->getCredentials(),
+                $this->getPathCase()->getReviewedOn(Date::FORMAT_LONG_DATETIME)
+            );
+            $this->appendField(Field\Html::createHtml('reviewedBy', $html));
+        }
 
         // Setup auto-save on the tinymce instances
         $js = <<<JS
@@ -436,7 +442,6 @@ jQuery(function ($) {
 JS;
         $this->getRenderer()->getTemplate()->appendJs($js);
 
-
         // File field
         $tab = 'Files';
         $maxFiles = 10;
@@ -445,7 +450,6 @@ JS;
             ->setTabGroup($tab)->setAttr('data-max-files', $maxFiles)
             ->setAttr('data-select-title', 'Add file to report emails.')
             ->setNotes('Upload any related files. A max. of '.$maxFiles.' files can be selected and uploaded per form submission.<br/>Select/check any file you want to be included with the email report.<br/>Note: Files larger than 2Mb will not be attached to emails.');
-
 
         $tab = 'After Care';
         if ($this->getPathCase()->getType() != \App\Db\PathCase::TYPE_BIOPSY) {
@@ -466,14 +470,13 @@ JS;
         foreach ($this->getFieldList() as $field) {
             if (in_array($field->getName(), $this->exceptions)) continue;
             if ($this->isReadonly()) {
-                $field->setReadonly(); //->setDisabled();
+                $field->setReadonly();
             }
         }
 
         $this->appendField(new Event\Submit('update', array($this, 'doSubmit')));
         $this->appendField(new Event\Submit('save', array($this, 'doSubmit')));
         $this->appendField(new Event\Link('cancel', $this->getBackUrl()));
-        
     }
 
     /**
@@ -490,12 +493,7 @@ JS;
         parent::execute($request);
     }
 
-    /**
-     * @param Form $form
-     * @param Event\Iface $event
-     * @throws \Exception
-     */
-    public function doSubmit($form, $event)
+    public function doSubmit(Form $form, Event\Iface $event)
     {
         $this->secondOpinionText = $this->getPathCase()->getSecondOpinion();
 
@@ -583,6 +581,16 @@ JS;
         /** @var \Bs\Form\Field\File $fileField */
         $fileField = $form->getField('files');
         $fileField->doSubmit();
+        if (
+            $this->getPathCase()->hasStatus([\App\Db\PathCase::STATUS_EXAMINED, \App\Db\PathCase::STATUS_REPORTED, \App\Db\PathCase::STATUS_COMPLETED]) &&
+            $this->getAuthUser()->hasPermission(Permission::CAN_REVIEW_CASE)
+        ) {
+            if ($form->getField('reviewCase')->getValue()) {
+                $this->getPathCase()->setReviewedById($this->getAuthUser()->getId());
+                $this->getPathCase()->setReviewedOn(Date::create());
+                $this->getPathCase()->save();
+            }
+        }
 
         \Tk\Alert::addSuccess('Record saved!');
         $event->setRedirect($this->getBackUrl());
@@ -598,19 +606,12 @@ JS;
         return $this->readonly;
     }
 
-    /**
-     * @return \Tk\Db\ModelInterface|\App\Db\PathCase
-     */
-    public function getPathCase()
+    public function getPathCase(): \App\Db\PathCase
     {
         return $this->getModel();
     }
 
-    /**
-     * @param \App\Db\PathCase $pathCase
-     * @return $this
-     */
-    public function setPathCase($pathCase)
+    public function setPathCase(\App\Db\PathCase $pathCase): PathCase
     {
         return $this->setModel($pathCase);
     }

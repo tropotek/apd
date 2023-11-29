@@ -49,6 +49,15 @@ class Permission extends \Uni\Db\Permission
      */
     const CASE_FULL_EDIT            = 'perm.case.full.edit';
 
+    /**
+     * If a staff member has the full edit permission
+     * then when a case is completed they still have full edit control.
+     * Other users are blocked from editing a case when set to completed
+     *
+     * @target staff
+     */
+    const CAN_REVIEW_CASE            = 'perm.case.can.review';
+
 
     /**
      * @param string $type (optional) If set returns only the permissions for that user type otherwise returns all permissions
@@ -76,6 +85,7 @@ class Permission extends \Uni\Db\Permission
                     'Can Masquerade' => self::CAN_MASQUERADE,
                     'Is Pathologist' => self::IS_PATHOLOGIST,
                     'Is Technician' => self::IS_TECHNICIAN,
+                    'Review Cases' => self::CAN_REVIEW_CASE,
                     'Case Administration' => self::CASE_ADMIN,
                     'Case Always Edit' => self::CASE_FULL_EDIT
                 );
@@ -96,6 +106,7 @@ class Permission extends \Uni\Db\Permission
             self::IS_MENTOR => 'Is a mentor of a student, restricted access to student/site information',
             self::IS_PATHOLOGIST => 'Can be selected as a pathologist of a case',
             self::IS_TECHNICIAN => 'Receive disposal reminder emails',
+            self::CAN_REVIEW_CASE => 'Can review a case before completion',
             self::CASE_ADMIN => 'Change the status of a case after a case is set to completed',
             self::CASE_FULL_EDIT => 'Edit a case after a case is set to completed',
         ];

@@ -54,7 +54,6 @@ CREATE TABLE IF NOT EXISTS student
     del TINYINT(1) NOT NULL DEFAULT 0,
     modified DATETIME NOT NULL,
     created DATETIME NOT NULL,
-    KEY institution_id (institution_id),
     CONSTRAINT fk_student__institution_id FOREIGN KEY (institution_id) REFERENCES institution (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
@@ -113,7 +112,6 @@ CREATE TABLE IF NOT EXISTS company
     del TINYINT(1) NOT NULL DEFAULT 0,
     modified DATETIME NOT NULL,
     created DATETIME NOT NULL,
-    KEY institution_id (institution_id),
     CONSTRAINT fk_company__institution_id FOREIGN KEY (institution_id) REFERENCES institution (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
@@ -128,7 +126,6 @@ CREATE TABLE IF NOT EXISTS company_contact
     del TINYINT(1) NOT NULL DEFAULT 0,
     modified DATETIME NOT NULL,
     created DATETIME NOT NULL,
-    KEY company_id (company_id),
     CONSTRAINT fk_company_contact__company_id FOREIGN KEY (company_id) REFERENCES company (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
@@ -310,7 +307,20 @@ INSERT INTO path_case_has_company_contact (path_case_id, company_contact_id)
     WHERE cc.id IS NOT NULL
 );
 
--- TODO: After release run the script `./bin/cmd ro` to add/create company_contacts for the email_cc field
+
+-- Add reviewedById to case table
+ALTER TABLE path_case ADD reviewed_by_id INT UNSIGNED NULL AFTER addendum;
+ALTER TABLE path_case ADD
+    CONSTRAINT fk_path_case__reviewed_by_id FOREIGN KEY (reviewed_by_id) REFERENCES user (id) ON DELETE SET NULL ON UPDATE CASCADE;
+
+ALTER TABLE path_case ADD reviewed_on DATETIME NULL AFTER reviewed_by_id;
+
+ALTER TABLE path_case ADD necropsy_performed_on DATETIME NULL AFTER arrival;
+
+-- Add Smitha as a user that can review cases
+INSERT IGNORE INTO user_permission VALUES
+(15, 'perm.case.can.review')
+;
 
 
 

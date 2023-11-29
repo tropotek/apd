@@ -11,10 +11,12 @@ use Bs\Db\Traits\StatusTrait;
 use Bs\Db\Traits\TimestampTrait;
 use Bs\Db\Traits\UserTrait;
 use Bs\Db\UserIface;
+use Tk\Db\Map\ArrayObject;
 use Tk\Db\Tool;
 use Tk\Money;
 use Uni\Db\Traits\InstitutionTrait;
 use Uni\Db\User;
+use Uni\Db\UserMap;
 
 
 class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\FileIface
@@ -77,7 +79,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
      */
     public $institutionId = 0;
 
-
     /**
      * Staff who created this case
      * @var int
@@ -98,7 +99,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
 
     /**
      * Staff who last edited the secondOpinion text box
-     *
      * @var int
      */
     public $soUserId = 0;
@@ -130,9 +130,15 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
 
     /**
      * Date the case arrived/seen (Generally the same as the created but editable)
-     * @var \DateTime
+     * @var null|\DateTime
      */
     public $arrival = null;
+
+    /**
+     * For necropsi cases only
+     * @var null|\DateTime
+     */
+    public $necropsyPerformedOn = null;
 
     /**
      * Pending/frozen storage/examined/reported/awaiting review (if applicable)/completed
@@ -185,7 +191,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
      * @var bool
      */
     public $issueAlert = false;
-
 
     /**
      * Samples count for Biopsies only
@@ -272,13 +277,13 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
 
     /**
      * Date of birth
-     * @var \DateTime
+     * @var null|\DateTime
      */
     public $dob = null;
 
     /**
      * Date and time of death
-     * @var \DateTime
+     * @var null|\DateTime
      */
     public $dod = null;
 
@@ -300,7 +305,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
 
     /**
      * after care Date to wait until processing animal
-     * @var \DateTime
+     * @var null|\DateTime
      */
     public $acHold = null;
 
@@ -316,7 +321,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
     public $studentReport = false;
 
     /**
-     * @var \DateTime
+     * @var null|\DateTime
      */
     public $disposal = null;
 
@@ -368,6 +373,16 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
     public $addendum = '';
 
     /**
+     * @var int
+     */
+    public $reviewedById = 0;
+
+    /**
+     * @var null|\DateTime
+     */
+    public $reviewedOn = null;
+
+    /**
      * @var string
      */
     public $secondOpinion = '';
@@ -387,31 +402,27 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
     /**
      * @var \DateTime
      */
-    public $modified = null;
+    public $modified;
 
     /**
      * @var \DateTime
      */
-    public $created = null;
+    public $created;
 
     /**
-     * @var UserIface
+     * @var UserIface|null
      */
     private $_soUser = null;
 
 
-    /**
-     * PathCase
-     */
+
     public function __construct()
     {
         $this->_TimestampTrait();
         $this->setInstitutionId($this->getConfig()->getInstitutionId());
         if ($this->getConfig()->getAuthUser())
             $this->setUserId($this->getConfig()->getAuthUser()->getId());
-
         $this->arrival = new \DateTime();
-        $this->cost = Money::create(0);
     }
 
     /**
@@ -431,11 +442,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
         return $arr;
     }
 
-    /**
-     * @return int
-     * @throws \Exception
-     */
-    public function insert()
+    public function insert(): int
     {
         if (!$this->getPathologyId()) {
             $this->setPathologyId($this->getVolatilePathologyId());
@@ -443,61 +450,29 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
         return parent::insert();
     }
 
-    /**
-     * @param Tool|null $tool
-     * @return File[]|\Tk\Db\Map\ArrayObject
-     * @throws \Exception
-     */
-    public function getFileList(string $label = '', ?\Tk\Db\Tool $tool = null)
+    public function getFileList(string $label = '', ?\Tk\Db\Tool $tool = null): ArrayObject
     {
         $filter = ['model' => $this];
         if ($label) $filter['label'] = $label;
-        $list = FileMap::create()->findFiltered($filter, $tool);
-        return $list;
+        return FileMap::create()->findFiltered($filter, $tool);
     }
 
-    /**
-     * @param Tool|null $tool
-     * @return File[]|\Tk\Db\Map\ArrayObject
-     * @throws \Exception
-     */
-    public function getSelectedFileList(string $label = '', ?\Tk\Db\Tool $tool = null)
+    public function getSelectedFileList(string $label = '', ?\Tk\Db\Tool $tool = null): ArrayObject
     {
         $filter = ['model' => $this, 'selected' => true];
         if ($label) $filter['label'] = $label;
-        $list = FileMap::create()->findFiltered($filter, $tool);
-        return $list;
+        return FileMap::create()->findFiltered($filter, $tool);
     }
 
-    /**
-     * @param Tool|null $tool
-     * @return File[]|\Tk\Db\Map\ArrayObject
-     * @throws \Exception
-     * @deprecated Use getFileList()
-     */
-    public function getFiles(Tool $tool = null)
+    public function getPdfFiles(?Tool $tool = null): ArrayObject
     {
-        return $this->getFileList('', $tool);
-    }
-
-    /**
-     * @param Tool|null $tool
-     * @return File[]|\Tk\Db\Map\ArrayObject
-     * @throws \Exception
-     */
-    public function getPdfFiles(Tool $tool = null)
-    {
-        $list = FileMap::create()->findFiltered(array('model' => $this, 'active' => true), $tool);
-        return $list;
+        return FileMap::create()->findFiltered(array('model' => $this, 'active' => true), $tool);
     }
 
     /**
      * Get the Case root file folder, all content related to the case must be stored in here
-     *
-     * @return string
-     * @throws \Exception
      */
-    public function getDataPath()
+    public function getDataPath(): string
     {
         // TODO: we need to implement this to reduce folder list sizes, but first write a script to:
         //       - move all existing files in data folder (use path_case.created year
@@ -574,9 +549,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
         return Money::create($value);
     }
 
-    /**
-     * @return int
-     */
     public function getSoUserId(): int
     {
         return $this->soUserId;
@@ -584,7 +556,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
 
     /**
      * @param int|UserIface $soUserId
-     * @return PathCase
      */
     public function setSoUserId($soUserId): PathCase
     {
@@ -595,7 +566,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
 
     /**
      * @return UserIface|\Tk\Db\Map\Model|\Tk\Db\ModelInterface|null
-     * @throws \Exception
      */
     public function getSoUser()
     {
@@ -604,29 +574,17 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
         return $this->_soUser;
     }
 
-
-    /**
-     * @param string $pathologyId
-     * @return PathCase
-     */
-    public function setPathologyId($pathologyId) : PathCase
+    public function setPathologyId(?string $pathologyId) : PathCase
     {
         $this->pathologyId = $pathologyId;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getPathologyId() : string
     {
         return $this->pathologyId;
     }
 
-    /**
-     * @return string
-     * @throws \Exception
-     */
     public function getVolatilePathologyId() : string
     {
         if (!$this->getInstitutionId())
@@ -656,108 +614,66 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
         return $str;
     }
 
-    /**
-     * @return bool
-     */
     public function isBillable(): bool
     {
         return $this->billable;
     }
 
-    /**
-     * @param bool $billable
-     * @return PathCase
-     */
     public function setBillable(bool $billable): PathCase
     {
         $this->billable = $billable;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getAccountStatus(): string
     {
         return $this->accountStatus;
     }
 
-    /**
-     * @param string $accountStatus
-     * @return PathCase
-     */
     public function setAccountStatus(string $accountStatus): PathCase
     {
         $this->accountStatus = $accountStatus;
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isAfterHours(): bool
     {
         return $this->afterHours;
     }
 
-    /**
-     * @param bool $afterHours
-     * @return PathCase
-     */
     public function setAfterHours(bool $afterHours): PathCase
     {
         $this->afterHours = $afterHours;
         return $this;
     }
 
-    /**
-     * @param string $type
-     * @return PathCase
-     */
-    public function setType($type) : PathCase
+    public function setType(?string $type) : PathCase
     {
         $this->type = $type;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getType() : ?string
     {
         return $this->type;
     }
 
-    /**
-     * @param string $submissionType
-     * @return PathCase
-     */
-    public function setSubmissionType($submissionType) : PathCase
+    public function setSubmissionType(?string $submissionType) : PathCase
     {
         $this->submissionType = $submissionType;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getSubmissionType() : string
     {
         return $this->submissionType;
     }
 
-    /**
-     * @return bool
-     */
     public function isSubmissionReceived(): bool
     {
         return $this->submissionReceived;
     }
 
-    /**
-     * @param bool $submissionReceived
-     * @return PathCase
-     */
     public function setSubmissionReceived(bool $submissionReceived): PathCase
     {
         $this->submissionReceived = $submissionReceived;
@@ -765,20 +681,15 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
     }
 
     /**
-     * @param null|string $format
      * @return \DateTime|string
      */
-    public function getArrival($format = null)
+    public function getArrival(?string $format = null)
     {
         if ($format && $this->arrival)
             return $this->arrival->format($format);
         return $this->arrival;
     }
 
-    /**
-     * @param \DateTime $arrival
-     * @return PathCase
-     */
     public function setArrival(\DateTime $arrival): PathCase
     {
         $this->arrival = $arrival;
@@ -786,252 +697,170 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
     }
 
     /**
-     * @param string $zoonotic
-     * @return PathCase
+     * @return \DateTime|string
      */
-    public function setZoonotic($zoonotic) : PathCase
+    public function getNecropsyPerformedOn(?string $format = null): ?\DateTime
+    {
+        if ($format && $this->necropsyPerformedOn)
+            return $this->necropsyPerformedOn->format($format);
+        return $this->necropsyPerformedOn;
+    }
+
+    public function setNecropsyPerformedOn(?\DateTime $necropsyPerformedOn): PathCase
+    {
+        $this->necropsyPerformedOn = $necropsyPerformedOn;
+        return $this;
+    }
+
+    public function setZoonotic(?string $zoonotic) : PathCase
     {
         $this->zoonotic = $zoonotic;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getZoonotic() : string
     {
         return $this->zoonotic;
     }
 
-    /**
-     * @return bool
-     */
     public function isZoonoticAlert(): bool
     {
         return $this->zoonoticAlert;
     }
 
-    /**
-     * @param bool $zoonoticAlert
-     * @return PathCase
-     */
     public function setZoonoticAlert(bool $zoonoticAlert): PathCase
     {
         $this->zoonoticAlert = $zoonoticAlert;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getIssue(): string
     {
         return $this->issue;
     }
 
-    /**
-     * @param string $issue
-     * @return PathCase
-     */
-    public function setIssue(string $issue): PathCase
+    public function setIssue(?string $issue): PathCase
     {
         $this->issue = $issue;
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isIssueAlert(): bool
     {
         return $this->issueAlert;
     }
 
-    /**
-     * @param bool $issueAlert
-     * @return PathCase
-     */
     public function setIssueAlert(bool $issueAlert): PathCase
     {
         $this->issueAlert = $issueAlert;
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getBioSamples()
+    public function getBioSamples(): int
     {
         return $this->bioSamples;
     }
 
-    /**
-     * @param int $bioSamples
-     * @return PathCase
-     */
-    public function setBioSamples($bioSamples): PathCase
+    public function setBioSamples(?int $bioSamples): PathCase
     {
         $this->bioSamples = $bioSamples;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getBioNotes(): string
     {
         return $this->bioNotes;
     }
 
-    /**
-     * @param string $bioNotes
-     * @return PathCase
-     */
-    public function setBioNotes(string $bioNotes): PathCase
+    public function setBioNotes(?string $bioNotes): PathCase
     {
         $this->bioNotes = $bioNotes;
         return $this;
     }
 
-    /**
-     * @param int $specimenCount
-     * @return PathCase
-     */
-    public function setSpecimenCount($specimenCount) : PathCase
+    public function setSpecimenCount(?int $specimenCount) : PathCase
     {
         $this->specimenCount = $specimenCount;
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getSpecimenCount() : int
     {
         return $this->specimenCount;
     }
 
-    /**
-     * @param string $animalName
-     * @return PathCase
-     */
-    public function setAnimalName($animalName) : PathCase
+    public function setAnimalName(?string $animalName) : PathCase
     {
         $this->animalName = $animalName;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getAnimalName() : string
     {
         return $this->animalName;
     }
 
-    /**
-     * @param string $species
-     * @return PathCase
-     */
-    public function setSpecies($species) : PathCase
+    public function setSpecies(?string $species) : PathCase
     {
         $this->species = $species;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getSpecies() : string
     {
         return $this->species;
     }
 
-    /**
-     * @param string $breed
-     * @return PathCase
-     */
-    public function setBreed($breed) : PathCase
+    public function setBreed(?string $breed) : PathCase
     {
         $this->breed = $breed;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getBreed() : string
     {
         return $this->breed;
     }
 
-    /**
-     * @param string $sex
-     * @return PathCase
-     */
-    public function setSex($sex) : PathCase
+    public function setSex(?string $sex) : PathCase
     {
         $this->sex = $sex;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getSex() : string
     {
         return $this->sex;
     }
 
-    /**
-     * @param bool $desexed
-     * @return PathCase
-     */
-    public function setDesexed($desexed) : PathCase
+    public function setDesexed(bool $desexed) : PathCase
     {
         $this->desexed = $desexed;
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isDesexed() : bool
     {
         return $this->desexed;
     }
 
-    /**
-     * @param string $patientNumber
-     * @return PathCase
-     */
-    public function setPatientNumber($patientNumber) : PathCase
+    public function setPatientNumber(?string $patientNumber) : PathCase
     {
         $this->patientNumber = $patientNumber;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getPatientNumber() : string
     {
         return $this->patientNumber;
     }
 
-    /**
-     * @param string $microchip
-     * @return PathCase
-     */
-    public function setMicrochip($microchip) : PathCase
+    public function setMicrochip(?string $microchip) : PathCase
     {
         $this->microchip = $microchip;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getMicrochip() : string
     {
         return $this->microchip;
@@ -1048,114 +877,76 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
         return $this;
     }
 
-    /**
-     * @param string $origin
-     * @return PathCase
-     */
-    public function setOrigin($origin) : PathCase
+    public function setOrigin(?string $origin) : PathCase
     {
         $this->origin = $origin;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getOrigin() : string
     {
         return $this->origin;
     }
 
-    /**
-     * @return string
-     */
     public function getColour(): string
     {
         return $this->colour;
     }
 
-    /**
-     * @param string $colour
-     * @return PathCase
-     */
     public function setColour(string $colour): PathCase
     {
         $this->colour = $colour;
         return $this;
     }
 
-    /**
-     * @param string $weight
-     * @return PathCase
-     */
-    public function setWeight($weight) : PathCase
+    public function setWeight(?string $weight) : PathCase
     {
         $this->weight = $weight;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getWeight() : string
     {
         return $this->weight;
     }
 
-    /**
-     * @return string
-     */
-    public function getSize()
+    public function getSize(): string
     {
         return $this->size;
     }
 
-    /**
-     * @param string $size
-     * @return PathCase
-     */
-    public function setSize($size): PathCase
+    public function setSize(?string $size): PathCase
     {
         $this->size = $size;
         return $this;
     }
 
-    /**
-     * @param \DateTime $dob
-     * @return PathCase
-     */
-    public function setDob($dob) : PathCase
+    public function setDob(?\DateTime $dob) : PathCase
     {
         $this->dob = $dob;
         return $this;
     }
 
     /**
-     * @param null|string $format   If supplied then a string of the formatted date is returned
      * @return \DateTime|string
      */
-    public function getDob($format = null)
+    public function getDob(?string $format = null)
     {
         if ($format && $this->dob)
             return $this->dob->format($format);
         return $this->dob;
     }
 
-    /**
-     * @param \DateTime $dod
-     * @return PathCase
-     */
-    public function setDod($dod) : PathCase
+    public function setDod(?\DateTime $dod) : PathCase
     {
         $this->dod = $dod;
         return $this;
     }
 
     /**
-     * @param null|string $format   If supplied then a string of the formatted date is returned
      * @return \DateTime|string
      */
-    public function getDod($format = null)
+    public function getDod(?string $format = null)
     {
         if ($format && $this->dod)
             return $this->dod->format($format);
@@ -1163,10 +954,9 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
     }
 
     /**
-     * return the age years component
-     * @return int
+     * return the age years
      */
-    public function getAge()
+    public function getAge(): int
     {
         $age = 0;
         if ($this->getDob()) {
@@ -1183,10 +973,9 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
     }
 
     /**
-     * return the age months component excluding the years
-     * @return int
+     * return the age months excluding the years
      */
-    public function getAgeMonths()
+    public function getAgeMonths(): int
     {
         $age_m = 0;
         if ($this->getDob()) {
@@ -1202,30 +991,18 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
         return $age_m;
     }
 
-
-    /**
-     * @param bool $euthanised
-     * @return PathCase
-     */
-    public function setEuthanised($euthanised) : PathCase
+    public function setEuthanised(?string $euthanised) : PathCase
     {
         $this->euthanised = $euthanised;
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isEuthanised() : bool
     {
         return $this->euthanised;
     }
 
-    /**
-     * @param string $euthanisedMethod
-     * @return PathCase
-     */
-    public function setEuthanisedMethod($euthanisedMethod) : PathCase
+    public function setEuthanisedMethod(?string $euthanisedMethod) : PathCase
     {
         $this->euthanisedMethod = $euthanisedMethod;
         return $this;
@@ -1239,49 +1016,33 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
         return $this->euthanisedMethod;
     }
 
-    /**
-     * @param string $acType
-     * @return PathCase
-     */
-    public function setAcType($acType) : PathCase
+    public function setAcType(?string $acType) : PathCase
     {
         $this->acType = $acType;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getAcType() : string
     {
         return $this->acType;
     }
 
-    /**
-     * @param \DateTime $acHold
-     * @return PathCase
-     */
-    public function setAcHold($acHold) : PathCase
+    public function setAcHold(?\DateTime $acHold) : PathCase
     {
         $this->acHold = $acHold;
         return $this;
     }
 
     /**
-     * @param null|string $format   If supplied then a string of the formatted date is returned
      * @return \DateTime|string
      */
-    public function getAcHold($format = null)
+    public function getAcHold(?string $format = null)
     {
         if ($format && $this->acHold)
             return $this->acHold->format($format);
         return $this->acHold;
     }
 
-    /**
-     * @param \DateTime $disposal
-     * @return PathCase
-     */
     public function setDisposal($disposal) : PathCase
     {
         $this->disposal = $disposal;
@@ -1289,28 +1050,20 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
     }
 
     /**
-     * @param null|string $format   If supplied then a string of the formatted date is returned
      * @return \DateTime|string
      */
-    public function getDisposal($format = null)
+    public function getDisposal(?string $format = null)
     {
         if ($format && $this->disposal)
             return $this->disposal->format($format);
         return $this->disposal;
     }
 
-    /**
-     * @return bool
-     */
     public function isStudentReport(): bool
     {
         return $this->studentReport;
     }
 
-    /**
-     * @param bool $studentReport
-     * @return PathCase
-     */
     public function setStudentReport(bool $studentReport): PathCase
     {
         $this->studentReport = $studentReport;
@@ -1318,11 +1071,9 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
     }
 
     /**
-     * @param null|\Tk\Db\Tool $tool
-     * @return array|\Tk\Db\Map\ArrayObject|Student[]
-     * @throws \Exception
+     * @return Student[]
      */
-    public function getStudentList(?\Tk\Db\Tool $tool = null)
+    public function getStudentList(?\Tk\Db\Tool $tool = null): ArrayObject
     {
         return StudentMap::create()->findFiltered([
             'pathCaseId' => $this->getVolatileId()
@@ -1330,11 +1081,9 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
     }
 
     /**
-     * @param null|\Tk\Db\Tool $tool
-     * @return array|\Tk\Db\Map\ArrayObject|Student[]
-     * @throws \Exception
+     * @return CompanyContact[]
      */
-    public function getContactList(?\Tk\Db\Tool $tool = null)
+    public function getContactList(?\Tk\Db\Tool $tool = null): ArrayObject
     {
         $filter = [
             'pathCaseId' => $this->getVolatileId()
@@ -1345,235 +1094,175 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
         return CompanyContactMap::create()->findFiltered($filter, $tool);
     }
 
-    /**
-     * @return string
-     */
     public function getReportStatus(): string
     {
         return $this->reportStatus;
     }
 
-    /**
-     * @param string $reportStatus
-     * @return PathCase
-     */
     public function setReportStatus(string $reportStatus): PathCase
     {
         $this->reportStatus = $reportStatus;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getCollectedSamples(): string
     {
         return $this->collectedSamples;
     }
 
-    /**
-     * @param string $collectedSamples
-     * @return PathCase
-     */
     public function setCollectedSamples(string $collectedSamples): PathCase
     {
         $this->collectedSamples = $collectedSamples;
         return $this;
     }
 
-    /**
-     * @param string $clinicalHistory
-     * @return PathCase
-     */
-    public function setClinicalHistory($clinicalHistory) : PathCase
+    public function setClinicalHistory(?string $clinicalHistory) : PathCase
     {
         $this->clinicalHistory = $clinicalHistory;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getClinicalHistory() : string
     {
         return $this->clinicalHistory;
     }
 
-    /**
-     * @param string $grossPathology
-     * @return PathCase
-     */
-    public function setGrossPathology($grossPathology) : PathCase
+    public function setGrossPathology(?string $grossPathology) : PathCase
     {
         $this->grossPathology = $grossPathology;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getGrossPathology() : string
     {
         return $this->grossPathology;
     }
 
-    /**
-     * @param string $grossMorphologicalDiagnosis
-     * @return PathCase
-     */
-    public function setGrossMorphologicalDiagnosis($grossMorphologicalDiagnosis) : PathCase
+    public function setGrossMorphologicalDiagnosis(?string $grossMorphologicalDiagnosis) : PathCase
     {
         $this->grossMorphologicalDiagnosis = $grossMorphologicalDiagnosis;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getGrossMorphologicalDiagnosis() : string
     {
         return $this->grossMorphologicalDiagnosis;
     }
 
-    /**
-     * @param string $histopathology
-     * @return PathCase
-     */
-    public function setHistopathology($histopathology) : PathCase
+    public function setHistopathology(?string $histopathology) : PathCase
     {
         $this->histopathology = $histopathology;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getHistopathology() : string
     {
         return $this->histopathology;
     }
 
-    /**
-     * @param string $ancillaryTesting
-     * @return PathCase
-     */
-    public function setAncillaryTesting($ancillaryTesting) : PathCase
+    public function setAncillaryTesting(?string $ancillaryTesting) : PathCase
     {
         $this->ancillaryTesting = $ancillaryTesting;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getAncillaryTesting() : string
     {
         return $this->ancillaryTesting;
     }
 
-    /**
-     * @param string $morphologicalDiagnosis
-     * @return PathCase
-     */
-    public function setMorphologicalDiagnosis($morphologicalDiagnosis) : PathCase
+    public function setMorphologicalDiagnosis(?string $morphologicalDiagnosis) : PathCase
     {
         $this->morphologicalDiagnosis = $morphologicalDiagnosis;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getMorphologicalDiagnosis() : string
     {
         return $this->morphologicalDiagnosis;
     }
 
-    /**
-     * @param string $causeOfDeath
-     * @return PathCase
-     */
-    public function setCauseOfDeath($causeOfDeath) : PathCase
+    public function setCauseOfDeath(?string $causeOfDeath) : PathCase
     {
         $this->causeOfDeath = $causeOfDeath;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getCauseOfDeath() : string
     {
         return $this->causeOfDeath;
     }
 
-    /**
-     * @return string
-     */
-    public function getSecondOpinion()
+    public function getSecondOpinion(): string
     {
         return $this->secondOpinion;
     }
 
-    /**
-     * @param string $secondOpinion
-     * @return PathCase
-     */
-    public function setSecondOpinion($secondOpinion): PathCase
+    public function setSecondOpinion(?string $secondOpinion): PathCase
     {
         $this->secondOpinion = $secondOpinion;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getAddendum(): string
     {
         return $this->addendum;
     }
 
-    /**
-     * @param string $addendum
-     * @return PathCase
-     */
-    public function setAddendum(string $addendum): PathCase
+    public function setAddendum(?string $addendum): PathCase
     {
         $this->addendum = $addendum;
         return $this;
     }
 
-    /**
-     * @param string $comments
-     * @return PathCase
-     */
-    public function setComments($comments) : PathCase
+    public function getReviewer(): ?User
+    {
+        /** @var User $user */
+        $user = UserMap::create()->find($this->getReviewedById());
+        return $user;
+    }
+
+    public function getReviewedById(): ?int
+    {
+        return $this->reviewedById;
+    }
+
+    public function setReviewedById(int $reviewedById): PathCase
+    {
+        $this->reviewedById = $reviewedById;
+        return $this;
+    }
+
+    public function getReviewedOn(?string $format = null)
+    {
+        if ($format && $this->reviewedOn)
+            return $this->reviewedOn->format($format);
+        return $this->reviewedOn;
+    }
+
+    public function setReviewedOn(?\DateTime $reviewedOn): PathCase
+    {
+        $this->reviewedOn = $reviewedOn;
+        return $this;
+    }
+
+    public function setComments(?string $comments) : PathCase
     {
         $this->comments = $comments;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getComments() : string
     {
         return $this->comments;
     }
 
-    /**
-     * @param string $notes
-     * @return PathCase
-     */
-    public function setNotes($notes) : PathCase
+    public function setNotes(?string $notes) : PathCase
     {
         $this->notes = $notes;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getNotes() : string
     {
         return $this->notes;
@@ -1582,10 +1271,8 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
     /**
      * Is this case editable by this user
      * IE: Only users flagged as CASE_FULL_EDIT's can edit a case after it is completed
-     *
-     * @param User $user
      */
-    public function isEditable(User $user)
+    public function isEditable(User $user): bool
     {
         if (!$user->hasPermission(Permission::CASE_FULL_EDIT) && $this->hasStatus(self::STATUS_COMPLETED)) {
             return false;
@@ -1595,19 +1282,14 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
 
     /**
      * Return true if this case has been invoiced
-     *
-     * @return bool
      */
-    public function isBilled()
+    public function isBilled(): bool
     {
         if (!$this->isBillable()) return true;      // Do this so that non-billable cases are marked readonly
         return ($this->getAccountStatus() == self::ACCOUNT_STATUS_INVOICED || $this->getAccountStatus() == self::ACCOUNT_STATUS_UVET_INVOICED);
     }
 
-    /**
-     * @return array
-     */
-    public function validate()
+    public function validate(): array
     {
         $errors = array();
 
@@ -1646,7 +1328,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
         return $errors;
     }
 
-    public function hasStatusChanged(Status $status)
+    public function hasStatusChanged(Status $status): bool
     {
         $prevStatusName = $status->getPreviousName();
         switch ($status->getName()) {

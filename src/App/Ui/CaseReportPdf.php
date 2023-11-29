@@ -206,11 +206,19 @@ class CaseReportPdf extends Pdf
                 $template->appendText('pathologistCreds', ' ('.$pathologist->getCredentials().')');
             if ($pathologist->getPosition())
                 $template->appendText('pathologistPosition', $pathologist->getPosition());
-
             $template->setVisible('pathologist');
         }
-        //$template->appendText('date', \Tk\Date::create()->format(\Tk\Date::FORMAT_SHORT_DATE));
 
+        $reviewer = $this->getConfig()->getUserMapper()->find($this->pathCase->getReviewedById());
+        if ($reviewer) {
+            $template->appendText('reviewedOn', $this->pathCase->getReviewedOn(\Tk\Date::FORMAT_LONG_DATETIME));
+            $template->appendText('reviewerName', $reviewer->getName());
+            if ($reviewer->getCredentials())
+                $template->appendText('reviewerCreds', ' ('.$reviewer->getCredentials().')');
+            if ($reviewer->getPosition())
+                $template->appendText('reviewerPosition', $reviewer->getPosition());
+            $template->setVisible('reviewed');
+        }
 
         // Add any PDF active
         $allFiles = $this->pathCase->getPdfFiles();
@@ -436,6 +444,15 @@ JS;
         <p style="margin-left: 20px;">
           <span var="pathologistName"></span> <small var="pathologistCreds"></small><br/>
           <span var="pathologistPosition"></span>
+        </p> 
+      </div>
+    
+      <div choice="reviewed" style="page-break-inside: avoid;margin-top: 20px;" >
+        <p><b>Reviewed By:</b></p>
+        <p style="margin-left: 20px;">
+          <span var="reviewerName"></span> <em var="reviewerCreds"></em><br/>
+          <span>Date Reviewed: <span var="reviewedOn"></span></span><br/>
+          <span var="reviewerPosition"></span>
         </p> 
       </div>
       

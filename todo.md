@@ -1,9 +1,11 @@
 # APD
 
-
-
-
 ### TODO Tasks 17/11/23:
+
+__Release Notes:__
+
+- Run the script `./bin/cmd ro` to add/create company_contacts for the email_cc field
+
 
 __Chargeable Updates__
 
@@ -20,17 +22,17 @@ Auto-populate contact select field when new client is selected.~~ [4hrs]
 - ~~Add a Student table/object and copy the data from the Contacts table, Update code to use new Student object. (Manager, Edit, etc)~~ [4hrs]
 
 
-- Add a `reviewedById` field that links to a user that has a new permission `Can Review Case`,
-  add field after `Addendum` textarea on the reporting tab. [2hrs]
-- The reviewer credentials should then be added to the report PDF at the end of the document.
-  If no reviewer set be sure to use 'N/A' in the PDF. [2hrs]
-  
+- ~~Add a `reviewedById` field that links to a user that has a new permission `Can Review Case`,
+  add field after `Addendum` textarea on the reporting tab.~~ [2hrs]
+- ~~The reviewer credentials should then be added to the report PDF at the end of the document.~~ [2hrs]
+
+
+
+- For necropsy cases add a `necropsyPerformed` date field (consider adding a `Necropsy Complete` button to add today's date),
+  - Once set send a reminder to the pathologist (CC site admin) after 15 working days if case not completed. [4hrs]
 
 - For biopsy cases when all Histology requests are completed, send a reminder to pathologist (cc site admin) after 24 hours  
-to `complete` the __report__ if not completed already. [4hrs]
-
-- For necropsy cases add a `necropsyPerformed` date field (consider adding a `Necropsy Complete` button to add today's date), 
-once this field has been set send a reminder to the pathologist (CC site admin) after 15 working days if case not completed. [4hrs] 
+to `complete` the __report__ if not completed already. [4hrs] 
 
 
 ----

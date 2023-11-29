@@ -42,6 +42,7 @@ class PathCaseMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Text('submissionType', 'submission_type'));
             $this->dbMap->addPropertyMap(new Db\Boolean('submissionReceived', 'submission_received'));
             $this->dbMap->addPropertyMap(new Db\Date('arrival'));
+            $this->dbMap->addPropertyMap(new Db\Date('necropsyPerformedOn', 'necropsy_performed_on'));
             $this->dbMap->addPropertyMap(new Db\Text('status'));
             $this->dbMap->addPropertyMap(new Db\Text('reportStatus', 'report_status'));
             $this->dbMap->addPropertyMap(new Db\Boolean('billable'));
@@ -89,6 +90,8 @@ class PathCaseMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Text('comments'));
             $this->dbMap->addPropertyMap(new Db\Text('secondOpinion', 'second_opinion'));
             $this->dbMap->addPropertyMap(new Db\Text('addendum'));
+            $this->dbMap->addPropertyMap(new Db\Integer('reviewedById', 'reviewed_by_id'));
+            $this->dbMap->addPropertyMap(new Db\Date('reviewedOn', 'reviewed_on'));
             $this->dbMap->addPropertyMap(new Db\Text('notes'));
             $this->dbMap->addPropertyMap(new Db\Date('modified'));
             $this->dbMap->addPropertyMap(new Db\Date('created'));
@@ -119,6 +122,7 @@ class PathCaseMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Text('submissionType'));
             $this->formMap->addPropertyMap(new Form\Boolean('submissionReceived'));
             $this->formMap->addPropertyMap(new Form\Date('arrival'));
+            $this->formMap->addPropertyMap(new Form\Date('necropsyPerformedOn'));
             $this->formMap->addPropertyMap(new Form\Text('status'));
             $this->formMap->addPropertyMap(new Form\Text('reportStatus'));
             $this->formMap->addPropertyMap(new Form\Boolean('billable'));
@@ -166,6 +170,7 @@ class PathCaseMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Text('comments'));
             $this->formMap->addPropertyMap(new Form\Text('secondOpinion'));
             $this->formMap->addPropertyMap(new Form\Text('addendum'));
+            $this->formMap->addPropertyMap(new Form\Date('reviewedOn'));
             $this->formMap->addPropertyMap(new Form\Text('notes'));
 
         }
@@ -321,7 +326,6 @@ FROM path_case
             $filter->appendWhere('a.owner_name = %s AND ', $this->quote($filter['ownerName']));
         }
 
-
         if (!empty($filter['pathologistId']) && !empty($filter['userId']) && !empty($filter['user_pathologist_or'])) {
             $filter->appendWhere('(a.user_id = %s OR ', (int)$filter['userId']);
             $filter->appendWhere('a.pathologist_id = %s) AND ', (int)$filter['pathologistId']);
@@ -333,8 +337,6 @@ FROM path_case
                 $filter->appendWhere('a.pathologist_id = %s AND ', (int)$filter['pathologistId']);
             }
         }
-
-
 
         if (!empty($filter['pathologyId'])) {
             $filter->appendWhere('a.pathology_id = %s AND ', $this->quote($filter['pathologyId']));
@@ -423,6 +425,9 @@ FROM path_case
         }
         if (!empty($filter['acType'])) {
             $filter->appendWhere('a.ac_type = %s AND ', $this->quote($filter['acType']));
+        }
+        if (!empty($filter['reviewedById'])) {
+            $filter->appendWhere('a.reviewed_by_id = %s AND ', (int)$filter['reviewedById']);
         }
         if (!empty($filter['storageId'])) {
             $filter->appendWhere('a.storage_id = %s AND ', (int)$filter['storageId']);

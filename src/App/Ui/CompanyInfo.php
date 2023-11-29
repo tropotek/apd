@@ -81,7 +81,9 @@ jQuery(function ($) {
         
         $.get(document.location, {
             cid : companySel.val(),
-            cn : contactSel.val()
+            cn : contactSel.val(),
+            crumb_ignore: 'crumb_ignore',
+            nolog: 'nolog'
         })
         .done(function (data) {
             var html = '';
