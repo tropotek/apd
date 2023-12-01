@@ -5,8 +5,6 @@ use App\Db\Address;
 use App\Db\AddressMap;
 use App\Db\Cassette;
 use App\Db\CassetteMap;
-use App\Db\Contact;
-use App\Db\ContactMap;
 use App\Db\PathCase;
 use App\Db\PathCaseMap;
 use App\Db\Request;
@@ -14,14 +12,13 @@ use App\Db\Service;
 use App\Db\ServiceMap;
 use App\Db\Storage;
 use App\Db\StorageMap;
+use App\Db\StudentMap;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Tk\Db\Tool;
 use Tk\Exception;
-use Tk\Money;
 use Tk\ObjectUtil;
 use Uni\Db\Permission;
-use Uni\Db\User;
 
 /**
  * @author Michael Mifsud <info@tropotek.com>
@@ -118,36 +115,6 @@ class TestData extends \Bs\Console\TestData
             }
         }
 
-        //$db->exec('DELETE FROM `contact` WHERE `notes` = \'***\' ');
-        //$db->exec('TRUNCATE `contact`');
-        foreach (Contact::getTypeList() as $type) {
-            for($i = 0; $i < 25; $i++) {
-                $contact = new Contact();
-                //$client->setUserId();     // TODO
-                $contact->setUid($this->createStr(6));
-                $contact->setType($type);
-                if ($type == Contact::TYPE_CLIENT)
-                    $contact->setNameCompany($this->createName());
-                $contact->setNameFirst($this->createName());
-                $contact->setNameLast($this->createName());
-                $contact->setEmail($this->createUniqueEmail());
-
-                $contact->setPhone($this->createStr(10, '1234567890'));
-                if (rand(0, 1))
-                    $contact->setFax($this->createStr(10, '1234567890'));
-
-                $contact->setStreet($this->createWords(rand(1, 3)));
-                $contact->setCity(ucwords($this->createWords(rand(1, 2))));
-                $contact->setCountry(ucwords($this->createWords(rand(1, 2))));
-                $contact->setState(ucwords($this->createWords(rand(1, 2))));
-                $contact->setPostcode($this->createStr(4, '1234567890'));
-
-                $contact->setNotes('***');
-                $contact->save();
-            }
-
-        }
-
         //$db->exec('DELETE FROM `storage` WHERE `notes` = \'***\' ');
         //$db->exec('TRUNCATE `storage`');
         for($i = 0; $i < 10; $i++) {
@@ -177,12 +144,6 @@ class TestData extends \Bs\Console\TestData
             $arrival = \Tk\Date::create()->sub(new \DateInterval('P'.rand(0, 5000).'D'));
             $case->setArrival($arrival);
 
-            /** @var Contact $contact */
-            $contact = ContactMap::create()->findAll(Tool::create('RAND()'))->current();
-            $case->setClientId($contact->getId());
-            $contact = ContactMap::create()->findAll(Tool::create('RAND()'))->current();
-            $case->setOwnerId($contact->getId());
-
             $staff = $this->getConfig()->getUserMapper()->findFiltered(array('type' => 'staff'), Tool::create('RAND()'))->current();
             $case->setUserId($staff->getId());
             $case->setType(rand(0,1) ? PathCase::TYPE_NECROPSY : PathCase::TYPE_BIOPSY);
@@ -192,13 +153,10 @@ class TestData extends \Bs\Console\TestData
             $case->setSubmissionType($selected);
             $staff1 = $this->getConfig()->getUserMapper()->findFiltered(array('type' => 'staff'), Tool::create('RAND()'))->current();
             $case->setPathologistId($staff1->getId());
-            $case->setResident($this->createFullName());
 
-            $list = ContactMap::create()->findFiltered(array(
-                'type' => Contact::TYPE_STUDENT
-            ), \Tk\Db\Tool::create('RAND()', rand(1, 3)));
+            $list = StudentMap::create()->findFiltered([], \Tk\Db\Tool::create('RAND()', rand(1, 3)));
             foreach ($list as $student) {
-                $case->addStudent($student);
+                PathCaseMap::create()->addStudent($case->getId(), $student->getId());
             }
             //$case->setName($this->createFullName() . ' ' . $this->createSpecies() . ' ' . $this->createBreed());
 
@@ -247,10 +205,10 @@ class TestData extends \Bs\Console\TestData
                     $case->setStorageId($storage->getId());
                 }
                 if (rand(0,1)) {
-                    $case->setDisposal($this->createRandomDate($case->getCreated(), $case->getCreated()->add(new \DateInterval('P60D'))));
+                    $case->setDisposeOn($this->createRandomDate($case->getCreated(), $case->getCreated()->add(new \DateInterval('P60D'))));
                     $arr = array_values(ObjectUtil::getClassConstants($case, 'AC_'));
                     $selected = $arr[rand(0, count($arr) - 1)];
-                    $case->setAcType($selected);
+                    $case->setDisposedMethod($selected);
                 }
             }
 
@@ -328,8 +286,6 @@ class TestData extends \Bs\Console\TestData
             /** @var Service $service */
             $service = ServiceMap::create()->findAll(Tool::create('RAND()'))->current();
             $request->setServiceId($service->getId());
-            /** @var Contact $contact */
-            $contact = ContactMap::create()->findAll(Tool::create('RAND()'))->current();
             $request->setTestId(1);
 
             $request->setQty(rand(1, $cassette->getQty()));

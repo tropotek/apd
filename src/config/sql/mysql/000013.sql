@@ -323,8 +323,13 @@ INSERT IGNORE INTO user_permission VALUES
 ;
 
 
+ALTER TABLE path_case CHANGE COLUMN ac_type  dispose_method VARCHAR(64) NULL DEFAULT '';
+ALTER TABLE path_case CHANGE COLUMN disposal dispose_on DATETIME DEFAULT NULL;
 
-
+-- update mail template params
+UPDATE mail_template SET template = REPLACE(template, '{pathCase::clientId}', '{pathCase::companyId}') WHERE 1;
+UPDATE mail_template SET template = REPLACE(template, '{pathCase::acType}', '{pathCase::disposeMethod}') WHERE 1;
+UPDATE mail_template SET template = REPLACE(template, '{pathCase::disposal}', '{pathCase::disposeOn}') WHERE 1;
 
 
 

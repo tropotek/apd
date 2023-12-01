@@ -62,8 +62,8 @@ $routes->add('staff-specimens', Route::create('/staff/specimens.html', 'App\Cont
 $routes->add('cassette-manager', Route::create('/staff/cassetteManager.html', 'App\Controller\Cassette\Manager::doDefault'));
 $routes->add('cassette-edit', Route::create('/staff/cassetteEdit.html', 'App\Controller\Cassette\Edit::doDefault'));
 
-$routes->add('contact-manager', Route::create('/staff/contactManager.html', 'App\Controller\Contact\Manager::doDefault'));
-$routes->add('contact-edit', Route::create('/staff/contactEdit.html', 'App\Controller\Contact\Edit::doDefault'));
+//$routes->add('contact-manager', Route::create('/staff/contactManager.html', 'App\Controller\Contact\Manager::doDefault'));
+//$routes->add('contact-edit', Route::create('/staff/contactEdit.html', 'App\Controller\Contact\Edit::doDefault'));
 
 $routes->add('company-manager', Route::create('/staff/companyManager.html', 'App\Controller\Company\Manager::doDefault'));
 $routes->add('company-edit', Route::create('/staff/companyEdit.html', 'App\Controller\Company\Edit::doDefault'));

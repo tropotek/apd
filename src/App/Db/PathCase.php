@@ -24,7 +24,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
     use TimestampTrait;
     use InstitutionTrait;
     use CompanyTrait;
-    use OwnerTrait;
     use StorageTrait;
     use StatusTrait;
     use UserTrait;
@@ -40,10 +39,11 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
     const STATUS_COMPLETED              = 'completed';          //
     const STATUS_CANCELLED              = 'cancelled';          // case cancelled
 
+
     // Used for the reminder mailTemplateEvent
     const REMINDER_STATUS_DISPOSAL      = 'status.app.pathCase.disposalReminder';
     // Used in the mail_sent table `type` field
-    const REMINDER_SENT_TYPE            = 'reminder';
+    const MAIL_SENT_TYPE_DISPOSAL       = 'disposal_reminder';
 
     const TYPE_BIOPSY                   = 'biopsy';
     const TYPE_NECROPSY                 = 'necropsy';
@@ -64,10 +64,24 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
     const ACCOUNT_STATUS_UVET_INVOICED  = 'uvetInvoiced';
     const ACCOUNT_STATUS_CANCELLED      = 'cancelled';
 
+    const ACCOUNT_STATUS_LIST = [
+        'Pending'       => self::ACCOUNT_STATUS_PENDING,
+        'Invoiced'      => self::ACCOUNT_STATUS_INVOICED,
+        'uVet Invoiced' => self::ACCOUNT_STATUS_UVET_INVOICED,
+        'Cancelled'     => self::ACCOUNT_STATUS_CANCELLED,
+    ];
+
     // After Care Options
-    const AC_GENERAL                    = 'general';
-    const AC_CREMATION                  = 'cremation';
-    const AC_INCINERATION               = 'incineration';
+    const DISPOSAL_METHOD_GENERAL        = 'general';
+    const DISPOSAL_METHOD_CREMATION      = 'cremation';
+    const DISPOSAL_METHOD_INCINERATION   = 'incineration';
+
+    const DISPOSAL_METHOD_LIST = [
+        'General'       => self::DISPOSAL_METHOD_GENERAL,
+        'Cremation'     => self::DISPOSAL_METHOD_CREMATION,
+        'Incineration'  => self::DISPOSAL_METHOD_INCINERATION,
+    ];
+
 
     /**
      * @var int
@@ -301,7 +315,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
      * after care type: General Disposal/cremation/Internal incineration
      * @var string
      */
-    public $acType = '';
+    public $disposeMethod = '';
 
     /**
      * after care Date to wait until processing animal
@@ -323,7 +337,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
     /**
      * @var null|\DateTime
      */
-    public $disposal = null;
+    public $disposeOn = null;
 
     /**
      * @var string
@@ -435,7 +449,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
             'reportStatus', 'billable', 'accountStatus', 'afterHours', 'zoonotic', 'zoonoticAlert',
             'issue', 'issueAlert', 'bioSamples', 'bioNotes', 'specimenCount', 'ownerName', 'animalName', 'animalTypeId',
             'species', 'breed', 'sex', 'desexed', 'patientNumber', 'microchip', 'origin', 'colour', 'weight',
-            'dob', 'dod', 'euthanised', 'euthanisedMethod', 'acType', 'acHold', 'storageId', 'studentReport',
+            'dob', 'dod', 'euthanised', 'euthanisedMethod', 'disposeMethod', 'acHold', 'storageId', 'studentReport',
             'disposal', 'collectedSamples', 'clinicalHistory', 'grossPathology', 'grossMorphologicalDiagnosis',
             'histopathology', 'ancillaryTesting', 'morphologicalDiagnosis', 'causeOfDeath', 'secondOpinion', 'addendum',
             'comments', 'notes', 'modified', 'created'];
@@ -1016,15 +1030,15 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
         return $this->euthanisedMethod;
     }
 
-    public function setAcType(?string $acType) : PathCase
+    public function setDisposeMethod(?string $disposeMethod) : PathCase
     {
-        $this->acType = $acType;
+        $this->disposeMethod = $disposeMethod;
         return $this;
     }
 
-    public function getAcType() : string
+    public function getDisposeMethod() : string
     {
-        return $this->acType;
+        return $this->disposeMethod;
     }
 
     public function setAcHold(?\DateTime $acHold) : PathCase
@@ -1043,20 +1057,20 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
         return $this->acHold;
     }
 
-    public function setDisposal($disposal) : PathCase
+    public function setDisposeOn($disposeOn) : PathCase
     {
-        $this->disposal = $disposal;
+        $this->disposeOn = $disposeOn;
         return $this;
     }
 
     /**
      * @return \DateTime|string
      */
-    public function getDisposal(?string $format = null)
+    public function getDisposeOn(?string $format = null)
     {
-        if ($format && $this->disposal)
-            return $this->disposal->format($format);
-        return $this->disposal;
+        if ($format && $this->disposeOn)
+            return $this->disposeOn->format($format);
+        return $this->disposeOn;
     }
 
     public function isStudentReport(): bool

@@ -10,17 +10,6 @@ use Tk\Config;
 use Uni\Db\Institution;
 use Uni\Db\InstitutionMap;
 
-/**
- * Cron job to be run nightly
- *
- * # run Nightly site cron job
- *   0  4,16  *   *   *      php /home/user/public_html/bin/cmd cron > /dev/null 2>&1
- *
- *
- * @author Michael Mifsud <info@tropotek.com>
- * @see http://www.tropotek.com/
- * @license Copyright 2017 Michael Mifsud
- */
 class Cron extends \Bs\Console\Iface
 {
 
@@ -31,27 +20,23 @@ class Cron extends \Bs\Console\Iface
     {
         $this->setName('cron')
             ->setDescription(
-                sprintf('Run the site cron script:     "*/10  *   *   *   *      php %s/bin/cmd cron > /dev/null 2>&1"',
+                sprintf('Run cron script nightly:     "0  18   *   *   *      php %s/bin/cmd cron > /dev/null 2>&1"',
                     Config::getInstance()->getSrcPath())
             );
     }
 
-    /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     * @return int|null|void
-     * @throws \Tk\Db\Exception
-     * @throws \Tk\Exception
-     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         parent::execute($input, $output);
-
         $output->setVerbosity(OutputInterface::VERBOSITY_VERBOSE);
 
         $institutionList = InstitutionMap::create()->findFiltered(['active' => true]);
         foreach ($institutionList as $institution) {
             $this->sendDisposalReminders($institution);
+
+            $this->sendCompleteReportReminders($institution);
+
+            $this->sendNecropsyCompletionReminders($institution);
         }
 
         $this->write('', OutputInterface::VERBOSITY_VERBOSE);
@@ -59,35 +44,44 @@ class Cron extends \Bs\Console\Iface
     }
 
     /**
-     * @param Institution $institution
-     * @throws \Exception
+     * For biopsy cases when all Histology requests are completed, send a reminder to
+     * pathologist (cc site admin) after 24 hours to `complete` the report.
+     */
+    public function sendCompleteReportReminders(Institution $institution)
+    {
+        // Find uncompleted cases
+        $this->write('Send Disposal Reminders for '.$institution->getName().': ');
+
+    }
+
+    /**
+     * If case not completed after 15 working days from the `necropsyPerformedOn` date,
+     *   send a reminder to the pathologist (CC site admin)
+     */
+    public function sendNecropsyCompletionReminders(Institution $institution)
+    {
+
+    }
+
+    /**
+     * If a dispose_on date has been set then check for any t
      */
     public function sendDisposalReminders(Institution $institution)
     {
-        // Find all cases that require disposal in 3 days (60*60*24*3 = sec)
-        $days = 3;      // The number of days before disposal to send reminders
-        $spc = '  ';
+        // Find all cases that require disposal in 3 days
         $this->write('Send Disposal Reminders for '.$institution->getName().': ');
-
-        // TODO: REMOVE THIS ........!!!!!!!!!!!!!!!
-        //$this->getConfig()->getDb()->exec('TRUNCATE `mail_sent`');
 
         $caseList = PathCaseMap::create()->findFiltered([
             'institutionId' => $institution->getId(),
-            //'type' => PathCase::TYPE_NECROPSY,
-            'isDisposed' => true,
-            'disposedAfter' => \Tk\Date::create()->add(new \DateInterval('P'.$days.'D')),
-            'reminderSent' => false     // TODO:
+            'status' => [PathCase::STATUS_PENDING, PathCase::STATUS_REPORTED, PathCase::STATUS_EXAMINED, PathCase::STATUS_HOLD, PathCase::STATUS_FROZEN_STORAGE],
+            'disposedAfter' => \Tk\Date::create()->add(new \DateInterval('P3D')),
         ]);
         $sent = 0;
+        $spc = '  ';
         foreach ($caseList as $case) {
-            $subject = 'Pathology Case ['. $case->getPathologyId() . '] Disposal Reminder for ' . $case->getDisposal(\Tk\Date::FORMAT_LONG_DATE);
+            $subject = 'Pathology Case ['. $case->getPathologyId() . '] Disposal Reminder for ' . $case->getDisposeOn(\Tk\Date::FORMAT_LONG_DATE);
             $messageList = MailTemplateHandler::createMessageList(PathCase::REMINDER_STATUS_DISPOSAL, $case, $subject);
             $sent += MailTemplateHandler::sendMessageList($messageList);
-
-            // Flag this case as disposal email reminder sent
-            PathCaseMap::create()->addMailSent($case->getId(), PathCase::REMINDER_SENT_TYPE);
-            //$date = PathCaseMap::create()->hasMailSent($case->getId(), PathCase::REMINDER_SENT_TYPE);
 
             $this->writeGreen($spc . 'Sending Reminder For Case: #' . $case->getPathologyId(), OutputInterface::VERBOSITY_VERBOSE);
         }

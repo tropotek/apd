@@ -276,8 +276,7 @@ class Notice extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public function getIconCss()
     {
         $icon = 'fa fa-envelope';
-        //$icon = 'fa fa-comment';
-        //$icon = 'fa fa-eye';
+
         switch ($this->getFkey()) {
             case 'App\Db\PathCase':
                 $icon = 'fa fa-paw';
@@ -289,7 +288,11 @@ class Notice extends \Tk\Db\Map\Model implements \Tk\ValidInterface
                 $icon = 'fa fa-money';
                 break;
             case 'App\Db\Contact':
+            case 'App\Db\CompanyContact':
                 $icon = 'fa fa-user-md';
+                break;
+            case 'App\Db\Company':
+                $icon = 'fa fa-building-o';
                 break;
         }
         return $icon;

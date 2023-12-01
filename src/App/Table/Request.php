@@ -1,12 +1,8 @@
 <?php
 namespace App\Table;
 
-
-use App\Db\ContactMap;
+use App\Db\CompanyMap;
 use App\Db\RequestMap;
-use App\Db\ServiceMap;
-use App\Db\TestMap;
-use Tk\Db\Tool;
 use Tk\Form\Field;
 use Tk\Table\Cell;
 use Uni\Db\User;
@@ -22,11 +18,6 @@ use Uni\Uri;
  *   $tableTemplate = $table->show();
  *   $template->appendTemplate($tableTemplate);
  * </code>
- *
- * @author Mick Mifsud
- * @created 2020-07-30
- * @link http://tropotek.com.au/
- * @license Copyright 2020 Tropotek
  */
 class Request extends \Bs\TableIface
 {
@@ -148,16 +139,6 @@ class Request extends \Bs\TableIface
             ->setShowLabel(false)
             ->addCss('btn-select-all');
 
-//        $aCell->addButton(Cell\ActionButton::create('Cancel', Uri::create(), 'fa fa-thumbs-down')->addCss('btn-warning'))
-//            ->setShowLabel(false)
-//            ->addOnShow(function ($cell, \App\Db\Request $obj, Cell\ActionButton $button) {
-//                $button->getUrl()->set('rCancel', $obj->getId());
-//                $button->setAttr('data-confirm', 'Are you sure you want to cancel this request?');
-//                if ($obj->getStatus() == \App\Db\Request::STATUS_CANCELLED) {
-//                    $button->setAttr('disabled')->addCss('disabled');
-//                }
-//            });
-
         if ($this->isMinMode()) {
             $aCell->addButton(Cell\ActionButton::create('Delete', Uri::create(), 'fa fa-trash')->addCss('btn-danger'))
                 ->setShowLabel(false)
@@ -260,12 +241,6 @@ class Request extends \Bs\TableIface
 
             $this->appendFilter(new Field\Input('pathologyId'))->setAttr('placeholder', 'Case ID');
 
-            $serviceList = ServiceMap::create()->findFiltered(['institutionId' => $this->getConfig()->getInstitutionId()]);
-            //$this->appendFilter(Field\Select::createSelect('serviceId', $serviceList)->prependOption('-- Service --'));
-
-            $serviceList = TestMap::create()->findFiltered(['institutionId' => $this->getConfig()->getInstitutionId()], Tool::create('name'));
-            //$this->appendFilter(Field\Select::createSelect('testId', $serviceList)->prependOption('-- Test --'));
-
             $list = \Tk\ObjectUtil::getClassConstants(\App\Db\Request::class, 'STATUS', true);
             $this->appendFilter(Field\CheckboxSelect::createSelect('status', $list))
                 ->setValue([\App\Db\Request::STATUS_PENDING]);
@@ -278,44 +253,21 @@ class Request extends \Bs\TableIface
             ));
             $this->appendFilter(Field\Select::createSelect('pathologistId', $list)->prependOption('-- Pathologist --'));
 
-            $list = ContactMap::create()->findFiltered(array(
+            $list = CompanyMap::create()->findFiltered([
                 'institutionId' => $this->getConfig()->getInstitutionId(),
-                'type' => \App\Db\Contact::TYPE_CLIENT
-            ));
-            $this->appendFilter(Field\Select::createSelect('clientId', $list)->prependOption('-- Submitter/Client --'))
-                ->addOnShowOption(function (\Dom\Template $template, \Tk\Form\Field\Option $option, $var) {
-                    if (!trim($option->getName())) {
-                        $contact = ContactMap::create()->find($option->getValue());
-                        if ($contact) {
-                            if ($contact->getNameCompany())
-                                $option->setName($contact->getNameCompany());
-                            else if ($contact->getName())
-                                $option->setName($contact->getName());
-                        }
-                    }
-                });
-            $list = ContactMap::create()->findFiltered(array(
-                'institutionId' => $this->getConfig()->getInstitutionId(),
-                'type' => \App\Db\Contact::TYPE_OWNER
-            ));
-            $this->appendFilter(Field\Select::createSelect('ownerId', $list)->prependOption('-- Owner --'));
+            ]);
+            $this->appendFilter(Field\Select::createSelect('companyId', $list)->prependOption('-- Submitter/Client --'));
 
             $this->appendFilter(new Field\DateRange('date'));
         }
 
         // Actions
         if (!$this->isMinMode()) {
-            //$this->appendAction(\Tk\Table\Action\Link::createLink('New Request', \Bs\Uri::createHomeUrl('/requestEdit.html'), 'fa fa-plus'));
             $this->appendAction(\Tk\Table\Action\ColumnSelect::create()->setUnselected(array('modified')));
-
             $this->appendAction(\Tk\Table\Action\Delete::create());
         }
         $this->appendAction(\Tk\Table\Action\Csv::create());
-        $this->appendAction(\App\Table\Action\Status::create(\App\Db\Request::getStatusList())
-            ->addOnExecute(function (\Tk\Table\Action\Iface $action) {
-
-            })
-        );
+        $this->appendAction(\App\Table\Action\Status::create(\App\Db\Request::getStatusList()));
 
 
         return $this;
@@ -352,12 +304,6 @@ jQuery(function($) {
         form.find('tr .tk-tcb-cell input').prop('checked', false);
         var rows = form.find('tr[data-pathology-id='+pathologyId+']');
         rows.find('.tk-tcb-cell input').trigger('click');
-        // if (selectedCheckbox.is(':checked')) {
-        //   rows.find('.tk-tcb-cell input').prop('checked', false).trigger('change');
-        // } else {
-        //   rows.find('.tk-tcb-cell input').prop('checked', true).trigger('change');
-        // }
-        //console.log(rows);
       });
     });
   }
@@ -373,8 +319,6 @@ jQuery(function($) {
     var form = $(this);
     
     // Dynamic event handler to allow for when new cassettes are created
-    ////$(document).on('dblclick', '.tk-table .mComments', function (e) {
-    //$(document).on('click', '.tk-table .mComments', function (e) {
     form.on('click', '.mComments', function (e) {
       if ($(this).find('.tdVal').length) return;
       e.stopPropagation();

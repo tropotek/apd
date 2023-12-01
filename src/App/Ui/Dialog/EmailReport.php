@@ -1,10 +1,7 @@
 <?php
 namespace App\Ui\Dialog;
 
-use App\Db\Contact;
 use App\Db\PathCase;
-use Bs\Uri;
-use Tk\Alert;
 use Tk\CurlyTemplate;
 use Tk\Form;
 use Tk\Form\Event\Submit;

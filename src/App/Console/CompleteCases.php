@@ -7,12 +7,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
-/**
- * @author Michael Mifsud <info@tropotek.com>
- * @see http://www.tropotek.com/
- * @license Copyright 2017 Michael Mifsud
- */
-class Test extends \Bs\Console\Iface
+class CompleteCases extends \Bs\Console\Iface
 {
 
     /**
@@ -20,17 +15,12 @@ class Test extends \Bs\Console\Iface
      */
     protected function configure()
     {
-        $this->setName('test')
-            ->setDescription('This is a test script only');
+        $this->setName('complete-cases')
+            ->setAliases(['cc'])
+            ->setDescription("Complete cases older than a month that have been invoiced with no out-standing requests.");
     }
 
-    /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     * @return int|null|void
-     * @throws \Exception
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         parent::execute($input, $output);
 

@@ -4,7 +4,27 @@
 
 __Release Notes:__
 
+- Backup the DB before releasing
+- Release the updates with `./bin/cmd ug`
 - Run the script `./bin/cmd ro` to add/create company_contacts for the email_cc field
+- Confirm with Smitha if we should complete all cases over a month old and have been invoiced and have no requests pending.
+If so, then run the command `./bin/cmd cc` after release
+- 
+- Update mail templates:
+    - (Disposal rem's) `PathCase::acType` to `PathCase::disposalMethod`
+    - (Disposal rem's) `PathCase::disposal` to `PathCase::disposeOn`
+    - 
+
+__Update Questions/Notes__
+- Does not look like staff are completing cases, they seem to stop on `examined`, along with the reminder emails we could:
+  - Added an alert to the dashboard showing how many cases the pathologist has that are not completed, is this OK?
+  - We can mark case's as `completed` if the `account_status` is set to `invoiced` and all requests are complete (run the command `./bin/cmd cc`)
+  - 
+
+- For the dashboard we have the cases table and the requests table, I assume the cases table is mostly used 
+by the Pathologists and the requests table is used by the Technicians is this correct?
+Who are users the general users that are not a Path or Tech, what permissions should they have?
+
 
 
 __Chargeable Updates__
@@ -21,19 +41,18 @@ Auto-populate contact select field when new client is selected.~~ [4hrs]
 
 - ~~Add a Student table/object and copy the data from the Contacts table, Update code to use new Student object. (Manager, Edit, etc)~~ [4hrs]
 
-
 - ~~Add a `reviewedById` field that links to a user that has a new permission `Can Review Case`,
   add field after `Addendum` textarea on the reporting tab.~~ [2hrs]
 - ~~The reviewer credentials should then be added to the report PDF at the end of the document.~~ [2hrs]
 
-
-
-- For necropsy cases add a `necropsyPerformed` date field (consider adding a `Necropsy Complete` button to add today's date),
-  - Once set send a reminder to the pathologist (CC site admin) after 15 working days if case not completed. [4hrs]
+- ~~For necropsy cases add a `necropsyPerformedOn` date field (consider adding a `Necropsy Complete` button to add today's date),~~
+  - Send a reminder to the pathologist (CC site admin) after 15 working days if case not completed. [4hrs]
 
 - For biopsy cases when all Histology requests are completed, send a reminder to pathologist (cc site admin) after 24 hours  
 to `complete` the __report__ if not completed already. [4hrs] 
 
+NOTE: looks like cases are not being marked as completed, I think we need a list on the dashboard of open cases
+and ones that can be marked as completed.
 
 ----
 Total of 26 hours @ $100ph ($2,600)

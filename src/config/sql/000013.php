@@ -16,7 +16,7 @@ try {
         return;
     }
 
-    // get all client contacts with email_cc contacts
+    // Add client contacts from contact email_cc field
     $rows = $db->query("
             SELECT DISTINCT
                 pc.id AS path_case_id,
@@ -54,6 +54,8 @@ try {
             PathCaseMap::create()->addContact($row->path_case_id, $contact->getId());
         }
     }
+
+
 } catch (\Exception $e) { error_log($e->__toString()); }
 
 

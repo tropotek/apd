@@ -31,13 +31,9 @@ class PathCaseMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Integer('institutionId', 'institution_id'));
             $this->dbMap->addPropertyMap(new Db\Integer('userId', 'user_id'));
             $this->dbMap->addPropertyMap(new Db\Integer('companyId', 'company_id'));
-            // $this->dbMap->addPropertyMap(new Db\Integer('clientId', 'client_id'));
-            // $this->dbMap->addPropertyMap(new Db\Integer('ownerId', 'owner_id'));
             $this->dbMap->addPropertyMap(new Db\Integer('pathologistId', 'pathologist_id'));
             $this->dbMap->addPropertyMap(new Db\Integer('soUserId', 'so_user_id'));
-            // $this->dbMap->addPropertyMap(new Db\Text('resident'));
             $this->dbMap->addPropertyMap(new Db\Text('pathologyId', 'pathology_id'));
-            //$this->dbMap->addPropertyMap(new Db\Text('name'));
             $this->dbMap->addPropertyMap(new Db\Text('type'));
             $this->dbMap->addPropertyMap(new Db\Text('submissionType', 'submission_type'));
             $this->dbMap->addPropertyMap(new Db\Boolean('submissionReceived', 'submission_received'));
@@ -47,7 +43,6 @@ class PathCaseMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Text('reportStatus', 'report_status'));
             $this->dbMap->addPropertyMap(new Db\Boolean('billable'));
             $this->dbMap->addPropertyMap(new Db\Text('accountStatus', 'account_status'));
-            // $this->dbMap->addPropertyMap(new Db\Money('cost'));
             $this->dbMap->addPropertyMap(new Db\Boolean('afterHours', 'after_hours'));
             $this->dbMap->addPropertyMap(new Db\Text('zoonotic'));
             $this->dbMap->addPropertyMap(new Db\Boolean('zoonoticAlert', 'zoonotic_alert'));
@@ -73,10 +68,10 @@ class PathCaseMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Date('dod'));
             $this->dbMap->addPropertyMap(new Db\Boolean('euthanised'));
             $this->dbMap->addPropertyMap(new Db\Text('euthanisedMethod', 'euthanised_method'));
-            $this->dbMap->addPropertyMap(new Db\Text('acType', 'ac_type'));
+            $this->dbMap->addPropertyMap(new Db\Text('disposeMethod', 'dispose_method'));
             $this->dbMap->addPropertyMap(new Db\Date('acHold', 'ac_hold'));
             $this->dbMap->addPropertyMap(new Db\Integer('storageId', 'storage_id'));
-            $this->dbMap->addPropertyMap(new Db\Date('disposal'));
+            $this->dbMap->addPropertyMap(new Db\Date('disposeOn', 'dispose_on'));
             $this->dbMap->addPropertyMap(new Db\Boolean('studentReport', 'student_report'));
             $this->dbMap->addPropertyMap(new Db\Text('reportStatus', 'report_status'));
             $this->dbMap->addPropertyMap(new Db\Text('collectedSamples', 'collected_samples'));
@@ -111,13 +106,8 @@ class PathCaseMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Integer('institutionId'));
             $this->formMap->addPropertyMap(new Form\Integer('userId'));
             $this->formMap->addPropertyMap(new Form\Integer('companyId'));
-            //$this->formMap->addPropertyMap(new Form\Integer('clientId'));
-            //$this->formMap->addPropertyMap(new Form\Integer('ownerId'));
             $this->formMap->addPropertyMap(new Form\Integer('pathologistId'));
-            //$this->formMap->addPropertyMap(new Form\Integer('soUserId'));
-            //$this->formMap->addPropertyMap(new Form\Text('resident'));
             $this->formMap->addPropertyMap(new Form\Text('pathologyId'));
-            //$this->formMap->addPropertyMap(new Form\Text('name'));
             $this->formMap->addPropertyMap(new Form\Text('type'));
             $this->formMap->addPropertyMap(new Form\Text('submissionType'));
             $this->formMap->addPropertyMap(new Form\Boolean('submissionReceived'));
@@ -127,7 +117,6 @@ class PathCaseMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Text('reportStatus'));
             $this->formMap->addPropertyMap(new Form\Boolean('billable'));
             $this->formMap->addPropertyMap(new Form\Text('accountStatus'));
-            //$this->formMap->addPropertyMap(new Form\Money('cost'));
             $this->formMap->addPropertyMap(new Form\Boolean('afterHours'));
             $this->formMap->addPropertyMap(new Form\Text('zoonotic'));
             $this->formMap->addPropertyMap(new Form\Boolean('zoonoticAlert'));
@@ -153,10 +142,10 @@ class PathCaseMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Date('dod'));
             $this->formMap->addPropertyMap(new Form\Boolean('euthanised'));
             $this->formMap->addPropertyMap(new Form\Text('euthanisedMethod'));
-            $this->formMap->addPropertyMap(new Form\Text('acType'));
+            $this->formMap->addPropertyMap(new Form\Text('disposeMethod'));
             $this->formMap->addPropertyMap(new Form\Date('acHold'));
             $this->formMap->addPropertyMap(new Form\Integer('storageId'));
-            $this->formMap->addPropertyMap(new Form\Date('disposal'));
+            $this->formMap->addPropertyMap(new Form\Date('disposedOn'));
             $this->formMap->addPropertyMap(new Form\Boolean('studentReport'));
             $this->formMap->addPropertyMap(new Form\Text('reportStatus'));
             $this->formMap->addPropertyMap(new Form\Text('collectedSamples'));
@@ -313,17 +302,8 @@ FROM path_case
         if (!empty($filter['companyId'])) {
             $filter->appendWhere('a.company_id = %s AND ', (int)$filter['companyId']);
         }
-//        if (!empty($filter['clientId'])) {
-//            $filter->appendWhere('a.client_id = %s AND ', (int)$filter['clientId']);
-//        }
         if (!empty($filter['soUserId'])) {
             $filter->appendWhere('a.so_user_id = %s AND ', (int)$filter['soUserId']);
-        }
-//        if (!empty($filter['ownerId'])) {
-//            $filter->appendWhere('a.owner_id = %s AND ', (int)$filter['ownerId']);
-//        }
-        if (!empty($filter['ownerName'])) {
-            $filter->appendWhere('a.owner_name = %s AND ', $this->quote($filter['ownerName']));
         }
 
         if (!empty($filter['pathologistId']) && !empty($filter['userId']) && !empty($filter['user_pathologist_or'])) {
@@ -344,9 +324,6 @@ FROM path_case
         if (!empty($filter['animalTypeId'])) {
             $filter->appendWhere('a.animal_type_id = %s AND ', $this->quote($filter['animalTypeId']));
         }
-//        if (!empty($filter['resident'])) {
-//            $filter->appendWhere('a.resident = %s AND ', $this->quote($filter['resident']));
-//        }
         if (!empty($filter['type'])) {
             $filter->appendWhere('a.type = %s AND ', $this->quote($filter['type']));
         }
@@ -423,32 +400,41 @@ FROM path_case
         if (!empty($filter['euthanisedMethod'])) {
             $filter->appendWhere('a.euthanised_method = %s AND ', $this->quote($filter['euthanisedMethod']));
         }
-        if (!empty($filter['acType'])) {
-            $filter->appendWhere('a.ac_type = %s AND ', $this->quote($filter['acType']));
+        if (!empty($filter['disposeMethod'])) {
+            $filter->appendWhere('a.dispose_method = %s AND ', $this->quote($filter['disposeMethod']));
         }
         if (!empty($filter['reviewedById'])) {
             $filter->appendWhere('a.reviewed_by_id = %s AND ', (int)$filter['reviewedById']);
         }
+        if (!is_bool($filter['isReviewed'])) {
+            if (is_bool($filter['isReviewed'])) {
+                $filter->appendWhere('a.reviewed_by_id IS NOT NULL AND ');
+            } else {
+                $filter->appendWhere('a.reviewed_by_id IS NULL AND ');
+            }
+        }
         if (!empty($filter['storageId'])) {
             $filter->appendWhere('a.storage_id = %s AND ', (int)$filter['storageId']);
         }
-        if (isset($filter['isDisposed']) && $filter['isDisposed'] !== '' && $filter['isDisposed'] !== null) {
-            if ($filter['isDisposed'] > 0) {
-                $filter->appendWhere('a.disposal IS NOT NULL AND ');
+        if (is_bool($filter['isDisposable'])) {
+            if ($filter['isDisposable']) {
+                $filter->appendWhere('a.dispose_method != \'\' AND ');
             } else {
-                $filter->appendWhere('a.disposal IS NULL AND ');
+                $filter->appendWhere('a.dispose_method == \'\' AND ');
             }
         }
 
         // This query is used for finding reminder disposals (see Cron.php)
-        if (!empty($filter['disposedAfter']) && $filter['disposedAfter'] !== '' && $filter['disposedAfter'] !== null) {
-            $now = $this->quote(\Tk\Date::create()->format(\Tk\Date::FORMAT_ISO_DATETIME));
-            if (!$filter['disposedAfter'] instanceof \DateTime)
+        // If there is a disposal_on expected date, find any overdue from the supplied date
+        if (!empty($filter['disposedAfter'])) {
+            if (!($filter['disposedAfter'] instanceof \DateTime)) {
                 $filter['disposedAfter'] = \Tk\Date::createFormDate($filter['disposedAfter']);
-            $filter->appendWhere('a.disposal IS NOT NULL AND a.disposal > %s AND a.disposal <= %s AND ', $now, $this->quote($filter['disposedAfter']->format(\Tk\Date::FORMAT_ISO_DATETIME)));
+            }
+            $filter->appendWhere('a.dispose_on IS NOT NULL AND a.dispose_on < %s AND ',
+                $this->quote($filter['disposedAfter']->format(\Tk\Date::FORMAT_ISO_DATETIME)));
         }
 
-        if (isset($filter['reminderSent']) && $filter['reminderSent'] !== '' && $filter['reminderSent'] !== null) {
+        if (is_bool($filter['reminderSent'])) {
             $filter->appendFrom(' LEFT JOIN %s c ON (s.id = c.path_case_id AND c.type = %s)',
                 $this->quoteTable('mail_sent'), $this->quote('reminder'));
             if ($filter['reminderSent'] > 0) {
@@ -571,7 +557,7 @@ FROM path_case
      * @return \DateTime|null Return null if record not in the table
      * @throws \Tk\Db\Exception
      */
-    public function hasMailSent($pathCaseId, $type = 'reminder')
+    public function hasMailSent(int $pathCaseId, string $type)
     {
         $stm = $this->getDb()->prepare('SELECT * FROM mail_sent WHERE path_case_id = ? AND type = ? LIMIT 1');
         $stm->execute([$pathCaseId, $type]);
@@ -586,7 +572,7 @@ FROM path_case
      * @param string $type
      * @throws \Tk\Db\Exception
      */
-    public function addMailSent($pathCaseId, $type = 'reminder')
+    public function addMailSent(int $pathCaseId, string $type)
     {
         if ($this->hasMailSent($pathCaseId, $type)) return;
         $now = \Tk\Date::create()->format(\Tk\Date::FORMAT_ISO_DATETIME);
@@ -594,4 +580,43 @@ FROM path_case
         $stm->execute([$pathCaseId, $type, $now]);
     }
 
+
+    public function getSpeciesList(int $institutionId, string $keyword = '')
+    {
+        $sql = <<<SQL
+            SELECT DISTINCT species 
+            FROM path_case
+            WHERE institution_id = :institutionId
+            AND LOWER(species) LIKE LOWER(CONCAT(:keyword, '%'))
+        SQL;
+        $stm = $this->getDb()->prepare($sql);
+        $stm->execute(compact('institutionId', 'keyword'));
+        return array_map(fn($r) => $r['species'], $stm->fetchAll(\PDO::FETCH_ASSOC));
+    }
+
+    public function getOwnerNameList(int $institutionId, string $keyword = '')
+    {
+        $sql = <<<SQL
+            SELECT DISTINCT owner_name 
+            FROM path_case
+            WHERE institution_id = :institutionId
+            AND LOWER(owner_name) LIKE LOWER(CONCAT(:keyword, '%'))
+        SQL;
+        $stm = $this->getDb()->prepare($sql);
+        $stm->execute(compact('institutionId', 'keyword'));
+        return array_map(fn($r) => $r['owner_name'], $stm->fetchAll(\PDO::FETCH_ASSOC));
+    }
+
+    public function getColourList(int $institutionId, string $keyword = '')
+    {
+        $sql = <<<SQL
+            SELECT DISTINCT colour 
+            FROM path_case
+            WHERE institution_id = :institutionId
+            AND LOWER(colour) LIKE LOWER(CONCAT(:keyword, '%'))
+        SQL;
+        $stm = $this->getDb()->prepare($sql);
+        $stm->execute(compact('institutionId', 'keyword'));
+        return array_map(fn($r) => $r['colour'], $stm->fetchAll(\PDO::FETCH_ASSOC));
+    }
 }

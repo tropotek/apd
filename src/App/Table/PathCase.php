@@ -2,12 +2,10 @@
 namespace App\Table;
 
 use App\Db\AnimalTypeMap;
-use App\Db\ContactMap;
-use App\Db\InvoiceItemMap;
+use App\Db\CompanyMap;
 use App\Db\PathCaseMap;
 use Tk\Db\Tool;
 use Tk\Form\Field;
-use Tk\Money;
 use Tk\Table\Cell;
 use Uni\Db\User;
 
@@ -72,7 +70,6 @@ class PathCase extends \Bs\TableIface
             ->addOnCellHtml(function (\Tk\Table\Cell\Iface $cell, $obj, $html) {
                 $list = $obj->getContactList(Tool::create('name'));
                 if ($list->count()) {
-                    //$html .= implode(', ', $list->toArray('name'));
                     $html .= implode('<br/>', $list->toArray('name'));
                 }
                 return $html;
@@ -122,10 +119,10 @@ class PathCase extends \Bs\TableIface
         $this->appendCell(new Cell\Boolean('euthanised'));
         $this->appendCell(new Cell\Html('morphologicalDiagnosis'));
         $this->appendCell(new Cell\Text('euthanisedMethod'));
-        $this->appendCell(new Cell\Text('acType'));
+        $this->appendCell(new Cell\Text('disposeMethod'));
         $this->appendCell(new Cell\Date('acHold'));
         //$this->appendCell(new Cell\Text('storageId'));
-        $this->appendCell(new Cell\Date('disposal'));
+        $this->appendCell(new Cell\Date('disposeOn'));
 
         $this->appendCell(new Cell\Date('arrival'));
 
@@ -134,9 +131,7 @@ class PathCase extends \Bs\TableIface
 
         // Filters
         $this->appendFilter(new Field\Input('keywords'))->setAttr('placeholder', 'Search');
-
         $this->appendFilter(new Field\Input('age'))->setAttr('placeholder', 'Age');
-
         $list = $this->getConfig()->getUserMapper()->findFiltered([
             'institutionId' => $this->getConfig()->getInstitutionId(),
             'type' => User::TYPE_STAFF,
@@ -148,43 +143,16 @@ class PathCase extends \Bs\TableIface
         $this->appendFilter(Field\Select::createSelect('userId', $list)->prependOption('-- Creator --'));
 
 
-        $list = ContactMap::create()->findFiltered(array(
+        $list = CompanyMap::create()->findFiltered([
             'institutionId' => $this->getConfig()->getInstitutionId(),
-            'type' => \App\Db\Contact::TYPE_CLIENT
-        ), Tool::create('name_company, name_first, name_last'));
-        $this->appendFilter(Field\Select::createSelect('clientId', $list))//; //->prependOption('-- Submitter/Client --'))
-            ->addCss('tk-multiselect1')->prependOption('-- Submitter/Client --')
-            ->addOnShowOption(function (\Dom\Template $template, \Tk\Form\Field\Option $option, $var) {
-                /** @var \App\Db\Contact $contact */
-                $contact = ContactMap::create()->find($option->getValue());
-                if ($contact) {
-                    $option->setName($contact->getDisplayName());
-                }
-            });
-
-        $list = ContactMap::create()->findFiltered(array(
-            'institutionId' => $this->getConfig()->getInstitutionId(),
-            'type' => \App\Db\Contact::TYPE_OWNER
-        ), Tool::create('name_first, name_last'));
-        $this->appendFilter(Field\Select::createSelect('ownerId', $list))
-            ->addCss('tk-multiselect2')->prependOption('-- Owner --')
-            ->addOnShowOption(function (\Dom\Template $template, \Tk\Form\Field\Option $option, $var) {
-                /** @var \App\Db\Contact $contact */
-                $contact = ContactMap::create()->find($option->getValue());
-                if ($contact) {
-                    $option->setName($contact->getDisplayName());
-                }
-            });
+        ], Tool::create('name'));
+        $this->appendFilter(Field\Select::createSelect('companyId', $list))//; //->prependOption('-- Submitter/Client --'))
+            ->addCss('tk-multiselect1')->prependOption('-- Submitter/Client --');
 
         $js = <<<JS
 jQuery(function ($) {
   	$('select.tk-multiselect1').select2({
         placeholder: '-- Submitter/Client --',
-        allowClear: false,
-        minimumInputLength: 0
-    });
-  	$('select.tk-multiselect2').select2({
-        placeholder: '-- Owner --',
         allowClear: false,
         minimumInputLength: 0
     });
@@ -194,6 +162,7 @@ JS;
 
         $list = \Tk\ObjectUtil::getClassConstants(\App\Db\PathCase::class, 'TYPE', true);
         $this->appendFilter(Field\Select::createSelect('type', $list)->prependOption('-- Case Type --'));
+
         $list = \Tk\ObjectUtil::getClassConstants(\App\Db\PathCase::class, 'SUBMISSION', true);
         $this->appendFilter(Field\Select::createSelect('submissionType', $list)->prependOption('-- Submission Type --'));
 
@@ -211,21 +180,11 @@ JS;
             'Large < 200kg' => 'Large < 200kg',
             'Extra-large > 200kg' => 'Extra-large > 200kg');
         $this->appendFilter(Field\Select::createSelect('size', $list)->prependOption('-- Size --'));
-
-        $speciesList = PathCaseMap::create()->findSpeciesList();
-        $this->appendFilter(Field\Select::createSelect('species', $speciesList)->prependOption('-- Species --'));
-
-        $list = array('Yes' => '1', 'No' => '0');
-        $this->appendFilter(Field\Select::createSelect('isDisposed', $list)->prependOption('-- Is Disposed --', ''));
-
-        $list = \Tk\ObjectUtil::getClassConstants(\App\Db\PathCase::class, 'AC_');
-        $this->appendFilter(Field\Select::createSelect('acType', $list)->prependOption('-- Method Of Disposal --', ''));
-
-        $list = array('Yes' => '1', 'No' => '0');
-        $this->appendFilter(Field\Select::createSelect('billable', $list)->prependOption('-- Is Billable --', ''));
-
-        $list = \Tk\ObjectUtil::getClassConstants(\App\Db\PathCase::class, 'ACCOUNT_STATUS_');
-        $this->appendFilter(Field\Select::createSelect('accountStatus', $list)->prependOption('-- Account Status --', ''));
+        $this->appendFilter(Field\Select::createSelect('species', PathCaseMap::create()->findSpeciesList())->prependOption('-- Species --'));
+        $this->appendFilter(Field\Select::createSelect('isDisposable', ['Yes' => '1', 'No' => '0'])->prependOption('-- Is Disposable --', ''));
+        $this->appendFilter(Field\Select::createSelect('disposeMethod', \App\Db\PathCase::DISPOSAL_METHOD_LIST)->prependOption('-- Method Of Disposal --', ''));
+        $this->appendFilter(Field\Select::createSelect('billable', ['Yes' => '1', 'No' => '0'])->prependOption('-- Is Billable --', ''));
+        $this->appendFilter(Field\Select::createSelect('accountStatus', \App\Db\PathCase::ACCOUNT_STATUS_LIST)->prependOption('-- Account Status --', ''));
 
         $this->appendFilter(new Field\DateRange('arrival'));
 

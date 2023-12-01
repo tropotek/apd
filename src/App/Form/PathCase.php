@@ -2,14 +2,10 @@
 namespace App\Form;
 
 use App\Db\AnimalTypeMap;
-use App\Db\CompanyContactMap;
-use App\Db\ContactMap;
 use App\Db\Notice;
 use App\Db\PathCaseMap;
 use App\Db\Permission;
 use App\Db\StorageMap;
-use App\Db\StudentMap;
-use Tk\Alert;
 use Tk\Date;
 use Tk\Db\Tool;
 use Tk\Form\Field;
@@ -51,9 +47,6 @@ class PathCase extends \Bs\FormIface
     public function __construct($formId = '')
     {
         parent::__construct($formId);
-        if ($this->getConfig()->getRequest()->has('gc')) {
-            $this->doGetContact($this->getConfig()->getRequest());
-        }
         if ($this->getConfig()->getRequest()->has('gcl')) {
             $this->doGetContactList($this->getConfig()->getRequest());
         }
@@ -238,8 +231,7 @@ jQuery(function ($) {
 JS;
         $this->getRenderer()->getTemplate()->appendJs($js);
 
-        $list = \Tk\ObjectUtil::getClassConstants($this->getPathCase(), 'ACCOUNT_STATUS', true);
-        $this->appendField(Field\Select::createSelect('accountStatus', $list)->prependOption('-- Select --', ''))
+        $this->appendField(Field\Select::createSelect('accountStatus', \App\Db\PathCase::ACCOUNT_STATUS_LIST)->prependOption('-- Select --', ''))
             ->setTabGroup($tab);
 
         $this->appendField(new Field\Checkbox('submissionReceived'))->setTabGroup($tab)
@@ -260,14 +252,11 @@ JS;
                 ->setNotes('Set the status. Use the checkbox to disable notification emails.');
         }
 
-        $contact = new \App\Db\Contact();
-        $contact->setType(\App\Db\Contact::TYPE_OWNER);
-        $form = \App\Form\Contact::create('ownerSelect')->setType(\App\Db\Contact::TYPE_OWNER)->setModel($contact);
-        $form->removeField('accountCode');
-        $form->removeField('nameCompany');
-        $form->removeField('notes');
+        $this->appendField(new Field\Autocomplete('ownerName'))->setTabGroup($tab)
+            ->addOnAjax(function (Field\Autocomplete $field, \Tk\Request $request) {
+                return PathCaseMap::create()->getOwnerNameList($this->getConfig()->getInstitutionId(), $request->get('term'));
+            });
 
-        $this->appendField(new Field\Input('ownerName'))->setTabGroup($tab);
         $this->appendField(new Field\Input('animalName'))->setLabel('Animal Name/ID')->setTabGroup($tab);
         $this->appendField(new Field\Input('patientNumber'))->setTabGroup($tab);
         $this->appendField(new Field\Input('microchip'))->setTabGroup($tab);
@@ -276,8 +265,10 @@ JS;
         $this->appendField(Field\Select::createSelect('animalTypeId', $list)->prependOption('-- Select --', ''))
             ->setTabGroup($tab);
 
-        // TODO: Autocomplete field
-        $this->appendField(new Field\Input('species'))->setLabel('Species/Breed')->setTabGroup($tab);
+        $this->appendField(new Field\Autocomplete('species'))->setLabel('Species/Breed')->setTabGroup($tab)
+            ->addOnAjax(function (Field\Autocomplete $field, \Tk\Request $request) {
+                return PathCaseMap::create()->getSpeciesList($this->getConfig()->getInstitutionId(), $request->get('term'));
+            });
 
         $this->appendField(new Field\Input('specimenCount'))->setLabel('Animal Count')->setTabGroup($tab);
         $list = array('-- N/A --' => '', 'Male' => 'M', 'Female' => 'F');
@@ -296,10 +287,15 @@ JS;
         $this->appendField(Field\Select::createSelect('size', $list))
             ->setTabGroup($tab);
         $this->appendField(new Field\Input('weight'))->setTabGroup($tab);
-        $this->appendField(new Field\Input('colour'))->setTabGroup($tab);
+
+        //$this->appendField(new Field\Input('colour'))->setTabGroup($tab);
+        $this->appendField(new Field\Autocomplete('colour'))->setTabGroup($tab)
+            ->addOnAjax(function (Field\Autocomplete $field, \Tk\Request $request) {
+                return PathCaseMap::create()->getColourList($this->getConfig()->getInstitutionId(), $request->get('term'));
+            });
+
         $this->appendField(new \App\Form\Field\Age('age'))->setTabGroup($tab);
 
-        // TODO: we need to validate the dob is < dod at some point
         $this->appendField(new Field\Input('dob'))->setTabGroup($tab)->addCss('date')
             ->setAttr('placeholder', 'dd/mm/yyyy');
         $this->appendField(new Field\Input('dod'))->setTabGroup($tab)->addCss('date')
@@ -457,13 +453,10 @@ JS;
             $this->appendField(Field\Select::createSelect('storageId', $list)->prependOption('-- Select --', ''))
                 ->setTabGroup($tab);
             $this->appendField(new Field\Input('acHold'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy')
-                ->setLabel('Aftercare Hold')->setTabGroup($tab);
-            $list = \Tk\ObjectUtil::getClassConstants($this->getPathCase(), 'AC_');
-            $this->appendField(Field\Select::createSelect('acType', $list)->prependOption('-- None --', ''))
-                ->setLabel('Method Of Disposal')->setTabGroup($tab);
-            $this->appendField(new Field\Input('acHold'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy')
                 ->setLabel('Hold Until')->setTabGroup($tab);
-            $this->appendField(new Field\Input('disposal'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy')
+            $this->appendField(Field\Select::createSelect('disposeMethod', \App\Db\PathCase::DISPOSAL_METHOD_LIST)->prependOption('-- None --', ''))
+                ->setLabel('Method Of Disposal')->setTabGroup($tab);
+            $this->appendField(new Field\Input('disposeOn'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy')
                 ->setLabel('Disposal Completion Date')->setTabGroup($tab);
         }
 

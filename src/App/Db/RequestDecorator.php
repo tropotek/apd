@@ -100,9 +100,10 @@ class RequestDecorator
                 $message->replace(Collection::prefixArrayKeys(\App\Db\ServiceMap::create()
                     ->unmapForm($request->getService()), 'service::'));
 
-            if ($request->getPathCase())
+            if ($request->getPathCase()) {
                 $message->replace(Collection::prefixArrayKeys(\App\Db\PathCaseMap::create()
                     ->unmapForm($request->getPathCase()), 'pathCase::'));
+            }
 
             if (property_exists($request, 'requestCount')) {
                 $message->set('request::requestCount' , $request->requestCount);
