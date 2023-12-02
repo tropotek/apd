@@ -81,7 +81,7 @@ Auto-populate contact select field when new client is selected.~~ [4hrs]
   - Send a reminder to the pathologist (CC site admin) after 15 working days if case not completed. [4hrs]
 
 - For biopsy cases when all Histology requests are completed, send a reminder to pathologist (cc site admin) after 24 hours  
-to `complete` the __report__ if not completed already. [4hrs] 
+to `complete` the __`report`__ if not completed already. [4hrs] 
 
 
 ----

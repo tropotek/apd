@@ -82,7 +82,7 @@ SQL;
             $pathCase->setStatus(\App\Db\PathCase::STATUS_COMPLETED);
             // TODO: find out if this is OK
             $pathCase->setReportStatus(PathCase::REPORT_STATUS_COMPLETED);
-            //$pathCase->save();
+            $pathCase->save();
         }
 
 

@@ -373,16 +373,13 @@ INSERT INTO mail_template VALUES
 
 
 
--- TODO: uncomment for release
---       Probably best to wait until all updates are tested and approved before removing the following
 
--- ALTER TABLE company DROP COLUMN contact_id;
--- ALTER TABLE company_contact DROP COLUMN contact_id;
 
--- TODO: Uncomment for release of new client/student updates
--- ALTER TABLE path_case DROP COLUMN owner_id;
--- DROP TABLE path_case_has_contact;
--- DROP TABLE contact;
+
+
+
+
+-- cleanup objects and functions
 
 ALTER TABLE path_case DROP COLUMN resident;
 ALTER TABLE path_case DROP COLUMN name;
@@ -390,7 +387,11 @@ ALTER TABLE path_case DROP COLUMN cost;
 DROP FUNCTION IF EXISTS ucwords;
 
 
-
-
-
-
+-- TODO: uncomment for release
+--       Probably best to wait until all updates are tested and approved
+--       then run these manually (even if its next release, no rush)
+-- ALTER TABLE path_case DROP COLUMN owner_id;
+-- DROP TABLE path_case_has_contact;
+-- DROP TABLE contact;
+-- ALTER TABLE company DROP COLUMN contact_id;
+-- ALTER TABLE company_contact DROP COLUMN contact_id;

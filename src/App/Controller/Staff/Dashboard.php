@@ -53,7 +53,7 @@ class Dashboard extends \Uni\Controller\AdminIface
             $this->caseTable->init();
             $this->caseTable->findAction('columns')->setSelected(
                 ['id', 'pathologyId', 'clientId', 'owner', 'age',
-                    'patientNumber', 'type', 'submissionType', 'status', 'arrival']
+                    'patientNumber', 'type', 'submissionType', 'status', 'reportStatus', 'arrival']
             );
             $this->caseTable->removeFilter('userId');
             $this->caseTable->removeFilter('pathologistId');

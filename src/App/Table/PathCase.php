@@ -76,6 +76,7 @@ class PathCase extends \Bs\TableIface
             });
         $this->appendCell(new Cell\Text('submissionType'));
         $this->appendCell(new Cell\Text('status'));
+        $this->appendCell(new Cell\Text('reportStatus'));
 
         $this->appendCell(new Cell\Text('accountStatus'));
         $this->appendCell(new Cell\Boolean('billable'));
@@ -168,6 +169,9 @@ JS;
 
         $list = \Tk\ObjectUtil::getClassConstants(\App\Db\PathCase::class, 'STATUS', true);
         $this->appendFilter(Field\CheckboxSelect::createSelect('status', $list));
+
+        $list = \Tk\ObjectUtil::getClassConstants(\App\Db\PathCase::class, 'REPORT_STATUS', true);
+        $this->appendFilter(Field\Select::createSelect('reportStatus', $list)->prependOption('-- Report Status --'));
 
         // Species Filter
         $list = AnimalTypeMap::create()->findFiltered(['institutionId' => $this->getConfig()->getInstitutionId(), 'parent_id' => 0]);

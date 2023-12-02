@@ -330,15 +330,16 @@ FROM path_case
         if (!empty($filter['submissionType'])) {
             $filter->appendWhere('a.submission_type = %s AND ', $this->quote($filter['submissionType']));
         }
+        if (!empty($filter['afterHours'])) {
+            $filter->appendWhere('a.after_hours = %s AND ', (int)$filter['afterHours']);
+        }
         if (!empty($filter['status'])) {
             $w = $this->makeMultiQuery($filter['status'], 'a.status');
             if ($w) $filter->appendWhere('(%s) AND ', $w);
         }
-        if (!empty($filter['afterHours'])) {
-            $filter->appendWhere('a.after_hours = %s AND ', (int)$filter['afterHours']);
-        }
         if (!empty($filter['reportStatus'])) {
-            $filter->appendWhere('a.report_status = %s AND ', $this->quote($filter['reportStatus']));
+            $w = $this->makeMultiQuery($filter['reportStatus'], 'a.report_status');
+            if ($w) $filter->appendWhere('(%s) AND ', $w);
         }
         if (!empty($filter['submissionReceived'])) {
             $filter->appendWhere('a.submission_received = %s AND ', (int)$filter['submissionReceived']);

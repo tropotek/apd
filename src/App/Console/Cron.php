@@ -52,11 +52,61 @@ class Cron extends \Bs\Console\Iface
         // Find uncompleted cases
         $this->write('Send Complete Case Report Reminders for '.$institution->getName().': ');
 
+        $sql = <<<SQL
+WITH
+completed AS (
+    SELECT
+        r.path_case_id,
+        COUNT(*) as cnt,
+        MAX(s.created) AS requests_completed
+    FROM status s
+    JOIN request r on (s.fid = r.id)
+    WHERE s.fkey = 'App\\Db\\Request'
+    AND NOT s.del
+    AND s.name = 'completed'
+    GROUP BY r.path_case_id
+),
+requests AS (
+    SELECT
+        r.path_case_id,
+        p.pathologist_id,
+        -- p.account_status,
+        COUNT(*) AS total,
+        SUM(IF(r.status = 'pending', 1, 0)) AS pending_cnt,
+        SUM(IF(r.status = 'completed', 1, 0)) AS complete_cnt,
+        c.requests_completed,
+        p.report_status,
+        p.status AS 'case_status'
+        -- p.created AS 'case_created'
+    FROM request r
+    JOIN path_case p ON (r.path_case_id = p.id)
+    LEFT JOIN completed c ON (p.id = c.path_case_id)
+    WHERE
+        r.status != 'cancelled'
+        AND p.type = 'biopsy'
+        AND p.pathologist_id > 0
+        AND c.requests_completed < NOW() - INTERVAL 1 DAY
+    GROUP BY r.path_case_id
+)
+SELECT
+    r.pathologist_id,
+    COUNT(*) AS reports_due
+FROM requests r
+WHERE r.report_status != 'completed'
+AND r.case_status != 'cancelled'
+AND r.pending_cnt = 0
+GROUP BY r.pathologist_id
+SQL;
+        $pathologistList = $this->getDb()->query($sql);
 
+        foreach ($pathologistList as $row) {
+            $pathologist = $this->getConfig()->getUserMapper()->find($row->pathologist_id);
+            // send email with row->reports_due number in it and a link to the users dashboard.
 
-
+        }
 
     }
+
 
     /**
      * If case not completed after 15 working days from the `necropsyPerformedOn` date,
@@ -67,7 +117,32 @@ class Cron extends \Bs\Console\Iface
         // Find uncompleted cases
         $this->write('Send Necropsy Complete Case Reminders for '.$institution->getName().': ');
 
+        $sql = <<<SQL
+SELECT
+    pathologist_id,
+    COUNT(*) AS cases
+FROM path_case
+WHERE necropsy_performed_on IS NOT NULL
+    AND type = 'necropsy'
+    AND status NOT IN ('complete', 'cancelled')
+    AND DATE(necropsy_performed_on) <= CURRENT_DATE - INTERVAL 15 DAY
+    AND pathologist_id != 0
+GROUP BY pathologist_id
+SQL;
+        $pathologistList = $this->getDb()->query($sql);
+
+        foreach ($pathologistList as $row) {
+            $pathologist = $this->getConfig()->getUserMapper()->find($row->pathologist_id);
+            // send email with row->cases number in it and a link to the users dashboard.
+
+        }
+
+
+
+
+
     }
+
 
     /**
      * If a dispose_on date has been set then check for any t
