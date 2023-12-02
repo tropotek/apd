@@ -34,47 +34,14 @@ class Cron extends \Bs\Console\Iface
         $institutionList = InstitutionMap::create()->findFiltered(['active' => true]);
         foreach ($institutionList as $institution) {
             $this->sendDisposalReminders($institution);
-
             $this->sendNecropsyCompleteCaseReminders($institution);
-
             $this->sendBiopsyCompleteReportReminders($institution);
         }
 
         $this->write('', OutputInterface::VERBOSITY_VERBOSE);
         return 0;
     }
-
-
-    /**
-     * If case not completed after 15 working days from the `necropsyPerformedOn` date,
-     *   send a reminder to the pathologist (CC site admin)
-     */
-    public function sendNecropsyCompleteCaseReminders(Institution $institution)
-    {
-        // Find uncompleted cases
-        $this->write('Send necropsy complete case reminders for '.$institution->getName().': ');
-
-        $messageList = MailTemplateHandler::createMessageList(PathCase::REMINDER_NECROPSY_COMPLETE_CASE, $institution);
-        $sent = MailTemplateHandler::sendMessageList($messageList);
-        $this->write($sent.' emails sent.');
-    }
-
-
-    /**
-     * For biopsy cases when all Histology requests are completed, send a reminder to
-     * pathologist (cc site admin) after 24 hours to `complete` the report.
-     */
-    public function sendBiopsyCompleteReportReminders(Institution $institution)
-    {
-        // Find uncompleted cases
-        $this->write('Send Biopsy Complete Case Report Reminders for '.$institution->getName().': ');
-
-        $messageList = MailTemplateHandler::createMessageList(PathCase::REMINDER_BIOPSY_COMPLETE_REPORT, $institution);
-        $sent = MailTemplateHandler::sendMessageList($messageList);
-        $this->write($sent.' emails sent.');
-
-    }
-
+    
 
     /**
      * If a dispose_on date has been set then check for any t
@@ -98,7 +65,34 @@ class Cron extends \Bs\Console\Iface
             $this->writeGreen($spc . 'Case: #' . $case->getPathologyId(), OutputInterface::VERBOSITY_VERY_VERBOSE);
         }
         if ($sent) $this->write($sent.' emails sent.');
+    }
 
+    /**
+     * If case not completed after 15 working days from the `necropsyPerformedOn` date,
+     *   send a reminder to the pathologist (CC site admin)
+     */
+    public function sendNecropsyCompleteCaseReminders(Institution $institution)
+    {
+        // Find uncompleted cases
+        $this->write('Send necropsy complete case reminders for '.$institution->getName().': ');
+
+        $messageList = MailTemplateHandler::createMessageList(PathCase::REMINDER_NECROPSY_COMPLETE_CASE, $institution);
+        $sent = MailTemplateHandler::sendMessageList($messageList);
+        $this->write($sent.' emails sent.');
+    }
+
+    /**
+     * For biopsy cases when all Histology requests are completed, send a reminder to
+     * pathologist (cc site admin) after 24 hours to `complete` the report.
+     */
+    public function sendBiopsyCompleteReportReminders(Institution $institution)
+    {
+        // Find uncompleted cases
+        $this->write('Send Biopsy Complete Case Report Reminders for '.$institution->getName().': ');
+
+        $messageList = MailTemplateHandler::createMessageList(PathCase::REMINDER_BIOPSY_COMPLETE_REPORT, $institution);
+        $sent = MailTemplateHandler::sendMessageList($messageList);
+        $this->write($sent.' emails sent.');
     }
 
 

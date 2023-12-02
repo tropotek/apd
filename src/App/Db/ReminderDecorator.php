@@ -76,6 +76,7 @@ class ReminderDecorator
     {
         $config = \Uni\Config::getInstance();
         $messageList = [];
+        if ($mailTemplate->getRecipientType() != MailTemplate::RECIPIENT_PATHOLOGIST) return $messageList;
 
         $sql = <<<SQL
 SELECT
@@ -128,6 +129,7 @@ SQL;
     {
         $config = \Uni\Config::getInstance();
         $messageList = [];
+        if ($mailTemplate->getRecipientType() != MailTemplate::RECIPIENT_PATHOLOGIST) return $messageList;
 
         $sql = <<<SQL
 WITH
