@@ -80,11 +80,12 @@ SQL;
             $output->writeln(' ' . $pathCase->getPathologyId());
             $pathCase->setStatusNotify(false);
             $pathCase->setStatus(\App\Db\PathCase::STATUS_COMPLETED);
-            // TODO: find out if this is OK
+
+            // TODO: find out if completing the report here is OK...
             $pathCase->setReportStatus(PathCase::REPORT_STATUS_COMPLETED);
+
             $pathCase->save();
         }
-
 
         return 0;
     }

@@ -24,12 +24,12 @@ class MailTemplateHandler implements Subscriber
      * array of messages|emails that are to be sent
      *
      * @param string $eventName The MailTemplate event to create the messages from
-     * @param Model $model The Model object to use to populate the mail template
+     * @param mixed $model (optional) The Model object to use to populate the mail template
      * @param string $subject
      * @return array|CurlyMessage[]
      * @throws \Exception
      */
-    public static function createMessageList($eventName, $model, $subject = '')
+    public static function createMessageList(string $eventName, $model = null, string $subject = '')
     {
         /** @var array|CurlyMessage[] $messageList */
         $messageList = array();
@@ -41,7 +41,7 @@ class MailTemplateHandler implements Subscriber
         // Find all mail templates for this status update
         $mailTemplateList = \App\Db\MailTemplateMap::create()->findFiltered(array(
             'active' => true,
-            'institutionId' => $model->getConfig()->getInstitutionId(),
+            'institutionId' => $mEvent->getConfig()->getInstitutionId(),
             'mailTemplateEventId' => $mEvent->getId()
         ));
 
@@ -131,7 +131,7 @@ class MailTemplateHandler implements Subscriber
             }
         }
 
-        return 0;
+        return $sent;
     }
 
 

@@ -332,51 +332,64 @@ UPDATE path_case set dispose_on = '2023-09-13 09:03:46' WHERE id = 2911;
 -- marke reports completed if cases are marked completed
 UPDATE path_case SET report_status = 'completed' WHERE status = 'completed';
 
--- Update mail template content
 
+-- Add/Update mail template events for reminder emails
+INSERT INTO mail_template_event (name, event, callback, description, tags) VALUES
+    ('Case - Necropsy Complete Case Reminder', 'status.app.pathCase.necropsyCompleteCase', 'App\\Db\\ReminderDecorator::onNecropsyCompleteCase', 'Triggered when a case disposal reminder email is triggered', NULL),
+    ('Case - Biopsy Complete Case Report Reminder', 'status.app.pathCase.biopsyCompleteReport', 'App\\Db\\ReminderDecorator::onBiopsyCompleteReport', 'Triggered when a case disposal reminder email is triggered', NULL);
+UPDATE mail_template_event SET callback = 'App\\Db\\ReminderDecorator::onDisposalReminder' WHERE id = 11;
+
+
+-- Update mail template content
 TRUNCATE mail_template;
-INSERT INTO mail_template VALUES
-(1, 1, 1, 'pathologist', '<p>&nbsp;</p>
+INSERT INTO dev_apd.mail_template (id, institution_id, mail_template_event_id, recipient_type, template, active, modified, created)
+VALUES  (1, 1, 1, 'pathologist', '<p>Hi {recipient::name},</p>
 <p>A new pathology case (<a href="{pathCase::url}">#{pathCase::pathologyId}</a>) has been created by {pathCase::pathologist}.</p>
 <p><a href="{pathCase::url}">Click here to view the case.</a></p>
 <p>&nbsp;</p>
 <hr />
-<p>{institution::name}<br />Email: {institution::email}<br />Phone: {institution::phone}</p>', 1, '2023-12-02 11:55:58', '2021-02-19 11:12:57'),
-        (2, 1, 11, 'pathologist', '<p>&nbsp;</p>
+<p>{institution::name}<br />Email: {institution::email}<br />Phone: {institution::phone}</p>', 1, '2023-12-03 07:56:20', '2021-02-19 11:12:57'),
+        (2, 1, 11, 'pathologist', '<p>Hi {recipient::name},</p>
 <p>The pathology case <a href="{pathCase::url}">#{pathCase::pathologyId}</a> is overdue for disposal. The requested disposal date is {pathCase::disposeOn}</p>
 <p><a href="{pathCase::url}">Click here to view the case.</a></p>
 <p>Please process the disposal request and update the case to completed or clear the "Disposal Completion Date" field.</p>
 <p>&nbsp;</p>
 <hr />
-<p>{institution::name}<br />Email: {institution::email}<br />Phone: {institution::phone}</p>', 1, '2023-12-02 11:56:04', '2021-02-19 11:12:57'),
-        (3, 1, 8, 'serviceTeam', '<p>&nbsp;</p>
+<p>{institution::name}<br />Email: {institution::email}<br />Phone: {institution::phone}</p>', 1, '2023-12-03 07:56:24', '2021-02-19 11:12:57'),
+        (3, 1, 8, 'serviceTeam', '<p>Hi {recipient::name},</p>
 <p>{request::requestCount} new pathology request(s) have been submitted.</p>
 <p><a href="{pathCase::url}">Click here to view the case.</a></p>
 <p>&nbsp;</p>
 <hr />
 <p>{institution::name}<br />Email: {institution::email}<br />Phone: {institution::phone}</p>
-<p>&nbsp;</p>', 1, '2023-12-02 11:56:10', '2021-02-24 12:12:31'),
-        (4, 1, 10, 'serviceTeam', '<p>&nbsp;</p>
+<p>&nbsp;</p>', 1, '2023-12-03 07:56:29', '2021-02-24 12:12:31'),
+        (4, 1, 10, 'serviceTeam', '<p>Hi {recipient::name},</p>
 <p>{request::requestCount} pathology request(s) have been cancelled.</p>
 <p><a href="{pathCase::url}">Click here to view the case.</a></p>
 <p>&nbsp;</p>
 <hr />
 <p>{institution::name}<br />Email: {institution::email}<br />Phone: {institution::phone}</p>
-<p>&nbsp;</p>', 1, '2023-12-02 11:56:19', '2021-05-04 07:24:23'),
-        (5, 1, 6, 'pathologist', '<p>&nbsp;</p>
+<p>&nbsp;</p>', 1, '2023-12-03 07:56:33', '2021-05-04 07:24:23'),
+        (5, 1, 6, 'pathologist', '<p>Hi {recipient::name},</p>
 <p>The pathology case (<a href="{pathCase::url}">#{pathCase::pathologyId}</a>) has been completed.</p>
 <p><a href="{pathCase::url}">Click here to view the case.</a></p>
 <p>&nbsp;</p>
 <hr />
 <p>{institution::name}<br />Email: {institution::email}<br />Phone: {institution::phone}</p>
-<p>&nbsp;</p>', 1, '2023-12-02 11:56:24', '2021-05-25 04:39:58');
-
-
-
-
-
-
-
+<p>&nbsp;</p>', 1, '2023-12-03 07:56:41', '2021-05-25 04:39:58'),
+        (6, 1, 12, 'pathologist', '<p>Hi {recipient::name},</p>
+<p>You have {cases_due} necropsy cases waiting to be completed. They are 15 day overdue since the necropsy was performed.</p>
+<p><a href="{user::homeUrl}">Click here to view your APD Dashboard.</a></p>
+<p>Please close them as soon as you are able to let users know work on these cases is completed.</p>
+<p>&nbsp;</p>
+<hr />
+<p>{institution::name}<br />Email: {institution::email}<br />Phone: {institution::phone}</p>', 1, '2023-12-03 07:56:45', '2023-12-03 07:12:29'),
+        (7, 1, 13, 'pathologist', '<p>Hi {recipient::name},</p>
+<p>You have {reports_due} biopsy cases waiting for their report to be completed.</p>
+<p><a href="{user::homeUrl}">Click here to view your APD Dashboard.</a></p>
+<p>&nbsp;</p>
+<hr />
+<p>{institution::name}<br />Email: {institution::email}<br />Phone: {institution::phone}</p>', 1, '2023-12-03 07:56:50', '2023-12-03 07:17:07');
 
 
 -- cleanup objects and functions
