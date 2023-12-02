@@ -32,7 +32,7 @@ class Cron extends \Bs\Console\Iface
 
         $institutionList = InstitutionMap::create()->findFiltered(['active' => true]);
         foreach ($institutionList as $institution) {
-            $this->sendDisposalReminders($institution);
+            //$this->sendDisposalReminders($institution);
 
             $this->sendCompleteReportReminders($institution);
 
@@ -50,7 +50,11 @@ class Cron extends \Bs\Console\Iface
     public function sendCompleteReportReminders(Institution $institution)
     {
         // Find uncompleted cases
-        $this->write('Send Disposal Reminders for '.$institution->getName().': ');
+        $this->write('Send Complete Case Report Reminders for '.$institution->getName().': ');
+
+
+
+
 
     }
 
@@ -60,6 +64,8 @@ class Cron extends \Bs\Console\Iface
      */
     public function sendNecropsyCompletionReminders(Institution $institution)
     {
+        // Find uncompleted cases
+        $this->write('Send Necropsy Complete Case Reminders for '.$institution->getName().': ');
 
     }
 

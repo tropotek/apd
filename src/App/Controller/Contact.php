@@ -166,8 +166,10 @@ HTML;
         $message->addTo($email);
         $message->setSubject($this->getConfig()->get('site.title') . ':  Contact Form Submission - ' . $name);
         $message->set('content', $content);
-        // TODO: Dissabled untill I can confirm if this is causing spam
+
+        // TODO: Disabled until I can confirm if this is causing spam
         //return $this->getConfig()->getEmailGateway()->send($message);
+
         return true;
     }
 

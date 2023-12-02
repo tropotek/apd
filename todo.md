@@ -20,7 +20,7 @@
 - Added reviewer credentials to the PDF report under the pathologist section
 - Fixed Disposal reminder emails
 - Updated email text content messages to be more readable
-
+- Set all report_status to completed for completed cases
 
 
 
@@ -41,6 +41,15 @@ __Update Questions/Notes__
 - For the dashboard we have the cases table and the requests table, I assume the cases table is mostly used 
 by the Pathologists and the requests table is used by the Technicians is this correct?
 Who are users the general users that are not a Path or Tech, what permissions should they have?
+
+- The reportStatus for a lof of cases is left at `interim` we could set the report status to completed when 
+the case is set to completed? Or not allow the case to be set to completed until the report is set first? 
+In this update I have auto set completed cases to report_status to completed so we do not have as 
+many initial reminders being sent. If we also run the script to complete old cases this will also reduce the 
+number of reminders sent initially.
+
+
+
 
 
 

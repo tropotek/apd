@@ -1,6 +1,7 @@
 <?php
 namespace App\Console;
 
+use App\Db\PathCase;
 use App\Db\PathCaseMap;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -34,7 +35,7 @@ completed AS (
     SELECT
         r.path_case_id,
         COUNT(*) as cnt,
-        MAX(s.created) AS last_completed
+        MAX(s.created) AS requests_completed
     FROM status s
     JOIN request r on (s.fid = r.id)
     WHERE s.fkey = 'App\\\Db\\\Request'
@@ -50,7 +51,7 @@ requests AS (
         COUNT(*) AS total,
         SUM(IF(r.status = 'pending', 1, 0)) AS pending_cnt,
         SUM(IF(r.status = 'completed', 1, 0)) AS complete_cnt,
-        c.last_completed,
+        c.requests_completed,
         p.status AS 'case_status',
         p.created AS 'case_created'
     FROM request r
@@ -59,34 +60,32 @@ requests AS (
     WHERE
         r.status != 'cancelled'
         AND p.pathologist_id > 0
-        -- all cases that would need reminders (not needed if we auto set cases to completed with the below condition)
---        AND (p.account_status = '' OR p.account_status = 'pending')
-        -- find cases to be set to status 'completed'
---        AND (p.account_status = 'invoiced' OR p.account_status = 'uvetInvoiced')
     GROUP BY r.path_case_id
+    ORDER BY r.path_case_id
 )
 SELECT *
 FROM requests r
 WHERE r.case_status NOT IN ('completed','cancelled', 'reported')
---   AND r.pending_cnt = 0
    AND (r.account_status = 'invoiced' OR r.account_status = 'uvetInvoiced')
-   AND last_completed < NOW() - INTERVAL 1 MONTH
+   AND requests_completed < NOW() - INTERVAL 1 MONTH
 SQL;
         $rows = $config->getDb()->query($sql);
-
-vd($rows->rowCount());
-
+        if ($rows->rowCount()) {
+            $output->writeln('Completing cases: ');
+        }
         foreach ($rows as $row) {
-            vd($row);
             /** @var \App\Db\PathCase $pathCase */
             $pathCase = PathCaseMap::create()->find($row->path_case_id);
+            if (!$pathCase) continue;
+            $output->writeln(' ' . $pathCase->getPathologyId());
             $pathCase->setStatusNotify(false);
             $pathCase->setStatus(\App\Db\PathCase::STATUS_COMPLETED);
-            $pathCase->save();
+            // TODO: find out if this is OK
+            $pathCase->setReportStatus(PathCase::REPORT_STATUS_COMPLETED);
+            //$pathCase->save();
         }
 
 
-        $output->writeln('Complete!!!');
         return 0;
     }
 

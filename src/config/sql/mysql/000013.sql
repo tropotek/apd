@@ -327,16 +327,49 @@ ALTER TABLE path_case CHANGE COLUMN ac_type  dispose_method VARCHAR(64) NULL DEF
 ALTER TABLE path_case CHANGE COLUMN disposal dispose_on DATETIME DEFAULT NULL;
 
 -- fix a case invalid date
-UPDATE path_case set path_case.dispose_on = '2023-09-13 09:03:46' WHERE id = 2911;
+UPDATE path_case set dispose_on = '2023-09-13 09:03:46' WHERE id = 2911;
 
--- Update mail template params
-UPDATE mail_template SET template = REPLACE(template, '{pathCase::clientId}', '{pathCase::companyId}') WHERE 1;
-UPDATE mail_template SET template = REPLACE(template, '{pathCase::acType}', '{pathCase::disposeMethod}') WHERE 1;
-UPDATE mail_template SET template = REPLACE(template, '{pathCase::disposal}', '{pathCase::disposeOn}') WHERE 1;
+-- marke reports completed if cases are marked completed
+UPDATE path_case SET report_status = 'completed' WHERE status = 'completed';
 
 -- Update mail template content
 
-
+TRUNCATE mail_template;
+INSERT INTO mail_template VALUES
+(1, 1, 1, 'pathologist', '<p>&nbsp;</p>
+<p>A new pathology case (<a href="{pathCase::url}">#{pathCase::pathologyId}</a>) has been created by {pathCase::pathologist}.</p>
+<p><a href="{pathCase::url}">Click here to view the case.</a></p>
+<p>&nbsp;</p>
+<hr />
+<p>{institution::name}<br />Email: {institution::email}<br />Phone: {institution::phone}</p>', 1, '2023-12-02 11:55:58', '2021-02-19 11:12:57'),
+        (2, 1, 11, 'pathologist', '<p>&nbsp;</p>
+<p>The pathology case <a href="{pathCase::url}">#{pathCase::pathologyId}</a> is overdue for disposal. The requested disposal date is {pathCase::disposeOn}</p>
+<p><a href="{pathCase::url}">Click here to view the case.</a></p>
+<p>Please process the disposal request and update the case to completed or clear the "Disposal Completion Date" field.</p>
+<p>&nbsp;</p>
+<hr />
+<p>{institution::name}<br />Email: {institution::email}<br />Phone: {institution::phone}</p>', 1, '2023-12-02 11:56:04', '2021-02-19 11:12:57'),
+        (3, 1, 8, 'serviceTeam', '<p>&nbsp;</p>
+<p>{request::requestCount} new pathology request(s) have been submitted.</p>
+<p><a href="{pathCase::url}">Click here to view the case.</a></p>
+<p>&nbsp;</p>
+<hr />
+<p>{institution::name}<br />Email: {institution::email}<br />Phone: {institution::phone}</p>
+<p>&nbsp;</p>', 1, '2023-12-02 11:56:10', '2021-02-24 12:12:31'),
+        (4, 1, 10, 'serviceTeam', '<p>&nbsp;</p>
+<p>{request::requestCount} pathology request(s) have been cancelled.</p>
+<p><a href="{pathCase::url}">Click here to view the case.</a></p>
+<p>&nbsp;</p>
+<hr />
+<p>{institution::name}<br />Email: {institution::email}<br />Phone: {institution::phone}</p>
+<p>&nbsp;</p>', 1, '2023-12-02 11:56:19', '2021-05-04 07:24:23'),
+        (5, 1, 6, 'pathologist', '<p>&nbsp;</p>
+<p>The pathology case (<a href="{pathCase::url}">#{pathCase::pathologyId}</a>) has been completed.</p>
+<p><a href="{pathCase::url}">Click here to view the case.</a></p>
+<p>&nbsp;</p>
+<hr />
+<p>{institution::name}<br />Email: {institution::email}<br />Phone: {institution::phone}</p>
+<p>&nbsp;</p>', 1, '2023-12-02 11:56:24', '2021-05-25 04:39:58');
 
 
 
@@ -350,6 +383,10 @@ UPDATE mail_template SET template = REPLACE(template, '{pathCase::disposal}', '{
 -- ALTER TABLE path_case DROP COLUMN owner_id;
 -- DROP TABLE path_case_has_contact;
 -- DROP TABLE contact;
+
+ALTER TABLE path_case DROP COLUMN resident;
+ALTER TABLE path_case DROP COLUMN name;
+ALTER TABLE path_case DROP COLUMN cost;
 DROP FUNCTION IF EXISTS ucwords;
 
 
