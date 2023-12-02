@@ -1,30 +1,53 @@
 # APD
 
+### Tasks Completed
+- Added a new student contact System (Manager/Edit)
+- Updated Case edit page to use new student field
+- Update Client data fixing names and removing duplicates where possible
+- Create new Client Contacts from the Client email CC field
+- Added new Company and CompanyContact System
+- Update Case edit page to use new Company (Client) table
+- Added CompanyContacts filed to Case edit page with ability to create new contact for company 
+- Added alert to dashboard for pathologists stating how many non-completed case they have
+- Security and bugfix updates to base libraries
+- Added autocomplete to Case fields 'species', 'Owner' and 'Colour'
+- Removed old Contact system
+- Remove client hover infobox, replace with a panel on the left that shows client and contact info that dynamically updates.
+- Update staff manager/edit added disable field instead of delete.
+- Fixed masquerade logout bug not returning to the correct URL
+- Added new permission "Review Cases" These users will see a checkbox in a case so they can mark a case as reviewed
+- Added reviewed by checkbox that when clicked adds the user as teh reviewer for a case
+- Added reviewer credentials to the PDF report under the pathologist section
+- Fixed Disposal reminder emails
+- Updated email text content messages to be more readable
+
+
+
+
 ### TODO Tasks 17/11/23:
 
 __Release Notes:__
 
 - Backup the DB before releasing
 - Release the updates with `./bin/cmd ug`
-- Run the script `./bin/cmd ro` to add/create company_contacts for the email_cc field
-- Confirm with Smitha if we should complete all cases over a month old and have been invoiced and have no requests pending.
-If so, then run the command `./bin/cmd cc` after release
+- (TODO: Confirm with Smitha if we should complete old cases) Run the command `./bin/cmd cc` if OK
 - 
-- Update mail templates:
-    - (Disposal rem's) `PathCase::acType` to `PathCase::disposalMethod`
-    - (Disposal rem's) `PathCase::disposal` to `PathCase::disposeOn`
-    - 
 
 __Update Questions/Notes__
-- Does not look like staff are completing cases, they seem to stop on `examined`, along with the reminder emails we could:
+- Does not look like staff are completing cases, a lot seem to stop on `examined`, along with the reminder emails we could:
   - Added an alert to the dashboard showing how many cases the pathologist has that are not completed, is this OK?
-  - We can mark case's as `completed` if the `account_status` is set to `invoiced` and all requests are complete (run the command `./bin/cmd cc`)
-  - 
+  - We can mark case's as `completed` if the `account_status` is set to `invoiced` and all requests are complete.
 
 - For the dashboard we have the cases table and the requests table, I assume the cases table is mostly used 
 by the Pathologists and the requests table is used by the Technicians is this correct?
 Who are users the general users that are not a Path or Tech, what permissions should they have?
 
+
+
+__TESTING__
+
+- Compare the live site and the dev site Clients and client contacts to see if they correctly match up.
+- 
 
 
 __Chargeable Updates__
@@ -51,8 +74,6 @@ Auto-populate contact select field when new client is selected.~~ [4hrs]
 - For biopsy cases when all Histology requests are completed, send a reminder to pathologist (cc site admin) after 24 hours  
 to `complete` the __report__ if not completed already. [4hrs] 
 
-NOTE: looks like cases are not being marked as completed, I think we need a list on the dashboard of open cases
-and ones that can be marked as completed.
 
 ----
 Total of 26 hours @ $100ph ($2,600)
@@ -71,12 +92,6 @@ or optionally on delete have a company select that migrates all cases to the sel
 - ~~Check the masquerade bug on logout not going back to correct page left from.~~ [1hrs]
 - ~~Fix staff delete/disable, review delete option in place of deactivate Check that it is obvious to remove a staff member.
   Test what happens when we delete a staff.~~ [2hrs]
-
-
-__TESTING__
-
-- Compare the live site and the dev site Clients and client contacts to see if they correctly match up.
-- 
 
 
 

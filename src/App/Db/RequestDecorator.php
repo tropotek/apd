@@ -3,6 +3,7 @@ namespace App\Db;
 
 use App\Config;
 use Tk\Collection;
+use Tk\Date;
 use Tk\Db\Map\Model;
 use Tk\Mail\CurlyMessage;
 use Tk\Mail\Message;
@@ -53,7 +54,7 @@ class RequestDecorator
             $message = CurlyMessage::create($mailTemplate->getTemplate());
             $message->set('_mailTemplate', $mailTemplate);
             if (!$subject) {
-                $subject = '[#' . $request->getId() . '] Pathology Request - ' . ucfirst($status->getName()) . ': ' . $request->getPathCase()->getPathologyId();
+                $subject = '[' . $request->getPathCase()->getPathologyId() . '] Pathology Request - ' . ucfirst($status->getName());
             }
             $message->setSubject($subject);
 
@@ -103,13 +104,13 @@ class RequestDecorator
             if ($request->getPathCase()) {
                 $message->replace(Collection::prefixArrayKeys(\App\Db\PathCaseMap::create()
                     ->unmapForm($request->getPathCase()), 'pathCase::'));
+                $message->set('pathCase::disposeOn', $request->getPathCase()->getDisposeOn(Date::FORMAT_MED_DATE) ?? '');
             }
-
-            if (property_exists($request, 'requestCount')) {
-                $message->set('request::requestCount' , $request->requestCount);
-            } else {
-                $message->set('request::requestCount' , '1');
+            $cnt = 1;
+            if ($request->getStatusMessage()) {
+                $cnt = (int)$request->getStatusMessage();
             }
+            $message->set('request::requestCount' , $cnt);
 
             $messageList[] = $message;
         }

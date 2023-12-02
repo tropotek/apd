@@ -2,6 +2,7 @@
 namespace App\Ui\Dialog;
 
 use App\Db\PathCase;
+use Tk\Collection;
 use Tk\CurlyTemplate;
 use Tk\Form;
 use Tk\Form\Event\Submit;
@@ -146,6 +147,10 @@ class EmailReport extends JsonForm
             $message->addAttachment($filePath, basename($file->getPath()), $file->getMime());
         }
 
+        if ($this->getPathCase()->getInstitution()) {
+            $message->replace(Collection::prefixArrayKeys(\Uni\Db\InstitutionMap::create()->unmapForm($this->getPathCase()->getInstitution()), 'institution::'));
+        }
+
         $message->set('clientName', 'N/A');
         if ($this->getPathCase()->getCompany()) {
             $message->set('clientName', $this->getPathCase()->getCompany()->getName());
@@ -164,6 +169,8 @@ class EmailReport extends JsonForm
             $message->set('animalTypeId', $this->pathCase->getAnimalTypeId());
         }
         $message->set('caseType::'.$this->getPathCase()->getType(), true);
+
+
 
         // A BIG OLD -- HACK -- HERE!!! (its late...)
         // Parsing blocks in a sub template is working but the main template it is not  ???

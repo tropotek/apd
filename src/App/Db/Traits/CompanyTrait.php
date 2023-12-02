@@ -15,12 +15,12 @@ trait CompanyTrait
     private $_company = null;
 
 
-    public function getCompanyId(): int
+    public function getCompanyId(): ?int
     {
         return $this->companyId;
     }
 
-    public function setCompanyId(int $companyId): self
+    public function setCompanyId(?int $companyId): self
     {
         $this->companyId = $companyId;
         return $this;

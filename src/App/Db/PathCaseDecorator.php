@@ -3,10 +3,12 @@ namespace App\Db;
 
 use App\Config;
 use Tk\Collection;
+use Tk\Date;
 use Tk\Db\Map\Model;
 use Tk\Mail\CurlyMessage;
 use Tk\Mail\Message;
 use Tk\ObjectUtil;
+use Uni\Db\User;
 use Uni\Uri;
 
 class PathCaseDecorator
@@ -97,7 +99,7 @@ class PathCaseDecorator
             $message = CurlyMessage::create($mailTemplate->getTemplate());
             $message->set('_mailTemplate', $mailTemplate);
             if (!$subject) {
-                $subject = '[#' . $case->getId() . '] ' . ObjectUtil::basename($case) . ' ' . ucfirst($status->getName()) . ': ' . $case->getPathologyId();
+                $subject = '[' . $case->getPathologyId() . '] ' . ObjectUtil::basename($case) . ' ' . ucfirst($status->getName());
             }
             $message->setSubject($subject);
 
@@ -118,10 +120,16 @@ class PathCaseDecorator
                 ->setScheme(Uri::SCHEME_HTTP_SSL)
                 ->set('pathCaseId', $case->getId())->toString());
             $message->replace(Collection::prefixArrayKeys(\App\Db\PathCaseMap::create()->unmapForm($case), 'pathCase::'));
+            $message->set('pathCase::disposeOn', $case->getDisposeOn(Date::FORMAT_MED_DATE) ?? '');
             if ($case->getInstitution())
                 $message->replace(Collection::prefixArrayKeys(\Uni\Db\InstitutionMap::create()->unmapForm($case->getInstitution()), 'institution::'));
             if ($case->getCompany())
                 $message->replace(Collection::prefixArrayKeys(\App\Db\ContactMap::create()->unmapForm($case->getCompany()), 'client::'));
+            /** @var User $pathologist */
+            $pathologist = $config->getUserMapper()->find($case->pathologistId);
+            if ($pathologist) {
+                $message->set('pathCase::pathologist', $pathologist->getName());
+            }
             $messageList[] = $message;
         }
         return $messageList;

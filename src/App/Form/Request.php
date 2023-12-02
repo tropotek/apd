@@ -138,6 +138,8 @@ class Request extends \Bs\FormIface
                     if ($i == (count($cassetteList)-1)) {
                         $this->setRequest($req);
                         $req->setStatusNotify(true);
+                        // Add total to a value in the request for the message system
+                        $req->setStatusMessage(count($reqList));
                     }
                     $req->save();
                     $reqList[] = $req;
@@ -145,8 +147,6 @@ class Request extends \Bs\FormIface
             }
             if ($req) {
                 Notice::create($req, $req->getPathCase()->getUserId(), ['requestList' => $reqList]);
-                // Add total to a value in the request for the message system
-                $req->requestCount = count($reqList);
             }
         } else {
             $this->getRequest()->setStatusNotify(true);

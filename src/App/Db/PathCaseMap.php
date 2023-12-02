@@ -145,7 +145,7 @@ class PathCaseMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Text('disposeMethod'));
             $this->formMap->addPropertyMap(new Form\Date('acHold'));
             $this->formMap->addPropertyMap(new Form\Integer('storageId'));
-            $this->formMap->addPropertyMap(new Form\Date('disposedOn'));
+            $this->formMap->addPropertyMap(new Form\Date('disposeOn'));
             $this->formMap->addPropertyMap(new Form\Boolean('studentReport'));
             $this->formMap->addPropertyMap(new Form\Text('reportStatus'));
             $this->formMap->addPropertyMap(new Form\Text('collectedSamples'));

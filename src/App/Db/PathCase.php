@@ -101,9 +101,9 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
 
     /**
      * Submitting Client (the billable client)
-     * @var int
+     * @var null|int
      */
-    public $companyId = 0;
+    public $companyId = null;
 
     /**
      * userId of the pathologist user
@@ -173,9 +173,9 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
 
     /**
      *
-     * @var string
+     * @var null|string
      */
-    public $accountStatus = '';
+    public $accountStatus = null;
 
     /**
      * @var bool
@@ -196,9 +196,9 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
 
     /**
      * Any issues the staff should be alerted to when dealing with this animal
-     * @var string
+     * @var null|string
      */
-    public $issue = '';
+    public $issue = null;
 
     /**
      * If true then alert user of this info when viewing the case
@@ -307,13 +307,13 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
     public $euthanised = false;
 
     /**
-     * @var string
+     * @var null|string
      */
-    public $euthanisedMethod = '';
+    public $euthanisedMethod = null;
 
     /**
      * after care type: General Disposal/cremation/Internal incineration
-     * @var string
+     * @var null|string
      */
     public $disposeMethod = '';
 
@@ -387,9 +387,9 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
     public $addendum = '';
 
     /**
-     * @var int
+     * @var null|int
      */
-    public $reviewedById = 0;
+    public $reviewedById = null;
 
     /**
      * @var null|\DateTime
@@ -450,7 +450,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
             'issue', 'issueAlert', 'bioSamples', 'bioNotes', 'specimenCount', 'ownerName', 'animalName', 'animalTypeId',
             'species', 'breed', 'sex', 'desexed', 'patientNumber', 'microchip', 'origin', 'colour', 'weight',
             'dob', 'dod', 'euthanised', 'euthanisedMethod', 'disposeMethod', 'acHold', 'storageId', 'studentReport',
-            'disposal', 'collectedSamples', 'clinicalHistory', 'grossPathology', 'grossMorphologicalDiagnosis',
+            'disposeOn', 'collectedSamples', 'clinicalHistory', 'grossPathology', 'grossMorphologicalDiagnosis',
             'histopathology', 'ancillaryTesting', 'morphologicalDiagnosis', 'causeOfDeath', 'secondOpinion', 'addendum',
             'comments', 'notes', 'modified', 'created'];
         return $arr;
@@ -1057,7 +1057,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
         return $this->acHold;
     }
 
-    public function setDisposeOn($disposeOn) : PathCase
+    public function setDisposeOn(?\DateTime $disposeOn) : PathCase
     {
         $this->disposeOn = $disposeOn;
         return $this;
@@ -1241,7 +1241,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
         return $this->reviewedById;
     }
 
-    public function setReviewedById(int $reviewedById): PathCase
+    public function setReviewedById(?int $reviewedById): PathCase
     {
         $this->reviewedById = $reviewedById;
         return $this;

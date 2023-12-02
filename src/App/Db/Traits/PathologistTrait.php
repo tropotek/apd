@@ -21,7 +21,7 @@ trait PathologistTrait
 
 
     /**
-     * @return int
+     * @return null|int
      */
     public function getPathologistId()
     {
@@ -29,7 +29,7 @@ trait PathologistTrait
     }
 
     /**
-     * @param int|UserIface $userId
+     * @param null|int|UserIface $userId
      * @return $this
      */
     public function setPathologistId($userId)
