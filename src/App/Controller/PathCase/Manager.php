@@ -13,10 +13,6 @@ use Tk\Ui\ButtonDropdown;
  * TODO: Add Route to routes.php:
  *      $routes->add('path-case-manager', Route::create('/staff/path/caseManager.html', 'App\Controller\PathCase\Manager::doDefault'));
  *
- * @author Mick Mifsud
- * @created 2020-07-29
- * @link http://tropotek.com.au/
- * @license Copyright 2020 Tropotek
  */
 class Manager extends AdminManagerIface
 {
@@ -52,7 +48,7 @@ class Manager extends AdminManagerIface
             \Tk\Ui\Link::create('New Necropsy Case', Uri::createHomeUrl('/pathCaseEdit.html?type=necropsy'), 'fa fa-heart'),
             \Tk\Ui\Link::create('New Biopsy Case', Uri::createHomeUrl('/pathCaseEdit.html?type=biopsy'), 'fa fa-heartbeat'),
         ];
-        $this->getActionPanel()->append(ButtonDropdown::createButtonDropdown('New Case', '', $links));
+        $this->getActionPanel()->append(ButtonDropdown::createButtonDropdown('Create Case', '', $links));
 
     }
 

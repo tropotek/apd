@@ -10,33 +10,36 @@ todo file.
 
 
 ### Tasks Completed 17/11/23:
+Main Updates:
 - Added a new student contact System (Manager/Edit)
-- Updated Case edit page to use new student field
-- Update Client data fixing names and removing duplicates where possible
-- Create new Client Contacts from the Client email CC field
 - Added new Company and CompanyContact System
-- Update Case edit page to use new Company (Client) table
-- Added CompanyContacts filed to Case edit page with ability to create new contact for company 
 - Added alert to dashboard for pathologists stating how many non-completed case they have
-- Security and bugfix updates to base libraries
 - Added autocomplete to Case fields 'Species', 'Owner Name' and 'Colour'
-- Removed old Contact system that used to support Owner, Client and Student contacts all in one table
-- Remove client hover infobox, replace with a panel on the left that shows client and contact info that dynamically updates.
-- Update staff manager/edit added disable field instead of delete.
-- Fixed masquerade logout bug not returning to the correct URL
-- Added new permission "Review Cases" These users will see a checkbox in a case so they can mark a case as reviewed
-- Added reviewed by checkbox that when clicked adds the user as teh reviewer for a case
-- Added reviewer credentials to the PDF report under the pathologist section
-- Fixed Disposal reminder emails
+- Added new permission "Review Cases" These users will see a checkbox in a case, user can mark a case as reviewed
 - Updated email text content messages to be more readable
 - Set all report_status to completed for completed cases
 - Added Necropsy case complete reminders
 - Added Biopsy report complete reminders
+
+Other Updates:
+- Updated Case edit page to use new student field
+- Update Client data fixing names and removing duplicates where possible
+- Create new Client Contacts from the Client email CC field
+- Update Case edit page to use new Company (Client) table
+- Added CompanyContacts field to Case edit page with ability to create new contact for company 
+- Security and bugfix updates to base libraries
+- Removed old Contact system that used to support Owner, Client and Student contacts all in one table
+- Remove client hover infobox, replace with a panel on the left that shows client and contact info that dynamically updates.
+- Update staff manager/edit added disable field instead of delete.
+- Fixed masquerade logout bug not returning to the correct URL
+- Added reviewed by checkbox that when clicked adds the user as teh reviewer for a case
+- Added reviewer credentials to the PDF report under the pathologist section
+- Fixed Disposal reminder emails
 - Added editable mail templates for new reminders
 - Setup cron script to run nightly at 6pm (this sends all reminder emails)
 - Re-ordered the left Nav menu and added separators for different tasks
 - Fixed Content page saving issues with javascript
-- Reduced visible filters on Dashboard Case/Request tables (let me know if any filters need to be re-added) 
+- Reduced visible filters on Dashboard Case/Request tables (let me know if any filters need to be re-added)
 
 
 ### TODO Tasks 17/11/23:
@@ -59,7 +62,7 @@ Who are users the general users that are not a Path or Tech, what permissions sh
 
 - The reportStatus for a lof of cases is left at `interim` we could set the report status to completed when 
 the case is set to completed? Or not allow the case to be set to completed until the report is set first? 
-In this update I have auto set completed cases to report_status to completed so we do not have as 
+In this update I have auto set completed cases to report_status to completed then we will not have as 
 many initial reminders being sent. If we also run the script to complete old cases this will also reduce the 
 number of reminders sent initially.
 
@@ -67,12 +70,14 @@ number of reminders sent initially.
 or optionally on delete have a company select that migrates all cases to the selected company on delete. [4hrs]
 
 
+- We could also move the animal details to another tab to make the form a little more readable? 
+
 
 
 __TESTING__
 
 - Compare the live site and the dev site Clients and Client Contacts to see if they correctly match up.
-- 
+
 
 
 

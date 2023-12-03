@@ -190,14 +190,14 @@ class Edit extends AdminEditIface
     public function initActionPanel()
     {
         if ($this->pathCase->getId()) {
-            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn(
-                'Cassette List',
-                \Uni\Uri::createHomeUrl('/cassetteManager.html')->set('pathCaseId', $this->pathCase->getId()),
-                'fa fa-stack-overflow fa-add-action'));
-            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn(
-                'Request List',
-                \Uni\Uri::createHomeUrl('/requestManager.html')->set('pathCaseId', $this->pathCase->getId()),
-                'fa fa-medkit fa-add-action'));
+//            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn(
+//                'Cassette List',
+//                \Uni\Uri::createHomeUrl('/cassetteManager.html')->set('pathCaseId', $this->pathCase->getId()),
+//                'fa fa-stack-overflow fa-add-action'));
+//            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn(
+//                'Request List',
+//                \Uni\Uri::createHomeUrl('/requestManager.html')->set('pathCaseId', $this->pathCase->getId()),
+//                'fa fa-medkit fa-add-action'));
 //            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn(
 //                'Invoice Items',
 //                \Uni\Uri::createHomeUrl('/invoiceItemManager.html')->set('pathCaseId', $this->pathCase->getId()),
@@ -205,12 +205,9 @@ class Edit extends AdminEditIface
 
             $links = [
                 \Tk\Ui\Link::create('PDF View', \Uni\Uri::create()->set('pdf-view')->set(Crumbs::CRUMB_IGNORE), 'fa fa-file-pdf-o')->setAttr('target', '_blank')->setAttr('title', 'Download/View Case Details'),
-                \Tk\Ui\Link::create('HTML View', \Uni\Uri::create()->set('pdf-view')->set('isHtml')->set(Crumbs::CRUMB_IGNORE), 'fa fa-eye')->setAttr('target', '_blank')->setAttr('title', 'Download/View Case Details')
+                \Tk\Ui\Link::create('HTML View', \Uni\Uri::create()->set('pdf-view')->set('isHtml')->set(Crumbs::CRUMB_IGNORE), 'fa fa-code')->setAttr('target', '_blank')->setAttr('title', 'Download/View Case Details')
             ];
-            $this->getActionPanel()->append(ButtonDropdown::createButtonDropdown('Case View', 'fa fa-eye', $links))->setAttr('title', 'Download/View Case Details');
-
-            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Email Report', \Uni\Uri::create()->set('pdf')->set(Crumbs::CRUMB_IGNORE), 'fa fa-envelope-o'))
-                ->setAttr('data-toggle', 'modal')->setAttr('data-target', '#'.$this->emailReportDialog->getId());
+            $this->getActionPanel()->append(ButtonDropdown::createButtonDropdown('Case Details', 'fa fa-eye', $links))->setAttr('title', 'Download/View Case Details');
 
             $links = [
                 \Tk\Ui\Link::create('PDF Report', \Uni\Uri::create()->set('pdf')->set(Crumbs::CRUMB_IGNORE), 'fa fa-file-pdf-o')->setAttr('target', '_blank')->setAttr('title', 'Download/View Report'),
@@ -218,8 +215,10 @@ class Edit extends AdminEditIface
             ];
             $this->getActionPanel()->append(ButtonDropdown::createButtonDropdown('Report', 'fa fa-file-pdf-o', $links))->setAttr('title', 'Download/View Report');
 
-        }
+            $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Email Report', \Uni\Uri::create()->set('pdf')->set(Crumbs::CRUMB_IGNORE), 'fa fa-envelope-o'))
+                ->setAttr('data-toggle', 'modal')->setAttr('data-target', '#'.$this->emailReportDialog->getId());
 
+        }
 
     }
     
@@ -276,10 +275,12 @@ JS;
         }
         if ($this->cassetteTable) {
             $template->appendTemplate('side-panel-cassette', $this->cassetteTable->show());
+            $template->setAttr('side-panel-cassette-url', 'href', \Uni\Uri::createHomeUrl('/cassetteManager.html')->set('pathCaseId', $this->pathCase->getId()));
             $template->setVisible('side-panel-cassette');
         }
         if ($this->requestTable) {
             $template->appendTemplate('side-panel-requests', $this->requestTable->show());
+            $template->setAttr('side-panel-requests-url', 'href', \Uni\Uri::createHomeUrl('/requestManager.html')->set('pathCaseId', $this->pathCase->getId()));
             $template->setVisible('side-panel-requests');
         }
         if ($this->invoiceTable) {
@@ -332,8 +333,11 @@ JS;
   </div>
   <div class="col-4" var="panel2" choice="panel2">
     <div class="tk-panel" data-panel-title="Staff Notes" data-panel-icon="fa fa-sticky-note" var="notes-body" choice="notes-panel"></div>
-    <div class="tk-panel tk-cassette-list" data-panel-title="Cassettes" data-panel-icon="fa fa-stack-overflow" var="side-panel-cassette" choice="side-panel-cassette"></div>
+    <div class="tk-panel tk-cassette-list" data-panel-title="Cassettes" data-panel-icon="fa fa-stack-overflow" var="side-panel-cassette" choice="side-panel-cassette">
+      <div class="tk-panel-title-right"><a href="javascript:;" class="btn btn-sm btn-default" var="side-panel-cassette-url" title="Click to view Manager page"><i class="fa fa-list"></i></a></div>
+    </div>
     <div class="tk-panel tk-request-list" data-panel-title="Histology Requests" data-panel-icon="fa fa-medkit" var="side-panel-requests" choice="side-panel-requests">
+      <div class="tk-panel-title-right"><a href="javascript:;" class="btn btn-sm btn-default" var="side-panel-requests-url" title="Click to view Manager page"><i class="fa fa-list"></i></a></div>
       <p choice="hide"><small>* = the service or cassette record has been deleted.</small></p>
     </div>
     <div class="tk-panel" data-panel-title="Files" data-panel-icon="fa fa-floppy-o" var="side-panel-files" choice="side-panel-files"></div>

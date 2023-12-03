@@ -252,6 +252,8 @@ JS;
                 ->setNotes('Set the status. Use the checkbox to disable notification emails.');
         }
 
+
+        $tab = 'Animal';
         $this->appendField(new Field\Autocomplete('ownerName'))->setTabGroup($tab)
             ->addOnAjax(function (Field\Autocomplete $field, \Tk\Request $request) {
                 return PathCaseMap::create()->getOwnerNameList($this->getConfig()->getInstitutionId(), $request->get('term'));
@@ -301,6 +303,11 @@ JS;
         $this->appendField(new Field\Input('dod'))->setTabGroup($tab)->addCss('date')
             ->setAttr('placeholder', 'dd/mm/yyyy');
 
+
+        $this->appendField(new Field\Checkbox('euthanised'))->setTabGroup($tab);
+        $this->appendField(new Field\Input('euthanisedMethod'))->setTabGroup($tab);
+
+        $tab = 'Details';
         $list  = $this->getConfig()->getUserMapper()->findFiltered(
             array('institutionId'=> $this->getPathCase()->getInstitutionId(), 'permission' => Permission::IS_PATHOLOGIST, 'active' => true),
             Tool::create('nameFirst')
@@ -314,7 +321,7 @@ JS;
         $list = \App\Db\Student::getSelectList();
         $this->appendField(Field\DialogSelect::createDialogSelect('students[]', $list, $form,'Create Student'))
             ->addCss('tk-multiselect tk-multiselect2')
-            ->setTabGroup($tab)->setLabel('Students')->setNotes('(Optional) Start typing to find an existing student, only create a new student record if not found in list.')
+            ->setTabGroup($tab)->setLabel('Students')->setNotes('Type to find an existing student, create a new student record if not found in list.')
             ->setValue($this->getPathCase()->getStudentList()->toArray('id'));
 
         // Enable select2 multi select for student field
@@ -328,9 +335,6 @@ jQuery(function ($) {
 });
 JS;
         $this->getRenderer()->getTemplate()->appendJs($js);
-
-        $this->appendField(new Field\Checkbox('euthanised'))->setTabGroup($tab);
-        $this->appendField(new Field\Input('euthanisedMethod'))->setTabGroup($tab);
 
         $this->appendField(Field\CheckboxInput::create('zoonotic'))->setTabGroup($tab)->setLabel('Zoonotic/Other Risks')
             ->setNotes('Tick the checkbox to alert users of these risks when viewing this case.')

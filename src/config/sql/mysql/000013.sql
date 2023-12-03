@@ -329,7 +329,7 @@ ALTER TABLE path_case CHANGE COLUMN disposal dispose_on DATETIME DEFAULT NULL;
 -- fix a case invalid date
 UPDATE path_case set dispose_on = '2023-09-13 09:03:46' WHERE id = 2911;
 
--- marke reports completed if cases are marked completed
+-- mark reports completed if cases are marked completed
 UPDATE path_case SET report_status = 'completed' WHERE status = 'completed';
 
 
@@ -390,6 +390,20 @@ VALUES  (1, 1, 1, 'pathologist', '<p>Hi {recipient::name},</p>
 <p>&nbsp;</p>
 <hr />
 <p>{institution::name}<br />Email: {institution::email}<br />Phone: {institution::phone}</p>', 1, '2023-12-03 07:56:50', '2023-12-03 07:17:07');
+
+-- Update report template
+UPDATE _data SET value = '<p>Hi</p>
+<p>Please find attached a report for {animalName} ({animalType}) submitted by "{clientName}".</p>
+<p><em>{caseType::necropsy}If individual cremation has been requested for this case, could you please ensure the client has booked this service</em><br /><em>and made arrangements with the cremation company for the collection of the body within the next 7 days.{/caseType::necropsy}</em></p>
+<p>If you have any further questions regarding this case, please direct your inquiries to {institution::email}</p>
+<p>Thank You</p>
+<p>{pathologistName}</p>
+<p>&nbsp;</p>
+<hr />
+<p>{institution::name}<br />Email: {institution::email}<br />Phone: {institution::phone}</p>
+<p>&nbsp;</p>' WHERE id = 20;
+
+
 
 
 -- cleanup objects and functions

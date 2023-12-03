@@ -4,22 +4,11 @@ namespace App\Controller\Institution;
 use Tk\Ml\Db\MailLog;
 use Tk\Form\Field;
 
-/**
- * @author Michael Mifsud <info@tropotek.com>
- * @link http://www.tropotek.com/
- * @license Copyright 2015 Michael Mifsud
- */
 class Edit extends \Uni\Controller\Institution\Edit
 {
     const INSTITUTION_FAX = 'inst.fax';
     const INSTITUTION_REPORT_TEMPLATE = 'inst.report.mail.tpl';
     const INSTITUTION_AUTOCOMPLETE_REPORT_STATUS = 'inst.pathCase.autocomplete.reportStatus';
-    const INSTITUTION_OWNER_NAME_ONLY = 'inst.pathCase.owner.name.only';
-
-//    const INSTITUTION_DKIM_ENABLE  = 'inst.dkim.enable';
-//    const INSTITUTION_DKIM_DOMAIN  = 'inst.dkim.domain';
-//    const INSTITUTION_DKIM_PUBLIC  = 'inst.dkim.public';
-//    const INSTITUTION_DKIM_PRIVATE = 'inst.dkim.private';
 
     public function initForm(\Tk\Request $request)
     {
@@ -32,6 +21,7 @@ class Edit extends \Uni\Controller\Institution\Edit
             ->setLabel('Fax')
             ->setTabGroup('Details');
 
+        // TODO: this should be moved to the mail templates (see reminders in the Cron)
         $this->getForm()->appendField(new Field\Textarea(self::INSTITUTION_REPORT_TEMPLATE))->setTabGroup('Details')
             ->addCss('mce-min')
             ->setLabel('Report Email Template')
