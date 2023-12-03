@@ -41,7 +41,7 @@ class Cron extends \Bs\Console\Iface
         $this->write('', OutputInterface::VERBOSITY_VERBOSE);
         return 0;
     }
-    
+
 
     /**
      * If a dispose_on date has been set then check for any t

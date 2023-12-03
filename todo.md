@@ -1,6 +1,15 @@
 # APD
 
-### Tasks Completed
+### TODO Tasks:
+
+- [ ] Github now supports private repositories for free, move to private repository and use issues instead of this
+todo file.
+- [ ] Look into upgrading/Rebuilding the system using the PHP8 Tk lib (Will require some time to implement)
+
+
+
+
+### Tasks Completed 17/11/23:
 - Added a new student contact System (Manager/Edit)
 - Updated Case edit page to use new student field
 - Update Client data fixing names and removing duplicates where possible
@@ -10,8 +19,8 @@
 - Added CompanyContacts filed to Case edit page with ability to create new contact for company 
 - Added alert to dashboard for pathologists stating how many non-completed case they have
 - Security and bugfix updates to base libraries
-- Added autocomplete to Case fields 'species', 'Owner' and 'Colour'
-- Removed old Contact system
+- Added autocomplete to Case fields 'Species', 'Owner Name' and 'Colour'
+- Removed old Contact system that used to support Owner, Client and Student contacts all in one table
 - Remove client hover infobox, replace with a panel on the left that shows client and contact info that dynamically updates.
 - Update staff manager/edit added disable field instead of delete.
 - Fixed masquerade logout bug not returning to the correct URL
@@ -21,7 +30,13 @@
 - Fixed Disposal reminder emails
 - Updated email text content messages to be more readable
 - Set all report_status to completed for completed cases
-
+- Added Necropsy case complete reminders
+- Added Biopsy report complete reminders
+- Added editable mail templates for new reminders
+- Setup cron script to run nightly at 6pm (this sends all reminder emails)
+- Re-ordered the left Nav menu and added separators for different tasks
+- Fixed Content page saving issues with javascript
+- Reduced visible filters on Dashboard Case/Request tables (let me know if any filters need to be re-added) 
 
 
 ### TODO Tasks 17/11/23:
@@ -48,15 +63,24 @@ In this update I have auto set completed cases to report_status to completed so 
 many initial reminders being sent. If we also run the script to complete old cases this will also reduce the 
 number of reminders sent initially.
 
-
+- We can add a merge case function in the company manager, that would merge all cases from one company to another
+or optionally on delete have a company select that migrates all cases to the selected company on delete. [4hrs]
 
 
 
 
 __TESTING__
 
-- Compare the live site and the dev site Clients and client contacts to see if they correctly match up.
+- Compare the live site and the dev site Clients and Client Contacts to see if they correctly match up.
 - 
+
+
+
+
+----
+Total of 26 hours @ $100ph ($2,600)
+----
+
 
 
 __Chargeable Updates__
@@ -78,49 +102,19 @@ Auto-populate contact select field when new client is selected.~~ [4hrs]
 - ~~The reviewer credentials should then be added to the report PDF at the end of the document.~~ [2hrs]
 
 - ~~For necropsy cases add a `necropsyPerformedOn` date field (consider adding a `Necropsy Complete` button to add today's date),~~
-  - Send a reminder to the pathologist (CC site admin) after 15 working days if case not completed. [4hrs]
-
-- For biopsy cases when all Histology requests are completed, send a reminder to pathologist (cc site admin) after 24 hours  
-to `complete` the __`report`__ if not completed already. [4hrs] 
-
-
-----
-Total of 26 hours @ $100ph ($2,600)
-----
+  - ~~Send a reminder to the pathologist (CC site admin) after 15 working days if case not completed.~~ [4hrs]
+- ~~For biopsy cases when all Histology requests are completed, send a reminder to pathologist (cc site admin) after 24 hours  
+to `complete` the __`report`__ if not completed already.~~ [4hrs] 
 
 __No Charge - System Updates__
 
-- Look into creating a merge case function in the company manager, would be good to merge all cases from one company to another
-or optionally on delete have a company select that migrates all cases to the selected company on delete.
-
 - ~~Fix the Client field hover getting in the way. Maybe a longer timeout or only on click, update layout of panel.~~ [1hrs]
    - ~~The situation has changed with company and contacts and we need a new way to display these details.~~ 
-- Remove outdated Contact system once updates are completed. [4hrs]
-  - Check client field in old cases is correct and entered, if not create script to populate case field on old cases.
   - ~~Remove the setting to select owner text field and other code using it.~~
 - ~~Check the masquerade bug on logout not going back to correct page left from.~~ [1hrs]
 - ~~Fix staff delete/disable, review delete option in place of deactivate Check that it is obvious to remove a staff member.
   Test what happens when we delete a staff.~~ [2hrs]
-
-
-
-
-
-
-
-### TODO System Tasks:
-
-- [ ] Github now supports private repositories for free, move to private repository and use issues instead of this
-todo file.
-- [ ] Send only one email on user reg request email, log time email sent and do not send again for 1-2 days
-- [ ] Fix session DB errors on reload after session timeout.
-
-### DONE
-- [x] Use SMTP to send emails so that the emails are signed correctly with DKIM. 
-    - I have implemented DKIM on a per institution level, see settings page.
-- [x] Update the APD contact form to email owner only, disable contact form on all subdomain accounts.
-  all subdomain accounts should redirect to login/home page, no access to public pages for security.
-    - Implemented a redirect to the main domain contact page for users clicking on the contact page 
-
+- ~~Remove outdated Contact system once updates are completed.~~ [4hrs]
+  - ~~Check client field in old cases is correct and entered, if not create script to populate case field on old cases.~~
 
 
