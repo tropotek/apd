@@ -139,7 +139,7 @@ SELECT
 FROM path_case
 WHERE services_completed_on IS NOT NULL
     AND type = 'biopsy'
-    AND status NOT IN ('cancelled')
+    AND status NOT IN ('cancelled', 'completed')
     AND report_status != 'completed'
     AND DATE(services_completed_on) <= CURRENT_DATE - INTERVAL 1 DAY
     AND pathologist_id != 0
