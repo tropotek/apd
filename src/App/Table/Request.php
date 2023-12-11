@@ -2,7 +2,9 @@
 namespace App\Table;
 
 use App\Db\CompanyMap;
+use App\Db\PathCaseMap;
 use App\Db\RequestMap;
+use Tk\Date;
 use Tk\Form\Field;
 use Tk\Table\Cell;
 use Uni\Db\User;
@@ -88,6 +90,7 @@ class Request extends \Bs\TableIface
         }
         \Tk\Uri::create()->remove('rDel')->redirect();
     }
+
 
     /**
      * @return bool
@@ -299,7 +302,7 @@ jQuery(function($) {
     $(this).find('.btn-select-all').each(function () {
       $(this).on('click', function() {
         var pathologyId = $(this).closest('tr').find('.mPathologyId').attr('title');
-        var selectedCheckbox = $(this).closest('tr').find('.tk-tcb-cell input');
+        //var selectedCheckbox = $(this).closest('tr').find('.tk-tcb-cell input');
         //console.log(pathologyId);
         form.find('tr .tk-tcb-cell input').prop('checked', false);
         var rows = form.find('tr[data-pathology-id='+pathologyId+']');

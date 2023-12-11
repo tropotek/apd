@@ -87,7 +87,7 @@ class PathCase extends \Bs\FormIface
         $layout = $this->getRenderer()->getLayout();
 
         $layout->removeRow('arrival', 'col');
-        $layout->removeRow('proceduresCompletedOn', 'col');
+        $layout->removeRow('servicesCompletedOn', 'col');
 
         $layout->removeRow('type', 'col');
 
@@ -458,6 +458,15 @@ jQuery(function ($) {
 JS;
         $this->getRenderer()->getTemplate()->appendJs($js);
 
+        $js = <<<JS
+jQuery(function ($) {
+    $(document).on('click', '#request-save', function () {
+        // remove the services completed date value
+        $('#path_case-servicesCompletedOn').val('');
+    });
+});
+JS;
+        $this->getRenderer()->getTemplate()->appendJs($js);
 
         $tab = 'Files';
         $maxFiles = 10;
@@ -534,6 +543,13 @@ JS;
         }
 
         $orgCompanyId = $this->getPathCase()->getCompanyId();
+
+        // set null values
+        if (!$vals['pathologistId']) $vals['pathologistId'] = null;
+        if (!$vals['reviewedById']) $vals['reviewedById'] = null;
+        if (!$vals['companyId']) $vals['companyId'] = null;
+        if (!$vals['disposedOn']) $vals['disposedOn'] = null;
+        if (!$vals['disposedOn']) $vals['disposedOn'] = null;
 
         \App\Db\PathCaseMap::create()->mapForm($vals, $this->getPathCase());
 

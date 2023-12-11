@@ -83,8 +83,6 @@ INSERT INTO path_case_has_student (path_case_id, student_id)
 -- Delete all students with 'None'
 DELETE FROM student WHERE id IN (164, 180);
 
-DELETE FROM user_permission WHERE name = 'perm.manage.case';
-
 -- Fix duplicate student record
 UPDATE path_case_has_student SET student_id = 57 WHERE path_case_id = 32;
 DELETE FROM student WHERE id = 59;
@@ -315,15 +313,12 @@ ALTER TABLE path_case ADD reviewed_by_id INT UNSIGNED NULL AFTER addendum;
 ALTER TABLE path_case ADD
     CONSTRAINT fk_path_case__reviewed_by_id FOREIGN KEY (reviewed_by_id) REFERENCES user (id) ON DELETE SET NULL ON UPDATE CASCADE;
 
--- ALTER TABLE path_case ADD reviewed_on DATETIME NULL AFTER reviewed_by_id;
-
--- ALTER TABLE path_case ADD necropsy_performed_on DATETIME NULL AFTER arrival;
 ALTER TABLE path_case ADD services_completed_on DATETIME NULL AFTER arrival;
 
 -- Add Smitha as a user that can review cases
-INSERT IGNORE INTO user_permission VALUES
-(15, 'perm.case.can.review')
-;
+INSERT IGNORE INTO user_permission VALUES (15, 'perm.case.can.review');
+-- Remove manage case permission
+DELETE FROM user_permission WHERE name = 'perm.manage.case';
 
 
 ALTER TABLE path_case CHANGE COLUMN ac_type  dispose_method VARCHAR(64) NULL DEFAULT '';
@@ -334,6 +329,55 @@ UPDATE path_case set dispose_on = '2023-09-13 09:03:46' WHERE id = 2911;
 
 -- mark reports completed if cases are marked completed
 UPDATE path_case SET report_status = 'completed' WHERE status = 'completed';
+
+
+-- find all cases that have completed all requests, set the services_completed on to the date of the last request
+# UPDATE path_case pc
+# LEFT JOIN  (
+#     WITH completed AS (
+#         SELECT
+#             r.path_case_id,
+#             COUNT(*) AS cnt,
+#             MAX(s.created) AS requests_completed
+#         FROM status s
+#         JOIN request r ON (s.fid = r.id)
+#         WHERE s.fkey = 'App\\Db\\Request'
+#             AND NOT s.del
+#             AND s.name = 'completed'
+#         GROUP BY r.path_case_id
+#     ),
+#     requests AS (
+#         SELECT
+#             r.path_case_id,
+#             p.pathologist_id,
+#             -- p.account_status,
+#             COUNT(IF(r.status IN ('pending', 'completed'), 1, 0)) AS total,
+#             SUM(IF(r.status = 'pending', 1, 0)) AS pending_cnt,
+#             SUM(IF(r.status = 'completed', 1, 0)) AS complete_cnt,
+#             c.requests_completed,
+#             p.report_status,
+#             p.status AS 'case_status'
+#             -- p.created AS 'case_created'
+#         FROM request r
+#             JOIN path_case p ON (r.path_case_id = p.id)
+#             LEFT JOIN completed c ON (p.id = c.path_case_id)
+#         WHERE r.status != 'cancelled'
+#             AND p.type = 'biopsy'
+#             AND p.pathologist_id > 0
+#             AND c.requests_completed < NOW() - INTERVAL 1 DAY
+#         GROUP BY r.path_case_id
+#     )
+#     SELECT *
+#     FROM requests r
+#     WHERE r.total > 1
+#     AND r.pending_cnt = 0
+#     ) pf ON (pc.id = pf.path_case_id)
+# SET pc.services_completed_on = pf.requests_completed
+# WHERE pf.path_case_id IS NOT NULL
+#     AND pc.billable
+#     AND NOT pc.del
+# ;
+
 
 
 -- Add/Update mail template events for reminder emails

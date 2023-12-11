@@ -83,10 +83,10 @@ SELECT
     pathologist_id,
     COUNT(*) AS cases_due
 FROM path_case
-WHERE necropsy_performed_on IS NOT NULL
+WHERE services_completed_on IS NOT NULL
     AND type = 'necropsy'
     AND status NOT IN ('complete', 'cancelled')
-    AND DATE(necropsy_performed_on) <= CURRENT_DATE - INTERVAL 15 DAY
+    AND DATE(services_completed_on) <= CURRENT_DATE - INTERVAL 15 DAY
     AND pathologist_id != 0
     AND billable
 GROUP BY pathologist_id
@@ -133,48 +133,18 @@ SQL;
         if ($mailTemplate->getRecipientType() != MailTemplate::RECIPIENT_PATHOLOGIST) return $messageList;
 
         $sql = <<<SQL
-WITH
-completed AS (
-    SELECT
-        r.path_case_id,
-        COUNT(*) as cnt,
-        MAX(s.created) AS cases_due
-    FROM status s
-    JOIN request r on (s.fid = r.id)
-    WHERE s.fkey = 'App\\\Db\\\Request'
-    AND NOT s.del
-    AND s.name = 'completed'
-    GROUP BY r.path_case_id
-),
-requests AS (
-    SELECT
-        r.path_case_id,
-        p.pathologist_id,
-        COUNT(*) AS total,
-        SUM(IF(r.status = 'pending', 1, 0)) AS pending_cnt,
-        SUM(IF(r.status = 'completed', 1, 0)) AS complete_cnt,
-        c.cases_due,
-        p.report_status,
-        p.status AS 'case_status'
-    FROM request r
-    JOIN path_case p ON (r.path_case_id = p.id)
-    LEFT JOIN completed c ON (p.id = c.path_case_id)
-    WHERE
-        r.status != 'cancelled'
-        AND p.type = 'biopsy'
-        AND p.pathologist_id > 0
-        AND billable
-        AND c.cases_due < NOW() - INTERVAL 1 DAY
-    GROUP BY r.path_case_id
-)
 SELECT
-    r.pathologist_id,
+    pathologist_id,
     COUNT(*) AS reports_due
-FROM requests r
-WHERE r.report_status != 'completed'
-AND r.case_status != 'cancelled'
-AND r.pending_cnt = 0
-GROUP BY r.pathologist_id
+FROM path_case
+WHERE services_completed_on IS NOT NULL
+    AND type = 'biopsy'
+    AND status NOT IN ('cancelled')
+    AND report_status != 'completed'
+    AND DATE(services_completed_on) <= CURRENT_DATE - INTERVAL 1 DAY
+    AND pathologist_id != 0
+    AND billable
+GROUP BY pathologist_id
 SQL;
         $rows = $config->getDb()->query($sql);
 

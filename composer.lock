@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "38ef514a6c21335f29d9be64b097d2582ecbf8e4"
+                "reference": "45b30f99ac27b5ca93cb4831afe16285f57b8221"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/38ef514a6c21335f29d9be64b097d2582ecbf8e4",
-                "reference": "38ef514a6c21335f29d9be64b097d2582ecbf8e4",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/45b30f99ac27b5ca93cb4831afe16285f57b8221",
+                "reference": "45b30f99ac27b5ca93cb4831afe16285f57b8221",
                 "shasum": ""
             },
             "require": {
@@ -31,9 +31,9 @@
                 "psr/http-message-implementation": "1.0"
             },
             "require-dev": {
-                "bamarni/composer-bin-plugin": "^1.8.1",
+                "bamarni/composer-bin-plugin": "^1.8.2",
                 "http-interop/http-factory-tests": "^0.9",
-                "phpunit/phpunit": "^8.5.29 || ^9.5.23"
+                "phpunit/phpunit": "^8.5.36 || ^9.6.15"
             },
             "suggest": {
                 "laminas/laminas-httphandlerrunner": "Emit PSR-7 responses"
@@ -105,7 +105,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/psr7/issues",
-                "source": "https://github.com/guzzle/psr7/tree/2.6"
+                "source": "https://github.com/guzzle/psr7/tree/2.6.2"
             },
             "funding": [
                 {
@@ -121,20 +121,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-09-10T16:11:14+00:00"
+            "time": "2023-12-03T20:05:35+00:00"
         },
         {
             "name": "intervention/image",
-            "version": "2.7.2",
+            "version": "2.7.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Intervention/image.git",
-                "reference": "04be355f8d6734c826045d02a1079ad658322dad"
+                "reference": "54934ae8ea3661fd189437df90fb09ec3b679c74"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Intervention/image/zipball/04be355f8d6734c826045d02a1079ad658322dad",
-                "reference": "04be355f8d6734c826045d02a1079ad658322dad",
+                "url": "https://api.github.com/repos/Intervention/image/zipball/54934ae8ea3661fd189437df90fb09ec3b679c74",
+                "reference": "54934ae8ea3661fd189437df90fb09ec3b679c74",
                 "shasum": ""
             },
             "require": {
@@ -193,7 +193,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Intervention/image/issues",
-                "source": "https://github.com/Intervention/image/tree/2.7.2"
+                "source": "https://github.com/Intervention/image/tree/master"
             },
             "funding": [
                 {
@@ -205,7 +205,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-05-21T17:30:32+00:00"
+            "time": "2022-07-05T13:51:54+00:00"
         },
         {
             "name": "lasserafn/php-initial-avatar-generator",
@@ -3301,12 +3301,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-base.git",
-                "reference": "85d814921715267b051abb54ea64a50249554a4d"
+                "reference": "81ca6c09d3ebcbe59bd038ae26353e526e75c82a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/85d814921715267b051abb54ea64a50249554a4d",
-                "reference": "85d814921715267b051abb54ea64a50249554a4d",
+                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/81ca6c09d3ebcbe59bd038ae26353e526e75c82a",
+                "reference": "81ca6c09d3ebcbe59bd038ae26353e526e75c82a",
                 "shasum": ""
             },
             "require": {
@@ -3474,12 +3474,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-form.git",
-                "reference": "e81f614f04504730091c43ca9d7eba9d0e5558a9"
+                "reference": "d796e2de53f9ede2c8629f29ff64d6e6da78f4ee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-form/zipball/e81f614f04504730091c43ca9d7eba9d0e5558a9",
-                "reference": "e81f614f04504730091c43ca9d7eba9d0e5558a9",
+                "url": "https://api.github.com/repos/tropotek/tk-form/zipball/d796e2de53f9ede2c8629f29ff64d6e6da78f4ee",
+                "reference": "d796e2de53f9ede2c8629f29ff64d6e6da78f4ee",
                 "shasum": ""
             },
             "require": {
@@ -3950,12 +3950,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-uni.git",
-                "reference": "9854e91381af606a39be77b56ace81d934f1ca44"
+                "reference": "f3066278299ade0e74d6513b95554d23e0a4ba0e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-uni/zipball/9854e91381af606a39be77b56ace81d934f1ca44",
-                "reference": "9854e91381af606a39be77b56ace81d934f1ca44",
+                "url": "https://api.github.com/repos/tropotek/tk-uni/zipball/f3066278299ade0e74d6513b95554d23e0a4ba0e",
+                "reference": "f3066278299ade0e74d6513b95554d23e0a4ba0e",
                 "shasum": ""
             },
             "require": {

@@ -2,6 +2,9 @@
 namespace App\Table;
 
 
+use App\Db\PathCaseMap;
+use App\Db\RequestMap;
+use Tk\Date;
 use Tk\Form\Field;
 use Tk\Table\Cell;
 use Uni\Uri;
@@ -58,6 +61,7 @@ class RequestMin extends \Bs\TableIface
             $request->setStatusExecute(true);
             $request->setStatusNotify(true);
             $request->save();
+            $this->completeCaseServices($request->getPathCaseId());
             \Tk\Uri::create()->remove('rComplete')->redirect();
         }
     }
@@ -72,6 +76,7 @@ class RequestMin extends \Bs\TableIface
             $request->setStatusExecute(true);
             $request->setStatusNotify(true);
             $request->save();
+            $this->completeCaseServices($request->getPathCaseId());
             \Tk\Uri::create()->remove('rCancel')->redirect();
         }
     }
@@ -82,10 +87,24 @@ class RequestMin extends \Bs\TableIface
         $request = \App\Db\RequestMap::create()->find($requestId);
         if ($request) {
             $request->delete();
+            $this->completeCaseServices($request->getPathCaseId());
             \Tk\Uri::create()->remove('rDel')->redirect();
         }
     }
 
+    protected function completeCaseServices(int $pathCaseId)
+    {
+        $requestsOpen = RequestMap::create()->findFiltered([
+            'pathCaseId' => $pathCaseId,
+            'status' => [\App\Db\Request::STATUS_PENDING]
+        ]);
+        /** @var \App\Db\PathCase $pathCase */
+        $pathCase = PathCaseMap::create()->find($pathCaseId);
+        if ($pathCase && $pathCase->getType() == \App\Db\PathCase::TYPE_BIOPSY && !$requestsOpen->count()) {
+            $pathCase->setServicesCompletedOn(Date::create());
+            $pathCase->save();
+        }
+    }
 
     /**
      * @return bool

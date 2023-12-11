@@ -78,6 +78,7 @@ class PathCase extends \Bs\TableIface
         $this->appendCell(new Cell\Text('submissionType'));
         $this->appendCell(new Cell\Text('status'));
         $this->appendCell(new Cell\Text('reportStatus'));
+        $this->appendCell(new Cell\Date('servicesCompletedOn'));
 
         $this->appendCell(new Cell\Text('accountStatus'));
         $this->appendCell(new Cell\Boolean('billable'));

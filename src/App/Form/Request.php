@@ -6,6 +6,7 @@ use App\Db\ContactMap;
 use App\Db\Notice;
 use App\Db\ServiceMap;
 use App\Db\TestMap;
+use Tk\Date;
 use Tk\Db\Tool;
 use Tk\Form\Field;
 use Tk\Form\Event;
@@ -117,6 +118,7 @@ class Request extends \Bs\FormIface
             return;
         }
 
+        $case = null;
         $isNew = (bool)$this->getRequest()->getId();
         if ($cassetteList && count($cassetteList)) {
             $cassetteList = $this->getConfig()->getRequest()->get('cassetteId');
@@ -146,13 +148,22 @@ class Request extends \Bs\FormIface
                 }
             }
             if ($req) {
+                $case = $req->getPathCase();
                 Notice::create($req, $req->getPathCase()->getUserId(), ['requestList' => $reqList]);
             }
         } else {
             $this->getRequest()->setStatusNotify(true);
             $this->getRequest()->save();
-            if ($isNew)
+            if ($isNew) {
+                $case = $this->getRequest()->getPathCase();
                 Notice::create($this->getRequest(), $this->getRequest()->getPathCase()->getUserId());
+            }
+        }
+
+        // reset services completed date when new requests are created
+        if ($case && $case->getType() == \App\Db\PathCase::TYPE_BIOPSY) {
+            $case->setServicesCompletedOn(null);
+            $case->save();
         }
 
         \Tk\Alert::addSuccess('Record saved!');
