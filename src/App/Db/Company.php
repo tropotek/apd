@@ -20,12 +20,6 @@ class Company extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public $institutionId = 0;
 
     /**
-     * Client account code or their accounts' dep. account code for invoicing
-     * @var string
-     */
-    public $accountCode = '';
-
-    /**
      * @var string
      */
     public $name = '';
@@ -90,17 +84,6 @@ class Company extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     {
         $this->_TimestampTrait();
         $this->setInstitutionId($this->getConfig()->getInstitutionId());
-    }
-
-    public function setAccountCode(string $accountCode) : Company
-    {
-        $this->accountCode = $accountCode;
-        return $this;
-    }
-
-    public function getAccountCode() : string
-    {
-        return $this->accountCode;
     }
 
     public function getName(): string

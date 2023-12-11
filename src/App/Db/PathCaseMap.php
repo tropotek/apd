@@ -43,6 +43,7 @@ class PathCaseMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Text('reportStatus', 'report_status'));
             $this->dbMap->addPropertyMap(new Db\Boolean('billable'));
             $this->dbMap->addPropertyMap(new Db\Text('accountStatus', 'account_status'));
+            $this->dbMap->addPropertyMap(new Db\Text('accountCode', 'account_code'));
             $this->dbMap->addPropertyMap(new Db\Boolean('afterHours', 'after_hours'));
             $this->dbMap->addPropertyMap(new Db\Text('zoonotic'));
             $this->dbMap->addPropertyMap(new Db\Boolean('zoonoticAlert', 'zoonotic_alert'));
@@ -116,6 +117,7 @@ class PathCaseMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Text('reportStatus'));
             $this->formMap->addPropertyMap(new Form\Boolean('billable'));
             $this->formMap->addPropertyMap(new Form\Text('accountStatus'));
+            $this->formMap->addPropertyMap(new Form\Text('accountCode'));
             $this->formMap->addPropertyMap(new Form\Boolean('afterHours'));
             $this->formMap->addPropertyMap(new Form\Text('zoonotic'));
             $this->formMap->addPropertyMap(new Form\Boolean('zoonoticAlert'));
@@ -454,6 +456,9 @@ FROM path_case
         if (!empty($filter['accountStatus'])) {
             $w = $this->makeMultiQuery($filter['accountStatus'], 'a.account_status');
             if ($w) $filter->appendWhere('(%s) AND ', $w);
+        }
+        if (!empty($filter['accountCode'])) {
+            $filter->appendWhere('a.account_code = %s AND ', $this->quote($filter['accountCode']));
         }
 
         $dates = array('arrivalStart', 'arrivalEnd');

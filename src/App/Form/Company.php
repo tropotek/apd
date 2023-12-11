@@ -41,7 +41,6 @@ class Company extends \Bs\FormIface
 
         $this->appendField(new Field\Input('name'));
         $this->appendField(new Field\Input('email'));
-        $this->appendField(new Field\Input('accountCode'));
         $this->appendField(new Field\Input('phone'));
         $this->appendField(new Field\Input('fax'));
         $this->appendField(new Field\Input('street'));

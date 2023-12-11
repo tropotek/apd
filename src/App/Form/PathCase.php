@@ -22,10 +22,6 @@ use Tk\ObjectUtil;
  *   $template->appendTemplate('form', $formTemplate);
  * </code>
  *
- * @author Mick Mifsud
- * @created 2020-07-29
- * @link http://tropotek.com.au/
- * @license Copyright 2020 Tropotek
  */
 class PathCase extends \Bs\FormIface
 {
@@ -93,7 +89,7 @@ class PathCase extends \Bs\FormIface
 
         $layout->addRow('billable', 'col-2');
         $layout->removeRow('accountStatus', 'col');
-        $layout->removeRow('cost', 'col');
+        $layout->removeRow('accountCode', 'col');
 
         $layout->removeRow('afterHours', 'col');
 
@@ -215,7 +211,6 @@ jQuery(function ($) {
 JS;
         $this->getRenderer()->getTemplate()->appendJs($js);
 
-
         $this->appendField(new Field\Checkbox('billable'))->setTabGroup($tab)
             ->setNotes('Is this case billable?');
         $js = <<<JS
@@ -223,15 +218,13 @@ jQuery(function ($) {
   function updateBillable(el) {
     var d = 'disabled';
     if (el.prop('checked') === true) {
-      $('#path_case-accountStatus').removeAttr(d, d);
-      $('#path_case-cost').removeAttr(d, d);
+      $('#path_case-accountStatus, #path_case-accountCode').removeAttr(d, d);
       $('.tk-invoice-list').css('display', 'block');
       if ($('#path_case-accountStatus').val() === '') {
         $("#path_case-accountStatus").prop("selectedIndex", 1);
       }
     } else {
-      $('#path_case-accountStatus').attr(d, d);
-      $('#path_case-cost').attr(d, d);
+      $('#path_case-accountStatus, #path_case-accountCode').attr(d, d);
       $('.tk-invoice-list').css('display', 'none');
     }
   }
@@ -245,6 +238,8 @@ JS;
 
         $this->appendField(Field\Select::createSelect('accountStatus', \App\Db\PathCase::ACCOUNT_STATUS_LIST)->prependOption('-- Select --', ''))
             ->setTabGroup($tab);
+
+        $this->appendField(new Field\Input('accountCode'))->setTabGroup($tab);
 
         $this->appendField(new Field\Checkbox('submissionReceived'))->setTabGroup($tab)
             ->setNotes('Has the submission form been received?');
@@ -545,11 +540,10 @@ JS;
         $orgCompanyId = $this->getPathCase()->getCompanyId();
 
         // set null values
-        if (!$vals['pathologistId']) $vals['pathologistId'] = null;
-        if (!$vals['reviewedById']) $vals['reviewedById'] = null;
-        if (!$vals['companyId']) $vals['companyId'] = null;
-        if (!$vals['disposedOn']) $vals['disposedOn'] = null;
-        if (!$vals['disposedOn']) $vals['disposedOn'] = null;
+        if (empty($vals['pathologistId'])) $vals['pathologistId'] = null;
+        if (empty($vals['reviewedById'])) $vals['reviewedById'] = null;
+        if (empty($vals['companyId'])) $vals['companyId'] = null;
+        if (empty($vals['disposedOn'])) $vals['disposedOn'] = null;
 
         \App\Db\PathCaseMap::create()->mapForm($vals, $this->getPathCase());
 

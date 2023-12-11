@@ -178,6 +178,12 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
     public $accountStatus = null;
 
     /**
+     * Client account code or their accounts' dep. account code for invoicing
+     * @var string
+     */
+    public $accountCode = '';
+
+    /**
      * @var bool
      */
     public $afterHours = false;
@@ -643,6 +649,17 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
     {
         $this->accountStatus = $accountStatus;
         return $this;
+    }
+
+    public function setAccountCode(string $accountCode) : PathCase
+    {
+        $this->accountCode = $accountCode;
+        return $this;
+    }
+
+    public function getAccountCode() : string
+    {
+        return $this->accountCode;
     }
 
     public function isAfterHours(): bool

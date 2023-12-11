@@ -20,7 +20,6 @@ class CompanyMap extends Mapper
             $this->dbMap = new \Tk\DataMap\DataMap();
             $this->dbMap->addPropertyMap(new Db\Integer('id'), 'key');
             $this->dbMap->addPropertyMap(new Db\Integer('institutionId', 'institution_id'));
-            $this->dbMap->addPropertyMap(new Db\Text('accountCode', 'account_code'));
             $this->dbMap->addPropertyMap(new Db\Text('name'));
             $this->dbMap->addPropertyMap(new Db\Text('email'));
             $this->dbMap->addPropertyMap(new Db\Text('phone'));
@@ -46,7 +45,6 @@ class CompanyMap extends Mapper
             $this->formMap = new \Tk\DataMap\DataMap();
             $this->formMap->addPropertyMap(new Form\Integer('id'), 'key');
             $this->formMap->addPropertyMap(new Form\Integer('institutionId'));
-            $this->formMap->addPropertyMap(new Form\Text('accountCode'));
             $this->formMap->addPropertyMap(new Form\Text('name'));
             $this->formMap->addPropertyMap(new Form\Text('email'));
             $this->formMap->addPropertyMap(new Form\Text('phone'));
@@ -104,9 +102,6 @@ class CompanyMap extends Mapper
 
         if (isset($filter['institutionId'])) {
             $filter->appendWhere('a.institution_id = %s AND ', (int)$filter['institutionId']);
-        }
-        if (!empty($filter['accountCode'])) {
-            $filter->appendWhere('a.account_code = %s AND ', $this->quote($filter['accountCode']));
         }
         if (!empty($filter['name'])) {
             $filter->appendWhere('a.name = %s AND ', $this->quote($filter['name']));

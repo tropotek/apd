@@ -28,7 +28,6 @@ class Company extends \Bs\TableIface
 
         $this->appendCell(new Cell\Checkbox('id'));
         $this->appendCell(new Cell\Text('name'))->addCss('key')->setUrl($this->getEditUrl());
-        $this->appendCell(new Cell\Text('accountCode'));
         $this->appendCell(new Cell\Text('email'));
         $this->appendCell(new Cell\Text('phone'));
         $this->appendCell(new Cell\Text('city'));

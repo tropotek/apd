@@ -210,6 +210,8 @@ UPDATE contact SET name_company = 'RSPCA', name_first = 'Inspectorate Victoria' 
 UPDATE contact SET name_company = 'RSPCA' WHERE id IN (1914);
 UPDATE contact SET name_company = '', name_first = 'S', name_last = 'Harvey' WHERE id IN (61);
 UPDATE contact SET name_company = '', name_first = 'Smitha', name_last = 'Georgy' WHERE id IN (1098);
+UPDATE contact SET name_company = 'Racing Victoria' WHERE id IN (179);
+UPDATE contact SET name_company = 'Racing Victoria' WHERE id IN (139);
 
 
 SET FOREIGN_KEY_CHECKS = 0;
@@ -321,14 +323,24 @@ INSERT IGNORE INTO user_permission VALUES (15, 'perm.case.can.review');
 DELETE FROM user_permission WHERE name = 'perm.manage.case';
 
 
-ALTER TABLE path_case CHANGE COLUMN ac_type  dispose_method VARCHAR(64) NULL DEFAULT '';
+ALTER TABLE path_case CHANGE COLUMN ac_type  dispose_method VARCHAR(64) NOT NULL DEFAULT '';
 ALTER TABLE path_case CHANGE COLUMN disposal dispose_on DATETIME DEFAULT NULL;
+
+-- migrate account code to path case record
+ALTER TABLE path_case ADD account_code VARCHAR(64) NOT NULL DEFAULT '' AFTER account_status;
+
+UPDATE path_case p
+LEFT JOIN company c ON (p.company_id = c.id)
+SET p.account_code = c.account_code
+WHERE c.account_code != '';
+
 
 -- fix a case invalid date
 UPDATE path_case set dispose_on = '2023-09-13 09:03:46' WHERE id = 2911;
 
 -- mark reports completed if cases are marked completed
 UPDATE path_case SET report_status = 'completed' WHERE status = 'completed';
+
 
 
 -- find all cases that have completed all requests, set the services_completed on to the date of the last request
@@ -460,6 +472,7 @@ UPDATE _data SET value = '<p>Hi</p>
 ALTER TABLE path_case DROP COLUMN resident;
 ALTER TABLE path_case DROP COLUMN name;
 ALTER TABLE path_case DROP COLUMN cost;
+ALTER TABLE company DROP COLUMN account_code;
 DROP FUNCTION IF EXISTS ucwords;
 
 

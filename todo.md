@@ -24,10 +24,10 @@ remove reviewed on date field,~~
 - ~~Remove case filters creator, Size, species, is disposable~~
 - ~~Fix client details panel not removing contacts on new client select~~
 - ~~Only invoiceable cases get reminders~~
-- Add services completed on field With biopsy cases this should automatically get set when the last request is completed, and unset when requests are created.
-- Remove account_code field from company, add account code to case if submission type = research, 
+- ~~Add services completed on field With biopsy cases this should automatically get set when the last request is completed, and unset when requests are created.~~
+- ~~Remove account_code field from company, add account code to case if submission type = research~~
+- Add migrate cases when deleting Clients and Client Contacts (New task bill at 4 hrs?)
 - Merge Racing and Racing Victoria in SQL ?? Or use the new merge function?
-- Add migrate cases when deleting Clients and Client Contacts (New task bill at 4 hrs?) 
 
 Would like to have ready b4 end of year (Smitha will be available the first week of Jan)
 
