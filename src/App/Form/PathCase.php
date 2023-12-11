@@ -72,6 +72,7 @@ class PathCase extends \Bs\FormIface
         if ($this->getPathCase()->hasStatus(\App\Db\PathCase::STATUS_COMPLETED) && $this->getPathCase()->isBilled()) {
             $this->readonly = true;
         }
+
         if (
             !($this->getAuthUser()->getId() == $this->getPathCase()->getUserId() ||
             $this->getAuthUser()->hasPermission([Permission::IS_PATHOLOGIST, Permission::IS_TECHNICIAN]))
@@ -79,6 +80,9 @@ class PathCase extends \Bs\FormIface
             $this->readonly = true;
         }
 
+        if ($this->getAuthUser()->hasPermission([Permission::CASE_FULL_EDIT])) {
+            $this->readonly = false;
+        }
 
         $layout = $this->getRenderer()->getLayout();
 
@@ -631,8 +635,6 @@ JS;
 
     public function isReadonly()
     {
-        if ($this->getAuthUser()->hasPermission(Permission::CASE_FULL_EDIT))
-            return false;
         return $this->readonly;
     }
 

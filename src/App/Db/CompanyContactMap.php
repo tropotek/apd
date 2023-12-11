@@ -111,4 +111,5 @@ class CompanyContactMap extends Mapper
         return $filter;
     }
 
+
 }

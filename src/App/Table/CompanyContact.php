@@ -1,6 +1,7 @@
 <?php
 namespace App\Table;
 
+use App\Db\PathCaseMap;
 use Tk\Form\Field;
 use Tk\Table\Cell;
 
@@ -38,7 +39,11 @@ class CompanyContact extends \Bs\TableIface
         // Actions
         //TODO: use a dialog for add/edit
         $this->appendAction(\Tk\Table\Action\Link::createLink('New Contact', $this->getEditUrl(), 'fa fa-plus'));
-        $this->appendAction(\Tk\Table\Action\Delete::create());
+        $this->appendAction(\Tk\Table\Action\Delete::create()->addOnDelete(
+            function (\Tk\Table\Action\Delete $action, $obj) {
+                PathCaseMap::create()->removeContact(null, $obj->getId());
+            }
+        ));
 
         $this->getRenderer()->getFootRenderer('Pager')->setSmall(true);
 

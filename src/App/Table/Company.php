@@ -2,6 +2,7 @@
 namespace App\Table;
 
 use App\Db\CompanyContactMap;
+use App\Table\Action\MoveCompany;
 use Tk\Form\Field;
 use Tk\Table\Cell;
 
@@ -44,7 +45,11 @@ class Company extends \Bs\TableIface
         $this->appendFilter(new Field\Input('keywords'))->setAttr('placeholder', 'Search');
 
         // Actions
-        $this->appendAction(\Tk\Table\Action\Delete::create());
+        //$this->appendAction(\Tk\Table\Action\Delete::create());
+        /** @var MoveCompany $a */
+        $a = $this->appendAction(new \App\Table\Action\MoveCompany('delete', 'fa fa-times'));
+        $a->setLabel('Delete');
+        $a->setDeleteAfterMove(true);
         $this->appendAction(\Tk\Table\Action\Csv::create());
         $this->appendAction(new \App\Table\Action\MoveCompany());
 

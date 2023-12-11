@@ -50,6 +50,7 @@ class MoveCompany extends Button
         $this->addCss('no-loader');
         $this->addCss('tk-action-move');
 
+        $t = "";
         $this->dialog = Dialog::create('Move Cases to Company');
         $this->actionBtn = $this->dialog->getButtonList()->append(\Tk\Ui\Button::createButton('Move')->addCss('btn-success'));
 
@@ -57,6 +58,17 @@ class MoveCompany extends Button
         $this->setAttr('data-toggle', 'modal');
         $this->setAttr('data-target', '#'.$this->dialog->getId());
 
+    }
+
+    public function isDeleteAfterMove(): bool
+    {
+        return $this->deleteAfterMove;
+    }
+
+    public function setDeleteAfterMove(bool $deleteAfterMove): MoveCompany
+    {
+        $this->deleteAfterMove = $deleteAfterMove;
+        return $this;
     }
 
     /**
@@ -87,17 +99,17 @@ class MoveCompany extends Button
         $btnId = $this->getTable()->makeInstanceKey($this->getName());
 
         if ($request->get($btnId) == $btnId) {
-            vd($_REQUEST);
 
             $list = $this->getTable()->getList();
             $selected = $request->get($this->getCheckboxName());
-            $destCompanyId = $request->get($btnId.'-companyId');
+            $destCompanyId = (int)$request->get($btnId.'-companyId');
             /** @var Company $destCompany */
             $destCompany = CompanyMap::create()->find($destCompanyId);
             if (!$destCompany) {
                 \Tk\Alert::addWarning('Please select a valid company.');
                 $request->getTkUri()->redirect();
             }
+
 
             if (!is_array($selected)) {
                 \Tk\Alert::addWarning('Please select records to update.');
@@ -113,8 +125,15 @@ class MoveCompany extends Button
 
                 // Update obj status
                 if (in_array($objValue, $selected)) {
-                    \Tk\Log::notice('Moving selected company cases to '. $destCompany->getName());
+                    if (!$this->isDeleteAfterMove()) {
+                        \Tk\Log::notice('Moving selected company [id '.$obj->getId().'] cases to '. $destCompany->getName() . ' [id '.$obj->getId().']');
+                    } else {
+                        \Tk\Log::notice('deleting selected company [id '.$obj->getId().'] and moving cases to '. $destCompany->getName() . ' [id '.$obj->getId().']');
+                    }
                     CompanyMap::create()->moveCases($obj->getId(), $destCompanyId);
+                    if ($this->isDeleteAfterMove() && $obj->getId() != $destCompanyId) {
+                        $obj->delete();
+                    }
                 }
             }
 
@@ -150,6 +169,15 @@ class MoveCompany extends Button
             ->prependOption('-- Status --', '');
         $this->dialog->setContent($this->companySelect->show());
 
+        $this->dialog->getTemplate()->prependHtml('content',
+            '<p class="text-danger"><small><b>Note:</b> This action will clear the Company Contact field for the moved Cases.</small></p>');
+
+        if ($this->isDeleteAfterMove()) {
+            $this->dialog->setTitle('Delete selected and move Cases to Company');
+        }
+
+
+
         $template = parent::show();
 
         if ($this->dialog) {
@@ -184,7 +212,8 @@ jQuery(function ($) {
           companySelect.val('');
       });
       
-      form.on('submit', function (e) {
+      //form.on('submit', function (e) {
+      $('.btn-success', dialog).on('click', function (e) {
         // Check if this submit was the actual move button
         if (companySelect.val() === '') {
           alert('Please select a company!');
