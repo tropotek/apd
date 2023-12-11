@@ -210,8 +210,8 @@ UPDATE contact SET name_company = 'RSPCA', name_first = 'Inspectorate Victoria' 
 UPDATE contact SET name_company = 'RSPCA' WHERE id IN (1914);
 UPDATE contact SET name_company = '', name_first = 'S', name_last = 'Harvey' WHERE id IN (61);
 UPDATE contact SET name_company = '', name_first = 'Smitha', name_last = 'Georgy' WHERE id IN (1098);
-UPDATE contact SET name_company = 'Racing Victoria' WHERE id IN (179);
-UPDATE contact SET name_company = 'Racing Victoria' WHERE id IN (139);
+UPDATE contact SET name_company = 'Racing Victoria' WHERE id IN (94);
+UPDATE contact SET name_company = 'Racing Victoria' WHERE id IN (1451);
 
 
 SET FOREIGN_KEY_CHECKS = 0;
