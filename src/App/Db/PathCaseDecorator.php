@@ -21,7 +21,7 @@ class PathCaseDecorator
      */
     public static function getRecipients($case, MailTemplate $mailTemplate)
     {
-        $users = array();
+        $users = [];
         switch($mailTemplate->getRecipientType()) {
             case MailTemplate::RECIPIENT_AUTHOR:
                 if ($case->getUser()) {

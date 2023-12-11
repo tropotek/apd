@@ -63,7 +63,7 @@ class ClientDashboard extends \Uni\Controller\AdminIface
                 return trim($value, ', ');
             });
 
-        $filter = array();
+        $filter = [];
         $filter['institutionId'] = $this->getConfig()->getInstitutionId();
         $filter['type'] = \Uni\Db\User::TYPE_STAFF;
         //$this->userTable->setList($this->userTable->findList($filter));

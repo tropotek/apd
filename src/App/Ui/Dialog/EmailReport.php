@@ -104,7 +104,7 @@ class EmailReport extends JsonForm
     public function doSubmit(Form $form, Form\Event\Iface $event)
     {
         $values = $form->getValues();
-        $list = array();
+        $list = [];
         if (is_array($values['to']))
             $list = $values['to'];
 

@@ -135,7 +135,7 @@ class Config extends \Uni\Config
 //        $ext = trim(\Tk\File::getExtension($filename), '.');
 //        // TODO: make these configurable in the config.php
 //        $exclude = array('exe', 'com', 'php', 'perl', 'php5', 'php4', 'html', 'css', 'js');
-//        $include = array();
+//        $include = [];
 //
 //        if (count($exclude)) {
 //            if (in_array($ext, $exclude)) {

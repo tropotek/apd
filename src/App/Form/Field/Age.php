@@ -38,7 +38,7 @@ class Age extends \Tk\Form\Field\Iface
      */
     public function load($values)
     {
-        $v = array();
+        $v = [];
         if (isset($values[$this->getName()])) {
             $v[$this->getName()] =  $values[$this->getName()];
         }

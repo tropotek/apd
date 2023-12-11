@@ -280,7 +280,7 @@ class Request extends \Bs\TableIface
      * @return \Tk\Db\Map\ArrayObject|\App\Db\Request[]
      * @throws \Exception
      */
-    public function findList($filter = array(), $tool = null)
+    public function findList($filter = [], $tool = null)
     {
         if (!$tool) $tool = $this->getTool('b.pathology_id, c.number DESC');
         $filter = array_merge($this->getFilterValues(), $filter);

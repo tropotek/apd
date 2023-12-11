@@ -190,7 +190,7 @@ class Contact extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     {
         $arr = \Tk\Form\Field\Select::arrayToSelectList(\Tk\ObjectUtil::getClassConstants(__CLASS__, 'TYPE'));
         if (is_string($selected)) {
-            $arr2 = array();
+            $arr2 = [];
             foreach ($arr as $k => $v) {
                 if ($v == $selected) {
                     $arr2[$k.' (Current)'] = $v;
@@ -544,7 +544,7 @@ class Contact extends \Tk\Db\Map\Model implements \Tk\ValidInterface
         $list = ContactMap::create()->findFiltered($filter,
             \Tk\Db\Tool::create('CASE WHEN `name_company` = \'\' THEN `name_first` ELSE `name_company` END')
         );
-        $arr = array();
+        $arr = [];
         foreach ($list as $item) {
             $arr[$item->getSelectTitle()] = $item->getId();
         }
@@ -556,7 +556,7 @@ class Contact extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      */
     public function validate()
     {
-        $errors = array();
+        $errors = [];
 
         if (!$this->institutionId) {
             $errors['institutionId'] = 'Invalid value: institutionId';

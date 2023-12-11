@@ -48,7 +48,7 @@ class Student extends \Bs\TableIface
      * @return \Tk\Db\Map\ArrayObject|\App\Db\Student[]
      * @throws \Exception
      */
-    public function findList($filter = array(), $tool = null)
+    public function findList($filter = [], $tool = null)
     {
         if (!$tool) $tool = $this->getTool();
         $filter = array_merge($this->getFilterValues(), $filter);

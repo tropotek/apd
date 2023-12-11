@@ -37,7 +37,6 @@ class CompanyInfo extends \Dom\Renderer\Renderer implements \Dom\Renderer\Displa
         if ($request->has('cid')) {
             $this->doGetCompanyInfo($request);
         }
-
     }
 
     public function doGetCompanyInfo(Request $request)
@@ -53,7 +52,8 @@ class CompanyInfo extends \Dom\Renderer\Renderer implements \Dom\Renderer\Displa
             $data['company']['address'] = $company->getAddress();
             if ($contacts && is_array($contacts)) {
                 $data['contacts'] = CompanyContactMap::create()->findFiltered([
-                    'id' => $contacts
+                    'id' => $contacts,
+                    'companyId' => $company->getId(),
                 ], Tool::create('name'))->toArray();
             }
         }

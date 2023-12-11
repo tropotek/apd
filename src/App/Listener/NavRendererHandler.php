@@ -56,17 +56,20 @@ class NavRendererHandler implements Subscriber
         if (!$user) return;
 
         $menu->append(Item::create('My Profile', \Uni\Uri::createHomeUrl('/profile.html'), 'fa fa-user'));
-        $menu->append(Item::create()->addCss('divider'));
 
-        if ($user->isAdmin()) {
-            $menu->prepend(Item::create('Site Preview', \Uni\Uri::create('/index.html'), 'fa fa-home'))->getLink()
-                ->setAttr('target', '_blank');
+        if ($user->isAdmin() || $user->hasPermission([Permission::MANAGE_STAFF, Permission::MANAGE_SITE])) {
+            $menu->append(Item::create()->addCss('divider'));
+            if ($user->isAdmin()) {
+                $menu->prepend(Item::create('Site Preview', \Uni\Uri::create('/index.html'), 'fa fa-home'))->getLink()
+                    ->setAttr('target', '_blank');
+            }
+            if ($user->hasPermission(Permission::MANAGE_STAFF)) {
+                $menu->append(Item::create('Staff', \Uni\Uri::createHomeUrl('/staffUserManager.html'), 'fa fa-user-md'));
+            }
+            if ($user->hasPermission(Permission::MANAGE_SITE)) {
+                $menu->append(Item::create('Settings', \Uni\Uri::createHomeUrl('/settings.html'), 'fa fa-cogs'), 'Staff');
+            }
         }
-        if ($user->hasPermission(\Uni\Db\Permission::MANAGE_STAFF)) {
-            $menu->append(Item::create('Staff', \Uni\Uri::createHomeUrl('/staffUserManager.html'), 'fa fa-user-md'));
-        }
-        if ($user->hasPermission(Permission::MANAGE_SITE))
-            $menu->append(Item::create('Settings', \Uni\Uri::createHomeUrl('/settings.html'), 'fa fa-cogs'), 'Staff');
 
         $menu->append(Item::create()->addCss('divider'));
         $menu->append(Item::create('About', '#', 'fa fa-info-circle')
@@ -77,7 +80,6 @@ class NavRendererHandler implements Subscriber
 
     /**
      * @param Menu $menu
-     * @throws \Exception
      */
     protected function initSideMenu($menu)
     {
@@ -108,11 +110,11 @@ class NavRendererHandler implements Subscriber
             }
 
             $menu->append(Item::create('Cases', \Uni\Uri::createHomeUrl('/pathCaseManager.html'), 'fa fa-heart-o'));
-            $menu->append(Item::create('Requests', \Uni\Uri::createHomeUrl('/requestManager.html'), 'fa fa-medkit'));
 
             if ($user->hasPermission([Permission::IS_PATHOLOGIST, Permission::IS_TECHNICIAN, Permission::MANAGE_SITE])) {
+                $menu->append(Item::create('Requests', \Uni\Uri::createHomeUrl('/requestManager.html'), 'fa fa-medkit'));
                 $menu->append(Item::create('Clients', \Uni\Uri::createHomeUrl('/companyManager.html'), 'fa fa-building-o'));
-                $menu->append(Item::create('Students', \Uni\Uri::createHomeUrl('/studentManager.html'), 'fa fa-user-o'));
+                // $menu->append(Item::create('Students', \Uni\Uri::createHomeUrl('/studentManager.html'), 'fa fa-user-o'));
             }
 
             //$menu->append(Item::create('Mail Log', \Uni\Uri::createHomeUrl(MailLog::createMailLogUrl('/manager.html', $this->getConfig()->getInstitution())), 'fa fa-envelope'));

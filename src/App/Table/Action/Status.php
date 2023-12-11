@@ -39,7 +39,7 @@ class Status extends \Tk\Table\Action\Link
     /**
      * @var array|string[]
      */
-    public $statusList = array();
+    public $statusList = [];
 
     /**
      * @param array|string[] $statusList

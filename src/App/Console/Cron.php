@@ -55,6 +55,7 @@ class Cron extends \Bs\Console\Iface
             'institutionId' => $institution->getId(),
             'status' => [PathCase::STATUS_PENDING, PathCase::STATUS_REPORTED, PathCase::STATUS_EXAMINED, PathCase::STATUS_HOLD, PathCase::STATUS_FROZEN_STORAGE],
             'disposedAfter' => \Tk\Date::create()->add(new \DateInterval('P3D')),
+            'billable' => true,
         ]);
         $sent = 0;
         $spc = '  ';
@@ -68,7 +69,7 @@ class Cron extends \Bs\Console\Iface
     }
 
     /**
-     * If case not completed after 15 working days from the `necropsyPerformedOn` date,
+     * If case not completed after 15 working days from the `servicesCompletedOn` date,
      *   send a reminder to the pathologist (CC site admin)
      */
     public function sendNecropsyCompleteCaseReminders(Institution $institution)

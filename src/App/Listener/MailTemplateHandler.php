@@ -32,7 +32,7 @@ class MailTemplateHandler implements Subscriber
     public static function createMessageList(string $eventName, $model = null, string $subject = '')
     {
         /** @var array|CurlyMessage[] $messageList */
-        $messageList = array();
+        $messageList = [];
         // Check the mail template event exists from the status.event field
         /** @var MailTemplateEvent $mEvent */
         $mEvent = MailTemplateEventMap::create()->findFiltered(array('event' => $eventName))->current();

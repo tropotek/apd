@@ -35,7 +35,7 @@ class Manager extends AdminManagerIface
         $this->getTable()->setEditUrl(\Bs\Uri::createHomeUrl('/cassetteEdit.html')->set('pathCaseId', $request->get('pathCaseId')));
         $this->getTable()->init();
 
-        $filter = array();
+        $filter = [];
         $filter['pathCaseId'] = $request->get('pathCaseId');
         $this->getTable()->setList($this->getTable()->findList($filter));
     }

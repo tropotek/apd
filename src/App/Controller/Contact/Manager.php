@@ -35,7 +35,7 @@ class Manager extends AdminManagerIface
         $this->getTable()->setEditUrl(\Bs\Uri::createHomeUrl('/contactEdit.html'));
         $this->getTable()->init();
 
-        $filter = array();
+        $filter = [];
         $this->getTable()->setList($this->getTable()->findList($filter));
     }
 

@@ -59,6 +59,8 @@ $routes->add('staff-protocols', Route::create('/staff/protocols.html', 'App\Cont
 $routes->add('staff-sampling', Route::create('/staff/sampling.html', 'App\Controller\Staff\Sampling::doDefault'));
 $routes->add('staff-specimens', Route::create('/staff/specimens.html', 'App\Controller\Staff\Specimens::doDefault'));
 
+$routes->add('staff-user-edit', Route::create('/staff/{targetType}UserEdit.html', 'App\Controller\User\Edit::doDefaultType'));
+
 $routes->add('cassette-manager', Route::create('/staff/cassetteManager.html', 'App\Controller\Cassette\Manager::doDefault'));
 $routes->add('cassette-edit', Route::create('/staff/cassetteEdit.html', 'App\Controller\Cassette\Edit::doDefault'));
 

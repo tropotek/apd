@@ -32,15 +32,6 @@ class Permission extends \Uni\Db\Permission
     const IS_TECHNICIAN        = 'perm.is.technician';
 
     /**
-     * If a staff member is a case admin they have permission
-     * to change the status of a case at any time
-     * Other staff cannot change the status once a case is completed
-     *
-     * @target staff
-     */
-    const CASE_ADMIN            = 'perm.manage.case';
-
-    /**
      * If a staff member has the full edit permission
      * then when a case is completed they still have full edit control.
      * Other users are blocked from editing a case when set to completed
@@ -65,7 +56,7 @@ class Permission extends \Uni\Db\Permission
      */
     public function getAvailablePermissionList($type = '')
     {
-        $arr = array();
+        $arr = [];
         switch ($type) {
             case User::TYPE_ADMIN;
             case User::TYPE_CLIENT:
@@ -75,18 +66,15 @@ class Permission extends \Uni\Db\Permission
                 );
                 break;
             case User::TYPE_STUDENT:
-                $arr = array();
                 break;
             default:          // TYPE_STAFF
                 $arr = array(
                     'Manage Site Settings' => self::MANAGE_SITE,
-                    //'Manage Site Plugins' => self::MANAGE_PLUGINS,
                     'Manage Staff Records' => self::MANAGE_STAFF,
                     'Can Masquerade' => self::CAN_MASQUERADE,
                     'Is Pathologist' => self::IS_PATHOLOGIST,
                     'Is Technician' => self::IS_TECHNICIAN,
                     'Review Cases' => self::CAN_REVIEW_CASE,
-                    'Case Administration' => self::CASE_ADMIN,
                     'Case Always Edit' => self::CASE_FULL_EDIT
                 );
         }
@@ -96,18 +84,17 @@ class Permission extends \Uni\Db\Permission
     public function getPermissionDescriptions(): array
     {
         return [
-            self::MANAGE_SITE => 'Can manage site settings and manage site configuration (Notes, Cms content)',
-            self::MANAGE_PLUGINS => 'Can manage site plugins (deprecated)',
-            self::CAN_MASQUERADE => 'Can masquerade as lower permission users to view their data',
+            self::MANAGE_SITE => 'Can manage site settings and manage site configuration (Notes, Content Pages)',
             self::MANAGE_STAFF => 'Can create/update other staff user accounts',
-            self::MANAGE_SUBJECT => 'Can manage Subject settings, enrollment',
-            self::IS_COORDINATOR => 'Is the coordinator of a Course, access/emails/notifications of associated Courses, Subjects and Students ',
-            self::IS_LECTURER => 'Is a lecturer of a subject, access/email/notifications of associated Subjects, Students',
-            self::IS_MENTOR => 'Is a mentor of a student, restricted access to student/site information',
-            self::IS_PATHOLOGIST => 'Can be selected as a pathologist of a case',
-            self::IS_TECHNICIAN => 'Receive disposal reminder emails',
-            self::CAN_REVIEW_CASE => 'Can review a case before completion',
-            self::CASE_ADMIN => 'Change the status of a case after a case is set to completed',
+            //self::MANAGE_PLUGINS => 'Can manage site plugins (deprecated)',
+            self::CAN_MASQUERADE => 'Can masquerade as lower permission users',
+            //self::MANAGE_SUBJECT => 'Can manage Subject settings, enrollment',
+            //self::IS_COORDINATOR => 'Is the coordinator of a Course, access/emails/notifications of associated Courses, Subjects and Students ',
+            //self::IS_LECTURER => 'Is a lecturer of a subject, access/email/notifications of associated Subjects, Students',
+            //self::IS_MENTOR => 'Is a mentor of a student, restricted access to student/site information',
+            self::IS_PATHOLOGIST => 'Can view/edit all Cases and report fields, send report emails',
+            self::IS_TECHNICIAN => 'Can view/edit all Cases, sent report email, cannot change report status of cases, receives disposal reminders',
+            self::CAN_REVIEW_CASE => 'Pathologists will be able to set this user as the Case reviewer',
             self::CASE_FULL_EDIT => 'Edit a case after a case is set to completed',
         ];
     }

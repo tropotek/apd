@@ -4,6 +4,7 @@ namespace App\Table;
 use App\Db\AnimalTypeMap;
 use App\Db\CompanyMap;
 use App\Db\PathCaseMap;
+use App\Db\Permission;
 use Tk\Db\Tool;
 use Tk\Form\Field;
 use Tk\Table\Cell;
@@ -135,19 +136,16 @@ class PathCase extends \Bs\TableIface
         $this->appendFilter(new Field\Input('age'))->setAttr('placeholder', 'Age');
         $list = $this->getConfig()->getUserMapper()->findFiltered([
             'institutionId' => $this->getConfig()->getInstitutionId(),
-            'type' => User::TYPE_STAFF,
+            'permission' => [Permission::IS_PATHOLOGIST],
             'active' => true
         ], Tool::create('active DESC, name_first, name_last'));
-        
         $this->appendFilter(Field\Select::createSelect('pathologistId', $list)->prependOption('-- Pathologist --'));
-
-        $this->appendFilter(Field\Select::createSelect('userId', $list)->prependOption('-- Creator --'));
-
 
         $list = CompanyMap::create()->findFiltered([
             'institutionId' => $this->getConfig()->getInstitutionId(),
         ], Tool::create('name'));
-        $this->appendFilter(Field\Select::createSelect('companyId', $list))//; //->prependOption('-- Submitter/Client --'))
+        $this->appendFilter(Field\Select::createSelect('companyId', $list))
+            ->setAttr('style', 'max-width: 300px;')
             ->addCss('tk-multiselect1')->prependOption('-- Submitter/Client --');
 
         $js = <<<JS
@@ -177,15 +175,14 @@ JS;
         $list = AnimalTypeMap::create()->findFiltered(['institutionId' => $this->getConfig()->getInstitutionId(), 'parent_id' => 0]);
         $this->appendFilter(Field\Select::createSelect('animalTypeId', $list)->prependOption('-- Animal Type --', ''));
 
-        $list = array(
-            'Extra-small < 1kg' => 'Extra-small < 1kg',
-            'Small < 10kg' => 'Small < 10kg',
-            'Medium < 50kg' => 'Medium < 50kg',
-            'Large < 200kg' => 'Large < 200kg',
-            'Extra-large > 200kg' => 'Extra-large > 200kg');
-        $this->appendFilter(Field\Select::createSelect('size', $list)->prependOption('-- Size --'));
-        $this->appendFilter(Field\Select::createSelect('species', PathCaseMap::create()->findSpeciesList())->prependOption('-- Species --'));
-        $this->appendFilter(Field\Select::createSelect('isDisposable', ['Yes' => '1', 'No' => '0'])->prependOption('-- Is Disposable --', ''));
+//        $list = array(
+//            'Extra-small < 1kg' => 'Extra-small < 1kg',
+//            'Small < 10kg' => 'Small < 10kg',
+//            'Medium < 50kg' => 'Medium < 50kg',
+//            'Large < 200kg' => 'Large < 200kg',
+//            'Extra-large > 200kg' => 'Extra-large > 200kg');
+//        $this->appendFilter(Field\Select::createSelect('size', $list)->prependOption('-- Size --'));
+        //$this->appendFilter(Field\Select::createSelect('species', PathCaseMap::create()->findSpeciesList())->prependOption('-- Species --'));
         $this->appendFilter(Field\Select::createSelect('disposeMethod', \App\Db\PathCase::DISPOSAL_METHOD_LIST)->prependOption('-- Method Of Disposal --', ''));
         $this->appendFilter(Field\Select::createSelect('billable', ['Yes' => '1', 'No' => '0'])->prependOption('-- Is Billable --', ''));
         $this->appendFilter(Field\Select::createSelect('accountStatus', \App\Db\PathCase::ACCOUNT_STATUS_LIST)->prependOption('-- Account Status --', ''));
@@ -211,7 +208,7 @@ JS;
      * @return \Tk\Db\Map\ArrayObject|\App\Db\PathCase[]
      * @throws \Exception
      */
-    public function findList($filter = array(), $tool = null)
+    public function findList($filter = [], $tool = null)
     {
         if (!$tool) $tool = $this->getTool();
         $filter = array_merge($this->getFilterValues(), $filter);

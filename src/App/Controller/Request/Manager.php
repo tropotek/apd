@@ -39,7 +39,7 @@ class Manager extends AdminManagerIface
         $this->getTable()->setEditUrl($url);
         $this->getTable()->init();
 
-        $filter = array();
+        $filter = [];
         if ($request->query->get('pathCaseId')) {
             $filter['pathCaseId'] = $request->get('pathCaseId');
         }

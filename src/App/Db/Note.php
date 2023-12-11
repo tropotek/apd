@@ -139,7 +139,7 @@ class Note extends Model implements ValidInterface
      */
     public function validate()
     {
-        $errors = array();
+        $errors = [];
         $errors = $this->validateModelId($errors);
 
         if (!$this->getMessage()) {

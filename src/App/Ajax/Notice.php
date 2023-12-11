@@ -183,7 +183,7 @@ class Notice
                 $unViewed = 0;
                 $unAlert = 0;
                 $total = $list->count();
-                $out['list'] = array();
+                $out['list'] = [];
                 foreach ($list as $notice) {
                     $recipient = $notice->getNoticeRecipient($user);
                     if (!$recipient) continue;

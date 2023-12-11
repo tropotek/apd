@@ -59,7 +59,7 @@ class Notice extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     /**
      * @var array
      */
-    public $param = array();
+    public $param = [];
 
     /**
      * @var \DateTime

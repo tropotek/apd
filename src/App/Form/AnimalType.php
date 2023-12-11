@@ -28,7 +28,7 @@ class AnimalType extends \Bs\FormIface
     public function init()
     {
 
-        //$this->appendField(new Field\Select('parentId', array()))->prependOption('-- Select --', '');
+        //$this->appendField(new Field\Select('parentId', []))->prependOption('-- Select --', '');
         $this->appendField(new Field\Input('name'));
         $this->appendField(new Field\Textarea('description'));
 

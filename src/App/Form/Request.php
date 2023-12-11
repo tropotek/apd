@@ -41,7 +41,7 @@ class Request extends \Bs\FormIface
         //$layout->removeRow('serviceId', 'col');
         $layout->removeRow('testId', 'col');
 
-        //$this->appendField(new Field\Select('pathCaseId', array()))->prependOption('-- Select --', '');
+        //$this->appendField(new Field\Select('pathCaseId', []))->prependOption('-- Select --', '');
         if (!$this->getDialog()) {
             if (!$this->getRequest()->getCassetteId()) {
                 $list = CassetteMap::create()->findFiltered(array('pathCaseId' => $this->getRequest()->getPathCaseId()));

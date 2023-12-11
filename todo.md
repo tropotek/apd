@@ -2,10 +2,34 @@
 
 ### TODO Tasks:
 
-- [ ] Github now supports private repositories for free, move to private repository and use issues instead of this
+- Github now supports private repositories for free, move to private repository and use issues instead of this
 todo file.
-- [ ] Look into upgrading/Rebuilding the system using the PHP8 Tk lib (Will require some time to implement)
+- Look into upgrading/Rebuilding the system using the PHP8 Tk lib (Will require some time to implement)
 
+
+
+
+### Task Updates
+- ~~Fix pathologist list in filter remove non pathologists (Case list)~~
+- ~~Permissions Update:~~
+  - ~~Pathologists: view edit all cases, send report email~~
+  - ~~Technicians: Edit after care tabs?, cannot change report status, send report email~~
+  - ~~Default: Only edit own cases. (researchers, view others cases) cannot change after care fields~~
+  - ~~Remove "Case Administration" permission (not used), or use it to~~
+- ~~Case reviewed needs to be changed to a select so that a pathologist can select the reviewer. (Smitha And Liz will be initial reviewers)
+remove reviewed on date field,~~ 
+- ~~Remove students field, or add a setting to enable disable it~~
+- ~~Move Clinical history to animal tab~~
+- ~~Fix reviewer field to have a tab name value~~
+- ~~Remove case filters creator, Size, species, is disposable~~
+- ~~Fix client details panel not removing contacts on new client select~~
+- Only invoiceable cases get reminders
+- 
+- Remove account_code field from company, add account code to case if submission type = research, 
+- Merge Racing and Racing Victoria in SQL ?? Or use the new merge function?
+- Add migrate cases when deleting Clients and Client Contacts (New task bill at 4 hrs?) 
+
+Would like to have ready b4 end of year (Smitha will be available the first week of Jan)
 
 
 
@@ -60,7 +84,7 @@ __Update Questions/Notes__
 by the Pathologists and the requests table is used by the Technicians is this correct?
 Who are users the general users that are not a Path or Tech, what permissions should they have?
 
-- The reportStatus for a lof of cases is left at `interim` we could set the report status to completed when 
+- The reportStatus for a of of cases is left at `interim` we could set the report status to completed when 
 the case is set to completed? Or not allow the case to be set to completed until the report is set first? 
 In this update I have auto set completed cases to report_status to completed then we will not have as 
 many initial reminders being sent. If we also run the script to complete old cases this will also reduce the 
@@ -100,7 +124,8 @@ Auto-populate contact select field when new client is selected.~~ [4hrs]
     - ~~Create script to update existing cases to use new Client ID's~~ 
 [14hrs total]
 
-- ~~Add a Student table/object and copy the data from the Contacts table, Update code to use new Student object. (Manager, Edit, etc)~~ [4hrs]
+- ~~Add a Student table/object and copy the data from the Contacts table, 
+Update code to use new Student object. (Manager, Edit, etc)~~ [4hrs]
 
 - ~~Add a `reviewedById` field that links to a user that has a new permission `Can Review Case`,
   add field after `Addendum` textarea on the reporting tab.~~ [2hrs]

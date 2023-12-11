@@ -70,7 +70,7 @@ class InvoiceItemReport extends \Bs\TableIface
      * @return \Tk\Db\Map\ArrayObject|\App\Db\InvoiceItem[]
      * @throws \Exception
      */
-    public function findList($filter = array(), $tool = null)
+    public function findList($filter = [], $tool = null)
     {
         if (!$tool) $tool = $this->getTool('created, path_case_id');
         $filter = array_merge($this->getFilterValues(), $filter);

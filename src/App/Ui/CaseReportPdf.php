@@ -7,10 +7,6 @@ use Dom\Template;
 use Uni\Uri;
 
 /**
- * @author Michael Mifsud <info@tropotek.com>
- * @link http://www.tropotek.com/
- * @license Copyright 2018 Michael Mifsud
- *
  * @note This file uses the mpdf lib
  * @link https://mpdf.github.io/
  */
@@ -211,7 +207,6 @@ class CaseReportPdf extends Pdf
 
         $reviewer = $this->getConfig()->getUserMapper()->find($this->pathCase->getReviewedById());
         if ($reviewer) {
-            $template->appendText('reviewedOn', $this->pathCase->getReviewedOn(\Tk\Date::FORMAT_LONG_DATETIME));
             $template->appendText('reviewerName', $reviewer->getName());
             if ($reviewer->getCredentials())
                 $template->appendText('reviewerCreds', ' ('.$reviewer->getCredentials().')');
@@ -224,8 +219,8 @@ class CaseReportPdf extends Pdf
         $allFiles = $this->pathCase->getPdfFiles();
         if ($allFiles->count()) {
             $template->setVisible('media');
-            $images = array();
-            $files = array();
+            $images = [];
+            $files = [];
             foreach ($allFiles as $file) {     // Sort files
                 if ($file->isImage()) $images[] = $file;
                 else $files[] = $file;
@@ -451,7 +446,6 @@ JS;
         <p><b>Reviewed By:</b></p>
         <p style="margin-left: 20px;">
           <span var="reviewerName"></span> <em var="reviewerCreds"></em><br/>
-          <span>Date Reviewed: <span var="reviewedOn"></span></span><br/>
           <span var="reviewerPosition"></span>
         </p> 
       </div>

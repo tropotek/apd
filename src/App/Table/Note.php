@@ -128,7 +128,7 @@ class Note extends \Uni\TableIface
      * @return \Tk\Db\Map\ArrayObject|\App\Db\Note[]
      * @throws \Exception
      */
-    public function findList($filter = array(), $tool = null)
+    public function findList($filter = [], $tool = null)
     {
         if (!$tool) $tool = $this->getTool('created DESC');
         $filter = array_merge($this->getFilterValues(), $filter);

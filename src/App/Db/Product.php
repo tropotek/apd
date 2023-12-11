@@ -145,7 +145,7 @@ class Product extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      */
     public function validate()
     {
-        $errors = array();
+        $errors = [];
 
         if (!$this->institutionId) {
             $errors['institutionId'] = 'Invalid value: institutionId';

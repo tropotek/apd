@@ -45,7 +45,7 @@ class MailTemplateEvent extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      *
      * @var array
      */
-    public $tags = array();
+    public $tags = [];
 
 
     /**
@@ -171,7 +171,7 @@ class MailTemplateEvent extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      */
     public function validate()
     {
-        $errors = array();
+        $errors = [];
 
         if (!$this->name) {
             $errors['name'] = 'Invalid value: name';

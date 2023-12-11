@@ -95,7 +95,7 @@ class Pdf extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterfa
     {
         $html = $this->show()->toString();
         $tpl = \Tk\CurlyTemplate::create($html);
-        $parsedHtml = $tpl->parse(array());
+        $parsedHtml = $tpl->parse([]);
 
         $this->mpdf = new \Mpdf\Mpdf(array(
 			'format' => 'A4-P',

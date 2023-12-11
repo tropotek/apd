@@ -149,10 +149,10 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
     public $arrival = null;
 
     /**
-     * For necropsi cases only
+     * Case services completed on (Necropsies, histologies)
      * @var null|\DateTime
      */
-    public $necropsyPerformedOn = null;
+    public $servicesCompletedOn = null;
 
     /**
      * Pending/frozen storage/examined/reported/awaiting review (if applicable)/completed
@@ -390,11 +390,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
      * @var null|int
      */
     public $reviewedById = null;
-
-    /**
-     * @var null|\DateTime
-     */
-    public $reviewedOn = null;
 
     /**
      * @var string
@@ -713,16 +708,16 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
     /**
      * @return \DateTime|string
      */
-    public function getNecropsyPerformedOn(?string $format = null): ?\DateTime
+    public function getServicesCompletedOn(?string $format = null): ?\DateTime
     {
-        if ($format && $this->necropsyPerformedOn)
-            return $this->necropsyPerformedOn->format($format);
-        return $this->necropsyPerformedOn;
+        if ($format && $this->servicesCompletedOn)
+            return $this->servicesCompletedOn->format($format);
+        return $this->servicesCompletedOn;
     }
 
-    public function setNecropsyPerformedOn(?\DateTime $necropsyPerformedOn): PathCase
+    public function setServicesCompletedOn(?\DateTime $servicesCompletedOn): PathCase
     {
-        $this->necropsyPerformedOn = $necropsyPerformedOn;
+        $this->servicesCompletedOn = $servicesCompletedOn;
         return $this;
     }
 
@@ -1247,19 +1242,6 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
         return $this;
     }
 
-    public function getReviewedOn(?string $format = null)
-    {
-        if ($format && $this->reviewedOn)
-            return $this->reviewedOn->format($format);
-        return $this->reviewedOn;
-    }
-
-    public function setReviewedOn(?\DateTime $reviewedOn): PathCase
-    {
-        $this->reviewedOn = $reviewedOn;
-        return $this;
-    }
-
     public function setComments(?string $comments) : PathCase
     {
         $this->comments = $comments;
@@ -1305,7 +1287,7 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
 
     public function validate(): array
     {
-        $errors = array();
+        $errors = [];
 
         if (!$this->institutionId) {
             $errors['institutionId'] = 'Invalid value: institutionId';

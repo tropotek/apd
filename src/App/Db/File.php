@@ -418,7 +418,7 @@ class File extends Model implements ValidInterface
      */
     public function validate()
     {
-        $errors = array();
+        $errors = [];
 
         if (!$this->getPath()) {
             $errors['path'] = 'Please enter a valid path';

@@ -71,12 +71,23 @@ class PathCase extends \Bs\FormIface
         // TODO: Allow WYSIWYG to view all files but only upload to html folder if possible (add this later)
         $mediaPath = $this->getPathCase()->getDataPath().'/media';
         $mce = 'mce-min';
-        $this->readonly = ($this->getPathCase()->hasStatus(\App\Db\PathCase::STATUS_COMPLETED)) && $this->getPathCase()->isBilled();
+
+        //$this->readonly = ($this->getPathCase()->hasStatus(\App\Db\PathCase::STATUS_COMPLETED)) && $this->getPathCase()->isBilled();
+        if ($this->getPathCase()->hasStatus(\App\Db\PathCase::STATUS_COMPLETED) && $this->getPathCase()->isBilled()) {
+            $this->readonly = true;
+        }
+        if (
+            !($this->getAuthUser()->getId() == $this->getPathCase()->getUserId() ||
+            $this->getAuthUser()->hasPermission([Permission::IS_PATHOLOGIST, Permission::IS_TECHNICIAN]))
+        ) {
+            $this->readonly = true;
+        }
+
 
         $layout = $this->getRenderer()->getLayout();
 
         $layout->removeRow('arrival', 'col');
-        $layout->removeRow('necropsyPerformedOn', 'col');
+        $layout->removeRow('proceduresCompletedOn', 'col');
 
         $layout->removeRow('type', 'col');
 
@@ -114,9 +125,10 @@ class PathCase extends \Bs\FormIface
         $this->appendField(new Field\Input('arrival'))->setTabGroup($tab)->addCss('date')
             ->setAttr('placeholder', 'dd/mm/yyyy')->setNotes('The date the case was received.');
 
+        $f = $this->appendField(new Field\Input('servicesCompletedOn'))->setTabGroup($tab)->addCss('date')
+            ->setAttr('placeholder', 'dd/mm/yyyy')->setLabel('Services Completed On');
         if ($this->getPathCase()->getType() == \App\Db\PathCase::TYPE_NECROPSY) {
-            $this->appendField(new Field\Input('necropsyPerformedOn'))->setTabGroup($tab)->addCss('date')
-                ->setAttr('placeholder', 'dd/mm/yyyy');
+            $f->setLabel('Necropsy Performed On');
         }
 
         if (!$this->getPathCase()->getType()) {
@@ -253,6 +265,49 @@ JS;
         }
 
 
+        $tab = 'Details';
+        $list  = $this->getConfig()->getUserMapper()->findFiltered(
+            [
+                'institutionId'=> $this->getPathCase()->getInstitutionId(),
+                'permission' => Permission::IS_PATHOLOGIST,
+                'active' => true
+            ],
+            Tool::create('nameFirst')
+        );
+        $this->appendField(Field\Select::createSelect('pathologistId', $list)
+            ->prependOption('-- Select --', ''))
+            ->setTabGroup($tab)->setLabel('Pathologist');
+
+//        $student = new \App\Db\Student();
+//        $form = \App\Form\Student::create('studentSelect')->setModel($student);
+//        $list = \App\Db\Student::getSelectList();
+//        $this->appendField(Field\DialogSelect::createDialogSelect('students[]', $list, $form,'Create Student'))
+//            ->addCss('tk-multiselect tk-multiselect2')
+//            ->setTabGroup($tab)->setLabel('Students')->setNotes('Type to find an existing student, create a new student record if not found in list.')
+//            ->setValue($this->getPathCase()->getStudentList()->toArray('id'));
+
+        // Enable select2 multi select for student field
+        $js = <<<JS
+jQuery(function ($) {
+  	$('select.tk-multiselect2').select2({
+        placeholder: 'Select a Student',
+        allowClear: false,
+        minimumInputLength: 0
+    });
+});
+JS;
+        $this->getRenderer()->getTemplate()->appendJs($js);
+
+        $this->appendField(Field\CheckboxInput::create('zoonotic'))->setTabGroup($tab)->setLabel('Zoonotic/Other Risks')
+            ->setNotes('Tick the checkbox to alert users of these risks when viewing this case.')
+            ->setAttr('placeholder', 'None');
+
+        $this->appendField(Field\CheckboxInput::create('issue'))->setTabGroup($tab)
+            ->setLabel('Case Issues')
+            ->setNotes('Tick the checkbox to alert users of any issues to be aware of when viewing this case.')
+            ->setAttr('placeholder', 'None');
+
+
         $tab = 'Animal';
         $this->appendField(new Field\Autocomplete('ownerName'))->setTabGroup($tab)
             ->addOnAjax(function (Field\Autocomplete $field, \Tk\Request $request) {
@@ -290,7 +345,6 @@ JS;
             ->setTabGroup($tab);
         $this->appendField(new Field\Input('weight'))->setTabGroup($tab);
 
-        //$this->appendField(new Field\Input('colour'))->setTabGroup($tab);
         $this->appendField(new Field\Autocomplete('colour'))->setTabGroup($tab)
             ->addOnAjax(function (Field\Autocomplete $field, \Tk\Request $request) {
                 return PathCaseMap::create()->getColourList($this->getConfig()->getInstitutionId(), $request->get('term'));
@@ -307,54 +361,22 @@ JS;
         $this->appendField(new Field\Checkbox('euthanised'))->setTabGroup($tab);
         $this->appendField(new Field\Input('euthanisedMethod'))->setTabGroup($tab);
 
-        $tab = 'Details';
-        $list  = $this->getConfig()->getUserMapper()->findFiltered(
-            array('institutionId'=> $this->getPathCase()->getInstitutionId(), 'permission' => Permission::IS_PATHOLOGIST, 'active' => true),
-            Tool::create('nameFirst')
-        );
-        $this->appendField(Field\Select::createSelect('pathologistId', $list)
-            ->prependOption('-- Select --', ''))
-            ->setTabGroup($tab)->setLabel('Pathologist');
-
-        $student = new \App\Db\Student();
-        $form = \App\Form\Student::create('studentSelect')->setModel($student);
-        $list = \App\Db\Student::getSelectList();
-        $this->appendField(Field\DialogSelect::createDialogSelect('students[]', $list, $form,'Create Student'))
-            ->addCss('tk-multiselect tk-multiselect2')
-            ->setTabGroup($tab)->setLabel('Students')->setNotes('Type to find an existing student, create a new student record if not found in list.')
-            ->setValue($this->getPathCase()->getStudentList()->toArray('id'));
-
-        // Enable select2 multi select for student field
-        $js = <<<JS
-jQuery(function ($) {
-  	$('select.tk-multiselect2').select2({
-        placeholder: 'Select a Student',
-        allowClear: false,
-        minimumInputLength: 0
-    });
-});
-JS;
-        $this->getRenderer()->getTemplate()->appendJs($js);
-
-        $this->appendField(Field\CheckboxInput::create('zoonotic'))->setTabGroup($tab)->setLabel('Zoonotic/Other Risks')
-            ->setNotes('Tick the checkbox to alert users of these risks when viewing this case.')
-            ->setAttr('placeholder', 'None');
-
-        $this->appendField(Field\CheckboxInput::create('issue'))->setTabGroup($tab)
-            ->setLabel('Case Issues')
-            ->setNotes('Tick the checkbox to alert users of any issues to be aware of when viewing this case.')
-            ->setAttr('placeholder', 'None');
-
         $this->appendField(new Field\Textarea('clinicalHistory'))
             ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
 
+
         $tab = 'Reporting';
-        $list  = ObjectUtil::getClassConstants($this->getPathCase(), 'REPORT_STATUS', true);
+
 
         $this->appendField(new Field\Checkbox('studentReport'))->setTabGroup($tab);
 
-        $this->appendField(Field\Select::createSelect('reportStatus', $list)->prependOption('-- Select --', ''))
+        $list  = ObjectUtil::getClassConstants($this->getPathCase(), 'REPORT_STATUS', true);
+        $f = $this->appendField(Field\Select::createSelect('reportStatus', $list)->prependOption('-- Select --', ''))
             ->setTabGroup($tab);
+
+        if (!$this->getAuthUser()->hasPermission([Permission::IS_PATHOLOGIST, Permission::CASE_FULL_EDIT])) {
+            $f->setDisabled(true);
+        }
 
         $this->appendField(new Field\Textarea('collectedSamples'))
             ->addCss('mce-min')->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
@@ -388,23 +410,17 @@ JS;
         $this->appendField(new Field\Textarea('addendum'))
             ->addCss($mce)->setAttr('data-elfinder-path', $mediaPath)->setTabGroup($tab);
 
-        if (
-            !$this->getPathCase()->getReviewedById() &&
-            $this->getPathCase()->hasStatus([\App\Db\PathCase::STATUS_EXAMINED, \App\Db\PathCase::STATUS_REPORTED, \App\Db\PathCase::STATUS_COMPLETED]) &&
-            $this->getAuthUser()->hasPermission(Permission::CAN_REVIEW_CASE)
-        ) {
-            $this->appendField(Field\Checkbox::create('reviewCase'))
-                ->setCheckboxLabel('Click the checkbox to mark this case as reviewed by ' . $this->getAuthUser()->getName());
-        } elseif ($this->getPathCase()->getReviewedById()) {
-            // show reviewed user and date details
-            $reviewer = $this->getPathCase()->getReviewer();
-            $html = sprintf('%s, <em>%s</em> on %s',
-                $reviewer->getName(),
-                $reviewer->getCredentials(),
-                $this->getPathCase()->getReviewedOn(Date::FORMAT_LONG_DATETIME)
-            );
-            $this->appendField(Field\Html::createHtml('reviewedBy', $html));
-        }
+        $list  = $this->getConfig()->getUserMapper()->findFiltered(
+            [
+                'institutionId'=> $this->getPathCase()->getInstitutionId(),
+                'permission' => Permission::CAN_REVIEW_CASE,
+                'active' => true
+            ],
+            Tool::create('nameFirst')
+        );
+        $this->appendField(Field\Select::createSelect('reviewedById', $list)
+            ->prependOption('-- Select --', ''))
+            ->setTabGroup($tab)->setLabel('Case Reviewed By');
 
         // Setup auto-save on the tinymce instances
         $js = <<<JS
@@ -442,24 +458,29 @@ jQuery(function ($) {
 JS;
         $this->getRenderer()->getTemplate()->appendJs($js);
 
-        // File field
+
         $tab = 'Files';
         $maxFiles = 10;
         /** @var \Bs\Form\Field\File $fileField */
         $this->appendField(\Bs\Form\Field\File::createFile('files[]', $this->getPathCase()))
             ->setTabGroup($tab)->setAttr('data-max-files', $maxFiles)
-            ->setAttr('data-select-title', 'Add file to report emails.')
+            ->setAttr('data-select-title', 'Add file to report emails.'
+            )
             ->setNotes('Upload any related files. A max. of '.$maxFiles.' files can be selected and uploaded per form submission.<br/>Select/check any file you want to be included with the email report.<br/>Note: Files larger than 2Mb will not be attached to emails.');
 
+
         $tab = 'After Care';
-        if ($this->getPathCase()->getType() != \App\Db\PathCase::TYPE_BIOPSY) {
+        if ($this->getPathCase()->getType() == \App\Db\PathCase::TYPE_NECROPSY) {
             $list = StorageMap::create()->findFiltered(['institutionId' => $this->getConfig()->getInstitutionId()], Tool::create('name'));
             $this->appendField(Field\Select::createSelect('storageId', $list)->prependOption('-- Select --', ''))
                 ->setTabGroup($tab);
+
             $this->appendField(new Field\Input('acHold'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy')
                 ->setLabel('Hold Until')->setTabGroup($tab);
+
             $this->appendField(Field\Select::createSelect('disposeMethod', \App\Db\PathCase::DISPOSAL_METHOD_LIST)->prependOption('-- None --', ''))
                 ->setLabel('Method Of Disposal')->setTabGroup($tab);
+
             $this->appendField(new Field\Input('disposeOn'))->addCss('date')->setAttr('placeholder', 'dd/mm/yyyy')
                 ->setLabel('Disposal Completion Date')->setTabGroup($tab);
         }
@@ -471,8 +492,10 @@ JS;
             }
         }
 
-        $this->appendField(new Event\Submit('update', array($this, 'doSubmit')));
-        $this->appendField(new Event\Submit('save', array($this, 'doSubmit')));
+        if (!$this->readonly) {
+            $this->appendField(new Event\Submit('update', array($this, 'doSubmit')));
+            $this->appendField(new Event\Submit('save', array($this, 'doSubmit')));
+        }
         $this->appendField(new Event\Link('cancel', $this->getBackUrl()));
     }
 
@@ -484,7 +507,7 @@ JS;
     {
         if ($this->getRequest()->has('action')) return;        // ignore column requests
         $this->getForm()->getField('contacts')->getDialog()->execute($request);
-        $this->getForm()->getField('students')->getDialog()->execute($request);
+        //$this->getForm()->getField('students')->getDialog()->execute($request);
 
         $this->load(\App\Db\PathCaseMap::create()->unmapForm($this->getPathCase()));
         parent::execute($request);

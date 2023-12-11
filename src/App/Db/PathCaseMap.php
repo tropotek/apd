@@ -38,7 +38,7 @@ class PathCaseMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Text('submissionType', 'submission_type'));
             $this->dbMap->addPropertyMap(new Db\Boolean('submissionReceived', 'submission_received'));
             $this->dbMap->addPropertyMap(new Db\Date('arrival'));
-            $this->dbMap->addPropertyMap(new Db\Date('necropsyPerformedOn', 'necropsy_performed_on'));
+            $this->dbMap->addPropertyMap(new Db\Date('servicesCompletedOn', 'services_completed_on'));
             $this->dbMap->addPropertyMap(new Db\Text('status'));
             $this->dbMap->addPropertyMap(new Db\Text('reportStatus', 'report_status'));
             $this->dbMap->addPropertyMap(new Db\Boolean('billable'));
@@ -86,7 +86,6 @@ class PathCaseMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Text('secondOpinion', 'second_opinion'));
             $this->dbMap->addPropertyMap(new Db\Text('addendum'));
             $this->dbMap->addPropertyMap(new Db\Integer('reviewedById', 'reviewed_by_id'));
-            $this->dbMap->addPropertyMap(new Db\Date('reviewedOn', 'reviewed_on'));
             $this->dbMap->addPropertyMap(new Db\Text('notes'));
             $this->dbMap->addPropertyMap(new Db\Date('modified'));
             $this->dbMap->addPropertyMap(new Db\Date('created'));
@@ -112,7 +111,7 @@ class PathCaseMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Text('submissionType'));
             $this->formMap->addPropertyMap(new Form\Boolean('submissionReceived'));
             $this->formMap->addPropertyMap(new Form\Date('arrival'));
-            $this->formMap->addPropertyMap(new Form\Date('necropsyPerformedOn'));
+            $this->formMap->addPropertyMap(new Form\Date('servicesCompletedOn'));
             $this->formMap->addPropertyMap(new Form\Text('status'));
             $this->formMap->addPropertyMap(new Form\Text('reportStatus'));
             $this->formMap->addPropertyMap(new Form\Boolean('billable'));
@@ -159,7 +158,7 @@ class PathCaseMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Text('comments'));
             $this->formMap->addPropertyMap(new Form\Text('secondOpinion'));
             $this->formMap->addPropertyMap(new Form\Text('addendum'));
-            $this->formMap->addPropertyMap(new Form\Date('reviewedOn'));
+            $this->formMap->addPropertyMap(new Form\Integer('reviewedById'));
             $this->formMap->addPropertyMap(new Form\Text('notes'));
 
         }
@@ -181,7 +180,7 @@ ORDER BY species
 SQL;
 
         $res = $this->getDb()->query($sql);
-        $arr = array();
+        $arr = [];
         foreach ($res as $row) {
             if (!$row->species) continue;
             $spec = $row->species;
@@ -211,7 +210,7 @@ ORDER BY breed
 SQL;
 
         $res = $this->getDb()->query($sql);
-        $arr = array();
+        $arr = [];
         foreach ($res as $row) {
             if (!$row->breed) continue;
             $spec = $row->breed;

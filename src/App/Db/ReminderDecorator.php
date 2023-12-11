@@ -69,7 +69,7 @@ class ReminderDecorator
     }
 
     /**
-     * After 15 working days from the `necropsyPerformedOn` date,
+     * After 15 working days from the `servicesCompletedOn` date,
      *   send a reminder to the pathologist (CC site admin) to complete the open Cases
      */
     public static function onNecropsyCompleteCase(Institution $institution, MailTemplate $mailTemplate, ?string $subject = null): array
@@ -88,6 +88,7 @@ WHERE necropsy_performed_on IS NOT NULL
     AND status NOT IN ('complete', 'cancelled')
     AND DATE(necropsy_performed_on) <= CURRENT_DATE - INTERVAL 15 DAY
     AND pathologist_id != 0
+    AND billable
 GROUP BY pathologist_id
 SQL;
         $rows = $config->getDb()->query($sql);
@@ -162,6 +163,7 @@ requests AS (
         r.status != 'cancelled'
         AND p.type = 'biopsy'
         AND p.pathologist_id > 0
+        AND billable
         AND c.cases_due < NOW() - INTERVAL 1 DAY
     GROUP BY r.path_case_id
 )

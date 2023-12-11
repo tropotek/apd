@@ -83,6 +83,8 @@ INSERT INTO path_case_has_student (path_case_id, student_id)
 -- Delete all students with 'None'
 DELETE FROM student WHERE id IN (164, 180);
 
+DELETE FROM user_permission WHERE name = 'perm.manage.case';
+
 -- Fix duplicate student record
 UPDATE path_case_has_student SET student_id = 57 WHERE path_case_id = 32;
 DELETE FROM student WHERE id = 59;
@@ -313,9 +315,10 @@ ALTER TABLE path_case ADD reviewed_by_id INT UNSIGNED NULL AFTER addendum;
 ALTER TABLE path_case ADD
     CONSTRAINT fk_path_case__reviewed_by_id FOREIGN KEY (reviewed_by_id) REFERENCES user (id) ON DELETE SET NULL ON UPDATE CASCADE;
 
-ALTER TABLE path_case ADD reviewed_on DATETIME NULL AFTER reviewed_by_id;
+-- ALTER TABLE path_case ADD reviewed_on DATETIME NULL AFTER reviewed_by_id;
 
-ALTER TABLE path_case ADD necropsy_performed_on DATETIME NULL AFTER arrival;
+-- ALTER TABLE path_case ADD necropsy_performed_on DATETIME NULL AFTER arrival;
+ALTER TABLE path_case ADD services_completed_on DATETIME NULL AFTER arrival;
 
 -- Add Smitha as a user that can review cases
 INSERT IGNORE INTO user_permission VALUES

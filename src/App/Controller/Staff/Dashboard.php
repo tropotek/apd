@@ -8,19 +8,13 @@ use Tk\Alert;
 use Tk\Request;
 use Dom\Template;
 
-/**
- * @author Michael Mifsud <info@tropotek.com>
- * @link http://www.tropotek.com/
- * @license Copyright 2015 Michael Mifsud
- */
+
 class Dashboard extends \Uni\Controller\AdminIface
 {
 
     protected $caseTable = null;
 
     protected $requestTable = null;
-
-    protected $filesTable = null;
 
     protected $cmsPanel = null;
 
@@ -47,44 +41,46 @@ class Dashboard extends \Uni\Controller\AdminIface
 //        $this->cmsPanel = CmsPanel::create();
 //        $this->cmsPanel->doDefault($request);
 
-        //if ($this->getAuthUser()->hasPermission(Permission::IS_PATHOLOGIST)) {
-            $this->caseTable = \App\Table\PathCase::create();
-            $this->caseTable->setEditUrl(\Bs\Uri::createHomeUrl('/pathCaseEdit.html'));
-            $this->caseTable->init();
-            $this->caseTable->findAction('columns')->setSelected(
-                ['id', 'pathologyId', 'clientId', 'owner', 'age',
-                    'patientNumber', 'type', 'submissionType', 'status', 'reportStatus', 'arrival']
-            );
-            $this->caseTable->removeFilter('userId');
-            $this->caseTable->removeFilter('pathologistId');
-            $this->caseTable->removeFilter('companyId');
-            $this->caseTable->removeFilter('animalTypeId');
-            $this->caseTable->removeFilter('size');
-            $this->caseTable->removeFilter('type');
-            $this->caseTable->removeFilter('species');
-            $this->caseTable->removeFilter('isDisposable');
-            $this->caseTable->removeFilter('submissionType');
-            $this->caseTable->removeFilter('disposeMethod');
-            $this->caseTable->removeFilter('billable');
 
-            $this->caseTable->getFilterForm()->getField('status')
-                ->setValue([\App\Db\PathCase::STATUS_PENDING, \App\Db\PathCase::STATUS_EXAMINED,
-                    \App\Db\PathCase::STATUS_REPORTED, \App\Db\PathCase::STATUS_FROZEN_STORAGE, \App\Db\PathCase::STATUS_HOLD]);
-            $filter = [
-                'pathologistId' => $this->getAuthUser()->getId(),
-            ];
-            $this->caseTable->setList($this->caseTable->findList($filter, $this->caseTable->getTool('created DESC')));
-        //}
+        $this->caseTable = \App\Table\PathCase::create();
+        $this->caseTable->setEditUrl(\Bs\Uri::createHomeUrl('/pathCaseEdit.html'));
+        $this->caseTable->init();
+        $this->caseTable->findAction('columns')->setSelected(
+            ['id', 'pathologyId', 'clientId', 'owner', 'age',
+                'patientNumber', 'type', 'submissionType', 'status', 'reportStatus', 'arrival']
+        );
+        $this->caseTable->removeFilter('userId');
+        $this->caseTable->removeFilter('pathologistId');
+        $this->caseTable->removeFilter('companyId');
+        $this->caseTable->removeFilter('animalTypeId');
+        $this->caseTable->removeFilter('size');
+        $this->caseTable->removeFilter('type');
+        $this->caseTable->removeFilter('species');
+        $this->caseTable->removeFilter('isDisposable');
+        $this->caseTable->removeFilter('submissionType');
+        $this->caseTable->removeFilter('disposeMethod');
+        $this->caseTable->removeFilter('billable');
 
-        $this->requestTable = \App\Table\Request::create();
-        $this->requestTable->setEditUrl(\Bs\Uri::createHomeUrl('/requestEdit.html'));
-        $this->requestTable->init();
-        $this->requestTable->removeFilter('pathologistId');
-        $this->requestTable->removeFilter('clientId');
+        $this->caseTable->getFilterForm()->getField('status')
+            ->setValue([\App\Db\PathCase::STATUS_PENDING, \App\Db\PathCase::STATUS_EXAMINED,
+                \App\Db\PathCase::STATUS_REPORTED, \App\Db\PathCase::STATUS_FROZEN_STORAGE, \App\Db\PathCase::STATUS_HOLD]);
         $filter = [
-            'pathologistId' => $this->getAuthUser()->getId()
+            'userId' => $this->getAuthUser()->getId(),
         ];
-        $this->requestTable->setList($this->requestTable->findList($filter, $this->requestTable->getTool('created DESC')));
+        $this->caseTable->setList($this->caseTable->findList($filter, $this->caseTable->getTool('created DESC')));
+
+
+        if ($this->getAuthUser()->hasPermission([Permission::IS_TECHNICIAN])) {
+            $this->requestTable = \App\Table\Request::create();
+            $this->requestTable->setEditUrl(\Bs\Uri::createHomeUrl('/requestEdit.html'));
+            $this->requestTable->init();
+            $this->requestTable->removeFilter('pathologistId');
+            $this->requestTable->removeFilter('clientId');
+            $filter = [
+                'userId' => $this->getAuthUser()->getId()
+            ];
+            $this->requestTable->setList($this->requestTable->findList($filter, $this->requestTable->getTool('created DESC')));
+        }
 
         if ($this->getAuthUser()->hasPermission(Permission::IS_PATHOLOGIST)) {
             $filter = [
@@ -119,16 +115,14 @@ class Dashboard extends \Uni\Controller\AdminIface
 
         if ($this->requestTable) {
             $template->appendTemplate('requests', $this->requestTable->show());
+            $template->setVisible('requests-panel', true);
         }
 
-        //$template->appendHtml('files', '<p><i>{TODO: Add an image/file gallery here...}</i></p>');
 
         return $template;
     }
 
     /**
-     * DomTemplate magic method
-     *
      * @return Template
      */
     public function __makeTemplate()
@@ -141,18 +135,12 @@ class Dashboard extends \Uni\Controller\AdminIface
       <div class="tk-panel" data-panel-title="My Case List" data-panel-icon="fa fa-heart" var="cases"></div>
     </div>
   </div>
-  <div class="row">
+  <div class="row" choice="requests-panel">
     <div class="col-12">
       <div class="tk-panel" data-panel-title="My Requests" data-panel-icon="fa fa-medkit" var="requests"></div>
     </div>
   </div>
   
-  
-  <div class="row" choice="todo">
-    <div class="col-12">
-      <div class="tk-panel" data-panel-title="My Recent Files" data-panel-icon="fa fa-image" var="files"></div>
-    </div>
-  </div>
 </div>
 HTML;
 
