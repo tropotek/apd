@@ -136,4 +136,27 @@ class CompanyMap extends Mapper
         return $filter;
     }
 
+
+    public function moveCases(int $srcCompanyId, int $destCompanyId): bool
+    {
+        // delete all contacts
+        $sql = <<<SQL
+DELETE phc
+FROM path_case_has_company_contact phc
+JOIN company_contact cc ON (cc.id = phc.company_contact_id)       
+WHERE cc.company_id = :srcCompanyId
+SQL;
+        $stm = $this->getDb()->prepare($sql);
+        $stm->execute(compact('srcCompanyId'));
+
+        $sql = <<<SQL
+UPDATE path_case SET 
+    company_id = :destCompanyId
+WHERE company_id = :srcCompanyId 
+SQL;
+        $stm = $this->getDb()->prepare($sql);
+        $n = $stm->execute(compact('srcCompanyId', 'destCompanyId'));
+        return ($n !== false);
+    }
+
 }

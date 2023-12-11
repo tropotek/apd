@@ -46,6 +46,7 @@ class Company extends \Bs\TableIface
         // Actions
         $this->appendAction(\Tk\Table\Action\Delete::create());
         $this->appendAction(\Tk\Table\Action\Csv::create());
+        $this->appendAction(new \App\Table\Action\MoveCompany());
 
         return $this;
     }

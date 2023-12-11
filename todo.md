@@ -6,7 +6,24 @@
 todo file.
 - Look into upgrading/Rebuilding the system using the PHP8 Tk lib (Will require some time to implement)
 
-
+- The form init javascript does not even work, its not proper JS event handling. we need to remove it.
+There may not even be a reason to have it, think it through....
+Some notes PageLoaderHandler.php:
+```php
+            // TODO: The current for init process will not work as expected
+            //       we need to implement this and change all lines from:
+            //       $('form').on('init', document, init).each(init);
+            //       to:
+            //       $(document).on('form.init', 'form', init);
+//            $js = <<<JS
+//$(document).ready(function() {
+//    // init the forms here!!!!
+//    $('form').trigger('form.init');   // this would init all forms not just ones updated via ajax
+//    $('table').trigger('table.init');
+//});
+//JS;
+//            $template->appendJs($js, ['data-jsl-priority' => 999999]);
+```
 
 
 ### Task Updates
@@ -26,8 +43,10 @@ remove reviewed on date field,~~
 - ~~Only invoiceable cases get reminders~~
 - ~~Add services completed on field With biopsy cases this should automatically get set when the last request is completed, and unset when requests are created.~~
 - ~~Remove account_code field from company, add account code to case if submission type = research~~
+- ~~Merge Racing and Racing Victoria in SQL ?? Or use the new merge function?~~
 - Add migrate cases when deleting Clients and Client Contacts (New task bill at 4 hrs?)
-- Merge Racing and Racing Victoria in SQL ?? Or use the new merge function?
+- investigate the MS login error and having to clear the sessions
+
 
 Would like to have ready b4 end of year (Smitha will be available the first week of Jan)
 
