@@ -44,7 +44,7 @@ remove reviewed on date field,~~
 - ~~Add services completed on field With biopsy cases this should automatically get set when the last request is completed, and unset when requests are created.~~
 - ~~Remove account_code field from company, add account code to case if submission type = research~~
 - ~~Merge Racing and Racing Victoria in SQL ?? Or use the new merge function?~~
-- Add migrate cases when deleting Clients and Client Contacts (New task bill at 4 hrs?)
+- ~~Add migrate cases when deleting Clients and Client Contacts (New task bill at 4 hrs?)~~
 - investigate the MS login error and having to clear the sessions
 
 

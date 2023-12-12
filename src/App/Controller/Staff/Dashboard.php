@@ -5,6 +5,7 @@ use App\Db\PathCaseMap;
 use App\Db\Permission;
 use App\Ui\CmsPanel;
 use Tk\Alert;
+use Tk\ExtAuth\Microsoft\Token;
 use Tk\Request;
 use Dom\Template;
 
@@ -40,7 +41,6 @@ class Dashboard extends \Uni\Controller\AdminIface
 //        $this->cmsPanel = CmsPanel::create('Staff News', 'fa fa-newspaper-o', 'inst.cms.dashnews');
 //        $this->cmsPanel = CmsPanel::create();
 //        $this->cmsPanel->doDefault($request);
-
 
         $this->caseTable = \App\Table\PathCase::create();
         $this->caseTable->setEditUrl(\Bs\Uri::createHomeUrl('/pathCaseEdit.html'));

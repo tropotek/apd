@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6d1a2e53c167d67a0d78e24078b9c705",
+    "content-hash": "6949b51e68e5b265e3b79040fe5a6c8c",
     "packages": [
         {
             "name": "guzzlehttp/psr7",
@@ -1236,16 +1236,16 @@
         },
         {
             "name": "setasign/fpdi",
-            "version": "v2.5.0",
+            "version": "v2.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Setasign/FPDI.git",
-                "reference": "ecf0459643ec963febfb9a5d529dcd93656006a4"
+                "reference": "a6db878129ec6c7e141316ee71872923e7f1b7ad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Setasign/FPDI/zipball/ecf0459643ec963febfb9a5d529dcd93656006a4",
-                "reference": "ecf0459643ec963febfb9a5d529dcd93656006a4",
+                "url": "https://api.github.com/repos/Setasign/FPDI/zipball/a6db878129ec6c7e141316ee71872923e7f1b7ad",
+                "reference": "a6db878129ec6c7e141316ee71872923e7f1b7ad",
                 "shasum": ""
             },
             "require": {
@@ -1257,8 +1257,8 @@
             },
             "require-dev": {
                 "phpunit/phpunit": "~5.7",
-                "setasign/fpdf": "~1.8",
-                "setasign/tfpdf": "~1.31",
+                "setasign/fpdf": "~1.8.6",
+                "setasign/tfpdf": "~1.33",
                 "squizlabs/php_codesniffer": "^3.5",
                 "tecnickcom/tcpdf": "~6.2"
             },
@@ -1296,7 +1296,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Setasign/FPDI/issues",
-                "source": "https://github.com/Setasign/FPDI/tree/v2.5.0"
+                "source": "https://github.com/Setasign/FPDI/tree/v2.6.0"
             },
             "funding": [
                 {
@@ -1304,7 +1304,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-09-28T10:46:27+00:00"
+            "time": "2023-12-11T16:03:32+00:00"
         },
         {
             "name": "symfony/console",
@@ -3301,12 +3301,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-base.git",
-                "reference": "4ab3c3fc1914d9096683784a650a6c425e770648"
+                "reference": "6c27b07408a47fdf896067c9e4ae29b40ab8e9c3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/4ab3c3fc1914d9096683784a650a6c425e770648",
-                "reference": "4ab3c3fc1914d9096683784a650a6c425e770648",
+                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/6c27b07408a47fdf896067c9e4ae29b40ab8e9c3",
+                "reference": "6c27b07408a47fdf896067c9e4ae29b40ab8e9c3",
                 "shasum": ""
             },
             "require": {
@@ -3851,12 +3851,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-table.git",
-                "reference": "0ef7034c878d80b1a03f89e03d5d16f11dddc2a9"
+                "reference": "9245748fe84224a64198e084aaa8a08a104a27da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-table/zipball/0ef7034c878d80b1a03f89e03d5d16f11dddc2a9",
-                "reference": "0ef7034c878d80b1a03f89e03d5d16f11dddc2a9",
+                "url": "https://api.github.com/repos/tropotek/tk-table/zipball/9245748fe84224a64198e084aaa8a08a104a27da",
+                "reference": "9245748fe84224a64198e084aaa8a08a104a27da",
                 "shasum": ""
             },
             "require": {
@@ -4071,7 +4071,8 @@
         "ext-json": "*",
         "ext-dom": "*",
         "ext-openssl": "*",
-        "ext-pdo": "*"
+        "ext-pdo": "*",
+        "ext-curl": "*"
     },
     "platform-dev": [],
     "plugin-api-version": "2.3.0"

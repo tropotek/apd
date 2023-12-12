@@ -38,6 +38,7 @@
     "ext-dom": "*",
     "ext-openssl": "*",
     "ext-pdo": "*",
+    "ext-curl": "*",
     "ttek/tk-uni": "~3.6.0",
     "ttek/tk-map": "~3.2.0",
     "ttek/theme-cube": "~1.4.0",

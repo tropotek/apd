@@ -33,12 +33,12 @@ class Login extends \Uni\Controller\Login
             //\Tk\Alert::addWarning('Invalid or inactive Institution. Set up an active institution to continue.');
             \Uni\Uri::create('/xlogin.html')->redirect();
         } else {
-            if (!$this->getAuthUser() && $this->institution->getData()->get('inst.microsoftLogin')) {
-                // Add it ID to the session for the microsoft login to work as expected
-                $this->getSession()->set('auth.institutionId', $this->institution->getId());
-                $this->getSession()->writeClose();
-                \Uni\Uri::create('/microsoftLogin.html')->redirect();
-            }
+//            if (!$this->getAuthUser() && $this->institution->getData()->get('inst.microsoftLogin')) {
+//                // Add it ID to the session for the microsoft login to work as expected
+//                $this->getSession()->set('auth.institutionId', $this->institution->getId());
+//                $this->getSession()->writeClose();
+//                \Uni\Uri::create('/microsoftLogin.html')->redirect();
+//            }
         }
 
         if ($this->getAuthUser()) {
@@ -84,17 +84,17 @@ class Login extends \Uni\Controller\Login
     /**
      * @return \Dom\Template
      */
-    public function __makeTemplate()
-    {
-        $xhtml = <<<HTML
-<div class="tk-login-panel tk-login">
-
-  <div var="form"></div>
-  
-</div>
-HTML;
-
-        return \Dom\Loader::load($xhtml);
-    }
+//    public function __makeTemplate()
+//    {
+//        $xhtml = <<<HTML
+//<div class="tk-login-panel tk-login">
+//
+//  <div var="form"></div>
+//
+//</div>
+//HTML;
+//
+//        return \Dom\Loader::load($xhtml);
+//    }
 
 }

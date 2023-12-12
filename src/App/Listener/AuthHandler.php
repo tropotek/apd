@@ -5,6 +5,7 @@ use Tk\Event\AuthEvent;
 use Tk\Auth\AuthEvents;
 use Tk\ExtAuth\Microsoft\Token;
 use Tk\ExtAuth\Microsoft\TokenMap;
+use Uni\Uri;
 
 /**
  * @author Michael Mifsud <info@tropotek.com>
@@ -225,9 +226,9 @@ class AuthHandler extends \Bs\Listener\AuthHandler
 
         if (!$event->getRedirect()) {
             $url = \Tk\Uri::create('/');
-//            if ($user && !$user->isClient() && !$user->isAdmin() && $user->getInstitution()) {
-//                $url = \Uni\Uri::createInstitutionUrl('/login.html', $user->getInstitution());
-//            }
+            if ($user && !$user->isClient() && !$user->isAdmin() && $user->getInstitution()) {
+                $url = \Uni\Uri::createInstitutionUrl('/login.html', $user->getInstitution());
+            }
             $event->setRedirect($url);
         }
 
@@ -242,21 +243,21 @@ class AuthHandler extends \Bs\Listener\AuthHandler
         $auth->clearIdentity();
 
         if (!$config->getMasqueradeHandler()->isMasquerading()) {
-            \Tk\Log::warning('Destroying Session');
-            $config->getSession()->destroy();
-
-            // TODO: do for other external auths, (Also we could create individual listeners for each ExtAuth system)
             if ($this->getConfig()->get('auth.microsoft.enabled', false)) {
                 $token = TokenMap::create()->findBySessionKey($this->getSession()->get(Token::SESSION_KEY, ''));
                 if ($token) {
                     $token->delete();
-                    // TODO: I think this need only to be called when the user clicks logout, use curl to call it.
-                    $event->setRedirect(\Tk\Uri::create($this->getConfig()->get('auth.microsoft.logout')));
+                    \Tk\Log::warning('Destroying Session');
+                    $config->getSession()->destroy();
+                    //$url = \Tk\Uri::create($this->getConfig()->get('auth.microsoft.logout'));
+                    $url = \Tk\Uri::create($this->getConfig()->get('auth.microsoft.logout'))
+                        ->set('client_id', $this->getConfig()->get('auth.microsoft.clientid'))
+                        ->set('post_logout_redirect_uri', Uri::createInstitutionUrl('/login.html'));
+                    $event->setRedirect($url);
                 }
             }
         };
     }
-
 
     /**
      * Returns an array of event names this subscriber wants to listen to.

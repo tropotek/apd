@@ -7,6 +7,7 @@ use App\Listener\MailTemplateHandler;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Tk\Config;
+use Tk\ExtAuth\Microsoft\TokenMap;
 use Uni\Db\Institution;
 use Uni\Db\InstitutionMap;
 use Uni\Db\User;
@@ -33,6 +34,10 @@ class Cron extends \Bs\Console\Iface
 
         $institutionList = InstitutionMap::create()->findFiltered(['active' => true]);
         foreach ($institutionList as $institution) {
+
+            $this->expireMicrosoftTokens($institution);
+
+            // reminders
             $this->sendDisposalReminders($institution);
             $this->sendNecropsyCompleteCaseReminders($institution);
             $this->sendBiopsyCompleteReportReminders($institution);
@@ -40,6 +45,13 @@ class Cron extends \Bs\Console\Iface
 
         $this->write('', OutputInterface::VERBOSITY_VERBOSE);
         return 0;
+    }
+
+
+    public function expireMicrosoftTokens(Institution $institution)
+    {
+        $this->write('Clearing expired Microsoft login tokens. ');
+        TokenMap::create()->cleanExpired();
     }
 
 
