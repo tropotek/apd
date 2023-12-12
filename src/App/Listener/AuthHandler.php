@@ -192,7 +192,7 @@ class AuthHandler extends \Bs\Listener\AuthHandler
 
 
         $event->setResult($result);
-        $event->set('auth.password.access', true);   // Can modify their own password
+        $event->set('auth.password.access', false);   // Can modify their own password
     }
 
     /**

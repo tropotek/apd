@@ -81,20 +81,4 @@ class Login extends \Uni\Controller\Login
 
     }
 
-    /**
-     * @return \Dom\Template
-     */
-//    public function __makeTemplate()
-//    {
-//        $xhtml = <<<HTML
-//<div class="tk-login-panel tk-login">
-//
-//  <div var="form"></div>
-//
-//</div>
-//HTML;
-//
-//        return \Dom\Loader::load($xhtml);
-//    }
-
 }
