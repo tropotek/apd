@@ -47,9 +47,9 @@ class Recover extends \Uni\Controller\Recover
     {
         $xhtml = <<<HTML
 <div class="tk-login-panel tk-recover">
-  <h4>Forgot your password?</h4>
+  <h4>Recover your password?</h4>
   <p>
-    Enter your username to recover your password.
+    Enter your username/email to recover your password.
   </p>
   <div var="form"></div>
   <div class="not-member" choice="register">

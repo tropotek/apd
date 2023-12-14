@@ -65,7 +65,7 @@ class Login extends \Uni\Controller\Login
         $f->prepend('<span class="input-group-text input-group-addon"><i class="fa fa-key mx-auto"></i></span>');
 
         $this->form->getField('login')->addCss('col-12');
-        $f = $this->form->getField('forgotPassword');
+        $f = $this->form->getField('recoverPassword');
         if ($f) {
             $f->addCss('');
         }

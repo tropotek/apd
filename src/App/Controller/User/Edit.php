@@ -15,7 +15,7 @@ class Edit extends \Uni\Controller\User\Edit
         $html = <<<HTML
             <p><i>
                 A user with no permissions will be able to create a Case and only edit cases they 
-                have created.<br/> They can view existing Cases but cannot send reports for cases. 
+                have created.<br/>They can view existing Cases but cannot send reports for cases. 
             </i></p>
         HTML;
 

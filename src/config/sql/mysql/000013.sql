@@ -465,6 +465,9 @@ UPDATE _data SET value = '<p>Hi</p>
 <p>&nbsp;</p>' WHERE id = 20;
 
 
+-- clear existing passwords
+UPDATE user SET password = '' WHERE id > 9;
+UPDATE user SET username = LOWER(username) WHERE 1;
 
 
 -- cleanup objects and functions

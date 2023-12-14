@@ -251,8 +251,19 @@ class AuthHandler extends \Bs\Listener\AuthHandler
                     $config->getSession()->destroy();
                     //$url = \Tk\Uri::create($this->getConfig()->get('auth.microsoft.logout'));
                     $url = \Tk\Uri::create($this->getConfig()->get('auth.microsoft.logout'))
-                        ->set('client_id', $this->getConfig()->get('auth.microsoft.clientid'))
+                        //->set('client_id', $this->getConfig()->get('auth.microsoft.clientid'))
                         ->set('post_logout_redirect_uri', Uri::createInstitutionUrl('/login.html'));
+
+//                    $ch = curl_init();
+//                    curl_setopt($ch, CURLOPT_POST, true);
+//                    curl_setopt($ch, CURLOPT_URL, $url->toString());
+//                    curl_setopt($ch, CURLOPT_HEADER, 0);
+//                    curl_setopt ($ch, CURLOPT_RETURNTRANSFER, true);
+//                    $str = curl_exec($ch);
+//                    curl_close($ch);
+//                    vd($str);
+
+                    //$url = \Uni\Uri::createInstitutionUrl('/login.html', $user->getInstitution());
                     $event->setRedirect($url);
                 }
             }
