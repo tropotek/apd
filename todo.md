@@ -45,7 +45,7 @@ remove reviewed on date field,~~
 - ~~Remove account_code field from company, add account code to case if submission type = research~~
 - ~~Merge Racing and Racing Victoria in SQL ?? Or use the new merge function?~~
 - ~~Add migrate cases when deleting Clients and Client Contacts (New task bill at 4 hrs?)~~
-- investigate the MS login error and having to clear the sessions
+- ~~investigate the MS login error and having to clear the sessions~~
 
 
 Would like to have ready b4 end of year (Smitha will be available the first week of Jan)
