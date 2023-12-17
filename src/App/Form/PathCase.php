@@ -497,6 +497,7 @@ JS;
             if (in_array($field->getName(), $this->exceptions)) continue;
             if ($this->isReadonly()) {
                 $field->setReadonly();
+                $field->setDisabled();
             }
         }
 
