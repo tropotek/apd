@@ -3474,12 +3474,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-form.git",
-                "reference": "d796e2de53f9ede2c8629f29ff64d6e6da78f4ee"
+                "reference": "ff2ef9158a99e16ad7d8a36d814e3e5ef90537ba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-form/zipball/d796e2de53f9ede2c8629f29ff64d6e6da78f4ee",
-                "reference": "d796e2de53f9ede2c8629f29ff64d6e6da78f4ee",
+                "url": "https://api.github.com/repos/tropotek/tk-form/zipball/ff2ef9158a99e16ad7d8a36d814e3e5ef90537ba",
+                "reference": "ff2ef9158a99e16ad7d8a36d814e3e5ef90537ba",
                 "shasum": ""
             },
             "require": {

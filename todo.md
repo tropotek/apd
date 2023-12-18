@@ -27,13 +27,25 @@ Some notes PageLoaderHandler.php:
 
 
 ### Task Updates
+
+- Fix new user login errors.
+- Add new permission (IS_HISTOLOGIST), do not show in pathologist fields,can edit all cases
+- Update Edit all cases to not work if no IS_PATHOLOGIST, IS_TECHNICIAN or IS HISTOLOGIST exits
+- Add new permission (IS_EXTERNAL), to not send reminders to these users
+- Capitalize all words for fields Animal Name, Species, Breed, anyothers that may require it (on save and update existing DB field)
+- Update report to capitalise status fields on display only
+- Release Wednesday 20th Dec, Send smitha changes list and send invoice
+- 
+
+
 - ~~Fix pathologist list in filter remove non pathologists (Case list)~~
 - ~~Permissions Update:~~
   - ~~Pathologists: view edit all cases, send report email~~
   - ~~Technicians: Edit after care tabs?, cannot change report status, send report email~~
   - ~~Default: Only edit own cases. (researchers, view others cases) cannot change after care fields~~
   - ~~Remove "Case Administration" permission (not used), or use it to~~
-- ~~Case reviewed needs to be changed to a select so that a pathologist can select the reviewer. (Smitha And Liz will be initial reviewers)
+- ~~Case reviewed needs to be changed to a select so that a pathologist can select the reviewer. 
+(Smitha And Liz will be initial reviewers)
 remove reviewed on date field,~~ 
 - ~~Remove students field, or add a setting to enable disable it~~
 - ~~Move Clinical history to animal tab~~
@@ -41,7 +53,8 @@ remove reviewed on date field,~~
 - ~~Remove case filters creator, Size, species, is disposable~~
 - ~~Fix client details panel not removing contacts on new client select~~
 - ~~Only invoiceable cases get reminders~~
-- ~~Add services completed on field With biopsy cases this should automatically get set when the last request is completed, and unset when requests are created.~~
+- ~~Add services completed on field With biopsy cases this should automatically get set when the last request is completed, 
+and unset when requests are created.~~
 - ~~Remove account_code field from company, add account code to case if submission type = research~~
 - ~~Merge Racing and Racing Victoria in SQL ?? Or use the new merge function?~~
 - ~~Add migrate cases when deleting Clients and Client Contacts (New task bill at 4 hrs?)~~
@@ -63,8 +76,12 @@ Main Updates:
 - Set all report_status to completed for completed cases
 - Added Necropsy case complete reminders
 - Added Biopsy report complete reminders
+- Add new IS_HISTOLOGIST permission, allows users to edit cases but not in pathologist lists
+- Add new IS_EXTERNAL permission, this will disable reminder emails for these users
+- Added ability for users to set a password (using ) for users and use the internal DB bypassing the Microsoft login.
 
 Other Updates:
+- Capitalise first letter of words in the fields Animal Name, Species, breed, statuses when displaying the report
 - Updated Case edit page to use new student field
 - Update Client data fixing names and removing duplicates where possible
 - Create new Client Contacts from the Client email CC field

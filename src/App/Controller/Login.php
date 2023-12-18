@@ -16,36 +16,29 @@ use Uni\Uri;
 class Login extends \Uni\Controller\Login
 {
 
-    public function doInsLogin(\Tk\Request $request, $instHash = '')
-    {
-        $this->getSession()->remove('auth.institutionId');
-
-        $this->institution = $this->getConfig()->getInstitutionMapper()->findByHash($instHash);
-        if (!$this->institution && $request->attributes->has('institutionId')) {
-            $this->institution = $this->getConfig()->getInstitutionMapper()->find($request->attributes->get('institutionId'));
-        }
-        // get institution by hostname
-        if (!$this->institution || !$this->institution->active ) {
-            $this->institution = $this->getConfig()->getInstitutionMapper()->findByDomain($request->getTkUri()->getHost());
-        }
-
-        if (!$this->institution || !$this->institution->active ) {
-            //\Tk\Alert::addWarning('Invalid or inactive Institution. Set up an active institution to continue.');
-            \Uni\Uri::create('/xlogin.html')->redirect();
-        } else {
-//            if (!$this->getAuthUser() && $this->institution->getData()->get('inst.microsoftLogin')) {
-//                // Add it ID to the session for the microsoft login to work as expected
-//                $this->getSession()->set('auth.institutionId', $this->institution->getId());
-//                $this->getSession()->writeClose();
-//                \Uni\Uri::create('/microsoftLogin.html')->redirect();
-//            }
-        }
-
-        if ($this->getAuthUser()) {
-            Uri::createHomeUrl('/index.html')->redirect();
-        }
-        $this->doDefault($request);
-    }
+//    public function doInsLogin(\Tk\Request $request, $instHash = '')
+//    {
+//        $this->getSession()->remove('auth.institutionId');
+//
+//        $this->institution = $this->getConfig()->getInstitutionMapper()->findByHash($instHash);
+//        if (!$this->institution && $request->attributes->has('institutionId')) {
+//            $this->institution = $this->getConfig()->getInstitutionMapper()->find($request->attributes->get('institutionId'));
+//        }
+//        // get institution by hostname
+//        if (!$this->institution || !$this->institution->active ) {
+//            $this->institution = $this->getConfig()->getInstitutionMapper()->findByDomain($request->getTkUri()->getHost());
+//        }
+//
+//        if (!$this->institution || !$this->institution->active ) {
+//            \Uni\Uri::create('/xlogin.html')->redirect();
+//        }
+//
+//        if ($this->getAuthUser()) {
+//            Uri::createHomeUrl('/index.html')->redirect();
+//        }
+//
+//        $this->doDefault($request);
+//    }
 
     /**
      * @throws \Exception

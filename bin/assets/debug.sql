@@ -1,6 +1,5 @@
 -- ------------------------------------------------------
 -- Author: Michael Mifsud
--- Date: 06/04/17
 -- ------------------------------------------------------
 
 -- --------------------------------------
@@ -10,5 +9,5 @@ UPDATE `user` SET `password` = MD5(CONCAT('password', `hash`)) WHERE 1;
 
 -- --------------------------------------
 -- Disable Domains for institutions
-# UPDATE `institution` SET `domain` = '';
+UPDATE `institution` SET `domain` = '' WHERE 1;
 
