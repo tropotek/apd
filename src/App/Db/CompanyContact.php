@@ -19,6 +19,9 @@ class CompanyContact extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      */
     public $companyId = 0;
 
+    // TODO: remove
+    public $contact_id = 0;
+
     /**
      * @var string
      */
@@ -33,6 +36,9 @@ class CompanyContact extends \Tk\Db\Map\Model implements \Tk\ValidInterface
      * @var string
      */
     public $phone = '';
+
+    // TODO: remove
+    public $del = false;
 
     /**
      * @var \DateTime|null

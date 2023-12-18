@@ -7,6 +7,10 @@ use App\Db\CompanyContact;
 use App\Db\CompanyContactMap;
 use App\Db\PathCaseMap;
 
+//error_reporting(E_ALL ^ (E_NOTICE));
+error_reporting(E_ERROR | E_WARNING | E_PARSE);
+ini_set('display_errors', '0');
+
 try {
     $config = \Uni\Config::getInstance();
     $db = $config->getDb();
@@ -56,7 +60,9 @@ try {
     }
 
 
-} catch (\Exception $e) { error_log($e->__toString()); }
+} catch (\Exception $e) {
+    error_log($e->__toString());
+}
 
 
 

@@ -24,7 +24,7 @@ class PathCaseDecorator
         $users = [];
         switch($mailTemplate->getRecipientType()) {
             case MailTemplate::RECIPIENT_AUTHOR:
-                if ($case->getUser()) {
+                if ($case->getUser() && !$case->getUser()->hasPermission(Permission::IS_EXTERNAL)) {
                     $users[] = array(
                         'type' => $mailTemplate->getRecipientType(),
                         'name' => $case->getUser()->getName(),
@@ -53,7 +53,7 @@ class PathCaseDecorator
                 }
                 break;
             case MailTemplate::RECIPIENT_PATHOLOGIST:
-                if ($case->getPathologist()) {
+                if ($case->getPathologist() && !$case->getPathologist()->hasPermission(Permission::IS_EXTERNAL)) {
                     $users[] = array(
                         'type' => $mailTemplate->getRecipientType(),
                         'name' => $case->getPathologist()->getName(),
@@ -61,22 +61,22 @@ class PathCaseDecorator
                     );
                 }
                 break;
-            case MailTemplate::RECIPIENT_STUDENTS:
-                foreach ($case->getStudentList() as $student) {
-                    $users[] = [
-                        'type' => $mailTemplate->getRecipientType(),
-                        'name' => $student->getName(),
-                        'email' => $student->getEmail()
-                    ];
-                    foreach ($student->getEmailCcList() as $e) {
-                        $users[] = array(
-                            'type' => $mailTemplate->getRecipientType(),
-                            'name' => $student->getName(),
-                            'email' => $e
-                        );
-                    }
-                }
-                break;
+//            case MailTemplate::RECIPIENT_STUDENTS:
+//                foreach ($case->getStudentList() as $student) {
+//                    $users[] = [
+//                        'type' => $mailTemplate->getRecipientType(),
+//                        'name' => $student->getName(),
+//                        'email' => $student->getEmail()
+//                    ];
+//                    foreach ($student->getEmailCcList() as $e) {
+//                        $users[] = array(
+//                            'type' => $mailTemplate->getRecipientType(),
+//                            'name' => $student->getName(),
+//                            'email' => $e
+//                        );
+//                    }
+//                }
+//                break;
         }
         return $users;
     }

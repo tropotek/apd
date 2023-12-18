@@ -68,21 +68,28 @@ class PathCase extends \Bs\FormIface
         $mediaPath = $this->getPathCase()->getDataPath().'/media';
         $mce = 'mce-min';
 
-        //$this->readonly = ($this->getPathCase()->hasStatus(\App\Db\PathCase::STATUS_COMPLETED)) && $this->getPathCase()->isBilled();
+        $this->readonly = false;
         if ($this->getPathCase()->hasStatus(\App\Db\PathCase::STATUS_COMPLETED) && $this->getPathCase()->isBilled()) {
             $this->readonly = true;
         }
-
-        if (
-            !($this->getAuthUser()->getId() == $this->getPathCase()->getUserId() ||
-            $this->getAuthUser()->hasPermission([Permission::IS_PATHOLOGIST, Permission::IS_TECHNICIAN]))
-        ) {
-            $this->readonly = true;
-        }
-
         if ($this->getAuthUser()->hasPermission([Permission::CASE_FULL_EDIT])) {
             $this->readonly = false;
         }
+
+        // For base permission users
+        if (!$this->getAuthUser()->hasPermission([Permission::IS_PATHOLOGIST, Permission::IS_TECHNICIAN, Permission::IS_HISTOLOGIST])) {
+            if ($this->getAuthUser()->getId() == $this->getPathCase()->getUserId()) {
+                if ($this->getPathCase()->hasStatus(\App\Db\PathCase::STATUS_COMPLETED) && $this->getPathCase()->isBilled()) {
+                    $this->readonly = true;
+                }
+                if ($this->getAuthUser()->hasPermission([Permission::CASE_FULL_EDIT])) {
+                    $this->readonly = false;
+                }
+            } else {
+                $this->readonly = true;
+            }
+        }
+
 
         $layout = $this->getRenderer()->getLayout();
 
@@ -269,13 +276,19 @@ JS;
             [
                 'institutionId'=> $this->getPathCase()->getInstitutionId(),
                 'permission' => Permission::IS_PATHOLOGIST,
-                'active' => true
+                'active' => true,
             ],
             Tool::create('nameFirst')
         );
-        $this->appendField(Field\Select::createSelect('pathologistId', $list)
-            ->prependOption('-- Select --', ''))
+        /** @var Field\Select $f */
+        $f = $this->appendField(Field\Select::createSelect('pathologistId', $list))
             ->setTabGroup($tab)->setLabel('Pathologist');
+        $current = $this->getConfig()->getUserMapper()->find($this->getPathCase()->getPathologistId());
+        if ($current) {
+            $f->prependOption($current->getName() . ' (Non-Path)', $current->getId());
+        }
+        $f->prependOption('-- None --', '');
+
 
 //        $student = new \App\Db\Student();
 //        $form = \App\Form\Student::create('studentSelect')->setModel($student);
@@ -549,6 +562,12 @@ JS;
         if (empty($vals['reviewedById'])) $vals['reviewedById'] = null;
         if (empty($vals['companyId'])) $vals['companyId'] = null;
         if (empty($vals['disposedOn'])) $vals['disposedOn'] = null;
+
+        // uppercase values
+        if (!empty($vals['ownerName'])) $vals['ownerName'] = ucwords($vals['ownerName']);
+        if (!empty($vals['animalName'])) $vals['animalName'] = ucwords($vals['animalName']);
+        if (!empty($vals['species'])) $vals['species'] = ucwords($vals['species']);
+        if (!empty($vals['colour'])) $vals['colour'] = ucwords($vals['colour']);
 
         \App\Db\PathCaseMap::create()->mapForm($vals, $this->getPathCase());
 

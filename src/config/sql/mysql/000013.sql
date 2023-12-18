@@ -2,6 +2,7 @@
 -- Version: 3.4.98
 -- ---------------------------------
 
+SET SQL_SAFE_UPDATES = 0;
 
 -- function to set all words to uppercase
 DROP FUNCTION IF EXISTS ucwords;
@@ -466,8 +467,19 @@ UPDATE _data SET value = '<p>Hi</p>
 
 
 -- clear existing passwords
-UPDATE user SET password = '' WHERE id > 9;
 UPDATE user SET username = LOWER(username) WHERE 1;
+UPDATE user SET password = '' WHERE
+    institution_id = 1
+    AND id > 9;
+
+
+
+-- UCWords for case fields
+UPDATE path_case SET owner_name = ucwords(owner_name) WHERE 1;
+UPDATE path_case SET animal_name = ucwords(animal_name) WHERE 1;
+UPDATE path_case SET species = ucwords(species) WHERE 1;
+UPDATE path_case SET colour = ucwords(colour) WHERE 1;
+
 
 
 -- cleanup objects and functions

@@ -97,6 +97,7 @@ SQL;
             /** @var User $pathologist */
             $pathologist = $config->getUserMapper()->find($row->pathologist_id);
             if (!($pathologist || $pathologist->isActive())) continue;
+            if ($pathologist->hasPermission(Permission::IS_EXTERNAL)) continue;
 
             $message = CurlyMessage::create($mailTemplate->getTemplate());
             $message->set('_mailTemplate', $mailTemplate);
@@ -152,6 +153,7 @@ SQL;
             /** @var User $pathologist */
             $pathologist = $config->getUserMapper()->find($row->pathologist_id);
             if (!($pathologist || $pathologist->isActive())) continue;
+            if ($pathologist->hasPermission(Permission::IS_EXTERNAL)) continue;
 
             $message = CurlyMessage::create($mailTemplate->getTemplate());
             $message->set('_mailTemplate', $mailTemplate);

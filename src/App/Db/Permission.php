@@ -13,23 +13,37 @@ class Permission extends \Uni\Db\Permission
 {
 
     /**
-     *
      * Pathologist:
-     *  - Will be used in future
+     *  - Can edit all non completed cases
      *
      * @target staff
      */
     const IS_PATHOLOGIST        = 'perm.is.pathologist';
 
     /**
-     *
-     *
      * Technician:
+     *  - Can edit all non completed cases
      *  - Gets disposal reminder emails
      *
      * @target staff
      */
     const IS_TECHNICIAN        = 'perm.is.technician';
+
+    /**
+     * Technician:
+     *  - Can edit all non completed cases
+     *
+     * @target staff
+     */
+    const IS_HISTOLOGIST        = 'perm.is.histologist';
+
+    /**
+     * Permission to suppress any email reminders
+     * Used for external pathologists that do not set the report to complete
+     *
+     * @target staff
+     */
+    const IS_EXTERNAL       = 'perm.is.external';
 
     /**
      * If a staff member has the full edit permission
@@ -74,6 +88,8 @@ class Permission extends \Uni\Db\Permission
                     'Can Masquerade' => self::CAN_MASQUERADE,
                     'Is Pathologist' => self::IS_PATHOLOGIST,
                     'Is Technician' => self::IS_TECHNICIAN,
+                    'Is Histologist' => self::IS_HISTOLOGIST,
+                    'Is External' => self::IS_EXTERNAL,
                     'Review Cases' => self::CAN_REVIEW_CASE,
                     'Case Always Edit' => self::CASE_FULL_EDIT
                 );
@@ -94,6 +110,8 @@ class Permission extends \Uni\Db\Permission
             //self::IS_MENTOR => 'Is a mentor of a student, restricted access to student/site information',
             self::IS_PATHOLOGIST => 'Can view/edit all Cases and report fields, send report emails',
             self::IS_TECHNICIAN => 'Can view/edit all Cases, sent report email, cannot change report status of cases, receives disposal reminders',
+            self::IS_HISTOLOGIST => 'Can view/edit all Cases, sent report email, cannot change report status of cases',
+            self::IS_EXTERNAL => 'No reminders are sent to external users',
             self::CAN_REVIEW_CASE => 'Pathologists will be able to set this user as the Case reviewer',
             self::CASE_FULL_EDIT => 'Edit a case after a case is set to completed',
         ];

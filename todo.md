@@ -28,12 +28,11 @@ Some notes PageLoaderHandler.php:
 
 ### Task Updates
 
-- Fix new user login errors.
-- Add new permission (IS_HISTOLOGIST), do not show in pathologist fields,can edit all cases
-- Update Edit all cases to not work if no IS_PATHOLOGIST, IS_TECHNICIAN or IS HISTOLOGIST exits
-- Add new permission (IS_EXTERNAL), to not send reminders to these users
-- Capitalize all words for fields Animal Name, Species, Breed, anyothers that may require it (on save and update existing DB field)
-- Update report to capitalise status fields on display only
+- ~~Add new permission (IS_HISTOLOGIST), do not show in pathologist fields, can edit all cases~~
+- ~~Update Edit all cases to not work if no IS_PATHOLOGIST, IS_TECHNICIAN or IS HISTOLOGIST exits~~
+- ~~Add new permission (IS_EXTERNAL), to not send reminders to these users~~
+- ~~Capitalize all words for fields Animal Name, Species, Breed, anyothers that may require it (on save and update existing DB field)~~
+- ~~Update report to capitalise status fields on display only~~
 - Release Wednesday 20th Dec, Send smitha changes list and send invoice
 - 
 
