@@ -404,7 +404,7 @@ UPDATE mail_template_event SET callback = 'App\\Db\\ReminderDecorator::onDisposa
 
 -- Update mail template content
 TRUNCATE mail_template;
-INSERT INTO dev_apd.mail_template (id, institution_id, mail_template_event_id, recipient_type, template, active, modified, created)
+INSERT INTO mail_template (id, institution_id, mail_template_event_id, recipient_type, template, active, modified, created)
 VALUES  (1, 1, 1, 'pathologist', '<p>Hi {recipient::name},</p>
 <p>A new pathology case (<a href="{pathCase::url}">#{pathCase::pathologyId}</a>) has been created by {pathCase::pathologist}.</p>
 <p><a href="{pathCase::url}">Click here to view the case.</a></p>
