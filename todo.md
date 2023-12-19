@@ -3,8 +3,11 @@
 ### TODO Tasks:
 
 - Github now supports private repositories for free, move to private repository and use issues instead of this
-todo file.
+  todo file.
 - Look into upgrading/Rebuilding the system using the PHP8 Tk lib (Will require some time to implement)
+- Case data files are taking up a lot of disk space. Would be good to have an archive system to download
+case files and reports and delete old case files. Maybe every year create a downloadable zip file of cases
+older than 3 years into a HTML browsable/searchable directory of case reports?
 - Clean up DB columns once release is working and we no longer require them 
 ```sql
 
@@ -46,6 +49,7 @@ Some notes PageLoaderHandler.php:
 - Release Wednesday 20th Dec, Send smitha changes list and send invoice
 Would like to have ready b4 end of year (Smitha will be available the first week of Jan)
 
+- Release Version: 3.4.98
 
 
 ### Tasks Completed 17/11/23:

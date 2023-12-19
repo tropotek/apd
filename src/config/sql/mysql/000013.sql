@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS student
     CONSTRAINT fk_student__institution_id FOREIGN KEY (institution_id) REFERENCES institution (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
-TRUNCATE student;
+-- TRUNCATE student;
 INSERT INTO student (id, institution_id, name, email, del, modified, created)
     SELECT id, institution_id, replace(TRIM(CONCAT_WS(' ', name_first, name_last)), UNHEX('C2A0'),'') AS name, email ,del, modified, created
     FROM contact
@@ -73,7 +73,7 @@ CREATE TABLE IF NOT EXISTS path_case_has_student (
     CONSTRAINT fk_path_case_has_student__student_id FOREIGN KEY (student_id) REFERENCES student (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
-TRUNCATE path_case_has_student;
+-- TRUNCATE path_case_has_student;
 INSERT INTO path_case_has_student (path_case_id, student_id)
     SELECT hc.path_case_id, hc.contact_id
     FROM path_case_has_contact hc
