@@ -64,11 +64,16 @@ class Dashboard extends \Uni\Controller\AdminIface
         $this->caseTable->getFilterForm()->getField('status')
             ->setValue([\App\Db\PathCase::STATUS_PENDING, \App\Db\PathCase::STATUS_EXAMINED,
                 \App\Db\PathCase::STATUS_REPORTED, \App\Db\PathCase::STATUS_FROZEN_STORAGE, \App\Db\PathCase::STATUS_HOLD]);
+
         $filter = [
             'userId' => $this->getAuthUser()->getId(),
         ];
-        $this->caseTable->setList($this->caseTable->findList($filter, $this->caseTable->getTool('created DESC')));
-
+        if ($this->getAuthUser()->hasPermission([Permission::IS_PATHOLOGIST])) {
+            $filter = [
+                'pathologistId' => $this->getAuthUser()->getId(),
+            ];
+        }
+        $this->caseTable->setList($this->caseTable->findList($filter, $this->caseTable->getTool('created DESC', 15)));
 
         if ($this->getAuthUser()->hasPermission([Permission::IS_TECHNICIAN])) {
             $this->requestTable = \App\Table\Request::create();
@@ -79,7 +84,7 @@ class Dashboard extends \Uni\Controller\AdminIface
             $filter = [
                 'userId' => $this->getAuthUser()->getId()
             ];
-            $this->requestTable->setList($this->requestTable->findList($filter, $this->requestTable->getTool('created DESC')));
+            $this->requestTable->setList($this->requestTable->findList($filter, $this->requestTable->getTool('created DESC', 15)));
         }
 
         if ($this->getAuthUser()->hasPermission(Permission::IS_PATHOLOGIST)) {

@@ -42,14 +42,15 @@ Some notes PageLoaderHandler.php:
 //JS;
 //            $template->appendJs($js, ['data-jsl-priority' => 999999]);
 ```
-
+- Make the password creation form enforce more complex passwords, possibly implement 2FA using google Auth or email. 
+(probably overkill for this app)
 
 ### Task Updates
 
 - Release Wednesday 20th Dec, Send smitha changes list and send invoice
 Would like to have ready b4 end of year (Smitha will be available the first week of Jan)
 
-- Release Version: 3.4.98
+- Release Version: 3.4.100
 
 
 ### Tasks Completed 17/11/23:
