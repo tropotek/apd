@@ -1,6 +1,20 @@
 
 #CHANGELOG#
 
+Ver 3.4.98 [2023-12-19]:
+-------------------------------
+  - updated MS SSO and login page
+  - added biopsy and necropsy reminder emails and templates
+  - cleanup email templates
+  - Add necropst performed and reviewed by fields
+  - added company info panel
+  - Implemented company and contact objects and tables
+  - Import Company and Company Contact data
+  - added new student DB table and fields
+  - Remove delete from user rename to enable/disable
+  - Fix masquerade return url
+
+
 Ver 3.4.96 [2023-11-18]:
 -------------------------------
 
