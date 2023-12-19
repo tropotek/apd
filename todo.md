@@ -5,9 +5,24 @@
 - Github now supports private repositories for free, move to private repository and use issues instead of this
 todo file.
 - Look into upgrading/Rebuilding the system using the PHP8 Tk lib (Will require some time to implement)
+- Clean up DB columns once release is working and we no longer require them 
+```sql
 
+-- TODO: uncomment for release
+--       Probably best to wait until all updates are tested and approved
+--       then run these manually (even if its next release, no rush)
+ALTER TABLE path_case DROP COLUMN owner_id;
+DROP TABLE path_case_has_contact;
+DROP TABLE contact;
+ALTER TABLE company DROP COLUMN contact_id;
+ALTER TABLE company_contact DROP COLUMN contact_id;
+-- Also look into dropping the student table and objects
+-- DROP TABLE student;
+
+```
 - The form init javascript does not even work, its not proper JS event handling. we need to remove it.
-There may not even be a reason to have it, think it through....
+There may not even be a reason to have it, think it through. Essentially `$('form').on('init', document, init).each(init);`
+only executes the `$('form').each(init);` part.
 Some notes PageLoaderHandler.php:
 ```php
             // TODO: The current for init process will not work as expected
@@ -28,10 +43,7 @@ Some notes PageLoaderHandler.php:
 
 ### Task Updates
 
-
 - Release Wednesday 20th Dec, Send smitha changes list and send invoice
-- 
-
 Would like to have ready b4 end of year (Smitha will be available the first week of Jan)
 
 
