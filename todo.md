@@ -28,60 +28,33 @@ Some notes PageLoaderHandler.php:
 
 ### Task Updates
 
-- ~~Add new permission (IS_HISTOLOGIST), do not show in pathologist fields, can edit all cases~~
-- ~~Update Edit all cases to not work if no IS_PATHOLOGIST, IS_TECHNICIAN or IS HISTOLOGIST exits~~
-- ~~Add new permission (IS_EXTERNAL), to not send reminders to these users~~
-- ~~Capitalize all words for fields Animal Name, Species, Breed, anyothers that may require it (on save and update existing DB field)~~
-- ~~Update report to capitalise status fields on display only~~
+
 - Release Wednesday 20th Dec, Send smitha changes list and send invoice
 - 
-
-
-- ~~Fix pathologist list in filter remove non pathologists (Case list)~~
-- ~~Permissions Update:~~
-  - ~~Pathologists: view edit all cases, send report email~~
-  - ~~Technicians: Edit after care tabs?, cannot change report status, send report email~~
-  - ~~Default: Only edit own cases. (researchers, view others cases) cannot change after care fields~~
-  - ~~Remove "Case Administration" permission (not used), or use it to~~
-- ~~Case reviewed needs to be changed to a select so that a pathologist can select the reviewer. 
-(Smitha And Liz will be initial reviewers)
-remove reviewed on date field,~~ 
-- ~~Remove students field, or add a setting to enable disable it~~
-- ~~Move Clinical history to animal tab~~
-- ~~Fix reviewer field to have a tab name value~~
-- ~~Remove case filters creator, Size, species, is disposable~~
-- ~~Fix client details panel not removing contacts on new client select~~
-- ~~Only invoiceable cases get reminders~~
-- ~~Add services completed on field With biopsy cases this should automatically get set when the last request is completed, 
-and unset when requests are created.~~
-- ~~Remove account_code field from company, add account code to case if submission type = research~~
-- ~~Merge Racing and Racing Victoria in SQL ?? Or use the new merge function?~~
-- ~~Add migrate cases when deleting Clients and Client Contacts (New task bill at 4 hrs?)~~
-- ~~investigate the MS login error and having to clear the sessions~~
-
 
 Would like to have ready b4 end of year (Smitha will be available the first week of Jan)
 
 
 
 ### Tasks Completed 17/11/23:
-Main Updates:
-- Added a new student contact System (Manager/Edit)
-- Added new Company and CompanyContact System
+Major Updates:
+- Clients and Client Contacts have now been seperated. 
+Client Contacts can be created for individual Clients on the edit Case page. 
+New Clients can be created/edited from the "Clients" option in the left menu.
+- Added ability to migrate Clients cases to another Client on delete in the Client manager page.
+- Added Necropsy case complete reminders sent 15 days after necropsy performed date
+- Added Biopsy report complete reminders sent 1 day after all services completed date
 - Added alert to dashboard for pathologists stating how many non-completed case they have
 - Added autocomplete to Case fields 'Species', 'Owner Name' and 'Colour'
-- Added new permission "Review Cases" These users will see a checkbox in a case, user can mark a case as reviewed
-- Updated email text content messages to be more readable
-- Set all report_status to completed for completed cases
-- Added Necropsy case complete reminders
-- Added Biopsy report complete reminders
 - Add new IS_HISTOLOGIST permission, allows users to edit cases but not in pathologist lists
 - Add new IS_EXTERNAL permission, this will disable reminder emails for these users
-- Added ability for users to set a password (using ) for users and use the internal DB bypassing the Microsoft login.
+- Added ability for users to recover/set a password and use the internal DB to login and bypass the Microsoft/unimelb login.
+- Added new permission "Review Cases" These users will see a checkbox in a case, user can mark a case as reviewed
 
-Other Updates:
-- Capitalise first letter of words in the fields Animal Name, Species, breed, statuses when displaying the report
+Minor Updates:
 - Updated Case edit page to use new student field
+- Set all report_status to completed for completed cases
+- Updated email template text to be more readable
 - Update Client data fixing names and removing duplicates where possible
 - Create new Client Contacts from the Client email CC field
 - Update Case edit page to use new Company (Client) table
@@ -94,6 +67,7 @@ Other Updates:
 - Added reviewed by checkbox that when clicked adds the user as teh reviewer for a case
 - Added reviewer credentials to the PDF report under the pathologist section
 - Fixed Disposal reminder emails
+- Capitalise first letter of words in the fields Animal Name, Species, breed, statuses when displaying the report
 - Added editable mail templates for new reminders
 - Setup cron script to run nightly at 6pm (this sends all reminder emails)
 - Re-ordered the left Nav menu and added separators for different tasks
@@ -145,6 +119,33 @@ __TESTING__
 Total of 26 hours @ $100ph ($2,600)
 ----
 
+
+- ~~Add new permission (IS_HISTOLOGIST), do not show in pathologist fields, can edit all cases~~
+- ~~Update Edit all cases to not work if no IS_PATHOLOGIST, IS_TECHNICIAN or IS HISTOLOGIST exits~~
+- ~~Add new permission (IS_EXTERNAL), to not send reminders to these users~~
+- ~~Capitalize all words for fields Animal Name, Species, Breed, anyothers that may require it (on save and update existing DB field)~~
+- ~~Update report to capitalise status fields on display only~~
+- ~~Fix pathologist list in filter remove non pathologists (Case list)~~
+- ~~Permissions Update:~~
+  - ~~Pathologists: view edit all cases, send report email~~
+  - ~~Technicians: Edit after care tabs?, cannot change report status, send report email~~
+  - ~~Default: Only edit own cases. (researchers, view others cases) cannot change after care fields~~
+  - ~~Remove "Case Administration" permission (not used), or use it to~~
+- ~~Case reviewed needs to be changed to a select so that a pathologist can select the reviewer. 
+(Smitha And Liz will be initial reviewers)
+remove reviewed on date field,~~ 
+- ~~Remove students field, or add a setting to enable disable it~~
+- ~~Move Clinical history to animal tab~~
+- ~~Fix reviewer field to have a tab name value~~
+- ~~Remove case filters creator, Size, species, is disposable~~
+- ~~Fix client details panel not removing contacts on new client select~~
+- ~~Only invoiceable cases get reminders~~
+- ~~Add services completed on field With biopsy cases this should automatically get set when the last request is completed, 
+and unset when requests are created.~~
+- ~~Remove account_code field from company, add account code to case if submission type = research~~
+- ~~Merge Racing and Racing Victoria in SQL ?? Or use the new merge function?~~
+- ~~Add migrate cases when deleting Clients and Client Contacts (New task bill at 4 hrs?)~~
+- ~~investigate the MS login error and having to clear the sessions~~
 
 
 __Chargeable Updates__

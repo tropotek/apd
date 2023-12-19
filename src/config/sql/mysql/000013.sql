@@ -472,7 +472,10 @@ UPDATE user SET password = '' WHERE
     institution_id = 1
     AND id > 9;
 
-
+-- fix user Christina Mccowan permission to is histologist
+-- DELETE FROM user_permission WHERE user_id = 22;
+-- INSERT INTO user_permission VALUES (22, 'perm.is.histologist');
+INSERT INTO user_permission VALUES (22, 'perm.is.external');
 
 -- UCWords for case fields
 UPDATE path_case SET owner_name = ucwords(owner_name) WHERE 1;
