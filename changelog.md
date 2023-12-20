@@ -1,6 +1,11 @@
 
 #CHANGELOG#
 
+Ver 3.4.108 [2023-12-20]:
+-------------------------------
+  - Fix mail template contents
+
+
 Ver 3.4.106 [2023-12-20]:
 -------------------------------
   - Fix cases not showing in list
