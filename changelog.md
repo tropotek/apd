@@ -1,6 +1,11 @@
 
 #CHANGELOG#
 
+Ver 3.4.106 [2023-12-20]:
+-------------------------------
+  - Fix cases not showing in list
+
+
 Ver 3.4.104 [2023-12-19]:
 -------------------------------
   - fix dashboard case list for pathologists
