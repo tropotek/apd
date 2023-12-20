@@ -31,6 +31,7 @@ trait CompanyTrait
         if (!$this->_company) {
             $this->_company = CompanyMap::create()->find($this->getCompanyId());
         }
+        vd($this->_company);
         return $this->_company;
     }
 

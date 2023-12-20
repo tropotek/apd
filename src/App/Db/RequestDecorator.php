@@ -75,9 +75,6 @@ class RequestDecorator
 //                'fid' => $status->getFId()
             ], 'status::'));
 
-            if ($request->getPathCase())
-                $message->set('pathCase::url', Uri::create('/staff/pathCaseEdit.html')
-                    ->setScheme(Uri::SCHEME_HTTP_SSL)->set('pathCaseId', $request->getPathCase()->getId())->toString());
             $message->set('request::url', Uri::create('/staff/requestEdit.html')
                 ->setScheme(Uri::SCHEME_HTTP_SSL)->set('requestId', $request->getId())->toString());
             $message->replace(Collection::prefixArrayKeys(\App\Db\RequestMap::create()
@@ -105,6 +102,15 @@ class RequestDecorator
                 $message->replace(Collection::prefixArrayKeys(\App\Db\PathCaseMap::create()
                     ->unmapForm($request->getPathCase()), 'pathCase::'));
                 $message->set('pathCase::disposeOn', $request->getPathCase()->getDisposeOn(Date::FORMAT_MED_DATE) ?? '');
+                $message->set('pathCase::url', Uri::create('/staff/pathCaseEdit.html')
+                    ->setScheme(Uri::SCHEME_HTTP_SSL)->set('pathCaseId', $request->getPathCase()->getId())->toString());
+
+                if ($request->getPathCase()->getCompany()) {
+                    $message->replace(Collection::prefixArrayKeys(\App\Db\CompanyMap::create()
+                        ->unmapForm($request->getPathCase()->getCompany()), 'client::'));
+                    $message->set('client::url', Uri::create('/staff/companyEdit.html')
+                        ->setScheme(Uri::SCHEME_HTTP_SSL)->set('companyId', $request->getPathCase()->getCompanyId())->toString());
+                }
             }
             $cnt = 1;
             if ($request->getStatusMessage()) {

@@ -57,7 +57,7 @@ class ReminderDecorator
             if ($case->getInstitution())
                 $message->replace(Collection::prefixArrayKeys(\Uni\Db\InstitutionMap::create()->unmapForm($case->getInstitution()), 'institution::'));
             if ($case->getCompany())
-                $message->replace(Collection::prefixArrayKeys(\App\Db\ContactMap::create()->unmapForm($case->getCompany()), 'client::'));
+                $message->replace(Collection::prefixArrayKeys(\App\Db\CompanyMap::create()->unmapForm($case->getCompany()), 'client::'));
             /** @var User $pathologist */
             $pathologist = $config->getUserMapper()->find($case->pathologistId);
             if ($pathologist) {

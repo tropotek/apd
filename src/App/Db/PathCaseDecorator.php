@@ -121,10 +121,16 @@ class PathCaseDecorator
                 ->set('pathCaseId', $case->getId())->toString());
             $message->replace(Collection::prefixArrayKeys(\App\Db\PathCaseMap::create()->unmapForm($case), 'pathCase::'));
             $message->set('pathCase::disposeOn', $case->getDisposeOn(Date::FORMAT_MED_DATE) ?? '');
-            if ($case->getInstitution())
+            if ($case->getInstitution()) {
                 $message->replace(Collection::prefixArrayKeys(\Uni\Db\InstitutionMap::create()->unmapForm($case->getInstitution()), 'institution::'));
-            if ($case->getCompany())
-                $message->replace(Collection::prefixArrayKeys(\App\Db\ContactMap::create()->unmapForm($case->getCompany()), 'client::'));
+            }
+
+            if ($case->getCompany()) {
+                $message->replace(Collection::prefixArrayKeys(\App\Db\CompanyMap::create()->unmapForm($case->getCompany()), 'client::'));
+                $message->set('client::url', Uri::create('/staff/companyEdit.html')
+                    ->setScheme(\Tk\Uri::SCHEME_HTTP_SSL)->set('companyId', $case->getCompanyId())->toString());
+            }
+
             /** @var User $pathologist */
             $pathologist = $config->getUserMapper()->find($case->pathologistId);
             if ($pathologist) {
