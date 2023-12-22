@@ -45,47 +45,25 @@ Some notes PageLoaderHandler.php:
 - Make the password creation form enforce more complex passwords, possibly implement 2FA using google Auth or email. 
 (probably overkill for this app)
 
+
+
+```sql
+ALTER TABLE path_case MODIFY pathologist_id INT UNSIGNED DEFAULT NULL NULL;
+
+```
+
+
+
+
+-----------------------------
+
+
 ### Task Updates
 
 - Release Wednesday 20th Dec, Send smitha changes list and send invoice
 Would like to have ready b4 end of year (Smitha will be available the first week of Jan)
 
 - Release Version: 3.4.100
-
-
-
-
-<p>Hi {recipient::name},</p>
-<p>{request::requestCount} new pathology request(s) have been submitted.</p>
-<ul>
-<li>Pathology #: <a href="{pathCase::url}">{pathCase::pathologyId}</a></li>
-<li>Client Name: <a href="{client::url}">{client::name}</a></li>
-<li>Case Type: {pathCase::type}</li>
-<li>Submission Type: {pathCase::submissionType}</li>
-<li>Service: {service::name}</li>
-{test::block}
-<li>Test: {test::name}</li>
-{/test::block}
-<li>Animal Name: {pathCase::animalName}</li>
-</ul>
-<p><a href="{pathCase::url}">Click here to view the case.</a></p>
-<p>&nbsp;</p>
-<hr />
-<p>{institution::name}<br />Email: {institution::email}<br />Phone: {institution::phone}</p>
-<p>&nbsp;</p>
-
-
-
-<ul>
-<li>Pathology #: <a href="{pathCase::url}">{pathCase::pathologyId}</a></li>
-<li>Client Name: <a href="{client::url}">{client::name}</a></li>
-<li>Case Type: {pathCase::type}</li>
-<li>Submission Type: {pathCase::submissionType}</li>
-<li>Animal Name: {pathCase::animalName}</li>
-</ul>
-
-
-
 
 ### Tasks Completed 17/11/23:
 Major Updates:
@@ -161,9 +139,6 @@ or optionally on delete have a company select that migrates all cases to the sel
 __TESTING__
 
 - Compare the live site and the dev site Clients and Client Contacts to see if they correctly match up.
-
-
-
 
 
 ----

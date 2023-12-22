@@ -558,17 +558,19 @@ JS;
         $orgCompanyId = $this->getPathCase()->getCompanyId();
 
         // set null values
-        if (empty($vals['pathologistId'])) $vals['pathologistId'] = null;
+        // TODO: this should not happen here, but in the mappers
+        //if (empty($vals['pathologistId'])) $vals['pathologistId'] = null;
         if (empty($vals['reviewedById'])) $vals['reviewedById'] = null;
         if (empty($vals['companyId'])) $vals['companyId'] = null;
         if (empty($vals['disposedOn'])) $vals['disposedOn'] = null;
+        if (is_null($vals['accountCode'])) $vals['accountCode'] = '';
 
         // uppercase values
         if (!empty($vals['ownerName'])) $vals['ownerName'] = ucwords($vals['ownerName']);
         if (!empty($vals['animalName'])) $vals['animalName'] = ucwords($vals['animalName']);
         if (!empty($vals['species'])) $vals['species'] = ucwords($vals['species']);
         if (!empty($vals['colour'])) $vals['colour'] = ucwords($vals['colour']);
-
+vd($vals);
         \App\Db\PathCaseMap::create()->mapForm($vals, $this->getPathCase());
 
         $form->addFieldErrors($this->getPathCase()->validate());
