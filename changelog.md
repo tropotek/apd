@@ -1,6 +1,11 @@
 
 #CHANGELOG#
 
+Ver 3.4.112 [2024-03-15]:
+-------------------------------
+  - disable pathcase client contact field when no company selected
+
+
 Ver 3.4.110 [2023-12-22]:
 -------------------------------
 
