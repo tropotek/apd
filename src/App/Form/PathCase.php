@@ -168,7 +168,7 @@ class PathCase extends \Bs\FormIface
             ->addCss('tk-multiselect tk-ms-contact')
             ->setAttr('data-reset-on-hide', true)
             ->setTabGroup($tab)->setLabel('Client Contacts')
-            ->setNotes('Select Client Contacts that will be able to receive the pathology report.')
+            ->setNotes('Select/Create client contacts that will be able to receive the pathology report. (Submitting Client must be select first)')
             ->setValue($this->getPathCase()->getContactList()->toArray('id'));;
 
         $modalId = json_encode($field->getDialog()->getId());
@@ -179,6 +179,14 @@ jQuery(function ($) {
     const contactModal = $('#' + {$modalId});
     let select = $('select.tk-ms-contact');
     let companyId = ${companyId};
+    
+    $('select[name=companyId]').on('change', function() {
+        if ($(this).val()) {
+            $('#path_case-contacts').prop('disabled', false).trigger('enable');
+        } else {
+            $('#path_case-contacts').prop('disabled', true).trigger('diable');
+        }
+    }).trigger('change');
     
     contactModal.on('shown.bs.modal', function() {
         // Set the company ID for new contact
@@ -570,7 +578,7 @@ JS;
         if (!empty($vals['animalName'])) $vals['animalName'] = ucwords($vals['animalName']);
         if (!empty($vals['species'])) $vals['species'] = ucwords($vals['species']);
         if (!empty($vals['colour'])) $vals['colour'] = ucwords($vals['colour']);
-vd($vals);
+
         \App\Db\PathCaseMap::create()->mapForm($vals, $this->getPathCase());
 
         $form->addFieldErrors($this->getPathCase()->validate());
