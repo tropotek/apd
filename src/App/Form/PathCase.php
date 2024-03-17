@@ -645,16 +645,6 @@ JS;
         /** @var \Bs\Form\Field\File $fileField */
         $fileField = $form->getField('files');
         $fileField->doSubmit();
-        if (
-            $this->getPathCase()->hasStatus([\App\Db\PathCase::STATUS_EXAMINED, \App\Db\PathCase::STATUS_REPORTED, \App\Db\PathCase::STATUS_COMPLETED]) &&
-            $this->getAuthUser()->hasPermission(Permission::CAN_REVIEW_CASE)
-        ) {
-            if ($form->getField('reviewCase')->getValue()) {
-                $this->getPathCase()->setReviewedById($this->getAuthUser()->getId());
-                $this->getPathCase()->setReviewedOn(Date::create());
-                $this->getPathCase()->save();
-            }
-        }
 
         \Tk\Alert::addSuccess('Record saved!');
         $event->setRedirect($this->getBackUrl());
