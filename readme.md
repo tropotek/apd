@@ -1,7 +1,13 @@
 # apd  
 
+__WARNING: This repo has been moved to https://github.com/tropotek/apd__  
+
+_Date: 19/4/24 8:01 AM_
+
+----
+
 __Project:__ APD (Anatomic Pathology Database)  
-__Web:__ <https://bitbucket.org/fvas-elearning/apd>  
+__Web:__ <https://github.com/tropotek/apd>  
 __Authors:__ Michael Mifsud <http://www.tropotek.com/>  
 __Steakholders:__ Andrew Stent <andrew.stent@unimelb.edu.au> Richard Ploeg <richard.ploeg@unimelb.edu.au>
 
