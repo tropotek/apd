@@ -138,7 +138,6 @@ class PathCaseDecorator
             }
 
             $user = $config->getUserMapper()->find($case->getUserId());
-            vd($user);
             if ($user) {
                 $message->set('pathCase::author', $user->getName());
             }
