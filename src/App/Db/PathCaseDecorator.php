@@ -132,10 +132,17 @@ class PathCaseDecorator
             }
 
             /** @var User $pathologist */
-            $pathologist = $config->getUserMapper()->find($case->pathologistId);
+            $pathologist = $config->getUserMapper()->find($case->getPathologistId());
             if ($pathologist) {
                 $message->set('pathCase::pathologist', $pathologist->getName());
             }
+
+            $user = $config->getUserMapper()->find($case->getUserId());
+            vd($user);
+            if ($user) {
+                $message->set('pathCase::author', $user->getName());
+            }
+
             $messageList[] = $message;
         }
         return $messageList;

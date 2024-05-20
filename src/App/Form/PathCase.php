@@ -594,7 +594,7 @@ JS;
         if ($isNew)
             $this->getPathCase()->setStatusMessage('New pathology case created.');
 
-        // This should automatically set the reportStatus to completed once the case is completed, as this option is sometimes fogotten
+        // This should automatically set the reportStatus to completed once the case is completed, as this option is sometimes forgotten
         $autocomplete = (bool)$this->getConfig()->getInstitution()->getData()->get(\App\Controller\Institution\Edit::INSTITUTION_AUTOCOMPLETE_REPORT_STATUS);
         if (
             $autocomplete &&
