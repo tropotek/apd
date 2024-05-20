@@ -1,6 +1,11 @@
 
 #CHANGELOG#
 
+Ver 3.4.116 [2024-05-20]:
+-------------------------------
+  - fixed author name on path case created email
+
+
 Ver 3.4.114 [2024-03-17]:
 -------------------------------
   - Remove reviewed on code in pathCase form
