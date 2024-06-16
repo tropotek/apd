@@ -39,6 +39,11 @@ class AnimalType extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public $description = '';
 
     /**
+     * @var bool
+     */
+    public $active = '';
+
+    /**
      * @var \DateTime
      */
     public $modified = null;
@@ -137,6 +142,17 @@ class AnimalType extends \Tk\Db\Map\Model implements \Tk\ValidInterface
     public function getDescription() : string
     {
         return $this->description;
+    }
+
+    public function setActive(bool $active): AnimalType
+    {
+        $this->active = $active;
+        return $this;
+    }
+
+    public function isActive(): bool
+    {
+        return $this->active;
     }
 
     /**

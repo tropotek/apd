@@ -408,7 +408,7 @@ FROM path_case
         if (!empty($filter['reviewedById'])) {
             $filter->appendWhere('a.reviewed_by_id = %s AND ', (int)$filter['reviewedById']);
         }
-        if (is_bool($filter['isReviewed'])) {
+        if (isset($filter['isReviewed'])) {
             if (is_bool($filter['isReviewed'])) {
                 $filter->appendWhere('a.reviewed_by_id IS NOT NULL AND ');
             } else {

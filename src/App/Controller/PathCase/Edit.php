@@ -13,6 +13,7 @@ use Tk\Alert;
 use Tk\Crumbs;
 use Tk\Request;
 use Tk\Ui\ButtonDropdown;
+use Tk\Uri;
 
 /**
  * TODO: Add Route to routes.php:
@@ -154,6 +155,9 @@ class Edit extends AdminEditIface
         if ($request->has('pdf-view')) {
             return $this->doPdfView($request);
         }
+        if ($request->has('convert')) {
+            $this->doConvert($request);
+        }
     }
 
     /**
@@ -184,12 +188,37 @@ class Edit extends AdminEditIface
         return $pdf->show();
     }
 
+    public function doConvert(\Tk\Request $request)
+    {
+        $type = $request->request->get('convert');
+        if (!in_array($type, [PathCase::TYPE_BIOPSY, PathCase::TYPE_NECROPSY])) {
+            Alert::addError('Invalid conversion type.');
+            Uri::create()->remove('convert')->redirect();
+        }
+
+        if ($type != $this->pathCase->getType()) {
+            $this->pathCase->setType($type);
+            $this->pathCase->save();
+            Alert::addSuccess("Case converted to {$type}");
+        }
+
+        Uri::create()->remove('convert')->redirect();
+    }
+
     /**
      * Add actions here
      */
     public function initActionPanel()
     {
         if ($this->pathCase->getId()) {
+            if ($this->pathCase->getType() == PathCase::TYPE_BIOPSY) {
+                $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Convert To Necropsy', \Uni\Uri::create()->set('convert', PathCase::TYPE_NECROPSY), 'fa fa-heart'))
+                    ->setAttr('data-confirm', 'Converting this Case to Biopsy will loose any un-saved data, continue?');
+            } else {
+                $this->getActionPanel()->append(\Tk\Ui\Link::createBtn('Convert To Biopsy', \Uni\Uri::create()->set('convert', PathCase::TYPE_BIOPSY), 'fa fa-heartbeat'))
+                    ->setAttr('data-confirm', 'Converting this Case to Necropsy will loose any un-saved data, continue?');
+            }
+
             $links = [
                 \Tk\Ui\Link::create('PDF View', \Uni\Uri::create()->set('pdf-view')->set(Crumbs::CRUMB_IGNORE), 'fa fa-file-pdf-o')->setAttr('target', '_blank')->setAttr('title', 'Download/View Case Details'),
                 \Tk\Ui\Link::create('HTML View', \Uni\Uri::create()->set('pdf-view')->set('isHtml')->set(Crumbs::CRUMB_IGNORE), 'fa fa-code')->setAttr('target', '_blank')->setAttr('title', 'Download/View Case Details')

@@ -30,6 +30,7 @@ class AnimalType extends \Bs\FormIface
 
         //$this->appendField(new Field\Select('parentId', []))->prependOption('-- Select --', '');
         $this->appendField(new Field\Input('name'));
+        $this->appendField(new Field\Checkbox('active'));
         $this->appendField(new Field\Textarea('description'));
 
         $this->appendField(new Event\Submit('update', array($this, 'doSubmit')));

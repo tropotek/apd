@@ -3,7 +3,6 @@ namespace App\Db;
 
 use App\Db\Traits\AnimalTypeTrait;
 use App\Db\Traits\CompanyTrait;
-use App\Db\Traits\OwnerTrait;
 use App\Db\Traits\PathologistTrait;
 use App\Db\Traits\StorageTrait;
 use Bs\Db\Status;
@@ -48,8 +47,8 @@ class PathCase extends \Tk\Db\Map\Model implements \Tk\ValidInterface, \Bs\Db\Fi
     const TYPE_BIOPSY                   = 'biopsy';
     const TYPE_NECROPSY                 = 'necropsy';
 
-    const SUBMISSION_INTERNAL_DIAG      = 'internalDiagnostic';
-    const SUBMISSION_EXTERNAL_DIAG      = 'externalDiagnostic';
+    const SUBMISSION_INTERNAL_DIAG      = 'internalDiagnostic';     // deprecated (disable in edit selects)
+    const SUBMISSION_EXTERNAL_DIAG      = 'paidDiagnostic';
     const SUBMISSION_RESEARCH           = 'research';
     const SUBMISSION_TEACHING           = 'teaching';
     const SUBMISSION_OTHER              = 'other';

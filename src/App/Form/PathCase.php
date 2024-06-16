@@ -147,7 +147,12 @@ class PathCase extends \Bs\FormIface
         $list = \Tk\ObjectUtil::getClassConstants($this->getPathCase(), 'SUBMISSION', true);
         $this->appendField(Field\Select::createSelect('submissionType', $list))
             ->prependOption('-- Select --', '')
-            ->setTabGroup($tab);
+            ->setTabGroup($tab)
+        ->addOnShowOption(function(\Dom\Template $template, \Tk\Form\Field\Option $option, $var) {
+            if ($option->getValue() == \App\Db\PathCase::SUBMISSION_INTERNAL_DIAG) {
+                $option->setAttr('disabled');
+            }
+        });
 
         $layout->removeRow('contacts', 'col');
 
@@ -338,7 +343,11 @@ JS;
         $this->appendField(new Field\Input('patientNumber'))->setTabGroup($tab);
         $this->appendField(new Field\Input('microchip'))->setTabGroup($tab);
 
-        $list = AnimalTypeMap::create()->findFiltered(['institutionId' => $this->getConfig()->getInstitutionId(), 'parent_id' => 0]);
+        $list = AnimalTypeMap::create()->findFiltered([
+            'institutionId' => $this->getConfig()->getInstitutionId(),
+            'active' => true,
+            'parent_id' => 0
+        ], Tool::create('name'));
         $this->appendField(Field\Select::createSelect('animalTypeId', $list)->prependOption('-- Select --', ''))
             ->setTabGroup($tab);
 

@@ -29,6 +29,7 @@ class AnimalTypeMap extends Mapper
             $this->dbMap->addPropertyMap(new Db\Integer('parentId', 'parent_id'));
             $this->dbMap->addPropertyMap(new Db\Text('name'));
             $this->dbMap->addPropertyMap(new Db\Text('description'));
+            $this->dbMap->addPropertyMap(new Db\Boolean('active'));
             $this->dbMap->addPropertyMap(new Db\Date('modified'));
             $this->dbMap->addPropertyMap(new Db\Date('created'));
 
@@ -48,6 +49,7 @@ class AnimalTypeMap extends Mapper
             $this->formMap->addPropertyMap(new Form\Integer('parentId'));
             $this->formMap->addPropertyMap(new Form\Text('name'));
             $this->formMap->addPropertyMap(new Form\Text('description'));
+            $this->formMap->addPropertyMap(new Form\Boolean('active'));
 
         }
         return $this->formMap;
@@ -97,6 +99,13 @@ class AnimalTypeMap extends Mapper
         }
         if (!empty($filter['name'])) {
             $filter->appendWhere('a.name = %s AND ', $this->quote($filter['name']));
+        }
+        if (isset($filter['active']) && $filter['active'] !== '') {
+            if ($filter['active']) {
+                $filter->appendWhere('a.active AND ');
+            } else {
+                $filter->appendWhere('NOT a.active AND ');
+            }
         }
 
         if (!empty($filter['exclude'])) {

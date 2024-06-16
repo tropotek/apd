@@ -33,16 +33,22 @@ class AnimalType extends \Bs\TableIface
         $this->appendCell(new Cell\Checkbox('id'));
         //$this->appendCell(new Cell\Text('parentId'));
         $this->appendCell(new Cell\Text('name'))->addCss('key')->setUrl($this->getEditUrl());
+        $this->appendCell(new Cell\Text('description'));
+        $this->appendCell(new Cell\Boolean('active'));
         $this->appendCell(new Cell\Date('modified'));
         $this->appendCell(new Cell\Date('created'));
 
         // Filters
         $this->appendFilter(new Field\Input('keywords'))->setAttr('placeholder', 'Search');
+        $list = ['Active' => '1', 'Not Active' => '0'];
+        $this->appendFilter(Field\Select::createSelect('active', $list)
+            ->setValue('1')
+            ->prependOption('-- All States--'));
 
         // Actions
         //$this->appendAction(\Tk\Table\Action\Link::createLink('New Animal Type', \Bs\Uri::createHomeUrl('/animal/typeEdit.html'), 'fa fa-plus'));
         //$this->appendAction(\Tk\Table\Action\ColumnSelect::create()->setUnselected(array('modified', 'created')));
-        $this->appendAction(\Tk\Table\Action\Delete::create());
+        //$this->appendAction(\Tk\Table\Action\Delete::create());
         $this->appendAction(\Tk\Table\Action\Csv::create());
 
         // load table
@@ -59,10 +65,9 @@ class AnimalType extends \Bs\TableIface
      */
     public function findList($filter = [], $tool = null)
     {
-        if (!$tool) $tool = $this->getTool();
+        if (!$tool) $tool = $this->getTool('name');
         $filter = array_merge($this->getFilterValues(), $filter);
-        $list = \App\Db\AnimalTypeMap::create()->findFiltered($filter, $tool);
-        return $list;
+        return \App\Db\AnimalTypeMap::create()->findFiltered($filter, $tool);
     }
 
 }
